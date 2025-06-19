@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerTypeA : MonoBehaviour
+public class PlayerControllerTypeC : MonoBehaviour
 {
-    // wasd 이동 마우스 에임
-    public float moveSpeed;
+	public float moveSpeed;
 	public float attackSpeed;
-
 	public Rigidbody2D rigid;
-	public Vector2 moveInput;
-
 	public GameObject effectPrefab;
+
+	public Vector3 targetPos;
 
 	void Awake()
 	{
@@ -20,17 +18,28 @@ public class PlayerControllerTypeA : MonoBehaviour
 
 	void Update()
 	{
-		// 물리 무시 이동
-		//float x = Input.GetAxis("Horizontal");
-		//float y = Input.GetAxis("Vertical");
+		if (Input.GetMouseButtonDown(1)) MouseClick();
+		if (Input.GetKeyDown(KeyCode.Q)) Attack();
+	}
 
-		//Vector3 movePos = new Vector3(x, y).normalized;
-		//transform.position += movePos * moveSpeed * Time.deltaTime;
+	void FixedUpdate()
+	{
+		Vector2 dir = (targetPos - transform.position);
+		if (dir.magnitude > 0.1f)
+		{
+			Vector2 movePos = dir.normalized * moveSpeed;
+			rigid.velocity = movePos;
+		}
+		else
+		{
+			rigid.velocity = Vector2.zero;
+		}
+	}
 
-		moveInput.x = Input.GetAxis("Horizontal");
-		moveInput.y = Input.GetAxis("Vertical");
-
-		if (Input.GetMouseButton(0)) Attack();
+	void MouseClick()
+	{
+		targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		targetPos.z = 0;
 	}
 
 	void Attack()
@@ -46,12 +55,4 @@ public class PlayerControllerTypeA : MonoBehaviour
 		var go = Instantiate(effectPrefab, spawnPos, transform.rotation);
 		go.GetComponent<Rigidbody2D>().AddForce(dir * attackSpeed, ForceMode2D.Impulse);
 	}
-
-	void FixedUpdate()
-	{
-		Vector2 movePos = moveInput.normalized * moveSpeed;
-		rigid.velocity = movePos;
-	}
-
-
 }
