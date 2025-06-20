@@ -2,9 +2,8 @@
 name: Issue 버그 리포팅 템플릿
 about: 버그 리포팅 템플릿
 title: ''
-labels: bug, fix:bug, fix:feature
-assignees: Clean18, Hurbmint, JsP1o, Kim-Waffle, neosmu, whatisyourusername, YeonHouu,
-  YongHo-FOG, yun388
+labels: bug
+assignees: ''
 
 ---
 
