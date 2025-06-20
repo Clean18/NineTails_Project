@@ -1,10 +1,9 @@
 ---
 name: Issue 기능 개발 템플릿
 about: 기능 개발 템플릿
-title: ''
-labels: feature, fix:bug, fix:feature, refactor, test
-assignees: Clean18, Hurbmint, JsP1o, Kim-Waffle, neosmu, whatisyourusername, YeonHouu,
-  YongHo-FOG, yun388
+title: "[Type]"
+labels: ''
+assignees: ''
 
 ---
 
