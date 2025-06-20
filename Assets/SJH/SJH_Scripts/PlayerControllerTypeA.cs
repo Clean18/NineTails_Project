@@ -30,7 +30,7 @@ public class PlayerControllerTypeA : MonoBehaviour
 		moveInput.x = Input.GetAxis("Horizontal");
 		moveInput.y = Input.GetAxis("Vertical");
 
-		if (Input.GetMouseButton(0)) Attack();
+		if (Input.GetMouseButtonDown(0)) Attack();
 	}
 
 	void Attack()
@@ -52,6 +52,4 @@ public class PlayerControllerTypeA : MonoBehaviour
 		Vector2 movePos = moveInput.normalized * moveSpeed;
 		rigid.velocity = movePos;
 	}
-
-
 }
