@@ -3,35 +3,97 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ControlMode { Manual, Auto }
+public enum AIState { Idle, Chase, Attack }
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerModel _playerModel;
 	public PlayerView PlayerView;
-	private PlayerAI _playerAI;
 
+	// TODO : 게임이 시작되면 시작은 Auto
 	public ControlMode Mode = ControlMode.Manual;
+
+	// AI
+	private AIState _currentState;
+
+	// Manual
+	public Vector2 MoveDir { get; private set; }
 
 	void Awake()
 	{
 		_playerModel = new PlayerModel();
 		PlayerView = GetComponent<PlayerView>();
 
-		_playerAI = new PlayerAI(this, _playerModel, PlayerView);
+		_currentState = AIState.Idle;
 	}
 
 	void Update()
 	{
 		// Auto일 때는 입력 제한
-		if (Mode == ControlMode.Auto)
-		{
-			_playerAI.Action();
-			return;
-		}
+		if (Mode == ControlMode.Auto) Action();
 
 		// 수동 컨트롤
-		PlayerView.Move(
-			new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), // 이동 방향
-			_playerModel.PlayerData.MoveSpeed); // 이동속도
+		else if (Mode == ControlMode.Manual) InputHandler();
 	}
+
+	public void Action()
+	{
+		switch (_currentState)
+		{
+			// TODO : 행동방식은 기획에서 받기
+			// 임시로 Chase <-> Idle <-> Attack
+			case AIState.Idle:
+				/* 타겟 탐색
+				 * 타겟이 있으면 등록된 스킬 중 사정거리가 유효한 스킬이 있는지 체크
+				 * if 스킬이 있음
+				 * > Attack 으로 변경
+				 * 
+				 * else 스킬이 없음
+				 * > Chase 으로 변경
+				 * 
+				 * 타겟이 없으면 유지
+				 */
+				break;
+			case AIState.Chase:
+				/* 추격
+				 * 현재 맵에 몬스터가 없으면 Idle
+				 * 몬스터가 있으면
+				 * 공격 가능한지 체크
+				 * 
+				 */
+
+				break;
+			case AIState.Attack:
+				/* 공격
+				 * 
+				 */
+				break;
+		}
+
+
+	}
+	public void InputHandler()
+	{
+		MoveInput();
+		// TODO : 사용하는 키 정보 필요
+		SkillInput();
+		MouseInput();
+	}
+
+	void MoveInput()
+	{
+		MoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+		PlayerView.Move(MoveDir, _playerModel.Data.MoveSpeed);
+	}
+
+	void SkillInput()
+	{
+
+	}
+
+	void MouseInput()
+	{
+
+	}
+
 }
