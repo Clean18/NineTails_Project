@@ -37,7 +37,7 @@ public class Upgrade : MonoBehaviour
     }
 
     //CSV 다운로드용 스프레드시트 URL
-    public const string UpgradeTableURL = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/export?format=csv&&gid=0";
+    public const string UpgradeTableURL = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/export?format=csv&gid=0";
     IEnumerator DownloadRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(UpgradeTableURL);
@@ -109,7 +109,7 @@ public class Upgrade : MonoBehaviour
         }
 
         // 현재 강화 단계가 최대로 도달되었을때
-        if (currentLevel >= 5)
+        if (currentLevel >= 10)
         {
             Debug.Log("최대 강화 도달");
         }
