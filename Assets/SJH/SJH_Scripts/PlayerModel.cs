@@ -10,9 +10,6 @@ public class PlayerModel
 	// 재화 > 영기, 온정
 	public PlayerCost Cost;
 
-	// 스킬 해금 포인트
-	// 영기 (장비강화)
-
 	public PlayerModel()
 	{
 		// 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화

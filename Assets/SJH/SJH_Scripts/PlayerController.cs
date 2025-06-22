@@ -11,20 +11,39 @@ public class PlayerController : MonoBehaviour
 	public PlayerView PlayerView;
 
 	// TODO : 게임이 시작되면 시작은 Auto
-	public ControlMode Mode = ControlMode.Manual;
+	private ControlMode _mode;
+	public ControlMode Mode {
+		get => _mode;
+		set
+		{
+			_mode = value;
+			Debug.Log(_mode);
+			if (_mode == ControlMode.Manual) UIManager.Instance.GameUI?.AIStateText.gameObject.SetActive(false);
+			else UIManager.Instance.GameUI?.AIStateText.gameObject.SetActive(true);
+		}
+	}
 
 	// AI
-	private AIState _currentState;
+	public AIState CurrentState;
 
 	// Manual
 	public Vector2 MoveDir { get; private set; }
+	public List<KeyCode> SkillKeys = new()
+	{
+		KeyCode.Mouse0,
+		KeyCode.Mouse1,
+	};
+
 
 	void Awake()
 	{
 		_playerModel = new PlayerModel();
 		PlayerView = GetComponent<PlayerView>();
 
-		_currentState = AIState.Idle;
+		CurrentState = AIState.Idle;
+		Mode = ControlMode.Manual;
+
+		GameManager.Instance.PlayerController = this;
 	}
 
 	void Update()
@@ -38,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Action()
 	{
-		switch (_currentState)
+		switch (CurrentState)
 		{
 			// TODO : 행동방식은 기획에서 받기
 			// 임시로 Chase <-> Idle <-> Attack
@@ -69,13 +88,12 @@ public class PlayerController : MonoBehaviour
 				 */
 				break;
 		}
-
-
+		UIManager.Instance.GameUI?.ChangeStateText(CurrentState);
 	}
 	public void InputHandler()
 	{
 		MoveInput();
-		// TODO : 사용하는 키 정보 필요
+		// TODO : 사용하는 키 정보 필요 > WASD 이동만 공격은 자동으로
 		SkillInput();
 		MouseInput();
 	}
@@ -93,7 +111,21 @@ public class PlayerController : MonoBehaviour
 
 	void MouseInput()
 	{
-
+		// 특정 키를 누름
+		// GetSkill에서 반환된게 null이 아니면 스킬 사용
+		
+		foreach (var key in SkillKeys)
+		{
+			if (Input.GetKeyDown(key))
+			{
+				var skill = GameManager.Instance.GetSkill("Fireball");
+				if (skill != null)
+				{
+					Debug.Log("키 리스트에 있는 키 스킬사용");
+					skill.UseSkill(transform);
+				}
+			}
+		}
 	}
 
 }

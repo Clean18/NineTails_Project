@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d37386578c8134c9b1c00551696706, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  <SkillName>k__BackingField: 
+  <SkillName>k__BackingField: "\uD30C\uC774\uC5B4\uBCFC"
+  <Description>k__BackingField: "\uBD88"
+  <Damage>k__BackingField: 10
+  <SkillPrefab>k__BackingField: {fileID: 99062240329242543, guid: 64a35954a8738c74caea13e6d040b68f, type: 3}
