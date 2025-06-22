@@ -13,7 +13,8 @@ public class GameUI : SceneUI
 	{
 		UIManager.Instance.GameUI = this;
 
-
+		// TODO : 임시로 비활성화
+		AIStateText.gameObject.SetActive(false);
 	}
 
 	void OnEnable() => SubscribeEvent();
@@ -53,8 +54,16 @@ public class GameUI : SceneUI
 		var player = GameManager.Instance.PlayerController;
 		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 
+		// Text On/Off
+		UpdateAIMode(player.Mode);
+
 		// 플레이어 velocity 초기화
 		player.PlayerView.Move(Vector2.zero, 0);
 	}
-
+	
+	public void UpdateAIMode(ControlMode mode)
+	{
+		Debug.Log($"모드 변경 : {mode}");
+		AIStateText.gameObject.SetActive(mode == ControlMode.Auto);
+	}
 }

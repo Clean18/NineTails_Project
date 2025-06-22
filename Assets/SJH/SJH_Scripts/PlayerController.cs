@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,9 +18,6 @@ public class PlayerController : MonoBehaviour
 		set
 		{
 			_mode = value;
-			Debug.Log(_mode);
-			if (_mode == ControlMode.Manual) UIManager.Instance.GameUI?.AIStateText.gameObject.SetActive(false);
-			else UIManager.Instance.GameUI?.AIStateText.gameObject.SetActive(true);
 		}
 	}
 
