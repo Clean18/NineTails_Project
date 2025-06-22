@@ -329,6 +329,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeTable:
     values: []
+  currentGrade: 1
+  currentLevel: 0
+  currentAttack: 5
+  warmth: 500
 --- !u!4 &1417810559
 Transform:
   m_ObjectHideFlags: 0
