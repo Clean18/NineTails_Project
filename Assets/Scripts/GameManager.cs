@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 	// 즉, 싱글톤이든 static이든 오브젝트풀이랑 몬스터들의 정보를 플레이어에서 접근할 수 있던가 해야함
 
 	public PlayerController PlayerController;
+	public Spawner Spawner;
 
 	public Dictionary<string, SkillData> SkillDic;
 
@@ -24,4 +25,6 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;
+
+
 }

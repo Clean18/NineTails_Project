@@ -21,7 +21,7 @@ public class PlayerData
 	// 가하는 피해 증가 (특수 스탯)
 	public int IncreaseDamage { get; set; }
 
-	public PlayerData(float attack = 1, float defense = 0, int maxhp = 100, int hp = 100, float moveSpeed = 5f, float hpRegen = 0.03f, int increaseDamage = 0)
+	public PlayerData(float attack = 1, float defense = 0, int maxhp = 100, int hp = 100, float moveSpeed = 2f, float hpRegen = 0.03f, int increaseDamage = 0)
 	{
 		Attack = attack;
 		Defense = defense;

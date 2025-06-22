@@ -11,6 +11,10 @@ public class Spawner : MonoBehaviour
 	public GameObject MonsterPrefab;
 	private List<GameObject> monsterPool = new();
 
+	// 활성화되어있는 몹 리스트
+	public List<GameObject> ActiveMonsters => monsterPool.FindAll(mon => mon.activeSelf);
+
+
 	public List<Transform> SpawnPoints;
 	public float SpawnDelay;
 
@@ -24,6 +28,7 @@ public class Spawner : MonoBehaviour
 			monsterPool.Add(mon);
 			mon.SetActive(false);
 		}
+		GameManager.Instance.Spawner = this;
 	}
 
 	void Update()
@@ -51,5 +56,23 @@ public class Spawner : MonoBehaviour
 			var newMon = Instantiate(MonsterPrefab, SpawnPoints[Random.Range(0, SpawnPoints.Count)].position, Quaternion.identity);
 			monsterPool.Add(newMon);
 		}
+	}
+
+	public GameObject FindCloseMonster(Vector3 searchPoint)
+	{
+		var monsters = ActiveMonsters;
+
+		GameObject closeMon = null;
+		float minDistance = float.MaxValue;
+		foreach (var mon in monsters)
+		{
+			float dist = Vector3.Distance(searchPoint, mon.transform.position);
+			if (dist < minDistance)
+			{
+				minDistance = dist;
+				closeMon = mon;
+			}
+		}
+		return closeMon;
 	}
 }
