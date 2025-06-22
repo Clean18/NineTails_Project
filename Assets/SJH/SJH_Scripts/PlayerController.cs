@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 		set
 		{
 			_mode = value;
+			// TODO : 자동모드가 되면 항상 Idle에서 시작
+			if (CurrentState != AIState.Idle) CurrentState = AIState.Idle;
 		}
 	}
 

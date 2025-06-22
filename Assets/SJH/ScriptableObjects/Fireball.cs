@@ -14,11 +14,10 @@ public class Fireball : SkillData
 		Vector3 spawnPos = attacker.position;
 		Vector3 dir = (attackDir - spawnPos).normalized;
 
-
-
 		var go = Instantiate(SkillPrefab, spawnPos, Quaternion.identity);
 		go.transform.up = dir;
 		go.GetComponent<Rigidbody2D>().velocity = dir * 10;
+		go.GetComponent<Projectile>().TotlaDamage = Damage;
 
 		Debug.Log($"{SkillName} 스킬 사용");
 	}
