@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using UnityEngine;
 
 /// <summary>
 /// JSON 형식으로 게임 데이터를 저장하고 불러오는 매니저 클래스입니다.
 /// </summary>
-public class SaveLoadManager : MonoBehaviour
+public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public GameData GameData;
 
@@ -21,27 +21,13 @@ public class SaveLoadManager : MonoBehaviour
         get { return _elapsedMinutes; }
     }
 
-    // merge 후 Singleton 클래스 상속 받은 뒤 삭제 예정입니다.
-    #region Singleton
-    private static SaveLoadManager _instance;
-    public static SaveLoadManager Instance { get { return _instance; } }
-
-    private void Awake()
+    protected override void Awake()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        base.Awake();
+        
         // 게임 데이터 로드
         //LoadData();
     }
-    #endregion
 
     private void Update()
     {
