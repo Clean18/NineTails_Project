@@ -19,7 +19,7 @@ public class Fireball : SkillData
 		var go = Instantiate(SkillPrefab, spawnPos, Quaternion.identity);
 		go.transform.up = dir;
 		go.GetComponent<Rigidbody2D>().velocity = dir * 10;
-		go.GetComponent<Projectile>().TotlaDamage = Damage;
+		go.GetComponent<Projectile>().TotalDamage = Damage;
 
 		Debug.Log($"{SkillName} 스킬 사용");
 	}
@@ -37,7 +37,7 @@ public class Fireball : SkillData
 		var go = Instantiate(SkillPrefab, spawnPos, Quaternion.identity);
 		go.transform.up = dir;
 		go.GetComponent<Rigidbody2D>().velocity = dir * 10;
-		go.GetComponent<Projectile>().TotlaDamage = Damage;
+		go.GetComponent<Projectile>().TotalDamage = Damage;
 
 		Debug.Log($"{SkillName} 스킬 사용");
 	}
