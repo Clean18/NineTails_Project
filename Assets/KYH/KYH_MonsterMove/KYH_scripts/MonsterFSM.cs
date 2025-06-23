@@ -1,49 +1,49 @@
-using System.Diagnostics;
+ï»¿using System.Diagnostics;
 using UnityEngine;
 
 public class MonsterFSM : MonoBehaviour
 {
-    // ¸ó½ºÅÍÀÇ »óÅÂ¸¦ ³ªÅ¸³»´Â ¿­°ÅÇü
+    // ëª¬ìŠ¤í„°ì˜ ìƒíƒœë¥¼ ë‚˜íƒ€ë‚´ëŠ” ì—´ê±°í˜•
     enum MonsterState { Idle, Move, Attack }
 
     [Header("Monster status")]
-    public float MoveSpeed = 2f;          // ÀÌµ¿ ¼Óµµ
-    public float DetectRange = 5f;        // ÇÃ·¹ÀÌ¾î¸¦ °¨ÁöÇÏ´Â ¹üÀ§
-    public float AttackRange = 1.5f;      // °ø°İ °¡´ÉÇÑ °Å¸®
-    public float AttackCooldown = 2f;     // °ø°İ Äğ´Ù¿î ½Ã°£
+    public float MoveSpeed = 2f;          // ì´ë™ ì†ë„
+    public float DetectRange = 5f;        // í”Œë ˆì´ì–´ë¥¼ ê°ì§€í•˜ëŠ” ë²”ìœ„
+    public float AttackRange = 1.5f;      // ê³µê²© ê°€ëŠ¥í•œ ê±°ë¦¬
+    public float AttackCooldown = 2f;     // ê³µê²© ì¿¨ë‹¤ìš´ ì‹œê°„
 
     [Header("Search Player Cooldown")]
-    public float FindInterval = 1.0f;     // ¸î ÃÊ¸¶´Ù ÇÃ·¹ÀÌ¾î¸¦ ÀçÅ½»öÇÒÁö ¼³Á¤
+    public float FindInterval = 1.0f;     // ëª‡ ì´ˆë§ˆë‹¤ í”Œë ˆì´ì–´ë¥¼ ì¬íƒìƒ‰í• ì§€ ì„¤ì •
 
-    private MonsterState _currentState = MonsterState.Idle; // ÇöÀç »óÅÂ
-    private float _attackTimer;       // °ø°İ Äğ´Ù¿î Å¸ÀÌ¸Ó
-    private float _findTimer;         // ÇÃ·¹ÀÌ¾î ÀçÅ½»ö Å¸ÀÌ¸Ó
+    private MonsterState _currentState = MonsterState.Idle; // í˜„ì¬ ìƒíƒœ
+    private float _attackTimer;       // ê³µê²© ì¿¨ë‹¤ìš´ íƒ€ì´ë¨¸
+    private float _findTimer;         // í”Œë ˆì´ì–´ ì¬íƒìƒ‰ íƒ€ì´ë¨¸
 
-    private Transform targetPlayer;   // ÇöÀç ÃßÀû ÁßÀÎ ÇÃ·¹ÀÌ¾î
+    private Transform targetPlayer;   // í˜„ì¬ ì¶”ì  ì¤‘ì¸ í”Œë ˆì´ì–´
 
     private void Update()
     {
-        // ÇÃ·¹ÀÌ¾î ÀçÅ½»ö Å¸ÀÌ¸Ó Áõ°¡
+        // í”Œë ˆì´ì–´ ì¬íƒìƒ‰ íƒ€ì´ë¨¸ ì¦ê°€
         _findTimer += Time.deltaTime;
 
-        // ¼³Á¤µÈ ÁÖ±â¸¶´Ù ÇÃ·¹ÀÌ¾î ´Ù½Ã Å½»ö
+        // ì„¤ì •ëœ ì£¼ê¸°ë§ˆë‹¤ í”Œë ˆì´ì–´ ë‹¤ì‹œ íƒìƒ‰
         if (_findTimer >= FindInterval)
         {
             FindClosestPlayer();
             _findTimer = 0;
         }
 
-        // Å¸°Ù ÇÃ·¹ÀÌ¾î°¡ ¾øÀ¸¸é Idle »óÅÂ À¯Áö
+        // íƒ€ê²Ÿ í”Œë ˆì´ì–´ê°€ ì—†ìœ¼ë©´ Idle ìƒíƒœ ìœ ì§€
         if (targetPlayer == null)
         {
             ChangeState(MonsterState.Idle);
             return;
         }
 
-        // ÇöÀç ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸® °è»ê
+        // í˜„ì¬ í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ ê³„ì‚°
         float dist = Vector2.Distance(transform.position, targetPlayer.position);
 
-        // »óÅÂ ÀüÀÌ Á¶°Ç Ã³¸®
+        // ìƒíƒœ ì „ì´ ì¡°ê±´ ì²˜ë¦¬
         switch (_currentState)
         {
             case MonsterState.Idle:
@@ -65,26 +65,26 @@ public class MonsterFSM : MonoBehaviour
 
         }
 
-        // ÇöÀç »óÅÂ¿¡ µû¸¥ Çàµ¿ ½ÇÇà
+        // í˜„ì¬ ìƒíƒœì— ë”°ë¥¸ í–‰ë™ ì‹¤í–‰
         switch (_currentState)
         {
             case MonsterState.Idle:
-                // ¾Æ¹« Çàµ¿ ¾È ÇÔ
+                // ì•„ë¬´ í–‰ë™ ì•ˆ í•¨
                 break;
 
             case MonsterState.Move:
-                MoveToPlayer(); // ÇÃ·¹ÀÌ¾î ÂÊÀ¸·Î ÀÌµ¿
+                MoveToPlayer(); // í”Œë ˆì´ì–´ ìª½ìœ¼ë¡œ ì´ë™
                 break;
 
             case MonsterState.Attack:
-                HandelAttack(); // °ø°İ Ã³¸®
+                HandelAttack(); // ê³µê²© ì²˜ë¦¬
                 break;
         }
     }
 
     /// <summary>
-    /// ¾À ÀüÃ¼¿¡¼­ "Player" ÅÂ±×¸¦ °¡Áø ¿ÀºêÁ§Æ®µéÀ» Ã£¾Æ
-    /// °¡Àå °¡±î¿î ÇÃ·¹ÀÌ¾î¸¦ ÃßÀû ´ë»óÀ¸·Î ¼³Á¤
+    /// ì”¬ ì „ì²´ì—ì„œ "Player" íƒœê·¸ë¥¼ ê°€ì§„ ì˜¤ë¸Œì íŠ¸ë“¤ì„ ì°¾ì•„
+    /// ê°€ì¥ ê°€ê¹Œìš´ í”Œë ˆì´ì–´ë¥¼ ì¶”ì  ëŒ€ìƒìœ¼ë¡œ ì„¤ì •
     /// </summary>
     void FindClosestPlayer()
     {
@@ -108,18 +108,18 @@ public class MonsterFSM : MonoBehaviour
     }
 
     /// <summary>
-    /// »óÅÂ º¯°æ Ã³¸® ¹× ÃÊ±âÈ­
+    /// ìƒíƒœ ë³€ê²½ ì²˜ë¦¬ ë° ì´ˆê¸°í™”
     /// </summary>
     void ChangeState(MonsterState newstate)
     {
         if (_currentState == newstate) return;
-        UnityEngine.Debug.Log($"State changed : {_currentState} ¡æ {newstate}");
+        UnityEngine.Debug.Log($"State changed : {_currentState} â†’ {newstate}");
         _currentState = newstate;
-        _attackTimer = 0f; // °ø°İ Äğ´Ù¿î ÃÊ±âÈ­
+        _attackTimer = 0f; // ê³µê²© ì¿¨ë‹¤ìš´ ì´ˆê¸°í™”
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î ÂÊÀ¸·Î ÀÌµ¿ÇÏ´Â ·ÎÁ÷
+    /// í”Œë ˆì´ì–´ ìª½ìœ¼ë¡œ ì´ë™í•˜ëŠ” ë¡œì§
     /// </summary>
     void MoveToPlayer()
     {
@@ -128,21 +128,21 @@ public class MonsterFSM : MonoBehaviour
     }
 
     /// <summary>
-    /// °ø°İ ·ÎÁ÷: Äğ´Ù¿îÀ» °í·ÁÇØ °ø°İ ½ÇÇà
+    /// ê³µê²© ë¡œì§: ì¿¨ë‹¤ìš´ì„ ê³ ë ¤í•´ ê³µê²© ì‹¤í–‰
     /// </summary>
     void HandelAttack()
     {
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= AttackCooldown)
         {
-            UnityEngine.Debug.Log("¸ó½ºÅÍ°¡ ÇÃ·¹ÀÌ¾î¸¦ °ø°İ!");
-            // ¿©±â¼­ ½ÇÁ¦·Î µ¥¹ÌÁö¸¦ ÁÖ´Â ÇÔ¼ö È£Ãâ °¡´É
+            UnityEngine.Debug.Log("ëª¬ìŠ¤í„°ê°€ í”Œë ˆì´ì–´ë¥¼ ê³µê²©!");
+            // ì—¬ê¸°ì„œ ì‹¤ì œë¡œ ë°ë¯¸ì§€ë¥¼ ì£¼ëŠ” í•¨ìˆ˜ í˜¸ì¶œ ê°€ëŠ¥
             _attackTimer = 0f;
         }
     }
 
     /// <summary>
-    /// Unity Editor¿¡¼­ °¨Áö/°ø°İ ¹üÀ§ ½Ã°¢È­
+    /// Unity Editorì—ì„œ ê°ì§€/ê³µê²© ë²”ìœ„ ì‹œê°í™”
     /// </summary>
     private void OnDrawGizmosSelected()
     {

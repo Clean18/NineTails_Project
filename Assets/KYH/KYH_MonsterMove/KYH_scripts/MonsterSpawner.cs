@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -6,37 +6,37 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class MonsterSpawner : MonoBehaviour
 {
     /// <summary>
-    /// ¸ó½ºÅÍ¸¦ ÀÏÁ¤ °£°İÀ¸·Î ÀÚµ¿ ½ºÆùÇÏ´Â Å¬·¡½º
-    /// - Ä«¸Ş¶ó ½Ã¾ß ¹Û ·£´ı À§Ä¡¿¡¼­ ½ºÆù
-    /// - ÃÖ´ë ¸ó½ºÅÍ ¼ö Á¦ÇÑ ±â´É Æ÷ÇÔ
-    /// - ½ºÅ×ÀÌÁö ·¹º§¿¡ µû¶ó HP, °ñµå ³­ÀÌµµ ÀÚµ¿ Á¶Àı
+    /// ëª¬ìŠ¤í„°ë¥¼ ì¼ì • ê°„ê²©ìœ¼ë¡œ ìë™ ìŠ¤í°í•˜ëŠ” í´ë˜ìŠ¤
+    /// - ì¹´ë©”ë¼ ì‹œì•¼ ë°– ëœë¤ ìœ„ì¹˜ì—ì„œ ìŠ¤í°
+    /// - ìµœëŒ€ ëª¬ìŠ¤í„° ìˆ˜ ì œí•œ ê¸°ëŠ¥ í¬í•¨
+    /// - ìŠ¤í…Œì´ì§€ ë ˆë²¨ì— ë”°ë¼ HP, ê³¨ë“œ ë‚œì´ë„ ìë™ ì¡°ì ˆ
     /// </summary>
     [Header("spawn setting")]
-    [SerializeField] private GameObject MonsterPrefabs;  // ½ºÆùÇÒ ¸ó½ºÅÍ ÇÁ¸®ÆÕ
-    [SerializeField] private float SpawnInterval = 2f;   // ¸ó½ºÅÍ »ı¼º °£°İ(ÃÊ)
-    [SerializeField] private int MaxMonsterCount = 10;   // ÇÑ¹ø¿¡ Á¸Àç °¡´ÉÇÑ ÃÖ´ë ¸ó½ºÅÍ ¼ö
-    [SerializeField] private float SpawnDistance = 2f;   // Ä«¸Ş¶ó ½Ã¾ß ¹ÛÀ¸·Î ¾ó¸¶³ª ¸Õ°Å¸®¿¡¼­ ½ºÆùÇÒÁö °Å¸®
+    [SerializeField] private GameObject MonsterPrefabs;  // ìŠ¤í°í•  ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹
+    [SerializeField] private float SpawnInterval = 2f;   // ëª¬ìŠ¤í„° ìƒì„± ê°„ê²©(ì´ˆ)
+    [SerializeField] private int MaxMonsterCount = 10;   // í•œë²ˆì— ì¡´ì¬ ê°€ëŠ¥í•œ ìµœëŒ€ ëª¬ìŠ¤í„° ìˆ˜
+    [SerializeField] private float SpawnDistance = 2f;   // ì¹´ë©”ë¼ ì‹œì•¼ ë°–ìœ¼ë¡œ ì–¼ë§ˆë‚˜ ë¨¼ê±°ë¦¬ì—ì„œ ìŠ¤í°í• ì§€ ê±°ë¦¬
 
     [Header("stage info")]
-    [SerializeField] private int StageLevel = 1;        // ÇöÀç ½ºÅ×ÀÌÁö ·¹º§ ( ³­ÀÌµµ Á¶Àı¿ë )
-    [SerializeField] private AnimationCurve HpCurve;    // ½ºÅ×ÀÌÁöº° ¸ó½ºÅÍ HP Á¶Àı¿ë Ä¿ºê
-    [SerializeField] private AnimationCurve GoldCurve;  // ½ºÅ×ÀÌÁöº° ¸ó½ºÅÍ Ã³Ä¡ º¸»ó °ñµå Á¶Àı¿ë Ä¿ºê
-    // Ä¿ºê´Â ÇöÀç ±â´É Á¡°Ë¿¹Á¤ »ç¿ëÀÌ ¾î·Á¿ì¸é °£´ÜÇÑ ¼ö½ÄÈ­ ÇÒµí.
+    [SerializeField] private int StageLevel = 1;        // í˜„ì¬ ìŠ¤í…Œì´ì§€ ë ˆë²¨ ( ë‚œì´ë„ ì¡°ì ˆìš© )
+    [SerializeField] private AnimationCurve HpCurve;    // ìŠ¤í…Œì´ì§€ë³„ ëª¬ìŠ¤í„° HP ì¡°ì ˆìš© ì»¤ë¸Œ
+    [SerializeField] private AnimationCurve GoldCurve;  // ìŠ¤í…Œì´ì§€ë³„ ëª¬ìŠ¤í„° ì²˜ì¹˜ ë³´ìƒ ê³¨ë“œ ì¡°ì ˆìš© ì»¤ë¸Œ
+    // ì»¤ë¸ŒëŠ” í˜„ì¬ ê¸°ëŠ¥ ì ê²€ì˜ˆì • ì‚¬ìš©ì´ ì–´ë ¤ìš°ë©´ ê°„ë‹¨í•œ ìˆ˜ì‹í™” í• ë“¯.
 
-    private float Timer;  // ³»ºÎ ½Ã°£ ÃøÁ¤¿ë Å¸ÀÌ¸Ó
+    private float Timer;  // ë‚´ë¶€ ì‹œê°„ ì¸¡ì •ìš© íƒ€ì´ë¨¸
 
     private void Update()
     {
-        Timer += Time.deltaTime; // Å¸ÀÌ¸Ó ÃÊ±âÈ­
+        Timer += Time.deltaTime; // íƒ€ì´ë¨¸ ì´ˆê¸°í™”
 
         if (Timer >= SpawnInterval)
         {
             Timer = 0f;
 
-            // ÇöÀç ¾À ³»¿¡ Á¸ÀçÇÏ´Â ¸ó½ºÅÍ ¼ö¸¦ ÅÂ±×·Î °Ë»ö (¼º´ÉÀÌ½´ ÀÖÀ» ¼ö ÀÖÀ½)
+            // í˜„ì¬ ì”¬ ë‚´ì— ì¡´ì¬í•˜ëŠ” ëª¬ìŠ¤í„° ìˆ˜ë¥¼ íƒœê·¸ë¡œ ê²€ìƒ‰ (ì„±ëŠ¥ì´ìŠˆ ìˆì„ ìˆ˜ ìˆìŒ)
             int currentMonsterCount = GameObject.FindGameObjectsWithTag("Monster").Length;
 
-            // ÃÖ´ë ¸ó½ºÅÍ ¼ö ¹Ì¸¸ÀÏ °æ¿ì¿¡¸¸ »õ ¸ó½ºÅÍ »ı¼º
+            // ìµœëŒ€ ëª¬ìŠ¤í„° ìˆ˜ ë¯¸ë§Œì¼ ê²½ìš°ì—ë§Œ ìƒˆ ëª¬ìŠ¤í„° ìƒì„±
             if (currentMonsterCount < MaxMonsterCount)
             {
                 SpawnMonster();
@@ -45,18 +45,18 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Ä«¸Ş¶ó ½Ã¾ß ¹Û ·£´ı À§Ä¡¸¦ °è»êÇØ ¸ó½ºÅÍ¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+    /// ì¹´ë©”ë¼ ì‹œì•¼ ë°– ëœë¤ ìœ„ì¹˜ë¥¼ ê³„ì‚°í•´ ëª¬ìŠ¤í„°ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
     private void SpawnMonster()
     {
-        // ½Ã¾ß ¹Û ·£´ı À§Ä¡ ¾ò±â
+        // ì‹œì•¼ ë°– ëœë¤ ìœ„ì¹˜ ì–»ê¸°
         Vector3 SpawnPosition = GetRandomPositionOutSideView();
-        // ÀÎ½ºÅÏ½º·Î ¸ó½ºÅÍ »ı¼º
+        // ì¸ìŠ¤í„´ìŠ¤ë¡œ ëª¬ìŠ¤í„° ìƒì„±
         GameObject Monster = Instantiate(MonsterPrefabs, SpawnPosition, Quaternion.identity);
-        // »ı¼ºµÈ ¸ó½ºÅÍÀÇ ½ºÅİ ÄÄÆ÷³ÍÆ® ºÒ·¯¿À±â
+        // ìƒì„±ëœ ëª¬ìŠ¤í„°ì˜ ìŠ¤í…Ÿ ì»´í¬ë„ŒíŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
         var MonsterStat = Monster.GetComponent<MonsterStat>();
 
-        // ÇöÀç ½ºÅ×ÀÌÁö ·¹º§¿¡ µû¸¥ HP ¼³Á¤°ú µå¶ø°ñµå Ä¿ºê·Î °ü¸®
+        // í˜„ì¬ ìŠ¤í…Œì´ì§€ ë ˆë²¨ì— ë”°ë¥¸ HP ì„¤ì •ê³¼ ë“œëê³¨ë“œ ì»¤ë¸Œë¡œ ê´€ë¦¬
         MonsterStat.Init(
             (int)HpCurve.Evaluate(StageLevel),
             (int)GoldCurve.Evaluate(StageLevel)
@@ -64,48 +64,48 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Ä«¸Ş¶ó ½Ã¾ß ¹Û ³× ¹æÇâ Áß ·£´ıÀ¸·Î À§Ä¡¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
-    /// - ½Ã¾ß ¹Û °Å¸®¸¸Å­ ¶³¾îÁø À§Ä¡¸¦ ±âÁØÀ¸·Î ·£´ı ÁÂÇ¥ »ı¼º
+    /// ì¹´ë©”ë¼ ì‹œì•¼ ë°– ë„¤ ë°©í–¥ ì¤‘ ëœë¤ìœ¼ë¡œ ìœ„ì¹˜ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
+    /// - ì‹œì•¼ ë°– ê±°ë¦¬ë§Œí¼ ë–¨ì–´ì§„ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ëœë¤ ì¢Œí‘œ ìƒì„±
     /// </summary>
-    /// <returns>·£´ıÀ¸·Î ¼±ÅÃµÈ ½Ã¾ß ¹Û ¿ùµå ÁÂÇ¥</returns>
+    /// <returns>ëœë¤ìœ¼ë¡œ ì„ íƒëœ ì‹œì•¼ ë°– ì›”ë“œ ì¢Œí‘œ</returns>
     private Vector3 GetRandomPositionOutSideView()
     {
         Camera Cam = Camera.main;
 
-        // Ä«¸Ş¶óÀÇ ¼¼·Î Àı¹İ ±æÀÌ °è»ê 
+        // ì¹´ë©”ë¼ì˜ ì„¸ë¡œ ì ˆë°˜ ê¸¸ì´ ê³„ì‚° 
         float CamHeight = 2f * Cam.orthographicSize;
 
-        // Ä«¸Ş¶óÀÇ °¡·Î Àı¹İ ±æÀÌ °è»ê
+        // ì¹´ë©”ë¼ì˜ ê°€ë¡œ ì ˆë°˜ ê¸¸ì´ ê³„ì‚°
         float CamWidth = CamHeight * Cam.aspect;
 
-        // Ä«¸Ş¶óÀÇ ÇöÀç À§Ä¡
+        // ì¹´ë©”ë¼ì˜ í˜„ì¬ ìœ„ì¹˜
         Vector3 CamPos = Cam.transform.position;
 
-        // ½Ã¾ß ¹ÛÀ¸·Î ¾ó¸¶³ª ¸Ö¾îÁúÁö °Å¸® ÁöÁ¤
+        // ì‹œì•¼ ë°–ìœ¼ë¡œ ì–¼ë§ˆë‚˜ ë©€ì–´ì§ˆì§€ ê±°ë¦¬ ì§€ì •
         float Extra = SpawnDistance;
 
-        // 0 = À§, 1 = ¾Æ·¡, 2 = ¿ŞÂÊ, 3 = ¿À¸¥ÂÊ Áß¿¡ ·£´ı ¼±ÅÃ
+        // 0 = ìœ„, 1 = ì•„ë˜, 2 = ì™¼ìª½, 3 = ì˜¤ë¥¸ìª½ ì¤‘ì— ëœë¤ ì„ íƒ
         int Side = Random.Range(0, 4);
         Vector3 offset = Vector3.zero;
 
-        // ¼±ÅÃµÈ ¹æÇâ¿¡ µû¶ó ·£´ı ÁÂÇ¥ »ı¼º
+        // ì„ íƒëœ ë°©í–¥ì— ë”°ë¼ ëœë¤ ì¢Œí‘œ ìƒì„±
         switch (Side)
         {
-            case 0: // À­ ¹æÇâ
+            case 0: // ìœ— ë°©í–¥
                 offset = new Vector3(Random.Range(-CamWidth / 2, CamWidth / 2), CamHeight / 2 + Extra, 0);
                 break;
-            case 1: // ¾Æ·§ ¹æÇâ
+            case 1: // ì•„ë« ë°©í–¥
                 offset = new Vector3(Random.Range(-CamWidth / 2, CamWidth / 2), -CamHeight / 2 - Extra, 0);
                 break;
-            case 2: // ¿ŞÂÊ ¹æÇâ
+            case 2: // ì™¼ìª½ ë°©í–¥
                 offset = new Vector3(-CamWidth / 2 - Extra, Random.Range(-CamHeight / 2, CamHeight / 2), 0);
                 break;
-            case 3: // ¿À¸¥ÂÊ ¹æÇâ
+            case 3: // ì˜¤ë¥¸ìª½ ë°©í–¥
                 offset = new Vector3(CamWidth / 2 + Extra, Random.Range(-CamHeight / 2, CamHeight / 2), 0);
                 break;
         }
 
-        // Ä«¸Ş¶ó À§Ä¡ + ¿ÀÇÁ¼Â = ÃÖÁ¾ ½ºÆùÀ§Ä¡ ¹İÈ¯
+        // ì¹´ë©”ë¼ ìœ„ì¹˜ + ì˜¤í”„ì…‹ = ìµœì¢… ìŠ¤í°ìœ„ì¹˜ ë°˜í™˜
         return CamPos + offset;
     }
 }

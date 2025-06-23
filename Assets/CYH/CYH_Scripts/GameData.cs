@@ -1,26 +1,26 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Save/Load µÇ¾î¾ß ÇÒ º¯¼ö/ScriptableObject¸¦ ´ã´Â Å¬·¡½ºÀÔ´Ï´Ù.
-/// »ç¿ë ½Ã InspectorÃ¢ °¡µ¶¼ºÀ» À§ÇØ Header¸¦ ÇÊ¼ö·Î ÀÛ¼ºÇØÁÖ¼¼¿ä ex.[Header("Player")]
+/// Save/Load ë˜ì–´ì•¼ í•  ë³€ìˆ˜/ScriptableObjectë¥¼ ë‹´ëŠ” í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
+/// ì‚¬ìš© ì‹œ Inspectorì°½ ê°€ë…ì„±ì„ ìœ„í•´ Headerë¥¼ í•„ìˆ˜ë¡œ ì‘ì„±í•´ì£¼ì„¸ìš” ex.[Header("Player")]
 /// </summary>
 [System.Serializable]
 public partial class GameData
 {
-    [Header("µ¥ÀÌÅÍ ÀúÀå ½Ã°£")]
+    [Header("ë°ì´í„° ì €ì¥ ì‹œê°„")]
     [SerializeField] private string _savedTimeString;
 
-    // DateTime Á÷·ÄÈ­/¿ªÁ÷·ÄÈ­ ÇÁ·ÎÆÛÆ¼
+    // DateTime ì§ë ¬í™”/ì—­ì§ë ¬í™” í”„ë¡œí¼í‹°
     public DateTime SavedTime
     {
         get => DateTime.Parse(_savedTimeString);         // string > DateTime
         set => _savedTimeString = value.ToString("o");   // DateTime > string
     }
 
-    [Header("Å×½ºÆ®¿ë ±âº» °ª")]
+    [Header("í…ŒìŠ¤íŠ¸ìš© ê¸°ë³¸ ê°’")]
     public int Level_T = 1;
     public float Exp_T = 10;
     public int Gold_T = 100;

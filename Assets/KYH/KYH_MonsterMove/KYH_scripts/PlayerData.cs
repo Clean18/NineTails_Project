@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ namespace Game.Data
         public void AddGold(int amount)
         {
             Gold += amount;
-            Debug.Log($"°ñµå {Gold} È¹µæ.");
+            Debug.Log($"ê³¨ë“œ {Gold} íšë“.");
         }
     }
 }

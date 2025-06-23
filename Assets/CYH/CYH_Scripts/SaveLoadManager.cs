@@ -1,27 +1,27 @@
-using System;
+ï»¿using System;
 using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// JSON Çü½ÄÀ¸·Î °ÔÀÓ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ°í ºÒ·¯¿À´Â ¸Å´ÏÀú Å¬·¡½ºÀÔ´Ï´Ù.
+/// JSON í˜•ì‹ìœ¼ë¡œ ê²Œì„ ë°ì´í„°ë¥¼ ì €ì¥í•˜ê³  ë¶ˆëŸ¬ì˜¤ëŠ” ë§¤ë‹ˆì € í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
 /// </summary>
 public class SaveLoadManager : MonoBehaviour
 {
     public GameData GameData;
 
-    public const string FileName = "SaveFile";  // ¼¼ÀÌºê ÆÄÀÏ¸í
-    public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");  // ¼¼ÀÌºê ÆÄÀÏ ÀúÀå °æ·Î
+    public const string FileName = "SaveFile";  // ì„¸ì´ë¸Œ íŒŒì¼ëª…
+    public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");  // ì„¸ì´ë¸Œ íŒŒì¼ ì €ì¥ ê²½ë¡œ
 
-    [field: SerializeField] public int ElapsedSeconds { get; private set; } // °ÔÀÓÁ¾·á ÈÄ ÃÑ °æ°ú ½Ã°£(ÃÊ) - Å×½ºÆ®¿ë
+    [field: SerializeField] public int ElapsedSeconds { get; private set; } // ê²Œì„ì¢…ë£Œ í›„ ì´ ê²½ê³¼ ì‹œê°„(ì´ˆ) - í…ŒìŠ¤íŠ¸ìš©
 
-    [Header("ÃÑ °æ°ú ½Ã°£")]
-    [SerializeField] private int _elapsedMinutes;   // °ÔÀÓÁ¾·á ÈÄ ÃÑ °æ°ú ½Ã°£(ºĞ)
+    [Header("ì´ ê²½ê³¼ ì‹œê°„")]
+    [SerializeField] private int _elapsedMinutes;   // ê²Œì„ì¢…ë£Œ í›„ ì´ ê²½ê³¼ ì‹œê°„(ë¶„)
     public int ElapsedMinutes
     {
         get { return _elapsedMinutes; }
     }
 
-    // merge ÈÄ Singleton Å¬·¡½º »ó¼Ó ¹ŞÀº µÚ »èÁ¦ ¿¹Á¤ÀÔ´Ï´Ù.
+    // merge í›„ Singleton í´ë˜ìŠ¤ ìƒì† ë°›ì€ ë’¤ ì‚­ì œ ì˜ˆì •ì…ë‹ˆë‹¤.
     #region Singleton
     private static SaveLoadManager _instance;
     public static SaveLoadManager Instance { get { return _instance; } }
@@ -38,14 +38,14 @@ public class SaveLoadManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // °ÔÀÓ µ¥ÀÌÅÍ ·Îµå
+        // ê²Œì„ ë°ì´í„° ë¡œë“œ
         //LoadData();
     }
     #endregion
 
     private void Update()
     {
-        // Å×½ºÆ®¿ë
+        // í…ŒìŠ¤íŠ¸ìš©
         if (Input.GetKeyDown(KeyCode.M))
         {
             SaveData();
@@ -63,32 +63,32 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÁöÁ¤µÈ °æ·Î¿¡ µ¥ÀÌÅÍ¸¦ JSON Çü½ÄÀ¸·Î ÀúÀåÇÕ´Ï´Ù.
+    /// ì§€ì •ëœ ê²½ë¡œì— ë°ì´í„°ë¥¼ JSON í˜•ì‹ìœ¼ë¡œ ì €ì¥í•©ë‹ˆë‹¤.
     /// </summary>
     public void SaveData()
     {
-        // ÀúÀå °æ·Î À¯¹« Ã¼Å©
+        // ì €ì¥ ê²½ë¡œ ìœ ë¬´ ì²´í¬
         if (Directory.Exists(Path.GetDirectoryName($"{DataPath}")) == false)
         {
             Directory.CreateDirectory(Path.GetDirectoryName($"{DataPath}"));
         }
 
-        GameData.SavedTime = DateTime.Now;  // ÀúÀå ½Ã°£ = ÇöÀç ½Ã°£
+        GameData.SavedTime = DateTime.Now;  // ì €ì¥ ì‹œê°„ = í˜„ì¬ ì‹œê°„
         
         string json = JsonUtility.ToJson(GameData, true);
         Debug.Log(json);
         File.WriteAllText($"{DataPath}", json);
         Debug.Log("SaveData");
-        Debug.Log($"¸¶Áö¸· ÀúÀå ½Ã°£: {GameData.SavedTime}");
+        Debug.Log($"ë§ˆì§€ë§‰ ì €ì¥ ì‹œê°„: {GameData.SavedTime}");
     }
 
     /// <summary>
-    /// ÁöÁ¤µÈ °æ·Î¿¡¼­ JSON Çü½ÄÀÇ µ¥ÀÌÅÍ¸¦ ºÒ·¯¿Í °´Ã¼·Î ¹İÈ¯ÇÕ´Ï´Ù.
-    /// ÃÖÁ¾ °ÔÀÓ¿¡¼­´Â Awake¿¡¼­ È£ÃâµÉ ¿¹Á¤ÀÔ´Ï´Ù.
+    /// ì§€ì •ëœ ê²½ë¡œì—ì„œ JSON í˜•ì‹ì˜ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì™€ ê°ì²´ë¡œ ë°˜í™˜í•©ë‹ˆë‹¤.
+    /// ìµœì¢… ê²Œì„ì—ì„œëŠ” Awakeì—ì„œ í˜¸ì¶œë  ì˜ˆì •ì…ë‹ˆë‹¤.
     /// </summary>
     public bool LoadData()
     {
-        // µ¥ÀÌÅÍ Á¸Àç ¿©ºÎ Ã¼Å©
+        // ë°ì´í„° ì¡´ì¬ ì—¬ë¶€ ì²´í¬
         if (!ExistData())
             return false;
 
@@ -96,7 +96,7 @@ public class SaveLoadManager : MonoBehaviour
         GameData = JsonUtility.FromJson<GameData>(json);
         Debug.Log("LoadData");
 
-        // Å×½ºÆ®¿ë
+        // í…ŒìŠ¤íŠ¸ìš©
         ElapsedTime();
         _elapsedMinutes = 0;
         ElapsedSeconds = 0;
@@ -105,17 +105,17 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÁöÁ¤µÈ °æ·Î¿¡ ÀÖ´Â ÀúÀå ÆÄÀÏÀ» »èÁ¦ÇÕ´Ï´Ù.
+    /// ì§€ì •ëœ ê²½ë¡œì— ìˆëŠ” ì €ì¥ íŒŒì¼ì„ ì‚­ì œí•©ë‹ˆë‹¤.
     /// </summary>
     public bool DeleteData()
     {
-        // ÃÊ±âÈ­¿ë JsonÆÄÀÏ ¹é¾÷ »óÈ²µµ °í·Á
+        // ì´ˆê¸°í™”ìš© JsoníŒŒì¼ ë°±ì—… ìƒí™©ë„ ê³ ë ¤
 
-        // µ¥ÀÌÅÍ Á¸Àç ¿©ºÎ Ã¼Å©
+        // ë°ì´í„° ì¡´ì¬ ì—¬ë¶€ ì²´í¬
         if (!ExistData())
             return false;
 
-        // ÆÄÀÏ »èÁ¦
+        // íŒŒì¼ ì‚­ì œ
         File.Delete($"{DataPath}");
         Debug.Log("DeleteData");
 
@@ -123,11 +123,11 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÁöÁ¤µÈ °æ·Î¿¡ ÀúÀå ÆÄÀÏÀÌ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÕ´Ï´Ù.
+    /// ì§€ì •ëœ ê²½ë¡œì— ì €ì¥ íŒŒì¼ì´ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸í•©ë‹ˆë‹¤.
     /// </summary>
     public bool ExistData()
     {
-        // ÀúÀå °æ·Î À¯¹« Ã¼Å©
+        // ì €ì¥ ê²½ë¡œ ìœ ë¬´ ì²´í¬
         if (Directory.Exists(Path.GetDirectoryName($"{DataPath}")) == false)
             return false;
 
@@ -135,22 +135,22 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÀúÀåµÈ ½Ã°£°ú ÇöÀç ½Ã°£ÀÇ Â÷ÀÌ¸¦ °è»êÇØ °æ°ú ½Ã°£À» ºĞ ´ÜÀ§·Î ÀúÀåÇÕ´Ï´Ù.
-    /// ÇöÀç´Â Å×½ºÆ® ¿ëµµ·Î ÃÊ ´ÜÀ§¸¦ ±âÁØÀ¸·Î »ç¿ëÇÕ´Ï´Ù.
+    /// ì €ì¥ëœ ì‹œê°„ê³¼ í˜„ì¬ ì‹œê°„ì˜ ì°¨ì´ë¥¼ ê³„ì‚°í•´ ê²½ê³¼ ì‹œê°„ì„ ë¶„ ë‹¨ìœ„ë¡œ ì €ì¥í•©ë‹ˆë‹¤.
+    /// í˜„ì¬ëŠ” í…ŒìŠ¤íŠ¸ ìš©ë„ë¡œ ì´ˆ ë‹¨ìœ„ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì‚¬ìš©í•©ë‹ˆë‹¤.
     /// </summary>
     public void ElapsedTime()
     {
         DateTime gameStartTime = DateTime.Now;
         TimeSpan elapsedTime = gameStartTime - GameData.SavedTime;
 
-        // ÃÊ ´ÜÀ§´Â ¹ö¸®°í ºĞ ´ÜÀ§¸¸ ÃßÃâ
+        // ì´ˆ ë‹¨ìœ„ëŠ” ë²„ë¦¬ê³  ë¶„ ë‹¨ìœ„ë§Œ ì¶”ì¶œ
         //_elapsedMinutes = (int)elapsedTime.TotalMinutes;
-        //Debug.Log($"°ÔÀÓ ½ÃÀÛ ½Ã°£: {gameStartTime}");
-        //Debug.Log($"°ÔÀÓ Á¾·á ÈÄ °æ°ú ½Ã°£: {ElapsedMinutes}ºĞ");
+        //Debug.Log($"ê²Œì„ ì‹œì‘ ì‹œê°„: {gameStartTime}");
+        //Debug.Log($"ê²Œì„ ì¢…ë£Œ í›„ ê²½ê³¼ ì‹œê°„: {ElapsedMinutes}ë¶„");
 
-        // Å×½ºÆ®¿ë ÃÊ ´ÜÀ§ Ã¼Å©
+        // í…ŒìŠ¤íŠ¸ìš© ì´ˆ ë‹¨ìœ„ ì²´í¬
         ElapsedSeconds = (int)elapsedTime.TotalSeconds;
-        Debug.Log($"°ÔÀÓ ½ÃÀÛ ½Ã°£: {gameStartTime}");
-        Debug.Log($"°ÔÀÓ Á¾·á ÈÄ °æ°ú ½Ã°£: {ElapsedSeconds}ÃÊ");
+        Debug.Log($"ê²Œì„ ì‹œì‘ ì‹œê°„: {gameStartTime}");
+        Debug.Log($"ê²Œì„ ì¢…ë£Œ í›„ ê²½ê³¼ ì‹œê°„: {ElapsedSeconds}ì´ˆ");
     }
 }
