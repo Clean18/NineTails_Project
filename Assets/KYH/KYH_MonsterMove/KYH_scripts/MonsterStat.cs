@@ -27,7 +27,7 @@ public class MonsterStat : MonoBehaviour
 
     private void Die()
     {
-        PlayerData.Instance.AddGold(RewardGold);
+        Game.Data.PlayerData.Instance.AddGold(RewardGold);
 
         Destroy(gameObject);
     }

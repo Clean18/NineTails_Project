@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+namespace Game.Data
 {
-    public static PlayerData Instance;
-
-    public int Gold { get; private set; }
-
-    private void Awake()
+    public class PlayerData : MonoBehaviour
     {
-        Instance = this;
-    }
+        public static PlayerData Instance;
 
-    public void AddGold(int amount)
-    {
-        Gold += amount;
-        Debug.Log($"°ñµå {Gold} È¹µæ.");
+        public int Gold { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        public void AddGold(int amount)
+        {
+            Gold += amount;
+            Debug.Log($"°ñµå {Gold} È¹µæ.");
+        }
     }
 }
