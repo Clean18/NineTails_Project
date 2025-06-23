@@ -436,6 +436,8 @@ MonoBehaviour:
     Gold_T: 100
   <ElapsedSeconds>k__BackingField: 0
   _elapsedMinutes: 0
+  autoSaveInterval: 1
+  isNormalStage: 0
 --- !u!4 &1039218583
 Transform:
   m_ObjectHideFlags: 0
@@ -962,7 +964,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1398861196}
-  - {fileID: 1039218583}
   - {fileID: 1611588411}
   - {fileID: 652448290}
   - {fileID: 1895255501}
+  - {fileID: 1039218583}

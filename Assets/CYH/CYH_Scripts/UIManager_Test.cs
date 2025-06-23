@@ -13,6 +13,6 @@ public class UIManager_Test : MonoBehaviour
 
     private void Start()
     {
-        _quitButton.onClick.AddListener(() => SaveLoadManager.Instance.SaveData());
+        _quitButton.onClick.AddListener(() => GameEvents.RequestSave());
     }
 }
