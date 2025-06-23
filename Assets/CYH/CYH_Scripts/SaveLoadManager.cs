@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ using UnityEngine;
 public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public GameData GameData;
-
     public const string FileName = "SaveFile";  // 세이브 파일명
     public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");  // 세이브 파일 저장 경로
 
@@ -16,18 +16,25 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     [Header("총 경과 시간")]
     [SerializeField] private int _elapsedMinutes;   // 게임종료 후 총 경과 시간(분)
-    public int ElapsedMinutes
-    {
-        get { return _elapsedMinutes; }
-    }
+    public int ElapsedMinutes { get { return _elapsedMinutes; } }
 
+    private Coroutine _autoSaveCoroutine;
+    [Header("저장 간격")]
+    [SerializeField] private float autoSaveInterval = 1f;
+    private WaitForSeconds _wait;                          
 
     protected override void Awake()
     {
         base.Awake();
         
-        // 게임 시작 시 게임데이터 로드
+        // 게임 시작 시 저장된 모든 게임데이터 로드
         LoadData();
+    }
+
+    private void Start()
+    {
+        _wait = new WaitForSeconds(autoSaveInterval);
+        StartAutoSave();
     }
 
     private void Update()
@@ -49,6 +56,32 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         }
     }
 
+    // 1초마다 SaveData 호출
+    private IEnumerator AutoSaveRoutine()
+    {
+        while (true)
+        {
+            SaveData();
+            yield return _wait;
+        }
+    }
+
+    public void StartAutoSave()
+    {
+        if (_autoSaveCoroutine == null)
+            _autoSaveCoroutine = StartCoroutine(AutoSaveRoutine());
+    }
+
+    public void StopAutoSave()
+    {
+        if (_autoSaveCoroutine != null)
+        {
+            StopCoroutine(_autoSaveCoroutine);
+            _autoSaveCoroutine = null;
+        }
+    }
+
+    #region Save, Load, Delete Exist
     /// <summary>
     /// 지정된 경로에 데이터를 JSON 형식으로 저장합니다.
     /// </summary>
@@ -63,7 +96,6 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         GameData.SavedTime = DateTime.Now;  // 저장 시간 = 현재 시간
         
         string json = JsonUtility.ToJson(GameData, true);
-        Debug.Log(json);
         File.WriteAllText($"{DataPath}", json);
         Debug.Log("SaveData");
         Debug.Log($"마지막 저장 시간: {GameData.SavedTime}");
@@ -140,4 +172,5 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         Debug.Log($"게임 시작 시간: {gameStartTime}");
         Debug.Log($"게임 종료 후 경과 시간: {ElapsedSeconds}초");
     }
+    #endregion
 }
