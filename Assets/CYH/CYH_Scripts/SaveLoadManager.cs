@@ -21,12 +21,13 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         get { return _elapsedMinutes; }
     }
 
+
     protected override void Awake()
     {
         base.Awake();
         
-        // 게임 데이터 로드
-        //LoadData();
+        // 게임 시작 시 게임데이터 로드
+        LoadData();
     }
 
     private void Update()
