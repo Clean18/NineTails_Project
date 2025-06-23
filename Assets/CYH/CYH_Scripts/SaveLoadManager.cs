@@ -1,47 +1,51 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
 /// <summary>
 /// JSON 형식으로 게임 데이터를 저장하고 불러오는 매니저 클래스입니다.
 /// </summary>
-public class SaveLoadManager : MonoBehaviour
+public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public GameData GameData;
-
-    public const string FileName = "SaveFile";  // 세이브 파일명
-    public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");  // 세이브 파일 저장 경로
+    public const string FileName = "SaveFile";
+    public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");
 
     [field: SerializeField] public int ElapsedSeconds { get; private set; } // 게임종료 후 총 경과 시간(초) - 테스트용
 
     [Header("총 경과 시간")]
     [SerializeField] private int _elapsedMinutes;   // 게임종료 후 총 경과 시간(분)
-    public int ElapsedMinutes
+    public int ElapsedMinutes { get { return _elapsedMinutes; } }
+
+    private Coroutine _autoSaveCoroutine;
+    [Header("저장 간격")]
+    [SerializeField] private float autoSaveInterval = 1f;
+    private WaitForSeconds _wait;
+
+    [Header("일반 스테이지")]
+    // 일반스테이지 판별용 테스트 변수
+    public bool isNormalStage = false;
+
+
+    protected override void Awake()
     {
-        get { return _elapsedMinutes; }
+        base.Awake();
+
+        // 게임 시작 시 저장된 모든 게임데이터 불러오기
+        LoadData();
     }
 
-    // merge 후 Singleton 클래스 상속 받은 뒤 삭제 예정입니다.
-    #region Singleton
-    private static SaveLoadManager _instance;
-    public static SaveLoadManager Instance { get { return _instance; } }
-
-    private void Awake()
+    private void Start()
     {
-        if (_instance == null)
+        _wait = new WaitForSeconds(autoSaveInterval);
+        
+        // 일반스테이지 -> 1초마다 게임데이터 저장
+        if (isNormalStage)
         {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
+            StartAutoSave();
         }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        // 게임 데이터 로드
-        //LoadData();
     }
-    #endregion
 
     private void Update()
     {
@@ -62,6 +66,34 @@ public class SaveLoadManager : MonoBehaviour
         }
     }
 
+    #region SaveCoroutine
+    // 1초마다 SaveData 호출
+    private IEnumerator AutoSaveRoutine()
+    {
+        while (true)
+        {
+            SaveData();
+            yield return _wait;
+        }
+    }
+
+    public void StartAutoSave()
+    {
+        if (_autoSaveCoroutine == null)
+            _autoSaveCoroutine = StartCoroutine(AutoSaveRoutine());
+    }
+
+    public void StopAutoSave()
+    {
+        if (_autoSaveCoroutine != null)
+        {
+            StopCoroutine(_autoSaveCoroutine);
+            _autoSaveCoroutine = null;
+        }
+    }
+    #endregion
+
+    #region Save, Load, Delete Exist
     /// <summary>
     /// 지정된 경로에 데이터를 JSON 형식으로 저장합니다.
     /// </summary>
@@ -74,9 +106,8 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         GameData.SavedTime = DateTime.Now;  // 저장 시간 = 현재 시간
-        
+
         string json = JsonUtility.ToJson(GameData, true);
-        Debug.Log(json);
         File.WriteAllText($"{DataPath}", json);
         Debug.Log("SaveData");
         Debug.Log($"마지막 저장 시간: {GameData.SavedTime}");
@@ -152,5 +183,16 @@ public class SaveLoadManager : MonoBehaviour
         ElapsedSeconds = (int)elapsedTime.TotalSeconds;
         Debug.Log($"게임 시작 시간: {gameStartTime}");
         Debug.Log($"게임 종료 후 경과 시간: {ElapsedSeconds}초");
+    }
+    #endregion
+
+    private void OnEnable()
+    {
+        GameEvents.OnSaveRequested += SaveData;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnSaveRequested -= SaveData;
     }
 }
