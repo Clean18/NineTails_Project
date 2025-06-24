@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
+/// </summary>
+[System.Serializable]
 public class PlayerModel
 {
 	// 캐릭터 스텟
@@ -19,5 +23,10 @@ public class PlayerModel
 		Data = new PlayerData();
 		Cost = new PlayerCost();
 		Skill = new PlayerSkill();
+	}
+
+	public void ApplyDamage(long damage)
+	{
+		Data.Hp -= damage;
 	}
 }
