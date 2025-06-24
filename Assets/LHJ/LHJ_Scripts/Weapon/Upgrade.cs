@@ -34,6 +34,8 @@ public class Upgrade : MonoBehaviour
     [SerializeField] private float CooldownReduction;  // 현재 쿨타임 감소 수치
     [SerializeField] private float ReduceDamage;       // 방어력 감소 수치
     [SerializeField] private int warmth;               // (Test용) 가지고 있는 재화
+    private int ssrDamageBonus = 5; // SSR 기본 데미지 증가 수치
+    private int baseSSRCost = 150; // 테이블 SR 재화 이후 임시로 넣어둔 재화 
     void Start()
     {
         // 강화 데이터 다운로드 루틴 실행
@@ -87,10 +89,17 @@ public class Upgrade : MonoBehaviour
         // SSR 등급은 무한히 강화가 되는 구조
         if (currentGrade == "SSR")
         {
-            int baseSSRCost = 150; // 테이블 SR 재화 이후 임시로 넣어둔 재화 
+            if (warmth < baseSSRCost)
+            {
+                Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
+                return;
+            }
             currentLevel += 1;
             warmth -= baseSSRCost;
-            // 올라갈 능력치 계산
+            int bonusPerLevel = 2; // 매 강화 시 +2%
+            ssrDamageBonus += bonusPerLevel;
+            Debug.Log($"강화 성공! 현재 등급: {currentGrade}등급, 강화 단계: {currentLevel}강" + $"공격력 증가율: {currentAttack * 100}%" + $"스킬 쿨타임 감소: {CooldownReduction * 100}%" + $"방어력 관통 수치: {ReduceDamage * 100}%"+ $"누적 피해 증가: { ssrDamageBonus}%");
+
             baseSSRCost++;          // 강화에 들어가는 재화가 1개씩 증가
             return;
         }
