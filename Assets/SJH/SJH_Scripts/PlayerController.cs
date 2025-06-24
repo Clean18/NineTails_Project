@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
 	public PlayerAI PlayerAI;
 
 	// TODO : 게임이 시작되면 시작은 Auto
-	private ControlMode _mode;
+	[SerializeField]private ControlMode _mode;
 	public ControlMode Mode
 	{
 		get => _mode;
@@ -93,10 +93,10 @@ public class PlayerController : MonoBehaviour
 		PlayerView = GetComponent<PlayerView>();
 		PlayerAI = new PlayerAI(this, PlayerView, _playerModel);
 
-		CurrentState = AIState.Idle;
+		CurrentState = AIState.Search;
 		//Mode = ControlMode.Manual;
 		Mode = ControlMode.Auto;
-
+		
 		GameManager.Instance.PlayerController = this;
 	}
 
@@ -106,7 +106,11 @@ public class PlayerController : MonoBehaviour
 		if (Mode == ControlMode.Auto) PlayerAI.Action();
 
 		// 수동 컨트롤
-		else if (Mode == ControlMode.Manual) InputHandler();
+		else if (Mode == ControlMode.Manual)
+		{
+			InputHandler();
+			PlayerAI.Action();
+		}
 	}
 
 	public void InputHandler()
@@ -134,6 +138,12 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	public void TakeDamage(long damage)
+	{
+		_playerModel.ApplyDamage(damage);
+		// TODO : view 피격처리
+		// TODO : UI 체력감소 처리
+	}
 
 	void OnDrawGizmos()
 	{

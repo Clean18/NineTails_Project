@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+[System.Serializable]
 public class PlayerAI
 {
 	private PlayerController _controller;
@@ -56,9 +57,9 @@ public class PlayerAI
 		foreach (var collider in monsters)
 		{
 			Vector2 dir = (Vector2)(collider.transform.position - _controller.transform.position).normalized;
-			float angle = Vector2.SignedAngle(Vector2.up, dir);
+			float angle = Vector2.SignedAngle(Vector2.up, dir); // Up을 기준으로 대상이 몇도에 있는지 확인
 			if (angle < 0) angle += 360;
-			int sector = (int)(angle / _controller.SightAngle) + 1;
+			int sector = (int)(angle / _controller.SightAngle) + 1; // 0 ~ 7
 			searchDic[sector].Add(collider.transform);
 		}
 
@@ -110,7 +111,7 @@ public class PlayerAI
 		}
 		if (TargetSkill == null) _controller.CurrentState = AIState.Search;
 		// 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
-		_controller.CurrentState = AIState.Chase;
+		_controller.CurrentState = _controller.Mode == ControlMode.Auto ? AIState.Chase : AIState.Attack;
 	}
 
 	void ChaseAction()
@@ -143,7 +144,11 @@ public class PlayerAI
 		if (distance > TargetSkill.Range)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
-			_controller.CurrentState = AIState.Chase;
+			// 자동모드일때만 추격으로 전환
+			if (_controller.Mode == ControlMode.Auto)
+				_controller.CurrentState = AIState.Chase;
+			else
+				TargetMonster = null;
 			return;
 		}
 
