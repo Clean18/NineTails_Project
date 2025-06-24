@@ -5,15 +5,17 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 /// <summary>
-/// °­È­ Á¤º¸ ±¸Á¶Ã¼
+/// ê°•í™” ì •ë³´ êµ¬ì¡°ì²´
 /// </summary>
 [System.Serializable]
 public struct UpgradeInfo
 {
-    public int Grade;       // ÀåºñÀÇ µî±Ş
-    public int Level;       // °­È­ ´Ü°è    
-    public int Attack;      // °ø°İ·Â ¼öÄ¡
-    public int WarmthCost;  // °­È­¿¡ ÇÊ¿äÇÑ ÀçÈ­°³¼ö
+    public string Grade;            // ì¥ë¹„ì˜ ë“±ê¸‰
+    public int Level;               // ê°•í™” ë‹¨ê³„    
+    public float Attack;            // (í”Œë ˆì´ì–´) ê³µê²©ë ¥% ìˆ˜ì¹˜
+    public float CooldownReduction; // (í”Œë ˆì´ì–´) ìŠ¤í‚¬ ì¿¨íƒ€ì„ ê°ì†Œ
+    public float ReduceDamage;      // (ëª¬ìŠ¤í„°) ë°›ëŠ” í”¼í•´ ê°ì†Œ ê´€í†µ ìˆ˜ì¹˜
+    public int WarmthCost;          // ê°•í™”ì— í•„ìš”í•œ ì¬í™”ê°œìˆ˜
 }
 [System.Serializable]
 public class UpgradeTable : DataTableParser<UpgradeInfo>
@@ -26,17 +28,21 @@ public class UpgradeTable : DataTableParser<UpgradeInfo>
 public class Upgrade : MonoBehaviour
 {
     public UpgradeTable upgradeTable;
-    [SerializeField] private int currentGrade;      // ÇöÀç Àåºñ µî±Ş
-    [SerializeField] private int currentLevel;      // ÇöÀç Àåºñ °­È­
-    [SerializeField] private int currentAttack;     // ÇöÀç Àåºñ °ø°İ·Â ¼öÄ¡
-    [SerializeField] private int warmth;            // (Test¿ë) °¡Áö°í ÀÖ´Â ÀçÈ­
+    [SerializeField] private string currentGrade;      // í˜„ì¬ ì¥ë¹„ ë“±ê¸‰
+    [SerializeField] private int currentLevel;         // í˜„ì¬ ì¥ë¹„ ê°•í™”
+    [SerializeField] private float currentAttack;      // í˜„ì¬ ì¥ë¹„ ê³µê²©ë ¥% ìˆ˜ì¹˜
+    [SerializeField] private float CooldownReduction;  // í˜„ì¬ ì¿¨íƒ€ì„ ê°ì†Œ ìˆ˜ì¹˜
+    [SerializeField] private float ReduceDamage;       // ë°©ì–´ë ¥ ê°ì†Œ ìˆ˜ì¹˜
+    [SerializeField] private int warmth;               // (Testìš©) ê°€ì§€ê³  ìˆëŠ” ì¬í™”
+    private int ssrDamageBonus = 5; // SSR ê¸°ë³¸ ë°ë¯¸ì§€ ì¦ê°€ ìˆ˜ì¹˜
+    private int baseSSRCost = 150; // í…Œì´ë¸” SR ì¬í™” ì´í›„ ì„ì‹œë¡œ ë„£ì–´ë‘” ì¬í™” 
     void Start()
     {
-        // °­È­ µ¥ÀÌÅÍ ´Ù¿î·Îµå ·çÆ¾ ½ÇÇà
+        // ê°•í™” ë°ì´í„° ë‹¤ìš´ë¡œë“œ ë£¨í‹´ ì‹¤í–‰
         StartCoroutine(DownloadRoutine());
     }
 
-    //CSV ´Ù¿î·Îµå¿ë ½ºÇÁ·¹µå½ÃÆ® URL
+    //CSV ë‹¤ìš´ë¡œë“œìš© ìŠ¤í”„ë ˆë“œì‹œíŠ¸ URL
     public const string UpgradeTableURL = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/export?format=csv&gid=0";
     IEnumerator DownloadRoutine()
     {
@@ -47,10 +53,12 @@ public class Upgrade : MonoBehaviour
         upgradeTable.Parse = words =>
         {
             UpgradeInfo info;
-            info.Grade = int.Parse(words[0]);       // µî±Ş
-            info.Level = int.Parse(words[1]);       // °­È­ ´Ü°è
-            info.Attack = int.Parse(words[2]);      // °ø°İ·Â  
-            info.WarmthCost = int.Parse(words[3]);  // °­È­ ºñ¿ë
+            info.Grade = words[0];                          // ë“±ê¸‰
+            info.Level = int.Parse(words[1]);               // ê°•í™” ë‹¨ê³„
+            info.Attack = float.Parse(words[2]);            // ê³µê²©ë ¥% ìˆ˜ì¹˜  
+            info.CooldownReduction = float.Parse(words[3]); // ì¿¨íƒ€ì„ ê°ì†Œ
+            info.ReduceDamage = float.Parse(words[4]);      // ë°©ì–´ë ¥ ê´€í†µ
+            info.WarmthCost = int.Parse(words[5]);          // ê°•í™” ë¹„ìš©
             return info;
         };
         upgradeTable.Load(csv);
@@ -61,14 +69,41 @@ public class Upgrade : MonoBehaviour
         {
             TryEnhance();
         }
+        // í˜„ì¬ ê°•í™”ë‹¨ê²Œê°€ 50 ì¼ë•Œ Promotionì— ìˆëŠ” TryPromote ì°¸ì¡°
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (currentLevel >= 50)
+            {
+                // ì”¬ì—ì„œ Promotion ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§„ ê°ì²´ë¥¼ ì°¾ì•„ì˜´
+                Promotion promotion = FindObjectOfType<Promotion>();
+                promotion.TryPromote(ref currentGrade, ref currentLevel, ref warmth);
+            }
+        }
     }
     /// <summary>
-    /// °­È­ Å×ÀÌºí¿¡¼­ ÇöÀç µî±Ş°ú ·¹º§¿¡ ¸Â´Â ´ÙÀ½ Á¤º¸¸¦ Ã£¾Æ °­È­
-    /// ÀçÈ­°¡ ÃæºĞÇÒ °æ¿ì °­È­ ¼º°ø Ã³¸® ÈÄ ÇöÀç °ø°İ·Â°ú °­È­ ·¹º§À» °»½Å
+    /// ê°•í™” í…Œì´ë¸”ì—ì„œ í˜„ì¬ ë“±ê¸‰ê³¼ ë ˆë²¨ì— ë§ëŠ” ë‹¤ìŒ ì •ë³´ë¥¼ ì°¾ì•„ ê°•í™”
+    /// ì¬í™”ê°€ ì¶©ë¶„í•  ê²½ìš° ê°•í™” ì„±ê³µ ì²˜ë¦¬ í›„ í˜„ì¬ ê³µê²©ë ¥ê³¼ ê°•í™” ë ˆë²¨ì„ ê°±ì‹ 
     /// </summary>
     public void TryEnhance()
     {
-        // °­È­ Å×ÀÌºí¿¡¼­ ´ÙÀ½ °­È­ Á¤º¸Ã£±â
+        // SSR ë“±ê¸‰ì€ ë¬´í•œíˆ ê°•í™”ê°€ ë˜ëŠ” êµ¬ì¡°
+        if (currentGrade == "SSR")
+        {
+            if (warmth < baseSSRCost)
+            {
+                Debug.Log("ì¬í™”ê°€ ë¶€ì¡±í•˜ì—¬ ê°•í™”ë¥¼ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                return;
+            }
+            currentLevel += 1;
+            warmth -= baseSSRCost;
+            int bonusPerLevel = 2; // ë§¤ ê°•í™” ì‹œ +2%
+            ssrDamageBonus += bonusPerLevel;
+            Debug.Log($"ê°•í™” ì„±ê³µ! í˜„ì¬ ë“±ê¸‰: {currentGrade}ë“±ê¸‰, ê°•í™” ë‹¨ê³„: {currentLevel}ê°•" + $"ê³µê²©ë ¥ ì¦ê°€ìœ¨: {currentAttack * 100}%" + $"ìŠ¤í‚¬ ì¿¨íƒ€ì„ ê°ì†Œ: {CooldownReduction * 100}%" + $"ë°©ì–´ë ¥ ê´€í†µ ìˆ˜ì¹˜: {ReduceDamage * 100}%"+ $"ëˆ„ì  í”¼í•´ ì¦ê°€: { ssrDamageBonus}%");
+
+            baseSSRCost++;          // ê°•í™”ì— ë“¤ì–´ê°€ëŠ” ì¬í™”ê°€ 1ê°œì”© ì¦ê°€
+            return;
+        }
+        // ê°•í™” í…Œì´ë¸”ì—ì„œ ë‹¤ìŒ ê°•í™” ì •ë³´ì°¾ê¸°
         List<UpgradeInfo> upgradeList = upgradeTable.Values;
         UpgradeInfo nextInfo = default;
         bool found = false;
@@ -77,7 +112,7 @@ public class Upgrade : MonoBehaviour
         {
             UpgradeInfo info = upgradeList[i];
 
-            // ÇöÀç µî±Ş°ú ´ÙÀ½ °­È­ ´Ü°è Á¶°ÇÀÌ ÀÏÄ¡ÇÏ´ÂÁö
+            // í˜„ì¬ ë“±ê¸‰ê³¼ ë‹¤ìŒ ê°•í™” ë‹¨ê³„ ì¡°ê±´ì´ ì¼ì¹˜í•˜ëŠ”ì§€
             if (info.Grade == currentGrade && info.Level == currentLevel + 1)
             {
                 nextInfo = info;
@@ -86,32 +121,29 @@ public class Upgrade : MonoBehaviour
             }
         }
 
-        // ´ÙÀ½ °­È­ Á¤º¸°¡ ¾øÀ»°æ¿ì
+        // ë‹¤ìŒ ê°•í™” ì •ë³´ê°€ ì—†ì„ê²½ìš°
         if (!found)
         {
-            Debug.Log("´õ ÀÌ»ó °­È­ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ë” ì´ìƒ ê°•í™”í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        // ÀçÈ­ È®ÀÎ
+        // ì¬í™” í™•ì¸
         if (warmth < nextInfo.WarmthCost)
         {
-            Debug.Log("ÀçÈ­°¡");
+            Debug.Log("ì¬í™”ê°€");
             return;
         }
         else
         {
-            // °­È­ ¼º°ø Ã³¸®
+            // ê°•í™” ì„±ê³µ ì²˜ë¦¬
             warmth -= nextInfo.WarmthCost;
             currentLevel += 1;
             currentAttack = nextInfo.Attack;
-            Debug.Log("°­È­ ¼º°ø! ÇöÀç µî±Ş: " + currentGrade + " , °­È­ ´Ü°è: " + currentLevel + " , °ø°İ·Â: " + currentAttack);
-        }
+            CooldownReduction = nextInfo.CooldownReduction;
+            ReduceDamage = nextInfo.ReduceDamage;
 
-        // ÇöÀç °­È­ ´Ü°è°¡ ÃÖ´ë·Î µµ´ŞµÇ¾úÀ»¶§
-        if (currentLevel >= 10)
-        {
-            Debug.Log("ÃÖ´ë °­È­ µµ´Ş");
+            Debug.Log($"ê°•í™” ì„±ê³µ! í˜„ì¬ ë“±ê¸‰: {currentGrade}ë“±ê¸‰, ê°•í™” ë‹¨ê³„: {currentLevel}ê°•" + $"ê³µê²©ë ¥ ì¦ê°€ìœ¨: {currentAttack * 100}%" +  $"ìŠ¤í‚¬ ì¿¨íƒ€ì„ ê°ì†Œ: {CooldownReduction * 100}%" +  $"ë°©ì–´ë ¥ ê´€í†µ ìˆ˜ì¹˜: {ReduceDamage * 100}%");
         }
     }
 }
