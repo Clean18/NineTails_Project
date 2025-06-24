@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.RestService;
 using UnityEngine;
@@ -27,7 +27,7 @@ public class MonsterStat : MonoBehaviour
 
     private void Die()
     {
-        Game.Data.PlayerData.Instance.AddGold(RewardGold);
+        //Game.Data.PlayerData.Instance.AddGold(RewardGold);
 
         Destroy(gameObject);
     }
