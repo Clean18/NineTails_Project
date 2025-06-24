@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 #region enum ControlMode
@@ -106,12 +106,8 @@ public class PlayerController : MonoBehaviour
 		if (Mode == ControlMode.Auto) PlayerAI.Action();
 
 		// 수동 컨트롤
-		else if (Mode == ControlMode.Manual)
-		{
-			InputHandler();
-			PlayerAI.Action();
-		}
-	}
+		else if (Mode == ControlMode.Manual) InputHandler();
+    }
 
 	public void InputHandler()
 	{
@@ -128,6 +124,7 @@ public class PlayerController : MonoBehaviour
 
 	void SkillInput()
 	{
+        // TODO : 키세팅
 		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
 			var skill = GameManager.Instance.GetSkill("Fireball");

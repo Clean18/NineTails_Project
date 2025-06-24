@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -110,9 +110,10 @@ public class PlayerAI
 			}
 		}
 		if (TargetSkill == null) _controller.CurrentState = AIState.Search;
-		// 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
-		_controller.CurrentState = _controller.Mode == ControlMode.Auto ? AIState.Chase : AIState.Attack;
-	}
+        // 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
+        _controller.CurrentState = AIState.Chase;
+
+    }
 
 	void ChaseAction()
 	{
@@ -144,12 +145,8 @@ public class PlayerAI
 		if (distance > TargetSkill.Range)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
-			// 자동모드일때만 추격으로 전환
-			if (_controller.Mode == ControlMode.Auto)
-				_controller.CurrentState = AIState.Chase;
-			else
-				TargetMonster = null;
-			return;
+            _controller.CurrentState = AIState.Chase;
+            return;
 		}
 
 		// 스킬 사용
