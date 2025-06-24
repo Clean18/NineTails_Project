@@ -37,7 +37,19 @@ public class BossMonsterFSM : MonoBehaviour
     [SerializeField] private float AttackAngle = 90f;           // 부채꼴 공격 각도
     [SerializeField] private AudioClip SwingSound;              // 팔 휘두르는 사운드
     [SerializeField] private GameObject WarningRangeIndicator;  // 공격 경고 범위 ( 빨간 UI 와 같은것 )
+    [SerializeField] private float Pattern1EffectDuration = 2f; // 이펙트와 경고의 유지시간.
 
+
+    [Header("Pattern2 Setting")]
+    [SerializeField] private GameObject DropRockPrefab;         // 떨어지는 돌 프리팹
+    [SerializeField] private GameObject WarningCirclePrefab;    // 바닥에 표시될 경고 원 프리팹
+    [SerializeField] private Transform DropPosition;            // 돌이 떨어질 위치 (보스 앞 등)
+    [SerializeField] private AudioClip RoarSound;               // 돌 떨어뜨리기 전 포효 사운드
+    [SerializeField] private float Pattern2Delay = 3f;          // 경고 표시 후 돌이 떨어지는 시간
+    [SerializeField] private float Pattern2EffectDuration = 2f; // 돌 이펙트가 유지되는 시간
+    [SerializeField] private float DropRadius = 3f;             // 낙석 범위
+
+    Coroutine BossPatternRoutine;
     // 시작 시 상태 초기화
     private void Start()
     {
@@ -90,39 +102,42 @@ public class BossMonsterFSM : MonoBehaviour
         TransitionToState(BossState.Idle);
     }
 
+    [SerializeField] private Transform PlayerTransform;
+
     // Idle 상태 처리 ( 패턴 전환 대기 상태 )
     private void HandleIdle()
     {
         IdleTimer += Time.deltaTime;
 
-        // 대기 시간이 충분히 지나면 랜덤으로 다음 패턴 선택
+        float distToPlayer = Vector2.Distance(AttackOrigin.position, PlayerTransform.position);
+        if (distToPlayer <= AttackRange)
+        {
+            TransitionToState(BossState.Pattern1); // 가까우면 무조건 패턴1
+            return;
+        }
+
+        // 그 외의 경우엔 시간 지나면 랜덤 패턴
         if (IdleTimer >= IdleTime)
         {
-            int rand = Random.Range(0, 3); // 0~2중에 하나 선택
-            switch (rand)
-            {
-                case 0:
-                    TransitionToState(BossState.Pattern1);
-                    break;
-                case 1:
-                    TransitionToState(BossState.Pattern2);
-                    break;
-                case 2:
-                    TransitionToState(BossState.Special);
-                    break;
-
-            }
+            IdleTimer = 0f;
+            int rand = Random.Range(0, 2); // Pattern2 or Special
+            if (rand == 0) TransitionToState(BossState.Pattern2);
+            else TransitionToState(BossState.Special);
         }
     }
 
     // 일반 패턴 1 처리
 
+    
     private void HandlePattern1()
     {
 
-        StartCoroutine(Pattern1Coroutine());
-        // 이후 Idle 상태로 돌아가야함
-        // 코루틴 내부에서 완료후 상태전환 처리
+        if (BossPatternRoutine == null)
+        {
+            BossPatternRoutine = StartCoroutine(Pattern1Coroutine());
+            // 이후 Idle 상태로 돌아가야함
+            // 코루틴 내부에서 완료후 상태전환 처리
+        }
     }
 
     private IEnumerator Pattern1Coroutine()
@@ -133,47 +148,79 @@ public class BossMonsterFSM : MonoBehaviour
         // 2. 애니메이션 재생
         BossAnimator.Play("Boss_Attack1");
         AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+        Debug.Log("할퀴기 공격 사용");
 
         // 3. 이펙트 생성
         if (AttackEffectPrefab != null)
         {
-            Instantiate(AttackEffectPrefab, AttackOrigin.position, AttackOrigin.rotation);
+           GameObject fx = Instantiate(AttackEffectPrefab, AttackOrigin.position, AttackOrigin.rotation);
+           Destroy(fx, Pattern1EffectDuration);
         }
 
         // 4. 데미지 판정
         DealDamageInCone();
 
         // 5. 대기 ( 애니메이션 연출 시간만큼 , 애니메이션과 이펙트가 끝날때까지 )
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(Pattern1EffectDuration);
 
         // 6. 경고 범위 제거
         WarningRangeIndicator.SetActive(false);
-
+        
         // 7. FSM 상태 복귀
 
         TransitionToState(BossState.Idle);
+
+        BossPatternRoutine = null;
     }
 
     private void DealDamageInCone()
     {
-        // 1. 공격 범위 내의 모든 콜라이더 탐색
-        Collider2D[] hits = Physics2D.OverlapCircleAll(AttackOrigin.position, AttackRange); 
+        Collider2D[] hits = Physics2D.OverlapCircleAll(AttackOrigin.position, AttackRange);
 
-        foreach ( var hit in hits )
+        foreach (var hit in hits)
         {
-            // 2. 대상 방향 계산
             Vector2 dir = (hit.transform.position - AttackOrigin.position).normalized;
-
-            // 3. 중심 방향 (오른쪽) 과 대상 방향 사이의 각도 계산
             float angle = Vector2.Angle(AttackOrigin.right, dir);
-            
-            // 4. 공격 범위 각도 내에 있으면 타격 대상
-            if ( angle < AttackAngle / 2f && hit.CompareTag("Player"))
+
+            if (angle < AttackAngle / 2f && hit.CompareTag("Player"))
             {
-                // 5. 데미지 적용 ( 플레이어에게 PlayerHealth, TakeDamage 가 있어야함 )
-               // hit.GetComponent<PlayerHealth>()?.TakeDamage();
+                var player = hit.GetComponent<Game.Data.PlayerData>();
+                if (player != null)
+                {
+                    Debug.Log($"Hit 대상: {hit.name}");
+                    player.TakeDamageByPercent(0.4f); // 40% 데미지
+                    Debug.Log("패턴1 - 플레이어에게 40% 데미지를 줌");
+                }
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (AttackOrigin == null) return;
+
+        // 1. 전체 공격 반경 원형
+        Gizmos.color = new Color(1, 0, 0, 0.4f); // 반투명 빨강
+        Gizmos.DrawWireSphere(AttackOrigin.position, AttackRange);
+
+        // 2. 부채꼴 시각화 (중심선 + 양끝선)
+        Gizmos.color = Color.yellow;
+
+        Vector3 origin = AttackOrigin.position;
+        Vector3 forward = AttackOrigin.right; // 오른쪽 방향 기준
+
+        float halfAngle = AttackAngle * 0.5f;
+
+        // 중심선
+        Gizmos.DrawLine(origin, origin + forward * AttackRange);
+
+        // 왼쪽 선
+        Vector3 left = Quaternion.Euler(0, 0, -halfAngle) * forward;
+        Gizmos.DrawLine(origin, origin + left * AttackRange);
+
+        // 오른쪽 선
+        Vector3 right = Quaternion.Euler(0, 0, halfAngle) * forward;
+        Gizmos.DrawLine(origin, origin + right * AttackRange);
     }
 
 
@@ -181,12 +228,66 @@ public class BossMonsterFSM : MonoBehaviour
 
     private void HandlePattern2()
     {
-        // TODO : 회전하면서 탄을 발사한다거나 하는 패턴 2 실행
-
+        // 
+        if (BossPatternRoutine == null)
+        {
+            BossPatternRoutine = StartCoroutine(Pattern2Coroutine());
+        }
         // 이후 Idle 상태로 되돌아감
-        TransitionToState(BossState.Idle);
-
     }
+
+    private IEnumerator Pattern2Coroutine()
+    {
+        // 1. 보스 애니메이션, 사운드
+        BossAnimator.Play("Boss_Roar");
+        AudioSource.PlayClipAtPoint(RoarSound, transform.position);
+
+
+        // 2. 낙석 위치 랜덤 계산
+        Vector2 Randomoffset = Random.insideUnitCircle * DropRadius;
+        Vector3 DropPos = DropPosition.position + new Vector3(Randomoffset.x, Randomoffset.y, 0f);
+
+        // 3. 경고 범위 생성
+        GameObject Warning = Instantiate(WarningCirclePrefab, DropPosition.position, Quaternion.identity);
+
+        // 4. 3초 대기
+
+        yield return new WaitForSeconds(Pattern2Delay);
+
+        // 5. 돌 생성 (위에서 낙하)
+        GameObject rock = Instantiate(DropRockPrefab, DropPos + Vector3.up * 5f, Quaternion.identity);
+        Destroy(rock, Pattern2EffectDuration);
+
+
+        // 6. 경고 범위 제거
+        Destroy(Warning);
+
+        // 7. 마무리 대기
+        yield return new WaitForSeconds(0.5f);
+
+        // 8. 상태 전환
+        TransitionToState(BossState.Idle);
+        BossPatternRoutine = null;
+    }
+
+    // public void DealDamageInArea(Vector2 center, float radius, float damagePercent, string targetTag = "Player")
+    // {
+    //     Collider2D[] hits = Physics2D.OverlapCircleAll(center, radius);
+    // 
+    //     foreach (var hit in hits)
+    //     {
+    //         if (hit.CompareTag(targetTag))
+    //         {
+    //             var player = hit.GetComponent<Game.Data.PlayerData>();
+    //             if (player != null)
+    //             {
+    //                 player.TakeDamageByPercent(0.1f); // 10% 데미지
+    //                 Debug.Log($"패턴2 - 플레이어에게 10% 데미지를 줌");
+    //             }
+    //         }
+    //     }
+    // }
+
 
     // 특수 패턴 처리
     private void HandleSpecial()
@@ -230,6 +331,8 @@ public class BossMonsterFSM : MonoBehaviour
         Destroy(gameObject);
     }
 
+    
+    
     public void TakeDamage(float damage)
     {
         if (CurrentState == BossState.Dead) return;

@@ -43,3 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Warning Point
+    uniqueID: 1355326769
+    locked: 0
