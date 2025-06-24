@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
+/// </summary>
 public class PlayerModel
 {
 	// 캐릭터 스텟
