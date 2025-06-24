@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BossMonsterFSM : MonoBehaviour
@@ -26,6 +27,16 @@ public class BossMonsterFSM : MonoBehaviour
     [Header("FSM Timer")]
     [SerializeField] private float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 ( 다음 패턴 전환까지 딜레이 )
     private float IdleTimer;            // Idle 상태에서 누적된 시간
+
+
+    [Header("Pattern1 setting")]
+    [SerializeField] private Animator BossAnimator;             // 보스 애니메이터
+    [SerializeField] private GameObject AttackEffectPrefab;     // 휘두르기 이펙트 프리팹
+    [SerializeField] private Transform AttackOrigin;            // 공격 중심 기준 위치 ( 예 : 오른팔 위치)
+    [SerializeField] private float AttackRange = 5f;            // 부채꼴 공격 반경
+    [SerializeField] private float AttackAngle = 90f;           // 부채꼴 공격 각도
+    [SerializeField] private AudioClip SwingSound;              // 팔 휘두르는 사운드
+    [SerializeField] private GameObject WarningRangeIndicator;  // 공격 경고 범위 ( 빨간 UI 와 같은것 )
 
     // 시작 시 상태 초기화
     private void Start()
@@ -108,11 +119,63 @@ public class BossMonsterFSM : MonoBehaviour
 
     private void HandlePattern1()
     {
-        // TODO : 전방 탄막 발사 같은 행동 패턴1 실행
 
+        StartCoroutine(Pattern1Coroutine());
         // 이후 Idle 상태로 돌아가야함
+        // 코루틴 내부에서 완료후 상태전환 처리
+    }
+
+    private IEnumerator Pattern1Coroutine()
+    {
+        // 1. 경고 범위 표시
+        WarningRangeIndicator.SetActive(true);
+
+        // 2. 애니메이션 재생
+        BossAnimator.Play("Boss_Attack1");
+        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+
+        // 3. 이펙트 생성
+        if (AttackEffectPrefab != null)
+        {
+            Instantiate(AttackEffectPrefab, AttackOrigin.position, AttackOrigin.rotation);
+        }
+
+        // 4. 데미지 판정
+        DealDamageInCone();
+
+        // 5. 대기 ( 애니메이션 연출 시간만큼 , 애니메이션과 이펙트가 끝날때까지 )
+        yield return new WaitForSeconds(2f);
+
+        // 6. 경고 범위 제거
+        WarningRangeIndicator.SetActive(false);
+
+        // 7. FSM 상태 복귀
+
         TransitionToState(BossState.Idle);
     }
+
+    private void DealDamageInCone()
+    {
+        // 1. 공격 범위 내의 모든 콜라이더 탐색
+        Collider2D[] hits = Physics2D.OverlapCircleAll(AttackOrigin.position, AttackRange); 
+
+        foreach ( var hit in hits )
+        {
+            // 2. 대상 방향 계산
+            Vector2 dir = (hit.transform.position - AttackOrigin.position).normalized;
+
+            // 3. 중심 방향 (오른쪽) 과 대상 방향 사이의 각도 계산
+            float angle = Vector2.Angle(AttackOrigin.right, dir);
+            
+            // 4. 공격 범위 각도 내에 있으면 타격 대상
+            if ( angle < AttackAngle / 2f && hit.CompareTag("Player"))
+            {
+                // 5. 데미지 적용 ( 플레이어에게 PlayerHealth, TakeDamage 가 있어야함 )
+               // hit.GetComponent<PlayerHealth>()?.TakeDamage();
+            }
+        }
+    }
+
 
     // 일반 패턴 2 처리
 
@@ -172,7 +235,7 @@ public class BossMonsterFSM : MonoBehaviour
         if (CurrentState == BossState.Dead) return;
 
         CurrentHealth -= damage;
-        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth})");
+        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth}");
 
         if (CurrentHealth <= 0)
         {
