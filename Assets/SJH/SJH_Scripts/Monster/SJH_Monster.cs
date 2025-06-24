@@ -7,7 +7,7 @@ public class SJH_Monster : MonoBehaviour
     public Transform _targetTransform;
 	public Rigidbody2D rigid;
 	public int MaxHp;
-	private int _hp;
+	[SerializeField] private int _hp;
 	public int Hp
 	{
 		get => _hp;

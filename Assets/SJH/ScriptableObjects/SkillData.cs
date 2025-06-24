@@ -8,7 +8,7 @@ public abstract class SkillData : ScriptableObject
 {
 	[field : SerializeField] public string SkillName { get; private set; }
 	[field : SerializeField] public string Description { get; private set; }
-	[field : SerializeField] public float Damage { get; private set; }
+	[field : SerializeField] public int Damage { get; private set; }
 	[field : SerializeField] public float Cooldown { get; private set; }
 	[field: SerializeField] public bool IsCooldown { get; private set; } = false;
 	[field : SerializeField] public float Range { get; private set; }

@@ -1,78 +1,116 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum ControlMode { Manual, Auto }
-public enum AIState { Idle, Chase, Attack }
+#region enum ControlMode
+/// <summary>
+/// 플레이어의 조작 방식
+/// </summary>
+public enum ControlMode
+{
+	/// <summary>
+	/// 수동 조작 : 이동은 플레이어, 공격은 AI에서 처리
+	/// </summary>
+	Manual,
+	/// <summary>
+	/// 자동 조작 : 이동, 공격 전부 AI에서 처리
+	/// </summary>
+	Auto
+}
+#endregion
 
+#region enum AIState
+/// <summary>
+/// 자동 모드에서의 플레이어 AI 상태.
+/// </summary>
+public enum AIState
+{
+	/// <summary>
+	/// 아무 행동도 하지 않는 대기 상태.
+	/// </summary>
+	Idle,
+
+	/// <summary>
+	/// 적을 탐색 중인 상태.
+	/// </summary>
+	Search,
+
+	/// <summary>
+	/// 탐지한 적을 향해 추격 중인 상태.
+	/// </summary>
+	Chase,
+
+	/// <summary>
+	/// 스킬 사용 준비 중인 상태. (예: 캐스팅 시간 등)
+	/// </summary>
+	SkillLoad,
+
+	/// <summary>
+	/// 적을 공격 중인 상태.
+	/// </summary>
+	Attack
+}
+#endregion
+
+/// <summary>
+/// 클라이언트의 입력을 관리하는 컴포넌트
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
 	private PlayerModel _playerModel;
 	public PlayerView PlayerView;
+	public PlayerAI PlayerAI;
 
 	// TODO : 게임이 시작되면 시작은 Auto
-	private ControlMode _mode;
+	[SerializeField]private ControlMode _mode;
 	public ControlMode Mode
 	{
 		get => _mode;
 		set
 		{
 			_mode = value;
-			// TODO : 자동모드가 되면 항상 Idle에서 시작
-			if (CurrentState != AIState.Idle) CurrentState = AIState.Idle;
+			// TODO : 자동모드가 되면 항상 Search에서 시작
+			Debug.Log($"AIState : {CurrentState} > {value}");
+			if (CurrentState != AIState.Search) CurrentState = AIState.Search;
 		}
 	}
 
-	// AI
-	public AIState CurrentState;
-	public GameObject TargetMonster;
-	public SkillData TargetSkill;
+	// AI 에서 사용하는 필드변수
+	public AIState CurrentState;		// AI 상태
+	public float SearchDistance = 8;	// 탐색 거리
+	public int DirectionCount = 8;		// 탐색할 칸의 개수 360 / 8
+	public float SightAngle = 45f;		// 칸마다 각도
+	public LayerMask MonsterLayer;		// 탐색할 레이어
 
-	// Manual
-	public Vector2 MoveDir { get; private set; }
-	public List<KeyCode> SkillKeys = new()
-	{
-		KeyCode.Mouse0,
-		KeyCode.Mouse1,
-	};
+	// Manual 에서 사용하는 필드변수
+	public Vector2 MoveDir { get; private set; } // 플레이어의 이동 방향
 
 
 	void Awake()
 	{
+		// TODO : Awake가 아니라 데이터 로드할때 초기화
 		_playerModel = new PlayerModel();
+
 		PlayerView = GetComponent<PlayerView>();
+		PlayerAI = new PlayerAI(this, PlayerView, _playerModel);
 
-		CurrentState = AIState.Idle;
-		Mode = ControlMode.Manual;
-
+		CurrentState = AIState.Search;
+		//Mode = ControlMode.Manual;
+		Mode = ControlMode.Auto;
+		
 		GameManager.Instance.PlayerController = this;
 	}
 
 	void Update()
 	{
 		// Auto일 때는 입력 제한
-		if (Mode == ControlMode.Auto) Action();
+		if (Mode == ControlMode.Auto) PlayerAI.Action();
 
 		// 수동 컨트롤
-		else if (Mode == ControlMode.Manual) InputHandler();
-	}
-
-	public void Action()
-	{
-		switch (CurrentState)
+		else if (Mode == ControlMode.Manual)
 		{
-			// TODO : 행동방식은 기획에서 받기
-			// 임시로 Chase <-> Idle <-> Attack
-			case AIState.Idle:
-				IdleAction();
-				break;
-			case AIState.Chase:
-				ChaseAction();
-				break;
-			case AIState.Attack:
-				AttackAction();
-				break;
+			InputHandler();
+			PlayerAI.Action();
 		}
-		UIManager.Instance.GameUI?.ChangeStateText(CurrentState);
 	}
 
 	public void InputHandler()
@@ -90,115 +128,35 @@ public class PlayerController : MonoBehaviour
 
 	void SkillInput()
 	{
-		// 특정 키를 누름
-		// GetSkill에서 반환된게 null이 아니면 스킬 사용
-
-		foreach (var key in SkillKeys)
+		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
-			if (Input.GetKeyDown(key))
+			var skill = GameManager.Instance.GetSkill("Fireball");
+			if (skill != null)
 			{
-				var skill = GameManager.Instance.GetSkill("Fireball");
-				if (skill != null)
-				{
-					skill.UseSkill(transform);
-				}
+				skill.UseSkill(transform);
 			}
 		}
 	}
 
-	void IdleAction()
+	public void TakeDamage(long damage)
 	{
-		/* 타겟 탐색
-		 * 타겟이 있으면 등록된 스킬 중 사정거리가 유효한 스킬이 있는지 체크
-		 * if 스킬이 있음
-		 * > Attack 으로 변경
-		 * 
-		 * else 스킬이 없음
-		 * > Chase 으로 변경
-		 * 
-		 * 타겟이 없으면 유지
-		 */
-		Debug.Log("Idle Action");
-		var target = GameManager.Instance.Spawner.FindCloseMonster(transform.position);
-		if (target != null)
-		{
-			Debug.Log("Idle Action : 공격대상 확인 추격 전환");
-			TargetMonster = target;
-			CurrentState = AIState.Chase;
-		}
+		_playerModel.ApplyDamage(damage);
+		// TODO : view 피격처리
+		// TODO : UI 체력감소 처리
 	}
 
-	void ChaseAction()
+	void OnDrawGizmos()
 	{
-		Debug.Log("Chase Action");
-		/* 추격
-		 * 현재 맵에 몬스터가 없으면 Idle
-		 * 몬스터가 있으면
-		 * 공격 가능한지 체크
-		 */
-		if (TargetMonster == null || !TargetMonster.activeSelf)
+		// 플레이어의 공격 범위 기즈모
+		// 팔각
+		for (int i = 0; i < DirectionCount; i++)
 		{
-			Debug.Log("Chase Action : 공격대상 사라짐 대기 전환");
-			TargetMonster = null;
-			CurrentState = AIState.Idle;
-			return;
+			float angle = SightAngle * i;
+			Vector3 dir = Quaternion.Euler(0, 0, angle) * transform.up;
+			Gizmos.color = Color.red;
+			Gizmos.DrawLine(transform.position, transform.position + dir * SearchDistance);
 		}
-
-		float distance = Vector3.Distance(transform.position, TargetMonster.transform.position);
-
-		// 쿨타임이 끝난 스킬 중에서 사거리 내에 있는 것 찾기
-		foreach (var skill in GameManager.Instance.SkillDic.Values)
-		{
-			if (!skill.IsCooldown && distance <= skill.Range)
-			{
-				Debug.Log($"Chase Action : {skill.SkillName} 장전 공격 전환");
-				TargetSkill = skill;
-				CurrentState = AIState.Attack;
-				return;
-			}
-		}
-
-		// 아직 사거리 안이 아니면 계속 추격
-		Debug.Log("Chase Action : 사거리 멀음 재추격 시작 ");
-		Vector2 dir = (TargetMonster.transform.position - transform.position).normalized;
-		PlayerView.Move(dir, _playerModel.Data.MoveSpeed);
-	}
-
-	void AttackAction()
-	{
-		Debug.Log("Attack Action");
-		if (TargetMonster == null || !TargetMonster.activeSelf)
-		{
-			Debug.Log("Attack Action : 공격대상 사라짐 대기 전환");
-			TargetMonster = null;
-			TargetSkill = null;
-			CurrentState = AIState.Idle;
-			return;
-		}
-
-		if (TargetSkill == null || TargetSkill.IsCooldown)
-		{
-			Debug.Log("Attack Action : 공격대상 사라짐 or 장전스킬 쿨타임");
-			CurrentState = AIState.Chase;
-			return;
-		}
-
-		// 사거리 벗어나면 다시 추격
-		float distance = Vector3.Distance(transform.position, TargetMonster.transform.position);
-		if (distance > TargetSkill.Range)
-		{
-			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
-			CurrentState = AIState.Chase;
-			return;
-		}
-
-		// 스킬 사용
-		Debug.Log($"Attack Action : {TargetSkill.SkillName} 스킬 사용");
-		TargetSkill.UseSkill(transform, TargetMonster.transform);
-		TargetSkill = null;
-
-		// 다음 행동은 상황 따라 다시 판단
-		Debug.Log("Attack Action : 공격 스킬 완료 대기 전환");
-		CurrentState = AIState.Idle;
+		// 원
+		Gizmos.DrawWireSphere(transform.position, SearchDistance);
 	}
 }
