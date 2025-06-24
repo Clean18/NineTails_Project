@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class BossMonsterFSM : MonoBehaviour
 {
@@ -20,6 +20,20 @@ public class BossMonsterFSM : MonoBehaviour
     [Header("Boss HP")]
     public float MaxHealth = 1000f;     // 최대 체력
     private float CurrentHealth;        // 현재 체력
+
+    public void TakeDamage(float damage)
+    {
+        if (CurrentState == BossState.Dead) return;
+
+        CurrentHealth -= damage;
+        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth})");
+
+        if ( CurrentHealth <= 0)
+        {
+            CurrentHealth = 0;
+            TransitionToState(BossState.Dead);
+        }
+    }
 
     [Header("FSM Timer")]
     public float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 ( 다음 패턴 전환까지 딜레이 )
