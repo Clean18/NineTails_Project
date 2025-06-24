@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-	public float TotlaDamage;
+	public int TotalDamage;
 
 	void OnTriggerEnter2D(Collider2D collision)
 	{
@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
 				SJH_Monster mon = collision.GetComponent<SJH_Monster>();
 				if (mon != null)
 				{
-					mon.TakeDamage((int)TotlaDamage);
+					mon.TakeDamage(TotalDamage);
 				}
 				break;
 		}
