@@ -15,28 +15,16 @@ public class BossMonsterFSM : MonoBehaviour
         Dead        // 체력이 0 이하가되면 사망
     }
 
-    private BossState CurrentState;
-
     [Header("Boss HP")]
-    public float MaxHealth = 1000f;     // 최대 체력
-    private float CurrentHealth;        // 현재 체력
+    [SerializeField] private float MaxHealth = 1000f;     // 최대 체력
+    private float CurrentHealth;                          // 현재 체력
 
-    public void TakeDamage(float damage)
-    {
-        if (CurrentState == BossState.Dead) return;
-
-        CurrentHealth -= damage;
-        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth})");
-
-        if ( CurrentHealth <= 0)
-        {
-            CurrentHealth = 0;
-            TransitionToState(BossState.Dead);
-        }
-    }
+    
+    private BossState CurrentState;         // 현재 FSM 상태
+    private bool isDeadHandled = false;     // 죽음 처리 중복 방지용
 
     [Header("FSM Timer")]
-    public float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 ( 다음 패턴 전환까지 딜레이 )
+    [SerializeField] private float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 ( 다음 패턴 전환까지 딜레이 )
     private float IdleTimer;            // Idle 상태에서 누적된 시간
 
     // 시작 시 상태 초기화
@@ -152,7 +140,7 @@ public class BossMonsterFSM : MonoBehaviour
         TransitionToState(BossState.Idle);
     }
 
-    private bool isDeadHandled = false;
+    
     // 사망 처리
     private void HandleDead()
     {
@@ -177,5 +165,19 @@ public class BossMonsterFSM : MonoBehaviour
     {
         Debug.Log("보스 오브젝트 제거됨");
         Destroy(gameObject);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (CurrentState == BossState.Dead) return;
+
+        CurrentHealth -= damage;
+        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth})");
+
+        if (CurrentHealth <= 0)
+        {
+            CurrentHealth = 0;
+            TransitionToState(BossState.Dead);
+        }
     }
 }
