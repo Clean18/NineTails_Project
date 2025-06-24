@@ -27,17 +27,17 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    //public T ShowPopUp<T>() where T : BaseUI
-    //{
-    //    T prefab = Resources.Load<T>($"PopUp/{typeof(T).Name}");
-    //    T instance = Instantiate(prefab, PopUpCanvas.transform);
+    public T ShowPopUp<T>() where T : BaseUI
+    {
+        T prefab = Resources.Load<T>($"PopUp/{typeof(T).Name}");
+        T instance = Instantiate(prefab, PopUpCanvas.transform);
 
-    //    PopUpCanvas.AddUI(instance);
-    //    return instance;
-    //}
+        PopUpCanvas.ShowUI(instance);
+        return instance;
+    }
 
-    //public void ClosePopUp()
-    //{
-    //    PopUpCanvas.RemoveUI();
-    //}
+    public void ClosePopUp()
+    {
+        PopUpCanvas.CloseUI();
+    }
 }
