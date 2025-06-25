@@ -15,7 +15,7 @@ MonoBehaviour:
   <SkillName>k__BackingField: "\uD30C\uC774\uC5B4\uBCFC"
   <Description>k__BackingField: "\uBD88"
   <Damage>k__BackingField: 10
-  <Cooldown>k__BackingField: 0.5
-  <IsCooldown>k__BackingField: 0
-  <Range>k__BackingField: 7
+  <Cooldown>k__BackingField: 5
+  <IsCooldown>k__BackingField: 1
+  <Range>k__BackingField: 2
   <SkillPrefab>k__BackingField: {fileID: 99062240329242543, guid: 64a35954a8738c74caea13e6d040b68f, type: 3}

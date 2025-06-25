@@ -1,109 +1,120 @@
-﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+[System.Serializable]
 public class PlayerAI
 {
 	private PlayerController _controller;
 	private PlayerView _view;
 	private PlayerModel _model;
 
-	public Transform TargetMonster;
-	public SkillData TargetSkill;
+	public Transform TargetMonster; // 공격할 몬스터
+	public SkillData TargetSkill;   // 사용할 스킬
+
+	private Coroutine _searchRoutine;
+	private WaitForSeconds _searchDelay;
 
 	public PlayerAI(PlayerController controller, PlayerView view, PlayerModel model)
 	{
 		_controller = controller;
 		_view = view;
 		_model = model;
+		_searchDelay = new WaitForSeconds(0.5f);
 	}
 
 	public void Action()
 	{
 		switch (_controller.CurrentState)
 		{
-			// TODO : 행동방식은 기획에서 받기
-			// 임시로 Chase <-> Idle <-> Attack
-			case AIState.Idle:
-				IdleAction();
-				break;
 			case AIState.Search:
+				SearchAction();
+				break;
+			case AIState.SkillLoad:
+				SkillLoad();
 				break;
 			case AIState.Chase:
 				ChaseAction();
-				break;
-			case AIState.SkillLoad:
 				break;
 			case AIState.Attack:
 				AttackAction();
 				break;
 		}
 		UIManager.Instance.GameUI?.ChangeStateText(_controller.CurrentState);
-
 	}
 
-	void IdleAction()
+	void SearchAction()
 	{
-		Debug.Log("Idle Action");
-		var target = GameManager.Instance.Spawner.FindCloseMonster(_controller.transform.position);
-		if (target != null)
-		{
-			Debug.Log("Idle Action : 공격대상 확인 추격 전환");
-			TargetMonster = target.transform;
-			_controller.CurrentState = AIState.Chase;
-		}
+		Debug.Log("Search Action");
+		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
+
+	void SkillLoad()
+	{
+		Debug.Log("SkillLoad Action");
+
+		TargetSkill = null;
+		//float maxCooldown = float.MinValue;
+
+		List<SkillData> ranSkills = new();
+        // TODO : 게임매니저의 딕셔너리가 아닌 플레이어가 등록한 스킬리스트
+        // 기본공격은 이 리스트에 없어야함
+        // -> 모든 스킬이 쿨타임일 때 사용할 예정 
+        foreach (var skill in GameManager.Instance.SkillDic.Values)
+		{
+			// 스킬 쿨타임이 아니고 쿨타임이 가장 긴 스킬 우선
+			//if (!skill.IsCooldown && skill.Cooldown > maxCooldown)
+			//{
+			//	maxCooldown = skill.Cooldown;
+			//	TargetSkill = skill;
+			//	Debug.Log($"{TargetSkill.SkillName} 장전");
+			//}
+
+            // 쿨타임이 아닌 스킬 등록
+			if (!skill.IsCooldown) ranSkills.Add(skill);
+		}
+        // 쿨타임이 아닌 스킬들 중 랜덤 사용
+        if (ranSkills.Count > 0)
+        {
+            TargetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
+            Debug.Log($"{TargetSkill.SkillName} 스킬장전");
+        }
+        // TODO : else 기본공격을 TargetSkill로 등록
+
+        // 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
+        if (TargetSkill != null) _controller.CurrentState = AIState.Chase;
+        // 스킬이 쿨타임일 때는 TargetMonster도 초기화해야 SearchRoutine에서 안걸림
+        else MonsterSkillCheck();
+    }
 
 	void ChaseAction()
 	{
 		Debug.Log("Chase Action");
-		if (TargetMonster == null || !TargetMonster.gameObject.activeSelf)
+		if (MonsterSkillCheck()) return;
+
+		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
+		Vector3 dir = TargetMonster.position - _controller.transform.position;
+		float distance = dir.magnitude;
+		if (distance <= TargetSkill.Range)
 		{
-			Debug.Log("Chase Action : 공격대상 사라짐 대기 전환");
-			TargetMonster = null;
-			_controller.CurrentState = AIState.Idle;
+			_view.Stop();
+			StopSearchRoutine();
+			_controller.CurrentState = AIState.Attack;
 			return;
 		}
 
-		float distance = Vector3.Distance(_controller.transform.position, TargetMonster.transform.position);
-
-		// 쿨타임이 끝난 스킬 중에서 사거리 내에 있는 것 찾기
-		foreach (var skill in GameManager.Instance.SkillDic.Values)
-		{
-			if (!skill.IsCooldown && distance <= skill.Range)
-			{
-				Debug.Log($"Chase Action : {skill.SkillName} 장전 공격 전환");
-				TargetSkill = skill;
-				_controller.CurrentState = AIState.Attack;
-				return;
-			}
-		}
-
-		// 아직 사거리 안이 아니면 계속 추격
-		Debug.Log("Chase Action : 사거리 멀음 재추격 시작 ");
-		Vector2 dir = (TargetMonster.transform.position - _controller.transform.position).normalized;
-		_view.Move(dir, _model.Data.MoveSpeed);
+		// 공격할 수 없으면 공격거리까지 이동 후 Skill로
+		_view.Move(dir.normalized, _model.Data.Speed);
+		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
 
 	void AttackAction()
 	{
 		Debug.Log("Attack Action");
-		if (TargetMonster == null || !TargetMonster.gameObject.activeSelf)
-		{
-			Debug.Log("Attack Action : 공격대상 사라짐 대기 전환");
-			TargetMonster = null;
-			TargetSkill = null;
-			_controller.CurrentState = AIState.Idle;
-			return;
-		}
-
-		if (TargetSkill == null || TargetSkill.IsCooldown)
-		{
-			Debug.Log("Attack Action : 공격대상 사라짐 or 장전스킬 쿨타임");
-			_controller.CurrentState = AIState.Chase;
-			return;
-		}
+		if (MonsterSkillCheck()) return;
 
 		// 사거리 벗어나면 다시 추격
-		float distance = Vector3.Distance(_controller.transform.position, TargetMonster.transform.position);
+		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
 		if (distance > TargetSkill.Range)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
@@ -114,15 +125,132 @@ public class PlayerAI
 		// 스킬 사용
 		Debug.Log($"Attack Action : {TargetSkill.SkillName} 스킬 사용");
 		TargetSkill.UseSkill(_controller.transform, TargetMonster.transform);
+		TargetMonster = null;
 		TargetSkill = null;
 
 		// 다음 행동은 상황 따라 다시 판단
-		Debug.Log("Attack Action : 공격 스킬 완료 대기 전환");
-		_controller.CurrentState = AIState.Idle;
+		Debug.Log("Attack Action : 공격 스킬 완료 탐색 전환");
+		_controller.CurrentState = AIState.Search;
 	}
 
-	[SerializeField] private float _attackDistance = 8;
-	[SerializeField] private int _directionCount = 8;
-	[SerializeField] private float _sightAngle = 45f;
-	[SerializeField] private LayerMask _monsterLayer;
+	/// <summary>
+	/// 공격 대상, 공격 대상의 활성화 상태, 공격 스킬, 공격 스킬의 쿨타임을 체크하여 bool 값을 반환하는 함수
+	/// </summary>
+	/// <returns>true : 공격불가, false : 공격 가능</returns>
+	bool MonsterSkillCheck()
+	{
+		bool result = false;
+		if (TargetMonster == null || !TargetMonster.gameObject.activeSelf || TargetSkill == null || TargetSkill.IsCooldown)
+		{
+			Debug.Log($"초기화 {_controller.CurrentState}");
+			TargetMonster = null;
+			TargetSkill = null;
+			_controller.CurrentState = AIState.Search;
+			result = true;
+			return result;
+		}
+		return result;
+	}
+
+	IEnumerator SearchRoutine()
+	{
+		while (_controller.CurrentState == AIState.Search || _controller.CurrentState == AIState.Chase)
+		{
+			yield return _searchDelay;
+
+			if (TargetMonster != null) continue;
+
+			var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
+			if (monsters.Length == 0) continue;
+
+			// 원 안의 몬스터들을 8칸으로 분류
+			Dictionary<int, List<Transform>> searchDic = new();
+			for (int i = 1; i <= _controller.DirectionCount; i++)
+				searchDic[i] = new List<Transform>(); // 1 ~ 8
+
+			foreach (var collider in monsters)
+			{
+				Vector2 dir = (collider.transform.position - _controller.transform.position).normalized;
+				float angle = Vector2.SignedAngle(Vector2.up, dir);
+				if (angle < 0) angle += 360;
+				int sector = (int)(angle / _controller.SightAngle) + 1;
+				searchDic[sector].Add(collider.transform);
+			}
+
+			// 몬스터가 가장 많은 섹터들 선택
+			List<int> monsterSectors = new();
+			int maxCount = 0;
+			for (int i = 1; i <= _controller.DirectionCount; i++)
+			{
+				int count = searchDic[i].Count; // 1 ~ 8
+				if (count > maxCount)                    // 현재 섹터의 몬스터가 가장 많다면
+				{
+					maxCount = count;                    // maxCount 갱신
+					monsterSectors.Clear();              // 이전의 섹터 정보들 삭제
+					monsterSectors.Add(i);               // 현재 섹터 정보 추가
+				}
+				else if (count == maxCount && count > 0) // 몬스터가 1마리 이상이고 maxCount와 같으면 섹터 리스트에 추가
+				{
+					monsterSectors.Add(i);
+				}
+			}
+			if (monsterSectors.Count == 0) continue;
+
+			// 몬스터가 가장 많은 섹터들 중 거리합이 가장 낮은 섹터 선택
+			int targetSector = monsterSectors[0];
+			float prevDistance = float.MaxValue;
+			Vector3 playerPos = _controller.transform.position;
+
+			foreach (int sector in monsterSectors)
+			{
+				float currentDistance = 0f;
+				foreach (var mon in searchDic[sector])
+				{
+					currentDistance += (mon.position - playerPos).magnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
+				}
+
+				if (currentDistance < prevDistance) // 현재 섹터의 거리합이 이전 섹터의 거리합보다 낮으면 변경
+				{
+					prevDistance = currentDistance;
+					targetSector = sector;
+				}
+			}
+
+			if (searchDic[targetSector].Count == 0) continue;
+
+			// 1. 선택된 칸 중 랜덤 몬스터 선택
+			//int ran = Random.Range(0, searchDic[targetSector].Count);
+			//TargetMonster = searchDic[targetSector][ran];
+
+			// 2. 선택된 칸 중 가까운 몬스터 선택
+			float minDistance = float.MaxValue;
+
+			foreach (var monster in searchDic[targetSector])
+			{
+				float distance = (monster.position - playerPos).magnitude;
+				if (distance < minDistance)
+				{
+					minDistance = distance;
+					TargetMonster = monster;
+				}
+			}
+
+			if (TargetMonster != null)
+			{
+				Debug.Log("SkillLoad로 변경");
+				_controller.CurrentState = AIState.SkillLoad;
+				StopSearchRoutine();
+				yield break;
+			}
+		}
+	}
+
+	void StopSearchRoutine()
+	{
+		if (_searchRoutine != null)
+		{
+			_controller.StopCoroutine(_searchRoutine);
+			_searchRoutine = null;
+		}
+	}
 }
