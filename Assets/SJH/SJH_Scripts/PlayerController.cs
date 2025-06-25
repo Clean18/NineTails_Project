@@ -8,7 +8,7 @@ using UnityEngine;
 public enum ControlMode
 {
 	/// <summary>
-	/// 수동 조작 : 이동은 플레이어, 공격은 AI에서 처리
+	/// 수동 조작 : 이동, 공격 전부 플레이어가 조작
 	/// </summary>
 	Manual,
 	/// <summary>
@@ -20,32 +20,28 @@ public enum ControlMode
 
 #region enum AIState
 /// <summary>
-/// 자동 모드에서의 플레이어 AI 상태.
+/// 자동 모드에서의 플레이어 AI 상태
 /// </summary>
 public enum AIState
 {
+    Idle,
 	/// <summary>
-	/// 아무 행동도 하지 않는 대기 상태.
-	/// </summary>
-	Idle,
-
-	/// <summary>
-	/// 적을 탐색 중인 상태.
+	/// 적을 탐색 중인 상태
 	/// </summary>
 	Search,
 
 	/// <summary>
-	/// 탐지한 적을 향해 추격 중인 상태.
+	/// 탐지한 적을 향해 추격 중인 상태
 	/// </summary>
 	Chase,
 
 	/// <summary>
-	/// 스킬 사용 준비 중인 상태. (예: 캐스팅 시간 등)
+	/// 사용할 스킬을 선택하는 상태
 	/// </summary>
 	SkillLoad,
 
 	/// <summary>
-	/// 적을 공격 중인 상태.
+	/// 적을 공격하는 상태
 	/// </summary>
 	Attack
 }
