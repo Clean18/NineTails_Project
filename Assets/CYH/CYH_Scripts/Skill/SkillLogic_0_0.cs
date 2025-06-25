@@ -6,13 +6,13 @@ public class SkillLogic_0_0 : MonoBehaviour
     [SerializeField] private ActiveSkillData _data;
 
     private CapsuleCollider2D SwordCollider;
-    private Animator Animator;
+    private Animator animator;
 
 
     private void Awake()
     {
         SwordCollider = GetComponent<CapsuleCollider2D>();
-        Animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         
         // 게임 스타트 -> 무기 collider 끔
         SwordCollider.enabled = false;
@@ -52,7 +52,7 @@ public class SkillLogic_0_0 : MonoBehaviour
             return;
         else
         {
-            Animator.SetTrigger("UseSkill");
+            animator.SetTrigger("UseSkill");
         }
     }
 
