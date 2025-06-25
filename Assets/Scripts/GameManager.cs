@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +22,10 @@ public class GameManager : Singleton<GameManager>
 		// 스킬을 사용한다는건 오브젝트풀 사용
 		// 오브젝트풀에서 사용할 오브젝트를 가져오고 플레이어의 스탯 * 스킬의 Damage계수 = 총대미지
 
+        foreach (var skill in SkillDic.Values)
+        {
+            skill.IsCooldown = false;
+        }
 	}
 
 	public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;

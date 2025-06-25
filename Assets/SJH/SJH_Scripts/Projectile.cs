@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +20,7 @@ public class Projectile : MonoBehaviour
 				if (mon != null)
 				{
 					mon.TakeDamage(TotalDamage);
+                    Destroy(gameObject);
 				}
 				break;
 		}
