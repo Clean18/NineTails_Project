@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
 	void MoveInput()
 	{
 		MoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-		PlayerView.Move(MoveDir, _playerModel.Data.MoveSpeed);
+		PlayerView.Move(MoveDir, _playerModel.Data.Speed);
 	}
 
 	void SkillInput()

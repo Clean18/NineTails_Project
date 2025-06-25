@@ -104,7 +104,7 @@ public class PlayerAI
 		}
 
 		// 공격할 수 없으면 공격거리까지 이동 후 Skill로
-		_view.Move(dir.normalized, _model.Data.MoveSpeed);
+		_view.Move(dir.normalized, _model.Data.Speed);
 		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
 
