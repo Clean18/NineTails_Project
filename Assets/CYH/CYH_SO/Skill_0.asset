@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d734c7b664dcedf478c2aab6d5aa9ec0, type: 3}
   m_Name: Skill_0
   m_EditorClassIdentifier: 
-  <SkillName>k__BackingField: "\uBBF8(\u5C3E)\uAC80 \uC81C 1\uC2DD"
-  <Description>k__BackingField: "\uC804\uBC29\uC5D0 \uAC80\uC744 \uB450\uCC28\uB840
-    \uD718\uB458\uB7EC \uC804\uBC29\uC758 \uC801\uC744 \uBB34\uCC0C\uB978\uB2E4. "
+  <SkillName>k__BackingField: 
+  <Description>k__BackingField: 
   <Damage>k__BackingField: 0
   <Level>k__BackingField: 0
   <CoolTime>k__BackingField: 0
   <IsCooldown>k__BackingField: 0
-  <Range>k__BackingField: 0
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
+  <Range>k__BackingField: 0

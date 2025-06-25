@@ -213,6 +213,12 @@ MonoBehaviour:
   Pattern2Delay: 3
   Pattern2EffectDuration: 2
   DropRadius: 3
+  SpearGhostPrefebs: {fileID: 5341108527615289755, guid: cad1049275b55444e9a01c57616e31df, type: 3}
+  SpearSpeed: 10
+  SpearDamagePercent: 0.2
+  SpearGhostSound: {fileID: 0}
+  WarningRectPrefab: {fileID: 0}
+  WarningDistance: 2
   PlayerTransform: {fileID: 0}
 --- !u!1 &2200318130224000539
 GameObject:

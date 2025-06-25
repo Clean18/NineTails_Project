@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +27,10 @@ public class PlayerModel
 
 	public void ApplyDamage(long damage)
 	{
-		Data.Hp -= damage;
+		Data.DecreaseHp(damage);
+        if (Data.Hp <= 0)
+        {
+            Debug.Log("플레이어 사망");
+        }
 	}
 }

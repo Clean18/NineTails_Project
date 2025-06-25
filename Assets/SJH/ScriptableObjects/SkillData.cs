@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,7 +10,7 @@ public abstract class SkillData : ScriptableObject
 	[field : SerializeField] public string Description { get; private set; }
 	[field : SerializeField] public int Damage { get; private set; }
 	[field : SerializeField] public float Cooldown { get; private set; }
-	[field: SerializeField] public bool IsCooldown { get; private set; } = false;
+	[field: SerializeField] public bool IsCooldown { get; set; } = false;
 	[field : SerializeField] public float Range { get; private set; }
 	[field : SerializeField] public GameObject SkillPrefab { get; private set; }
 
