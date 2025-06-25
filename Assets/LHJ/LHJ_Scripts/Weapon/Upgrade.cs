@@ -36,6 +36,11 @@ public class Upgrade : MonoBehaviour
     [SerializeField] private int warmth;               // (Test용) 가지고 있는 재화
     private int ssrDamageBonus = 5; // SSR 기본 데미지 증가 수치
     private int baseSSRCost = 150; // 테이블 SR 재화 이후 임시로 넣어둔 재화 
+
+    // 장비등급, 강화단계 읽기 전용 프로퍼티
+    public string CurrentGrade => currentGrade;
+    public int CurrentLevel => currentLevel;
+
     void Start()
     {
         // 강화 데이터 다운로드 루틴 실행
@@ -63,27 +68,16 @@ public class Upgrade : MonoBehaviour
         };
         upgradeTable.Load(csv);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            TryEnhance();
-        }
-        // 현재 강화단게가 50 일때 Promotion에 있는 TryPromote 참조
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            if (currentLevel >= 50)
-            {
-                // 씬에서 Promotion 컴포넌트를 가진 객체를 찾아옴
-                Promotion promotion = FindObjectOfType<Promotion>();
-                promotion.TryPromote(ref currentGrade, ref currentLevel, ref warmth);
-            }
-        }
-    }
     /// <summary>
     /// 강화 테이블에서 현재 등급과 레벨에 맞는 다음 정보를 찾아 강화
     /// 재화가 충분할 경우 강화 성공 처리 후 현재 공격력과 강화 레벨을 갱신
     /// </summary>
+   
+    // 장비의 등급, 강화, 남은 재화 수치를 Promotion에 ref하여 보낼 함수
+    public void TryPromoteWith(Promotion promotion)
+    {
+        promotion.TryPromote(ref currentGrade, ref currentLevel, ref warmth);
+    }
     public void TryEnhance()
     {
         // SSR 등급은 무한히 강화가 되는 구조

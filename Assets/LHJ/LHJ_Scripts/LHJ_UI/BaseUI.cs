@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class BaseUI : MonoBehaviour
 {
-    private Dictionary<string, GameObject> gameObjectDic;
-    private Dictionary<string, Component> componentDic;
+    private Dictionary<string, GameObject> gameObjectDic;   // 오브젝트 이름으로 탐색
+    private Dictionary<string, Component> componentDic;     // 컴포넌트로 탐색
 
     private void Awake()
     {
-        //BaseUi를 기준으로 모든 자식 게임오브젝트의 컴포넌트를 가져오기(비활성화된 오브젝트 포함)
+        // 오브젝트에는 트랜스폼이 존재하기때문에 트랜스폼 기준으로 탐색
         RectTransform[] transforms = GetComponentsInChildren<RectTransform>(true);
         gameObjectDic = new Dictionary<string, GameObject>();
         foreach(RectTransform child in transforms)
@@ -18,6 +18,7 @@ public class BaseUI : MonoBehaviour
             gameObjectDic.TryAdd(child.gameObject.name, child.gameObject);
         }
 
+        // 컴포넌트를 통해 탐색
         Component[] components = GetComponentsInChildren<Component>(true);
         componentDic = new Dictionary<string, Component>();
         foreach(Component child in components)
@@ -25,12 +26,15 @@ public class BaseUI : MonoBehaviour
             componentDic.TryAdd($"{child.gameObject.name}_{child.GetType().Name}", child);
         }
     }
+
+    // 오브젝트 이름을 반환
     public GameObject GetUI(in string name)
     {
-        gameObjectDic.TryGetValue(name, out GameObject gameObject);
+        gameObjectDic.TryGetValue(name, out GameObject gameObject);     // 게임오브젝트 이름 반환 없으면 null
         return gameObject;
     }
 
+    // 이름 및 컴포넌트로 찾는 구조
     public T GetUI<T>(in string name) where T : Component
     {
         componentDic.TryGetValue($"{name}_{typeof(T).Name}", out Component component);
