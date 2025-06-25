@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SkillLogic_0_0 : MonoBehaviour
+public class SkillLogic_1 : MonoBehaviour
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy playerController;

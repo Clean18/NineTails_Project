@@ -522,6 +522,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c238eadf819680f4d84412605ca3eb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _data: {fileID: 0}
+  playerController: {fileID: 8834188468784387696}
 --- !u!70 &1147578131
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1094,7 +1096,8 @@ GameObject:
   - component: {fileID: 8834188468784387695}
   - component: {fileID: 5066893459087449550}
   - component: {fileID: 7409231950812699962}
-  - component: {fileID: 7502401067848931312}
+  - component: {fileID: 8834188468784387697}
+  - component: {fileID: 8834188468784387696}
   m_Layer: 0
   m_Name: PlayerA
   m_TagString: Untagged
@@ -1182,23 +1185,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &7502401067848931312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2874512801222223151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09846ac43bb1ac04e966064d3013d8cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  attackSpeed: 15
-  rigid: {fileID: 0}
-  moveInput: {x: 0, y: 0}
-  effectPrefab: {fileID: 1440692181422280772, guid: 5a392d72ec7fc9b4c80ab1e0c05657af, type: 3}
 --- !u!4 &7613547319140957043
 Transform:
   m_ObjectHideFlags: 0
@@ -1259,7 +1245,7 @@ SpriteRenderer:
   m_SortingOrder: 10
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.8415094, g: 0.055571258, b: 0.055571258, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -1268,6 +1254,45 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8834188468784387696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874512801222223151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2618528f5d4fa439ce481fe0b5a906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  attackSpeed: 15
+  rigid: {fileID: 0}
+  moveInput: {x: 0, y: 0}
+  effectPrefab: {fileID: 1440692181422280772, guid: 5a392d72ec7fc9b4c80ab1e0c05657af, type: 3}
+  facingDir: 0
+--- !u!95 &8834188468784387697
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874512801222223151}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c3a69af10afd2d942873c4c7d937ce3b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!20 &8994819570074998775
 Camera:
   m_ObjectHideFlags: 0
