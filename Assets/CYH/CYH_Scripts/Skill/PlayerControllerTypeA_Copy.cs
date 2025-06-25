@@ -46,11 +46,13 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
         {
             facingDir = -1;
             transform.localScale = new Vector3(1, 1, 1);
+            //transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (moveInput.x > 0f)
         {
             facingDir = 1;
             transform.localScale = new Vector3(-1, 1, 1);
+            //transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 

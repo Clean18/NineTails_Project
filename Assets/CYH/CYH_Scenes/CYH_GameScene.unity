@@ -400,6 +400,7 @@ GameObject:
   - component: {fileID: 1147578128}
   - component: {fileID: 1147578131}
   - component: {fileID: 1147578130}
+  - component: {fileID: 1147578132}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -559,6 +560,20 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 2.105}
   m_Size: {x: 1.8700002, y: 4.21}
   m_Direction: 0
+--- !u!114 &1147578132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147578125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7308b36ed7b9d53409e6aa57c1e185cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data: {fileID: 0}
+  animator: {fileID: 8834188468784387697}
 --- !u!1 &1289211516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,6 +1113,7 @@ GameObject:
   - component: {fileID: 7409231950812699962}
   - component: {fileID: 8834188468784387697}
   - component: {fileID: 8834188468784387696}
+  - component: {fileID: 8834188468784387698}
   m_Layer: 0
   m_Name: PlayerA
   m_TagString: Untagged
@@ -1293,6 +1309,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8834188468784387698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874512801222223151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11acc493ccfc7bf45a379356f2b68759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &8994819570074998775
 Camera:
   m_ObjectHideFlags: 0

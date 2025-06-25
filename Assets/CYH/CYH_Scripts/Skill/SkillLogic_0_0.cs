@@ -28,7 +28,7 @@ public class SkillLogic_0_0 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && slashCount == 0)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             UseSkill();
         }
@@ -38,7 +38,7 @@ public class SkillLogic_0_0 : MonoBehaviour
             Flip();
         }
 
-        Debug.Log($"facingDir : {playerController.facingDir}");
+        //Debug.Log($"facingDir : {playerController.facingDir}");
     }
 
     public void UseSkill()
@@ -89,7 +89,7 @@ public class SkillLogic_0_0 : MonoBehaviour
     {
         if (other.CompareTag("Monster"))
         {
-            Debug.Log("몬스터 히트!");
+            Debug.Log("몬스터 맞음");
             // 데미지 로직 호출
         }
     }

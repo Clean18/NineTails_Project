@@ -1,52 +1,31 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SkillLogic_1 : MonoBehaviour
 {
     [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy playerController;
+    [SerializeField] private Animator animator;
 
     private CapsuleCollider2D SwordCollider;
-    private Animator animator;
-
-    private int slashCount = 0;
 
 
     private void Awake()
     {
         SwordCollider = GetComponent<CapsuleCollider2D>();
-        animator = GetComponent<Animator>();
-        
-        // 게임 스타트 -> 무기 collider 끔
         SwordCollider.enabled = false;
-    }
-
-    private void Start()
-    {
-        playerController.facingDir = -1;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && slashCount == 0)
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             UseSkill();
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Flip();
-        }
-
-        Debug.Log($"facingDir : {playerController.facingDir}");
     }
-
     public void UseSkill()
     {
-        slashCount = 1;
         OnAttackStart();
+        Debug.Log("스킬사용");
         AnimationPlay();
-        Debug.Log("스킬사용 1타");
     }
 
     public void OnAttackStart()
@@ -55,25 +34,12 @@ public class SkillLogic_1 : MonoBehaviour
         Debug.Log("콜라이더 킴");
     }
 
-    // 애니메이션이 끝났을 때 이벤트로 호출
     public void OnAttackEnd()
     {
         SwordCollider.enabled = false;
         Debug.Log("콜라이더 끔");
-
-        if(slashCount == 1)
-        {
-            slashCount = 2;
-            Flip();
-            OnAttackStart();
-            AnimationPlay();
-            Debug.Log("스킬사용 2타");
-        }
-        else
-        {
-            slashCount = 0;
-        }
     }
+
 
     public void AnimationPlay()
     {
@@ -89,16 +55,18 @@ public class SkillLogic_1 : MonoBehaviour
     {
         if (other.CompareTag("Monster"))
         {
-            Debug.Log("몬스터 히트!");
+            Debug.Log("몬스터 맞음");
             // 데미지 로직 호출
         }
     }
 
-    private void Flip()
+    private void OnEnable()
     {
-        Debug.Log("Filp");
-        playerController.facingDir *= -1;
-        gameObject.transform.parent.localScale = new Vector3(playerController.facingDir, 1, 1);
-        Debug.Log($"facingDir : {playerController.facingDir}");
+        SkillEvent.OnAAnimationEnd += OnAttackEnd;
+    }
+
+    private void OnDisable()
+    {
+        SkillEvent.OnAAnimationEnd -= OnAttackEnd;
     }
 }
