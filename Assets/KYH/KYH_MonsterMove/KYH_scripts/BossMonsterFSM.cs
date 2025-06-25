@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossMonsterFSM : MonoBehaviour
@@ -11,7 +12,7 @@ public class BossMonsterFSM : MonoBehaviour
         Idle,       // 대기 상태 (패턴 전환 준비 상태)
         Pattern1,   // 일반 공격 패턴 1
         Pattern2,   // 일반 공격 패턴 2
-        Special,    // 특수 공격 패턴
+        Pattern3,    // 특수 공격 패턴
         Groggy,     // 패턴 공략 성공 시 상태
         Dead        // 체력이 0 이하가되면 사망
     }
@@ -20,7 +21,7 @@ public class BossMonsterFSM : MonoBehaviour
     [SerializeField] private float MaxHealth = 1000f;     // 최대 체력
     private float CurrentHealth;                          // 현재 체력
 
-    
+
     private BossState CurrentState;         // 현재 FSM 상태
     private bool isDeadHandled = false;     // 죽음 처리 중복 방지용
 
@@ -49,6 +50,15 @@ public class BossMonsterFSM : MonoBehaviour
     [SerializeField] private float Pattern2EffectDuration = 2f; // 돌 이펙트가 유지되는 시간
     [SerializeField] private float DropRadius = 3f;             // 낙석 범위
 
+    [Header("Pattern3 Setting")]
+    [SerializeField] private GameObject SpearGhostPrefebs;   // 창귀 투사체 프리팹
+    [SerializeField] private float SpearSpeed = 10f;            // 투사체 속도
+    [SerializeField] private float SpearDamagePercent = 0.2f;   // 20% 피해
+    [SerializeField] private AudioClip SpearGhostSound;         // 발사 사운드
+    [SerializeField] private GameObject WarningRectPrefab; // 경고용 직사각형 오브젝트
+    [SerializeField] private float WarningDistance = 2f;   // 보스로부터 경고 오브젝트까지의 거리
+    private List<GameObject> warningRects = new List<GameObject>();
+
     Coroutine BossPatternRoutine;
     // 시작 시 상태 초기화
     private void Start()
@@ -74,8 +84,8 @@ public class BossMonsterFSM : MonoBehaviour
             case BossState.Pattern2:
                 HandlePattern2(); break;
 
-            case BossState.Special:
-                HandleSpecial(); break;
+            case BossState.Pattern3:
+                HandlePattern3(); break;
 
             case BossState.Groggy:
                 HandleGroggy(); break;
@@ -90,6 +100,7 @@ public class BossMonsterFSM : MonoBehaviour
         CurrentState = newstate;
         IdleTimer = 0f; // 상태 변화 시 타이머 초기회 (Idle 에서만 쓰임)
 
+        Debug.Log($"보스 몬스터 상태가 {newstate} 상태로 전환됨");
         // 상태 변화 시 추가 초기화 작업이 필요하면 아래에서 처리
     }
 
@@ -120,15 +131,15 @@ public class BossMonsterFSM : MonoBehaviour
         if (IdleTimer >= IdleTime)
         {
             IdleTimer = 0f;
-            int rand = Random.Range(0, 2); // Pattern2 or Special
+            int rand = UnityEngine.Random.Range(0, 2); // Pattern2 or Special
             if (rand == 0) TransitionToState(BossState.Pattern2);
-            else TransitionToState(BossState.Special);
+            else TransitionToState(BossState.Pattern3);
         }
     }
 
     // 일반 패턴 1 처리
 
-    
+
     private void HandlePattern1()
     {
 
@@ -153,8 +164,8 @@ public class BossMonsterFSM : MonoBehaviour
         // 3. 이펙트 생성
         if (AttackEffectPrefab != null)
         {
-           GameObject fx = Instantiate(AttackEffectPrefab, AttackOrigin.position, AttackOrigin.rotation);
-           Destroy(fx, Pattern1EffectDuration);
+            GameObject fx = Instantiate(AttackEffectPrefab, AttackOrigin.position, AttackOrigin.rotation);
+            Destroy(fx, Pattern1EffectDuration);
         }
 
         // 4. 데미지 판정
@@ -165,7 +176,7 @@ public class BossMonsterFSM : MonoBehaviour
 
         // 6. 경고 범위 제거
         WarningRangeIndicator.SetActive(false);
-        
+
         // 7. FSM 상태 복귀
 
         TransitionToState(BossState.Idle);
@@ -244,7 +255,7 @@ public class BossMonsterFSM : MonoBehaviour
 
 
         // 2. 낙석 위치 랜덤 계산
-        Vector2 Randomoffset = Random.insideUnitCircle * DropRadius;
+        Vector2 Randomoffset = UnityEngine.Random.insideUnitCircle * DropRadius;
         Vector3 DropPos = DropPosition.position + new Vector3(Randomoffset.x, Randomoffset.y, 0f);
 
         // 3. 경고 범위 생성
@@ -290,11 +301,92 @@ public class BossMonsterFSM : MonoBehaviour
 
 
     // 특수 패턴 처리
-    private void HandleSpecial()
+    private void HandlePattern3()
     {
-        // TODO : 특수 기믹패턴 같은 특수 행동 처리 , 처리 결과에 따라서 Idle로 갈지 Groggy로 갈지 
+        // 우선 그로기는 없이 진행
+        if (BossPatternRoutine == null)
+        {
+            BossPatternRoutine = StartCoroutine(Pattern3Coroutine());
+        }
     }
 
+    private IEnumerator Pattern3Coroutine()
+    {
+        // 1. 경고 범위 표시
+        ShowWarningRects();
+
+        // 2. 눈빛 연출 및 대기
+        BossAnimator.Play("Boss_EyeGlow");
+        Debug.Log("보스 창귀발사 대기모션");
+        yield return new WaitForSeconds(3f);
+
+        // 3. 팔 휘두르기 애니메이션 및 사운드
+        BossAnimator.Play("Boss_Slash3Way");
+        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+        yield return new WaitForSeconds(0.4f);  // 타이밍 맞춰서 발사
+
+        // 4. 창귀 발사 ( 3 방향으로 )
+        FireSpearGhost(0f);     // 정면
+        FireSpearGhost(35f);    // 위
+        FireSpearGhost(-35f);   // 아래
+
+        AudioSource.PlayClipAtPoint(SpearGhostSound, transform.position);
+
+        yield return new WaitForSeconds(1f);
+
+        // 5. 경고 범위 제거
+        HideWarningRects();
+
+        // 6. 상태 복귀
+        TransitionToState(BossState.Idle);
+        BossPatternRoutine = null;
+    }
+
+    private void FireSpearGhost(float Angle)
+    {
+        Vector3 direction = Quaternion.Euler(0, 0, Angle) * AttackOrigin.right;
+        GameObject spear = Instantiate(SpearGhostPrefebs, AttackOrigin.position, Quaternion.identity);
+
+        Rigidbody2D rb = spear.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = direction.normalized * SpearSpeed;
+        }
+
+        // 방향 회전도 적용
+
+        float zRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        spear.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+    }
+
+    private void ShowWarningRects()
+    {
+        ShowOneWarning(0f);         // 정면
+        ShowOneWarning(35f);        // 위
+        ShowOneWarning(-35f);       // 아래
+    }
+
+    private void ShowOneWarning(float angle)
+    {
+        Vector3 dir = Quaternion.Euler(0, 0, angle) * AttackOrigin.right;
+        Vector3 pos = AttackOrigin.position + dir.normalized * WarningDistance;
+
+        GameObject warning = Instantiate(WarningRectPrefab, pos, Quaternion.Euler(0, 0, angle));
+        warningRects.Add(warning);
+    }
+
+    private void HideWarningRects()
+    {
+        for (int i = 0; i < warningRects.Count; i++)
+        {
+            if (warningRects[i] != null)
+            {
+                Destroy(warningRects[i]);
+            }
+
+        }
+        warningRects.Clear();
+    }
     // 그로기 상태 처리
     private void HandleGroggy()
     {
@@ -304,7 +396,7 @@ public class BossMonsterFSM : MonoBehaviour
         TransitionToState(BossState.Idle);
     }
 
-    
+
     // 사망 처리
     private void HandleDead()
     {
@@ -331,8 +423,8 @@ public class BossMonsterFSM : MonoBehaviour
         Destroy(gameObject);
     }
 
-    
-    
+
+
     public void TakeDamage(float damage)
     {
         if (CurrentState == BossState.Dead) return;
