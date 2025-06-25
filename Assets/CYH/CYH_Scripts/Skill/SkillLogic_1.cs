@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SkillLogic_1 : MonoBehaviour
 {
-    [SerializeField] private ActiveSkillData _data;
+    [SerializeField] private ActiveSkillData data;
     [SerializeField] private Animator animator;
 
     private CapsuleCollider2D SwordCollider;
