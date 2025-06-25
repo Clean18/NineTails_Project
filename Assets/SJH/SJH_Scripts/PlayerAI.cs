@@ -53,33 +53,39 @@ public class PlayerAI
 	{
 		Debug.Log("SkillLoad Action");
 
-		// 모든 스킬이 쿨타임이면 Search로 이동
 		TargetSkill = null;
-		float maxCooldown = float.MinValue;
+		//float maxCooldown = float.MinValue;
 
-		foreach (var skill in GameManager.Instance.SkillDic.Values)
+		List<SkillData> ranSkills = new();
+        // TODO : 게임매니저의 딕셔너리가 아닌 플레이어가 등록한 스킬리스트
+        // 기본공격은 이 리스트에 없어야함
+        // -> 모든 스킬이 쿨타임일 때 사용할 예정 
+        foreach (var skill in GameManager.Instance.SkillDic.Values)
 		{
 			// 스킬 쿨타임이 아니고 쿨타임이 가장 긴 스킬 우선
-			if (!skill.IsCooldown && skill.Cooldown > maxCooldown)
-			{
-				maxCooldown = skill.Cooldown;
-				TargetSkill = skill;
-				Debug.Log($"{TargetSkill.SkillName} 장전");
-			}
-		}
-		// 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
-		if (TargetSkill != null)
-        {
-			_controller.CurrentState = AIState.Chase;
+			//if (!skill.IsCooldown && skill.Cooldown > maxCooldown)
+			//{
+			//	maxCooldown = skill.Cooldown;
+			//	TargetSkill = skill;
+			//	Debug.Log($"{TargetSkill.SkillName} 장전");
+			//}
 
-        }
-		else
+            // 쿨타임이 아닌 스킬 등록
+			if (!skill.IsCooldown) ranSkills.Add(skill);
+		}
+        // 쿨타임이 아닌 스킬들 중 랜덤 사용
+        if (ranSkills.Count > 0)
         {
-            // 스킬이 쿨타임일 때는 TargetMonster도 초기화해야지 SearchRoutine에서 안걸림
-			_controller.CurrentState = AIState.Search;
-            MonsterSkillCheck();
+            TargetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
+            Debug.Log($"{TargetSkill.SkillName} 스킬장전");
         }
-	}
+        // TODO : else 기본공격을 TargetSkill로 등록
+
+        // 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
+        if (TargetSkill != null) _controller.CurrentState = AIState.Chase;
+        // 스킬이 쿨타임일 때는 TargetMonster도 초기화해야 SearchRoutine에서 안걸림
+        else MonsterSkillCheck();
+    }
 
 	void ChaseAction()
 	{
@@ -247,5 +253,4 @@ public class PlayerAI
 			_searchRoutine = null;
 		}
 	}
-
 }
