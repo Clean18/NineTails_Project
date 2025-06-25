@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public class SkillManager : Singleton<SkillManager>
 {
-    GameObject[] SkillList = new GameObject[8];
-
-    public void Use() { }
+    [SerializeField] private List<ActiveSkillData> _activeSkillData;
+   
 }

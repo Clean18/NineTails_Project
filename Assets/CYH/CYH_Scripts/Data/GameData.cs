@@ -24,4 +24,5 @@ public partial class GameData
     public int Level_T = 1;
     public float Exp_T = 10;
     public int Gold_T = 100;
+    public float Attack_T = 100;
 }
