@@ -4,19 +4,37 @@ using UnityEngine;
 
 public class PopUpCanvas : MonoBehaviour
 {
-    private BaseUI current; // 현재 팝업
-
+    // BaseUI 상속한 UI를 스택 구조로 관리
+    private Stack<BaseUI> stack = new Stack<BaseUI>();
 
     public void ShowUI(BaseUI ui)
     {
-        current = ui; // 현재 UI 등록
+        // 팝업창이 있을시
+        if (stack.Count > 0)
+        {
+            // 현재 가장 위에있는 팝업창을 비활성화시킴
+            BaseUI top = stack.Peek();
+            top.gameObject.SetActive(false);
+        }
+        // 새로운 UI를 스택에 추가
+        stack.Push(ui);  
     }
+
     public void CloseUI()
     {
-        if (current != null)
+        // 팝업창이 열려있지 않으면 동작하지않음
+        if (stack.Count == 0)
+            return;
+
+        // 현재 UI를 스택에서 제거
+        BaseUI top = stack.Pop();
+        Destroy(top.gameObject);
+
+        // 이전 팝업창이 있다면 다시 표시
+        if (stack.Count > 0)
         {
-            Destroy(current.gameObject); // 현재 팝업 UI 제거 
-            current = null; 
+            top = stack.Peek();
+            top.gameObject.SetActive(true);
         }
     }
 }

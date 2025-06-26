@@ -10,8 +10,19 @@ public class UpgradePopUp : BaseUI
 
     [SerializeField] private TextMeshProUGUI gradeText; // 등급 텍스트
     [SerializeField] private TextMeshProUGUI levelText; // 강화 단계 텍스트
+
+    // 활성화 될때마다 호출되는 함수
+    private void OnEnable()
+    {
+        if (upgrade == null)                            // upgrade가 null일때
+            upgrade = FindObjectOfType<Upgrade>();      // Upgrade컴포넌트가 붙어있는 오브젝트 참조
+        if (promotion == null)                          // promotion이 null일때
+            promotion = FindObjectOfType<Promotion>();  // Promotion컴포넌트가 붙어있는 오브젝트 참조
+        UpdateText();
+    }
     private void Start()
     {
+        // Upgrade,Promotion 컴포넌트가 붙어있는 오브젝트 참조
         upgrade = FindObjectOfType<Upgrade>();
         promotion = FindObjectOfType<Promotion>();
         
