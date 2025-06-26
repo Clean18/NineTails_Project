@@ -30,6 +30,17 @@ namespace Game.Data
             }
         }
 
+        public void TakeDamage(float damage)
+        {
+            currentHealth -= damage;
+            Debug.Log($" 플레이가 피해 {damage} 를 받음, 현재 남은 체력 : {currentHealth}");
+
+            if (currentHealth <= 0f)
+            {
+                Die();
+            }
+        }
+
         private void Die()
         {
             Debug.Log("플레이어가 사망했습니다!");
