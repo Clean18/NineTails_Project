@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,17 +8,36 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigid;
+    [SerializeField] private SpriteRenderer sprite;
 
-	void Awake()
+    private float _facingDir;
+    [SerializeField] float _spriteSize;
+
+
+    void Awake()
 	{
 		_rigid = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
 	}
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
 		Vector2 movePos = dir.normalized * moveSpeed;
 		_rigid.velocity = movePos;
-	}
+
+        if (dir.x < 0f)
+        {
+            _facingDir = -1;
+            transform.localScale = new Vector3(-_spriteSize, _spriteSize, _spriteSize);
+            //transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir.x > 0f)
+        {
+            _facingDir = 1;
+            transform.localScale = new Vector3(_spriteSize, _spriteSize, _spriteSize);
+            //transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
 
 	public void Stop() => _rigid.velocity = Vector2.zero;
 }

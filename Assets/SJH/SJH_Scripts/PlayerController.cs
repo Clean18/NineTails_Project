@@ -52,13 +52,16 @@ public enum AIState
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    private bool _isInit = false;
-	private PlayerModel _playerModel;
-	public PlayerView PlayerView;
-	public PlayerAI PlayerAI;
+    [Tooltip("플레이어 데이터 로드 여부")]
+    [SerializeField ]private bool _isInit = false;
 
-	// TODO : 게임이 시작되면 시작은 Auto
-	[SerializeField]private ControlMode _mode;
+	public PlayerModel PlayerModel;
+    public PlayerView PlayerView;
+    public PlayerAI PlayerAI;
+
+    // TODO : 게임이 시작되면 시작은 Auto
+    [Header("컨트롤 모드 Auto/Manual")]
+	[SerializeField] private ControlMode _mode;
 	public ControlMode Mode
 	{
 		get => _mode;
@@ -71,15 +74,17 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	// AI 에서 사용하는 필드변수
+    // AI 에서 사용하는 필드변수
+    [Header("AI 필드변수")]
 	public AIState CurrentState;		// AI 상태
 	public float SearchDistance = 8;	// 탐색 거리
 	public int DirectionCount = 8;		// 탐색할 칸의 개수 360 / 8
 	public float SightAngle = 45f;		// 칸마다 각도
-	public LayerMask MonsterLayer;		// 탐색할 레이어
+	public LayerMask MonsterLayer;      // 탐색할 레이어
 
-	// Manual 에서 사용하는 필드변수
-	public Vector2 MoveDir { get; private set; } // 플레이어의 이동 방향
+    // Manual 에서 사용하는 필드변수
+    [Header("수동모드 필드변수")]
+    public Vector2 MoveDir; // 플레이어의 이동 방향
 
 
 	void Awake()
@@ -97,9 +102,10 @@ public class PlayerController : MonoBehaviour
         if (_isInit == false && Input.GetKeyDown(KeyCode.Return))
         {
             // TODO : Awake가 아니라 데이터 로드할때 초기화
-            _playerModel = new PlayerModel();
+            PlayerModel = new PlayerModel();
+            PlayerModel.InitModel();
             PlayerView = GetComponent<PlayerView>();
-            PlayerAI = new PlayerAI(this, PlayerView, _playerModel);
+            PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
             _isInit = true;
             Debug.Log("플레이어 스탯 초기화 완료");
         }
@@ -123,7 +129,7 @@ public class PlayerController : MonoBehaviour
 	void MoveInput()
 	{
 		MoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-		PlayerView.Move(MoveDir, _playerModel.Data.Speed);
+		PlayerView.Move(MoveDir, PlayerModel.Data.Speed);
 	}
 
 	void SkillInput()
@@ -137,14 +143,30 @@ public class PlayerController : MonoBehaviour
 				skill.UseSkill(transform);
 			}
 		}
+        // TODO : 1번 2번 3번
 	}
 
+    /// <summary>
+    /// 플레이어가 대미지를 입는 함수
+    /// </summary>
+    /// <param name="damage"></param>
 	public void TakeDamage(long damage)
 	{
-		_playerModel.ApplyDamage(damage);
+		PlayerModel.ApplyDamage(damage);
 		// TODO : view 피격처리
 		// TODO : UI 체력감소 처리
 	}
+
+    /// <summary>
+    /// 플레이어가 체력을 회복하는 함수
+    /// </summary>
+    /// <param name="amount"></param>
+    public void TakeHeal(long amount)
+    {
+        PlayerModel.ApplyHeal(amount);
+        // TODO : view 힐처리
+        // TODO : UI 체력증가 처리
+    }
 
 	void OnDrawGizmos()
 	{

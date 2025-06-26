@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
 /// </summary>
-//[System.Serializable]
+[System.Serializable]
 public class PlayerModel
 {
 	// 캐릭터 스텟
@@ -17,13 +17,18 @@ public class PlayerModel
 	// 플레이어 스킬
 	public PlayerSkill Skill;
 
-	public PlayerModel()
-	{
-		// 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
-		Data = new PlayerData();
-		Cost = new PlayerCost();
-		Skill = new PlayerSkill();
-	}
+    /// <summary>
+    /// PlayerModel 초기화
+    /// </summary>
+    public void InitModel()
+    {
+        // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
+        Data = new PlayerData(); 
+        Data.InitData();
+
+        Cost = new PlayerCost();
+        Skill = new PlayerSkill();
+    }
 
 	public void ApplyDamage(long damage)
 	{
@@ -33,4 +38,9 @@ public class PlayerModel
             Debug.Log("플레이어 사망");
         }
 	}
+
+    public void ApplyHeal(long amount)
+    {
+        Data.HealHp(amount);
+    }
 }

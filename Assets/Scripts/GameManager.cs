@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
 	public Spawner Spawner;
 
 	public Dictionary<string, SkillData> SkillDic;
-    public Dictionary<StatType, Dictionary<int, long>> StatDic;
+    public Dictionary<StatType, Dictionary<int, long>> StatDic = new();
 
 	void Start()
 	{
@@ -92,12 +92,14 @@ public class GameManager : Singleton<GameManager>
             StatDic[StatType.Cost][statLevel] = levelupCost;
             StatDic[StatType.Speed][statLevel] = speed;
 
-            Debug.Log($"----------\n{statLevel} 레벨");
-            Debug.Log($"공격력 : {attack}");
-            Debug.Log($"체력 : {hp}");
-            Debug.Log($"방어력 : {defense}");
-            Debug.Log($"비용 : {levelupCost}");
-            Debug.Log($"스피드 : {speed}\n----------");
+            //Debug.Log("===============");
+            //Debug.Log($"{statLevel} 레벨");
+            //Debug.Log($"공격력 : {attack}");
+            //Debug.Log($"체력 : {hp}");
+            //Debug.Log($"방어력 : {defense}");
+            //Debug.Log($"비용 : {levelupCost}");
+            //Debug.Log($"스피드 : {speed}");
+            //Debug.Log("===============");
         }
     }
     string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
