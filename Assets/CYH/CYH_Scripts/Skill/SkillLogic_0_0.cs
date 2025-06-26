@@ -1,29 +1,23 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SkillLogic_0_0 : MonoBehaviour
 {
-    [SerializeField] private ActiveSkillData data;
-    [SerializeField] private PlayerControllerTypeA_Copy playerController;
+    [SerializeField] private ActiveSkillData _data;
+    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
-    private CapsuleCollider2D SwordCollider;
-    private Animator animator;
+    [SerializeField] private PolygonCollider2D _hitBox;
+    private Animator _animator;
 
-    private int slashCount = 0;
+    [SerializeField] private int _slashCount = 0;
 
 
     private void Awake()
     {
-        SwordCollider = GetComponent<CapsuleCollider2D>();
-        animator = GetComponent<Animator>();
-        
-        // 게임 스타트 -> 무기 collider 끔
-        SwordCollider.enabled = false;
-    }
+        _animator = GetComponent<Animator>();
 
-    private void Start()
-    {
-        playerController.facingDir = -1;
+        // 게임 스타트 -> 무기 collider 끔
+        _hitBox.enabled = false;
+        //_hitBox.SetActive(false);
     }
 
     private void Update()
@@ -32,18 +26,11 @@ public class SkillLogic_0_0 : MonoBehaviour
         {
             UseSkill();
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Flip();
-        }
-
-        //Debug.Log($"facingDir : {playerController.facingDir}");
     }
 
     public void UseSkill()
     {
-        slashCount = 1;
+        _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
         Debug.Log("스킬사용 1타");
@@ -51,37 +38,30 @@ public class SkillLogic_0_0 : MonoBehaviour
 
     public void OnAttackStart()
     {
-        SwordCollider.enabled = true;
+        _hitBox.enabled = true;
+        //_hitBox.SetActive(true);
         Debug.Log("콜라이더 킴");
     }
 
     // 애니메이션이 끝났을 때 이벤트로 호출
     public void OnAttackEnd()
     {
-        SwordCollider.enabled = false;
+        _hitBox.enabled = false;
+       // _hitBox.SetActive(false);
         Debug.Log("콜라이더 끔");
-
-        if(slashCount == 1)
+        if (_slashCount == 2)
         {
-            slashCount = 2;
-            Flip();
-            OnAttackStart();
-            AnimationPlay();
-            Debug.Log("스킬사용 2타");
-        }
-        else
-        {
-            slashCount = 0;
+            _slashCount = 0;
         }
     }
 
     public void AnimationPlay()
     {
-        if (!SwordCollider.enabled)
+        if (!_hitBox.enabled)
             return;
         else
         {
-            animator.SetTrigger("UseSkill");
+            _animator.SetTrigger("UseSkill");
         }
     }
 
@@ -89,16 +69,29 @@ public class SkillLogic_0_0 : MonoBehaviour
     {
         if (other.CompareTag("Monster"))
         {
-            Debug.Log("몬스터 맞음");
-            // 데미지 로직 호출
+            if (_slashCount == 1)
+            {
+                Debug.Log("몬스터 맞음 + 1타");
+                // 데미지 구현
+            }
+            else if(_slashCount == 2)
+            {
+                Debug.Log("몬스터 맞음 + 2타");
+                // 데미지 구현
+            }
+            else
+            {
+                Debug.Log("몬스터 맞음");
+            }
         }
     }
 
-    private void Flip()
+    /// <summary>
+    /// 애니메이션 2타 타이밍에 애니메이션 이벤트로 호출
+    /// </summary>
+    private void SlashCountEvent()
     {
-        Debug.Log("Filp");
-        playerController.facingDir *= -1;
-        gameObject.transform.parent.localScale = new Vector3(playerController.facingDir, 1, 1);
-        Debug.Log($"facingDir : {playerController.facingDir}");
+        _slashCount = 2;
+        Debug.Log("스킬사용 2타");
     }
 }
