@@ -16,7 +16,7 @@ MonoBehaviour:
   <Description>k__BackingField: 
   <Damage>k__BackingField: 1
   <Level>k__BackingField: 0
-  <CoolTime>k__BackingField: 1
+  <CoolTime>k__BackingField: 3
   <IsCooldown>k__BackingField: 0
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
