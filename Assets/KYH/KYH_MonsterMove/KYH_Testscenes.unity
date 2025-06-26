@@ -293,15 +293,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875025171636436676, guid: 54cc7fa44ecfc7a48accff371755bcaa, type: 3}
       propertyPath: IdleTime
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4875025171636436676, guid: 54cc7fa44ecfc7a48accff371755bcaa, type: 3}
       propertyPath: DropRadius
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4875025171636436676, guid: 54cc7fa44ecfc7a48accff371755bcaa, type: 3}
       propertyPath: AttackRange
-      value: 4.5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4875025171636436676, guid: 54cc7fa44ecfc7a48accff371755bcaa, type: 3}
       propertyPath: DropPosition
