@@ -8,30 +8,53 @@ public class SkillLogic_0_HitBox : MonoBehaviour
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [SerializeField] private PolygonCollider2D _hitBox;
-    private Animator _animator;
-
+    
+    [SerializeField] private int _skillLevel = 0;
     [SerializeField] private int _slashCount = 0;
+    
+    private Animator _animator;
+    private bool _isCooldown = false;
 
+    [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-
-        // 게임 스타트 -> 무기 collider 끔
+        // 게임 스타트 -> _hitBox collider 끔
         _hitBox.enabled = false;
-        //_hitBox.SetActive(false);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UseSkill();
+            UseSkill(transform);
         }
     }
 
-    public void UseSkill()
+    public void UseSkill(Transform attacker)
     {
+        // 쿨타임이면 return
+        if (_isCooldown) return;
+
+        // 쿨타임 체크 시작
+        _isCooldown = true;
+        StartCoroutine(CooldownCoroutine());
+
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+
+        _slashCount = 1;
+        OnAttackStart();
+        AnimationPlay();
+        Debug.Log("스킬사용 1타");
+    }
+
+    public void UseSkill(Transform attacker, Transform defender)
+    {
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+
         _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
@@ -41,7 +64,6 @@ public class SkillLogic_0_HitBox : MonoBehaviour
     public void OnAttackStart()
     {
         _hitBox.enabled = true;
-        //_hitBox.SetActive(true);
         Debug.Log("콜라이더 킴");
     }
 
@@ -49,8 +71,11 @@ public class SkillLogic_0_HitBox : MonoBehaviour
     public void OnAttackEnd()
     {
         _hitBox.enabled = false;
-        // _hitBox.SetActive(false);
         Debug.Log("콜라이더 끔");
+
+        // 몬스터 TakeDamage 처리
+        Damage();
+
         if (_slashCount == 2)
         {
             _slashCount = 0;
@@ -63,37 +88,67 @@ public class SkillLogic_0_HitBox : MonoBehaviour
             return;
         else
         {
-            _animator.SetTrigger("UseSkill");
+            _animator.SetTrigger("UseSkill_0");
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Monster"))
+
+        if (!other.CompareTag("Monster")) return;
+        if (!_hitMonsters.Contains(other.gameObject))
         {
-            if (_slashCount == 1)
+            _hitMonsters.Add(other.gameObject);
+        }
+
+        Debug.Log($"몬스터 맞음 : {_slashCount}타");
+    }
+
+    //// 애니메이션이 끝났을 때 이벤트로 호출
+    public void SlashCountEvent()
+    {
+        // 1타용 리스트 초기화
+        _hitMonsters.Clear();
+
+        _slashCount = 2;
+        Debug.Log("스킬사용 2타");
+        //OnAttackStart();
+    }
+
+    // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
+    private void Damage()
+    {
+        float damage = _playerController.AttackPoint * (100f + _skillLevel) / 100f;
+
+        if(_slashCount == 1)
+        {
+            foreach (var monster in _hitMonsters)
             {
-                Debug.Log("몬스터 맞음 + 1타");
-                // 데미지 구현
+                monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+                Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
             }
-            else if (_slashCount == 2)
+        }
+        else if(_slashCount == 2)
+        {
+            foreach (var monster in _hitMonsters)
             {
-                Debug.Log("몬스터 맞음 + 2타");
-                // 데미지 구현
-            }
-            else
-            {
-                Debug.Log("몬스터 맞음");
+                monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
+                Debug.Log($"{monster.name}에게 {damage * 0.5f}의 피해를 가했음");
             }
         }
     }
 
-    /// <summary>
-    /// 애니메이션 2타 타이밍에 애니메이션 이벤트로 호출
-    /// </summary>
-    private void SlashCountEvent()
+    // 쿨타임 코루틴
+    private IEnumerator CooldownCoroutine()
     {
-        _slashCount = 2;
-        Debug.Log("스킬사용 2타");
+        float remaining = _data.CoolTime;
+        while (remaining > 0f)
+        {
+            Debug.Log($"쿨타임 남음: {remaining}초");
+            yield return new WaitForSeconds(1f);
+            remaining -= 1f;
+        }
+        _isCooldown = false;
+        Debug.Log("쿨타임 종료");
     }
 }
