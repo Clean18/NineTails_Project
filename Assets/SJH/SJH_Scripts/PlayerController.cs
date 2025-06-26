@@ -52,6 +52,7 @@ public enum AIState
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    private bool _isInit = false;
 	private PlayerModel _playerModel;
 	public PlayerView PlayerView;
 	public PlayerAI PlayerAI;
@@ -83,12 +84,6 @@ public class PlayerController : MonoBehaviour
 
 	void Awake()
 	{
-		// TODO : Awake가 아니라 데이터 로드할때 초기화
-		_playerModel = new PlayerModel();
-
-		PlayerView = GetComponent<PlayerView>();
-		PlayerAI = new PlayerAI(this, PlayerView, _playerModel);
-
 		CurrentState = AIState.Search;
 		//Mode = ControlMode.Manual;
 		Mode = ControlMode.Auto;
@@ -96,8 +91,21 @@ public class PlayerController : MonoBehaviour
 		GameManager.Instance.PlayerController = this;
 	}
 
-	void Update()
+    void Update()
 	{
+        // TODO : PlayerData를 채우는 트리거 변경하기 임시로 엔터
+        if (_isInit == false && Input.GetKeyDown(KeyCode.Return))
+        {
+            // TODO : Awake가 아니라 데이터 로드할때 초기화
+            _playerModel = new PlayerModel();
+            PlayerView = GetComponent<PlayerView>();
+            PlayerAI = new PlayerAI(this, PlayerView, _playerModel);
+            _isInit = true;
+            Debug.Log("플레이어 스탯 초기화 완료");
+        }
+
+        if (_isInit == false) return;
+
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) PlayerAI.Action();
 
