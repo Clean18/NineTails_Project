@@ -16,9 +16,9 @@ public class StatUpPopUp : BaseUI
     {
         // 뒤로가기 버튼 클릭시 팝업창 닫기
         GetEvent("BackButton").Click += data => UIManager.Instance.ClosePopUp();
-        GetEvent("HpUpgrade").Click += data => { /*체력 스탯증가 함수*/; UpdateStatUpUI(); };
-        GetEvent("AttackUpgrade").Click += data => { /*공격 스탯증가 함수*/; UpdateStatUpUI(); };
-        GetEvent("DefenseUpgrade").Click += data => { /*방어력 스탯증가 함수*/; UpdateStatUpUI(); };
+        GetEvent("HpUpgrade").Click += data => { /*체력 스탯증가 함수*/; Debug.Log("체력 강화 버튼"); UpdateStatUpUI(); };
+        GetEvent("AttackUpgrade").Click += data => { /*공격 스탯증가 함수*/; Debug.Log("공격력 강화 버튼"); UpdateStatUpUI(); };
+        GetEvent("DefenseUpgrade").Click += data => { /*방어력 스탯증가 함수*/; Debug.Log("방어력 강화 버튼"); UpdateStatUpUI(); };
     }
 
     private void UpdateStatUpUI()

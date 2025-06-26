@@ -397,6 +397,7 @@ MonoBehaviour:
   powerText: {fileID: 466883879}
   attackText: {fileID: 9804434}
   defenseText: {fileID: 255127179}
+  hpText: {fileID: 1055634479}
 --- !u!1 &121038571
 GameObject:
   m_ObjectHideFlags: 0

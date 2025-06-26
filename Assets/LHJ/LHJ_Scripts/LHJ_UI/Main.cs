@@ -14,6 +14,7 @@ public class Main : BaseUI
         GetEvent("Equipment").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>();
         GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
+        GetEvent("Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>();
         PlayerStatUI();
     }
 
