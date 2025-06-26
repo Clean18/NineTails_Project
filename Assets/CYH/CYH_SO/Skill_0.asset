@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillName>k__BackingField: 
   <Description>k__BackingField: 
-  <Damage>k__BackingField: 0
+  <Damage>k__BackingField: 1
   <Level>k__BackingField: 0
-  <CoolTime>k__BackingField: 0
+  <CoolTime>k__BackingField: 1
   <IsCooldown>k__BackingField: 0
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
