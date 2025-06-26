@@ -34,7 +34,7 @@ public class Upgrade : MonoBehaviour
     [SerializeField] private float CooldownReduction;  // 현재 쿨타임 감소 수치
     [SerializeField] private float ReduceDamage;       // 방어력 감소 수치
     [SerializeField] private int warmth;               // (Test용) 가지고 있는 재화
-    private int ssrDamageBonus = 5; // SSR 기본 데미지 증가 수치
+    private float ssrDamageBonus = 0.05f; // SSR 기본 데미지 증가 수치
     private int baseSSRCost = 150; // 테이블 SR 재화 이후 임시로 넣어둔 재화 
 
     // 장비등급, 강화단계 읽기 전용 프로퍼티
@@ -90,7 +90,7 @@ public class Upgrade : MonoBehaviour
             }
             currentLevel += 1;
             warmth -= baseSSRCost;
-            int bonusPerLevel = 2; // 매 강화 시 +2%
+            float bonusPerLevel = 0.02f; // 매 강화 시 +2%
             ssrDamageBonus += bonusPerLevel;
             Debug.Log($"강화 성공! 현재 등급: {currentGrade}등급, 강화 단계: {currentLevel}강" + $"공격력 증가율: {currentAttack * 100}%" + $"스킬 쿨타임 감소: {CooldownReduction * 100}%" + $"방어력 관통 수치: {ReduceDamage * 100}%"+ $"누적 피해 증가: { ssrDamageBonus}%");
 
