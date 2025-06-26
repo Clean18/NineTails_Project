@@ -167,29 +167,32 @@ public class BossMonsterFSM : MonoBehaviour
             );
         }
 
-        // 3. 애니메이션 + 사운드
+        // 3. 경고 후 잠시 대기 (플레이어가 피할 시간)
+        yield return new WaitForSeconds(3f);
+
+        // 4. 애니메이션 + 사운드
         BossAnimator.Play("Boss_Attack1");
         AudioSource.PlayClipAtPoint(SwingSound, transform.position);
         Debug.Log("패턴1 - 할퀴기 공격 시작");
 
-        // 4. 이펙트 생성 (회전 포함)
+        // 5. 이펙트 생성 (회전 포함)
         if (AttackEffectPrefab != null)
         {
             GameObject fx = Instantiate(AttackEffectPrefab, AttackOrigin.position, Quaternion.Euler(0f, 0f, angleToPlayer));
             Destroy(fx, Pattern1EffectDuration);
         }
 
-        // 5. 데미지 판정
+        // 6. 데미지 판정
         DealDamageInCone(toPlayer);
 
-        // 6. 일정 시간 대기
-        yield return new WaitForSeconds(5f);
+        // 7. 이펙트와 연출 시간 대기 (ex: 2초)
+        yield return new WaitForSeconds(Pattern1EffectDuration);
 
-        // 7. 경고 제거
+        // 8. 경고 제거
         if (CurrentWarningIndicator != null)
             Destroy(CurrentWarningIndicator);
 
-        // 8. 상태 복귀
+        // 9. 상태 복귀
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
     }
