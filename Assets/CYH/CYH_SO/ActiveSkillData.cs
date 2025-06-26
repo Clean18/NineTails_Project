@@ -5,4 +5,3 @@ public class ActiveSkillData : SkillData_CYH
 {
     [field: SerializeField] public float Range { get; private set; }
 }
-
