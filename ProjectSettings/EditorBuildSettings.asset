@@ -5,10 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/SJH/SJH_Scene.unity
     guid: 68ebf97056592134fa1a1c1a5f01c8fe
-  - enabled: 1
+  - enabled: 0
     path: Assets/CYH/CYH_Scenes/CYH_GameScene.unity
     guid: 74535054aca04ee47bf358c8ad5639bc
   m_configObjects: {}
