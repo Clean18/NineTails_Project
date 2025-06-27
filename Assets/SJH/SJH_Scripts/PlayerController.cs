@@ -93,13 +93,21 @@ public class PlayerController : MonoBehaviour
         CurrentState = AIState.Search;
         Mode = ControlMode.Auto;
         //Mode = ControlMode.Manual;
+    }
 
-        StartCoroutine(PlayerInit());
+    public void PlayerInit()
+    {
+        Debug.LogWarning("Player Init 실행됨");
+        StartCoroutine(PlayerInitRoutine());
     }
 
     void Update()
 	{
-        if (_isInit == false) return;
+        if (_isInit == false)
+        {
+            Debug.Log("초기화가 아직 안됐음");
+            return;
+        }
 
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) PlayerAI.Action();
@@ -195,10 +203,11 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
     /// </summary>
     /// <returns></returns>
-    IEnumerator PlayerInit()
+    IEnumerator PlayerInitRoutine()
     {
         while (GameManager.Instance.StatDic == null || GameManager.Instance.StatDic.Count == 0)
         {
+            Debug.Log("게임매니저 스탯 딕셔너리 null");
             yield return null;
         }
 
@@ -212,14 +221,23 @@ public class PlayerController : MonoBehaviour
         PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
 
         // UI 초기화
-        foreach (var ui in UIManager.Instance.SceneUIList)
-        {
-            if (ui != null) ui.UIInit();
-        }
+        //if (UIManager.Instance.SceneUIList.Count > 0)
+        //{
+        //    foreach (var ui in UIManager.Instance.SceneUIList)
+        //    {
+        //        if (ui != null && !ReferenceEquals(ui, null))
+        //        {
+        //            ui.UIInit();
+        //        }
+        //    }
+        //}
 
         // TODO : 로딩종료
 
         _isInit = true;
+
+        Debug.Log("플레이어 데이터 초기화");
+
         yield break;
     }
 

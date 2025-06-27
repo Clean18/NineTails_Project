@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 public enum StatType
 {
     Attack,
@@ -17,7 +18,7 @@ public class GameManager : Singleton<GameManager>
 {
     // 플레이어가 오토로 돌아갈때는 몬스터의 정보를 알아야함 > 몬스터를 추격하고 공격하기 위해
     // 즉, 싱글톤이든 static이든 오브젝트풀이랑 몬스터들의 정보를 플레이어에서 접근할 수 있던가 해야함
-
+    public GameObject PlayerPrefab;
     public PlayerController PlayerController;
 	public Spawner Spawner;
 
@@ -44,7 +45,26 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-	public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;
+    void OnEnable()
+    {
+        // 씬 로딩 후 자동 호출될 메서드 등록
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("플레이어 오브젝트 생성");
+        var go = Instantiate(PlayerPrefab, Vector3.zero, Quaternion.identity);
+        go.GetComponent<PlayerController>().PlayerInit();
+    }
+
+
+    public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;
 
     IEnumerator StatInit()
     {
@@ -100,6 +120,7 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log($"비용 : {levelupCost}");
             //Debug.Log($"스피드 : {speed}");
             //Debug.Log("===============");
+
         }
     }
     string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거

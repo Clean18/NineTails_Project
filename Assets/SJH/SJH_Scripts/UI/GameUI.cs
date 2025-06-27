@@ -1,12 +1,13 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameUI : SceneUI, IUI
 {
 	public TMP_Text AIStateText;
 	public Button ControlModeBtn;
-	public Button Test_BossState;
+	public Button Test_BossStateBtn;
 
 	void Start()
 	{
@@ -20,14 +21,14 @@ public class GameUI : SceneUI, IUI
 	void SubscribeEvent()
 	{
 		ControlModeBtn.onClick.AddListener(OnControlModeBtn);
-		Test_BossState.onClick.AddListener(OnBossStageBtn);
-
+		Test_BossStateBtn.onClick.AddListener(OnBossStageBtn);
 	}
 
 	void UnsubscribeEvent()
 	{
-
-	}
+        ControlModeBtn.onClick.RemoveListener(OnControlModeBtn);
+        Test_BossStateBtn.onClick.RemoveListener(OnBossStageBtn);
+    }
 
 	public void ChangeStateText(AIState state)
 	{
@@ -79,7 +80,9 @@ public class GameUI : SceneUI, IUI
 
 	public void OnBossStageBtn()
 	{
-		// 정보 저장
-		// 보스씬 이동
+        // 정보 저장
+        // 보스씬 이동
+        Debug.Log("보스씬 이동");
+        SceneManager.LoadScene("Stage1-3");
 	}
 }

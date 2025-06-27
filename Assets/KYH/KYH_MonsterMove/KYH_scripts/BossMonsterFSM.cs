@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossMonsterFSM : MonoBehaviour
+public class BossMonsterFSM : MonoBehaviour, IDamagable
 {
     // 보스의 상태를 정의하는 열거형
 
     enum BossState
     {
+        Null,
         Intro,      // 등장 연출
         Idle,       // 대기 상태 (패턴 전환 준비 상태)
         Pattern1,   // 일반 공격 패턴 1
@@ -18,7 +19,7 @@ public class BossMonsterFSM : MonoBehaviour
 
     [Header("Boss HP")]
     [SerializeField] private float MaxHealth = 1000f;     // 최대 체력
-    private float CurrentHealth;                          // 현재 체력
+    [SerializeField] private float CurrentHealth;         // 현재 체력
     [SerializeField] private float DamageReduceRate = 0f; // 몬스터의 데미지 감소율  
 
 
@@ -60,8 +61,20 @@ public class BossMonsterFSM : MonoBehaviour
 
     Coroutine BossPatternRoutine;
     // 시작 시 상태 초기화
+
+    [SerializeField] private Transform PlayerTransform;
+
     private void Start()
     {
+        CurrentState = BossState.Null;
+        StartCoroutine(BossInit());
+    }
+
+    IEnumerator BossInit()
+    {
+        yield return new WaitUntil(() => GameManager.Instance.PlayerController != null);
+        PlayerTransform = GameManager.Instance.PlayerController.transform;
+
         CurrentHealth = MaxHealth;              // 보스 체력 초기화
         TransitionToState(BossState.Intro);     // Intro 상태로 시작
     }
@@ -69,6 +82,8 @@ public class BossMonsterFSM : MonoBehaviour
     // 매 프레임 상태에 따라서 처리
     private void Update()
     {
+        if (CurrentState == BossState.Null) return;
+
         switch (CurrentState)
         {
             case BossState.Intro:
@@ -108,8 +123,6 @@ public class BossMonsterFSM : MonoBehaviour
 
         TransitionToState(BossState.Idle);
     }
-
-    [SerializeField] private Transform PlayerTransform;
 
     // Idle 상태 처리 ( 패턴 전환 대기 상태 )
     private void HandleIdle()
@@ -467,7 +480,7 @@ public class BossMonsterFSM : MonoBehaviour
 
 
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(long damage)
     {
         if (CurrentState == BossState.Dead) return;
 

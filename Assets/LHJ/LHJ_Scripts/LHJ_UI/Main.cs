@@ -17,7 +17,7 @@ public class Main : BaseUI, IUI
     private Upgrade upgrade;  // Test용으로 Upgrade에 있는 Test재화 사용할 변수
     private void Start()
     {
-        upgrade = FindObjectOfType<Upgrade>();
+        //upgrade = FindObjectOfType<Upgrade>();
         // GetEvent("Equipment").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>();
         // GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         // GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
@@ -51,6 +51,6 @@ public class Main : BaseUI, IUI
         //defenseText.text = $"Defense:{플레이어 방어력}";
         //hpText.text = $"{체력}/{최대 체력}";
         //spritenergyText.text = $"S: {영기재화}";
-        warmthText.text = $"W: {upgrade.Warmth}";
+        //warmthText.text = $"W: {upgrade.Warmth}";
     }
 }
