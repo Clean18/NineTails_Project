@@ -36,10 +36,12 @@ public class Upgrade : MonoBehaviour
     [SerializeField] private int warmth;               // (Test용) 가지고 있는 재화
     private float ssrDamageBonus = 0.05f; // SSR 기본 데미지 증가 수치
     private int baseSSRCost = 150; // 테이블 SR 재화 이후 임시로 넣어둔 재화 
+    public Main mainUI;  // Main 변수 선언 
 
     // 장비등급, 강화단계 읽기 전용 프로퍼티
     public string CurrentGrade => currentGrade;
     public int CurrentLevel => currentLevel;
+    public int Warmth => warmth;    // Main UI(온정) 연결용 테스트 프로퍼티
 
     void Start()
     {
@@ -77,6 +79,7 @@ public class Upgrade : MonoBehaviour
     public void TryPromoteWith(Promotion promotion)
     {
         promotion.TryPromote(ref currentGrade, ref currentLevel, ref warmth);
+        mainUI.PlayerStatUI();
     }
     public void TryEnhance()
     {
@@ -139,5 +142,6 @@ public class Upgrade : MonoBehaviour
 
             Debug.Log($"강화 성공! 현재 등급: {currentGrade}등급, 강화 단계: {currentLevel}강" + $"공격력 증가율: {currentAttack * 100}%" +  $"스킬 쿨타임 감소: {CooldownReduction * 100}%" +  $"방어력 관통 수치: {ReduceDamage * 100}%");
         }
+        mainUI.PlayerStatUI();
     }
 }
