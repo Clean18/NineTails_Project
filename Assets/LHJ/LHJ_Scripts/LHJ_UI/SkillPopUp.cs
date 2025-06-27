@@ -18,7 +18,7 @@ public class SkillPopUp : BaseUI
         GetEvent("Skill3Up").Click += data => { /*스킬3레벨 증가*/; Debug.Log("스킬3 강화 버튼"); UpdateSkill(); };
     }
 
-    private void UpdateSkill()
+    public void UpdateSkill()
     {
         //skill0levelText.text = $"Level:{스킬0 레벨}";
         //skill1levelText.text = $"Level:{스킬1 레벨}";

@@ -21,7 +21,7 @@ public class StatUpPopUp : BaseUI
         GetEvent("DefenseUpgrade").Click += data => { /*방어력 스탯증가 함수*/; Debug.Log("방어력 강화 버튼"); UpdateStatUpUI(); };
     }
 
-    private void UpdateStatUpUI()
+    public void UpdateStatUpUI()
     {
         // 체력 레벨
         // hpLevelText.text = $"HP Lv:{플레이어 체력 레벨}";
