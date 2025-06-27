@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_2 : MonoBehaviour
 {
     [SerializeField] private ActiveSkillData _data;
+    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [Header("투사체 프리팹")]
     [SerializeField] private GameObject projectilePrefab;
@@ -17,6 +19,9 @@ public class SkillLogic_2 : MonoBehaviour
     private float degree;
     private GameObject[] targets;
 
+    [SerializeField] private int _skillLevel = 0;
+    [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
+
 
     private void Start()
     {
@@ -29,7 +34,7 @@ public class SkillLogic_2 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             UseSkill();
         }
@@ -63,5 +68,16 @@ public class SkillLogic_2 : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, circleR);
+    }
+
+    private void Damage()
+    {
+        float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
+
+        foreach (var monster in _hitMonsters)
+        {
+            monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
+        }
     }
 }

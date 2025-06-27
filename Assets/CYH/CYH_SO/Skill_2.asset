@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d734c7b664dcedf478c2aab6d5aa9ec0, type: 3}
+  m_Name: Skill_2
+  m_EditorClassIdentifier: 
+  <SkillName>k__BackingField: "\uD63C\uC758 \uC601\uC5ED"
+  <Description>k__BackingField: "\uD63C\uB839\uC744 \uC8FC\uBCC0\uC5D0 \uC18C\uD658\uD558\uC5EC
+    \uC801\uC5D0\uAC8C \uD53C\uD574\uB97C \uC785\uD788\uACE0, \uC790\uC2E0\uC744
+    \uBCF4\uD638\uD558\uB294 \uBCF4\uD638\uB9C9\uC744 \uB9CC\uB4E0\uB2E4."
+  <Damage>k__BackingField: 1
+  <Level>k__BackingField: 0
+  <CoolTime>k__BackingField: 12
+  <IsCooldown>k__BackingField: 0
+  <SkillSprite>k__BackingField: {fileID: 0}
+  <SkillAnimation>k__BackingField: {fileID: 0}
+  <Range>k__BackingField: 0
