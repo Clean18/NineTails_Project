@@ -214,7 +214,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1795293629051511029
+--- !u!1001 &878892863
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -264,21 +264,107 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: m_Name
-      value: Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 7885765592794172211, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
-      propertyPath: DetectRange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7885765592794172211, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
-      propertyPath: AttackRadius
-      value: 1
+      value: Melee Monster
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
+--- !u!1001 &1120416332
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866830215252662934, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486729481755186432, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: AttackRange
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486729481755186432, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: DetectRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9192469335144126249, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      propertyPath: m_Name
+      value: Range Monster
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9192469335144126249, guid: 703893ecf752791428e9635e6644f173, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1161663800}
+  m_SourcePrefab: {fileID: 100100000, guid: 703893ecf752791428e9635e6644f173, type: 3}
+--- !u!1 &1161663794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9192469335144126249, guid: 703893ecf752791428e9635e6644f173, type: 3}
+  m_PrefabInstance: {fileID: 1120416332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1161663800
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161663794}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f3769aee89c196941b961f0537440efa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &3286429421009676465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -349,77 +435,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9ab3bd6482d00747b0aca388b372123, type: 3}
---- !u!4 &7535576266530655183 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1289752585418359945, guid: d9ab3bd6482d00747b0aca388b372123, type: 3}
-  m_PrefabInstance: {fileID: 3286429421009676465}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &8599137075684640015
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.21
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835219812491970973, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836351683591775950, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: PlayerTransform
-      value: 
-      objectReference: {fileID: 7535576266530655183}
-    - target: {fileID: 8334779501756303457, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
-      propertyPath: m_Name
-      value: BossMonster
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a5e91601ac1671244a8bef66cafd25f6, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 274711055}
   - {fileID: 3286429421009676465}
-  - {fileID: 8599137075684640015}
-  - {fileID: 1795293629051511029}
+  - {fileID: 1120416332}
+  - {fileID: 878892863}
