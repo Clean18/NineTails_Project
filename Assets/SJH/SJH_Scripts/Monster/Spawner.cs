@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,26 +8,28 @@ public class Spawner : MonoBehaviour
 	// 스폰리스트
 	// 스폰할 프리팹
 
-	public GameObject MonsterPrefab;
-	private List<GameObject> monsterPool = new();
-
-	// 활성화되어있는 몹 리스트
-	public List<GameObject> ActiveMonsters => monsterPool.FindAll(mon => mon.activeSelf);
-
+	public GameObject[] MonsterPrefabs;
+	private List<List<GameObject>> monsterPool = new();
 
 	public List<Transform> SpawnPoints;
 	public float SpawnDelay;
 
 	private Coroutine SpawnRoutine;
 
+    private const int _spawnCount = 20;
+
 	void Awake()
 	{
-		for (int i = 0; i < 20; i++)
-		{
-			var mon = Instantiate(MonsterPrefab);
-			monsterPool.Add(mon);
-			mon.SetActive(false);
-		}
+        for (int i = 0; i < MonsterPrefabs.Length; i++)
+        {
+            monsterPool.Add(new());
+		    for (int j = 0; j < _spawnCount; j++)
+		    {
+			    var mon = Instantiate(MonsterPrefabs[i]);
+                monsterPool[i].Add(mon);
+			    mon.SetActive(false);
+		    }
+        }
 		GameManager.Instance.Spawner = this;
 	}
 
@@ -43,36 +45,25 @@ public class Spawner : MonoBehaviour
 		{
 			yield return new WaitForSeconds(SpawnDelay);
 
-			foreach (var mon in monsterPool)
+            var tableIndex = Random.Range(0, MonsterPrefabs.Length);
+            bool isSpawn = false;
+
+            foreach (var mon in monsterPool[tableIndex])
 			{
 				if (mon.activeSelf) continue;
 
 				int ran = Random.Range(0, SpawnPoints.Count);
 				mon.transform.position = SpawnPoints[ran].position;
 				mon.SetActive(true);
+                isSpawn = true;
 				break;
 			}
 
-			var newMon = Instantiate(MonsterPrefab, SpawnPoints[Random.Range(0, SpawnPoints.Count)].position, Quaternion.identity);
-			monsterPool.Add(newMon);
+            if (!isSpawn)
+            {
+			    var newMon = Instantiate(MonsterPrefabs[tableIndex], SpawnPoints[Random.Range(0, SpawnPoints.Count)].position, Quaternion.identity);
+                monsterPool[tableIndex].Add(newMon);
+            }
 		}
-	}
-
-	public GameObject FindCloseMonster(Vector3 searchPoint)
-	{
-		var monsters = ActiveMonsters;
-
-		GameObject closeMon = null;
-		float minDistance = float.MaxValue;
-		foreach (var mon in monsters)
-		{
-			float dist = Vector3.Distance(searchPoint, mon.transform.position);
-			if (dist < minDistance)
-			{
-				minDistance = dist;
-				closeMon = mon;
-			}
-		}
-		return closeMon;
 	}
 }

@@ -118,7 +118,7 @@ public class PlayerData
     [SerializeField] private bool _isDead;
     public bool IsDead
     {
-        get => (Hp <= 0);
+        get => _isDead;
         set { _isDead = value; }
     }
 
@@ -160,23 +160,27 @@ public class PlayerData
 
 	public void DecreaseHp(long damage)
 	{
-        // TODO : 체력을 감소하기 전 보호막부터 우선 감소
+        // 체력을 감소하기 전 보호막부터 우선 감소
+        long totalDamage = (long)(damage * (float)Defense / (Defense + 300f));
+        totalDamage = (1 > totalDamage) ? 1 : totalDamage; // 최소 1
         if (ShieldHp > 0)
         {
             // 실드가 대미지보다 낮으면
-            if (ShieldHp < damage)
+            if (ShieldHp < totalDamage)
             {
-                damage -= ShieldHp; // 실드에서 대미지 차감 후
+                totalDamage -= ShieldHp; // 실드에서 대미지 차감 후
                 ShieldHp = 0;       // 실드값 0
             }
-            else if (ShieldHp >= damage)
+            else if (ShieldHp >= totalDamage)
             {
-                ShieldHp -= damage;
+                ShieldHp -= totalDamage;
                 return;
             }
         }
-		Hp -= damage;
+		Hp -= totalDamage;
 		if (Hp <= 0) Hp = 0;
+        IsDead = Hp <= 0;
+        Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
 	}
 
     // 체력회복하는 함수

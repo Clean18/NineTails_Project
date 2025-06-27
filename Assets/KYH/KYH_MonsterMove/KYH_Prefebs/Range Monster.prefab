@@ -265,7 +265,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
 --- !u!114 &8486729481755186432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,15 +279,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 2
-  DetectRange: 5
+  DetectRange: 40
   AttackRange: 5
   AttackCooldown: 2
   MaxHp: 10
   CurrentHp: 0
+  DamageReduceRate: 0
   FindInterval: 1
+  StateChangeCooldown: 1
   AttackEffectPrefabs: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
   AttackPoint: {fileID: 4679346679482885323}
   ProjectilePrefabs: {fileID: 971121944272405935, guid: a0a6a8ea2ec99e84188126013a156d20, type: 3}
-  AttackDamage: 10
+  ProjectileSpeed: 8
+  AttackDamage: 1
   AttackSound: {fileID: 0}
   MonsterAnimator: {fileID: 0}

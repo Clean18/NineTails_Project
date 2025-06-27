@@ -38,7 +38,7 @@ public class PlayerModel
 		Data.DecreaseHp(damage);
         if (Data.Hp <= 0)
         {
-            Debug.Log("플레이어 사망");
+            Debug.LogError("플레이어 사망");
         }
 	}
 

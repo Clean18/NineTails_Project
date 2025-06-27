@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-public class MonsterFSM : MonoBehaviour
+public class MonsterFSM : MonoBehaviour, IDamagable
 {
     // 몬스터의 상태를 나타내는 열거형
     enum MonsterState { Idle, Move, Attack }
@@ -33,6 +33,8 @@ public class MonsterFSM : MonoBehaviour
     private float _findTimer;         // 플레이어 재탐색 타이머
     private Transform targetPlayer;   // 현재 타겟 플레이어
     private Coroutine AttackRoutine;  // 공격 코루틴 저장 변수
+
+    [SerializeField] private LayerMask _playerLayer; // 플레이어 레이어
 
     private void Start()
     {
@@ -102,28 +104,32 @@ public class MonsterFSM : MonoBehaviour
         }
     }
 
+    void OnEnable() => CurrentHp = MaxHp;
+    void OnDisable() => targetPlayer = null;
+
     /// <summary>
     /// 현재 플레이어를 가장 가까운 대상으로 설정
     /// </summary>
     private void FindClosestPlayer()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Transform closest = null;
-        float minDist = float.MaxValue;
+        //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        //Transform closest = null;
+        //float minDist = float.MaxValue;
 
-        foreach (var playerobj in players)
-        {
-            if (!playerobj.activeInHierarchy) continue;
+        //foreach (var playerobj in players)
+        //{
+        //    if (!playerobj.activeInHierarchy) continue;
 
-            float dist = Vector2.Distance(transform.position, playerobj.transform.position);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closest = playerobj.transform;
-            }
-        }
+        //    float dist = Vector2.Distance(transform.position, playerobj.transform.position);
+        //    if (dist < minDist)
+        //    {
+        //        minDist = dist;
+        //        closest = playerobj.transform;
+        //    }
+        //}
 
-        targetPlayer = closest;
+        //targetPlayer = closest;
+        targetPlayer = GameManager.Instance.PlayerController.transform;
     }
 
     /// <summary>
@@ -200,14 +206,15 @@ public class MonsterFSM : MonoBehaviour
             }
 
             // 피격 판정
-            Collider2D[] hits = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRadius, LayerMask.GetMask("Player"));
+            Collider2D[] hits = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRadius, _playerLayer);
             foreach (var hit in hits)
             {
-                Game.Data.PlayerData player = hit.GetComponent<Game.Data.PlayerData>();
+                //Game.Data.PlayerData player = hit.GetComponent<Game.Data.PlayerData>();
+                var player = GameManager.Instance.PlayerController;
                 if (player != null)
                 {
-                    player.TakeDamage(AttackDamage);
-                    Debug.Log($" 몬스터가 플레이어에게 {AttackDamage}피해를 입힘!");
+                    player.TakeDamage((long)AttackDamage);
+                    Debug.Log($" 몬스터가 플레이어에게 {(long)AttackDamage}피해를 입힘!");
                 }
             }
 
@@ -220,9 +227,9 @@ public class MonsterFSM : MonoBehaviour
     /// <summary>
     /// 피격 처리
     /// </summary>
-    public void TakeDamage(float damage)
+    public void TakeDamage(long damage)
     {
-        float finalDamage = damage * (1f - DamageReduceRate / 100f);
+        long finalDamage = (long)(damage * (1f - DamageReduceRate / 100f));
 
         CurrentHp -= finalDamage;
 
@@ -230,7 +237,8 @@ public class MonsterFSM : MonoBehaviour
 
         if (CurrentHp <= 0)
         {
-            Die();
+            //Die();
+            gameObject.SetActive(false);
         }
     }
 
