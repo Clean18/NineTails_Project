@@ -19,6 +19,8 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
     // 추가한 부분
     private SpriteRenderer playerSpriteRenderer;
     public int facingDir;
+    // 추가한 부분(공격력)
+    public int AttackPoint;
 
     void Awake()
 	{
