@@ -131,7 +131,7 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
             foreach (var monster in _hitMonsters)
             {
                 //monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-                monster.GetComponent<IDamagable>().TakeDamage((long)(damage));
+                monster?.GetComponent<IDamagable>().TakeDamage((long)(damage));
                 Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
             }
         }
@@ -140,7 +140,7 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
             foreach (var monster in _hitMonsters)
             {
                 //monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
-                monster.GetComponent<IDamagable>().TakeDamage((long)(damage * 0.5f));
+                monster?.GetComponent<IDamagable>().TakeDamage((long)(damage * 0.5f));
                 Debug.Log($"{monster.name}에게 {(int)(damage * 0.5f)}의 피해를 가했음");
             }
         }

@@ -20,14 +20,14 @@ public class GameUI : SceneUI, IUI
 
 	void SubscribeEvent()
 	{
-		ControlModeBtn.onClick.AddListener(OnControlModeBtn);
-		Test_BossStateBtn.onClick.AddListener(OnBossStageBtn);
+		ControlModeBtn?.onClick.AddListener(OnControlModeBtn);
+		Test_BossStateBtn?.onClick.AddListener(OnBossStageBtn);
 	}
 
 	void UnsubscribeEvent()
 	{
-        ControlModeBtn.onClick.RemoveListener(OnControlModeBtn);
-        Test_BossStateBtn.onClick.RemoveListener(OnBossStageBtn);
+        ControlModeBtn?.onClick.RemoveListener(OnControlModeBtn);
+        Test_BossStateBtn?.onClick.RemoveListener(OnBossStageBtn);
     }
 
 	public void ChangeStateText(AIState state)

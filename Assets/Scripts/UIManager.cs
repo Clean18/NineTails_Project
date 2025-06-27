@@ -1,7 +1,6 @@
 using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>

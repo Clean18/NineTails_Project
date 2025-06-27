@@ -109,7 +109,7 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
         foreach (var monster in _hitMonsters)
         {
             //monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-            monster.GetComponent<IDamagable>().TakeDamage((long)damage);
+            monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
             Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
         }
     }

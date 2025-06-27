@@ -91,8 +91,8 @@ public class PlayerController : MonoBehaviour
     {
         // 시작은 자동모드
         CurrentState = AIState.Search;
-        Mode = ControlMode.Auto;
-        //Mode = ControlMode.Manual;
+        //Mode = ControlMode.Auto;
+        Mode = ControlMode.Manual;
     }
 
     public void PlayerInit()
@@ -221,16 +221,15 @@ public class PlayerController : MonoBehaviour
         PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
 
         // UI 초기화
-        //if (UIManager.Instance.SceneUIList.Count > 0)
-        //{
-        //    foreach (var ui in UIManager.Instance.SceneUIList)
-        //    {
-        //        if (ui != null && !ReferenceEquals(ui, null))
-        //        {
-        //            ui.UIInit();
-        //        }
-        //    }
-        //}
+        if (UIManager.Instance.SceneUIList.Count > 0)
+        {
+            foreach (var ui in UIManager.Instance.SceneUIList)
+            {
+                if (ui == null || ui.Equals(null)) continue;
+
+                ui.UIInit();
+            }
+        }
 
         // TODO : 로딩종료
 
