@@ -9,7 +9,7 @@ using UnityEngine;
 public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public GameData GameData;
-    public const string FileName = "SaveFile";
+    public const string FileName = "PlayerSaveFile"; //SaveFile
     public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");
 
     [field: SerializeField] public int ElapsedSeconds { get; private set; } // 게임종료 후 총 경과 시간(초) - 테스트용
@@ -20,7 +20,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     private Coroutine _autoSaveCoroutine;
     [Header("저장 간격")]
-    [SerializeField] private float autoSaveInterval = 1f;
+    [SerializeField] private float autoSaveInterval = 100f; //1f
     private WaitForSeconds _wait;
 
     [Header("일반 스테이지")]
@@ -72,8 +72,8 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     {
         while (true)
         {
-            SaveData();
             yield return _wait;
+            SaveData();
         }
     }
 
@@ -195,4 +195,11 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     {
         GameEvents.OnSaveRequested -= SaveData;
     }
+
+    void OnApplicationQuit()
+    {
+        GameManager.Instance.PlayerController.SaveData();
+        SaveData();
+    }
+
 }

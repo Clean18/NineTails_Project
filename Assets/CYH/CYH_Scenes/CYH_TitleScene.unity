@@ -431,9 +431,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameData:
     _savedTimeString: 
-    Level_T: 1
-    Exp_T: 10
-    Gold_T: 100
+    AttackLevel: 1
+    DefenseLevel: 1
+    HpLevel: 1
+    CurrentHp: 100
+    SpeedLevel: 1
+    IncreaseDamageLevel: 0
+    ShieldHp: 0
   <ElapsedSeconds>k__BackingField: 0
   _elapsedMinutes: 0
   autoSaveInterval: 1
@@ -510,7 +514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TitleScene
+  m_text: Nice Try
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

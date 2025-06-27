@@ -15,16 +15,24 @@ public enum StatType
 
 public class GameManager : Singleton<GameManager>
 {
-	// 플레이어가 오토로 돌아갈때는 몬스터의 정보를 알아야함 > 몬스터를 추격하고 공격하기 위해
-	// 즉, 싱글톤이든 static이든 오브젝트풀이랑 몬스터들의 정보를 플레이어에서 접근할 수 있던가 해야함
+    // 플레이어가 오토로 돌아갈때는 몬스터의 정보를 알아야함 > 몬스터를 추격하고 공격하기 위해
+    // 즉, 싱글톤이든 static이든 오브젝트풀이랑 몬스터들의 정보를 플레이어에서 접근할 수 있던가 해야함
 
-	public PlayerController PlayerController;
+    public PlayerController PlayerController;
 	public Spawner Spawner;
 
 	public Dictionary<string, SkillData> SkillDic;
     public Dictionary<StatType, Dictionary<int, long>> StatDic = new();
 
-	void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+
+        // 레벨별 스탯 수치
+        StartCoroutine(StatInit());
+    }
+
+    void Start()
 	{
 		SkillDic = new()
 		{
@@ -38,10 +46,6 @@ public class GameManager : Singleton<GameManager>
         {
             skill.IsCooldown = false;
         }
-
-        // 레벨별 스탯 수치
-        StartCoroutine(StatInit());
-
     }
 
 	public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;

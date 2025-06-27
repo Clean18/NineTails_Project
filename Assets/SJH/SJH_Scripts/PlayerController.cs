@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -86,30 +87,18 @@ public class PlayerController : MonoBehaviour
     [Header("수동모드 필드변수")]
     public Vector2 MoveDir; // 플레이어의 이동 방향
 
+    void Start()
+    {
+        // 시작은 자동모드
+        CurrentState = AIState.Search;
+        Mode = ControlMode.Auto;
+        //Mode = ControlMode.Manual;
 
-	void Awake()
-	{
-		CurrentState = AIState.Search;
-		//Mode = ControlMode.Manual;
-		Mode = ControlMode.Auto;
-		
-		GameManager.Instance.PlayerController = this;
-	}
+        StartCoroutine(PlayerInit());
+    }
 
     void Update()
 	{
-        // TODO : PlayerData를 채우는 트리거 변경하기 임시로 엔터
-        if (_isInit == false && Input.GetKeyDown(KeyCode.Return))
-        {
-            // TODO : Awake가 아니라 데이터 로드할때 초기화
-            PlayerModel = new PlayerModel();
-            PlayerModel.InitModel();
-            PlayerView = GetComponent<PlayerView>();
-            PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
-            _isInit = true;
-            Debug.Log("플레이어 스탯 초기화 완료");
-        }
-
         if (_isInit == false) return;
 
 		// Auto일 때는 입력 제한
@@ -117,12 +106,17 @@ public class PlayerController : MonoBehaviour
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
+
+        // TODO : TEST 인풋
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Test_ChangeStat();
+        }
     }
 
 	public void InputHandler()
 	{
 		MoveInput();
-		// TODO : 사용하는 키 정보 필요 > WASD 이동만 공격은 자동으로
 		SkillInput();
 	}
 
@@ -166,6 +160,51 @@ public class PlayerController : MonoBehaviour
         PlayerModel.ApplyHeal(amount);
         // TODO : view 힐처리
         // TODO : UI 체력증가 처리
+    }
+
+    public void GetItem(long amount)
+    {
+        // TODO : 플레이어 재화 추가
+    }
+
+    public void Test_ChangeStat()
+    {
+        if (PlayerModel == null) return;
+
+        PlayerModel.Data.SetAttackLevel();
+    }
+
+    public void SaveData()
+    {
+        if (PlayerModel == null) return;
+
+        SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
+    }
+
+    /// <summary>
+    /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayerInit()
+    {
+        while (GameManager.Instance.StatDic == null || GameManager.Instance.StatDic.Count == 0)
+        {
+            yield return null;
+        }
+
+        PlayerModel = new PlayerModel();
+        PlayerView = GetComponent<PlayerView>();
+        PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
+
+        // 게임매니저에 자기자신 참조
+        GameManager.Instance.PlayerController = this;
+        // 세이브로드매니저에서 데이터 받아오기
+        PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
+
+        // TODO : 로딩종료
+
+        _isInit = true;
+        yield break;
     }
 
 	void OnDrawGizmos()

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -34,9 +34,12 @@ public class GameUI : SceneUI
 	{
 		switch (state)
 		{
-			case AIState.Idle:
-				AIStateText.text = "Idle...";
+			case AIState.Search:
+				AIStateText.text = "Search...";
 				break;
+            case AIState.SkillLoad:
+                AIStateText.text = "SkillLoad...";
+                break;
 			case AIState.Chase:
 				AIStateText.text = "Chase...";
 				break;

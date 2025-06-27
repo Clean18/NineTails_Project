@@ -20,11 +20,12 @@ public class PlayerModel
     /// <summary>
     /// PlayerModel 초기화
     /// </summary>
-    public void InitModel()
+    public void InitModel(GameData gameData)
     {
         // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
+        Debug.Log($"게임데이터 : {gameData.AttackLevel}");
         Data = new PlayerData(); 
-        Data.InitData();
+        Data.InitData(gameData.AttackLevel, gameData.DefenseLevel, gameData.HpLevel, gameData.CurrentHp, gameData.SpeedLevel, gameData.IncreaseDamageLevel, gameData.ShieldHp);
 
         Cost = new PlayerCost();
         Skill = new PlayerSkill();
@@ -42,5 +43,21 @@ public class PlayerModel
     public void ApplyHeal(long amount)
     {
         Data.HealHp(amount);
+    }
+
+    public GameData GetGameData()
+    {
+        SavePlayerData playerData = Data.SavePlayerData();
+
+        var gameData = SaveLoadManager.Instance.GameData;
+        gameData.AttackLevel = Data.AttackLevel;
+        gameData.DefenseLevel = Data.DefenseLevel;
+        gameData.SpeedLevel = Data.SpeedLevel;
+        gameData.HpLevel = Data.HpLevel;
+        gameData.CurrentHp = Data.Hp;
+        gameData.IncreaseDamageLevel = Data.IncreaseDamageLevel;
+        gameData.ShieldHp = Data.ShieldHp;
+
+        return gameData;
     }
 }
