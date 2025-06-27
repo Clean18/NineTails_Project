@@ -17,7 +17,7 @@ public class StatusPopUp : BaseUI
     }
 
     // 플레이어의 현재 스탯 텍스트
-    private void UpdateStatUI()
+    public void UpdateStatUI()
     {
         //maxHpText.text = $"MaxHp:{플레이어 최대체력}";
         //attackText.text = $"Attack:{플레이어 공격력}";
