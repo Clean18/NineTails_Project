@@ -16,6 +16,11 @@ public class RangeMonsterFSM : MonoBehaviour
     [Header("Search Player Cooldown")]
     [SerializeField] private float FindInterval = 1.0f;         // 플레이어 재탐색 주기
 
+    [Header("FSM Control")]
+    [SerializeField] private float StateChangeCooldown = 1f;    // 상태 전환 쿨타임
+    private float StateChangeTimer = 0f;
+
+
     [Header("Attack Setting")]
     [SerializeField] private GameObject AttackEffectPrefabs;    // 공격 이펙트 프리팹
     [SerializeField] private Transform AttackPoint;             // 공격 기준 위치
@@ -38,6 +43,7 @@ public class RangeMonsterFSM : MonoBehaviour
     private void Update()
     {
         _findTimer += Time.deltaTime;
+        StateChangeTimer += Time.deltaTime;     //  쿨타임의 타이머 증가
 
         // 일정 주기마다 가장 가까운 플레이어 탐색
         if (_findTimer >= FindInterval)
@@ -56,38 +62,41 @@ public class RangeMonsterFSM : MonoBehaviour
         float dist = Vector2.Distance(transform.position, targetPlayer.position);
 
         // 상태 변환 조건
-        switch (_currentState)
+        if (StateChangeTimer >= StateChangeCooldown)    // 상태 전환 쿨타임이 지난 경우에만 상태 변경 가능하게 조건 추가
         {
-            case MonsterState.Idle:
+            switch (_currentState)
+            {
+                case MonsterState.Idle:
 
-                if (dist < DetectRange)
-                {
-                    ChangeState(MonsterState.Move);
-                }
+                    if (dist < DetectRange)
+                    {
+                        ChangeState(MonsterState.Move);
+                    }
 
-                break;
-            case MonsterState.Move:
+                    break;
+                case MonsterState.Move:
 
-                if (dist < AttackRange)
-                {
-                    ChangeState(MonsterState.Attack);
-                }
-                else if (dist >= DetectRange)
-                {
-                    ChangeState(MonsterState.Idle);
-                }
+                    if (dist < AttackRange)
+                    {
+                        ChangeState(MonsterState.Attack);
+                    }
+                    else if (dist >= DetectRange)
+                    {
+                        ChangeState(MonsterState.Idle);
+                    }
 
-                break;
+                    break;
 
-            case MonsterState.Attack:
+                case MonsterState.Attack:
 
-                if (dist > AttackRange)
-                {
-                    ChangeState(MonsterState.Move);
-                }
+                    if (dist > AttackRange)
+                    {
+                        ChangeState(MonsterState.Move);
+                    }
 
-                break;
+                    break;
 
+            }
         }
 
         // 각 몬스터의 상태 별 행동 처리
@@ -147,6 +156,7 @@ public class RangeMonsterFSM : MonoBehaviour
         }
 
         _currentState = newstate;
+        StateChangeTimer = 0f;      // 상태 변경 시 쿨타임 초기화
 
         // 새로운 상태가 공격이면 코루틴을 실행
         if (newstate == MonsterState.Attack && AttackRoutine == null)
