@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,74 +7,168 @@ public class SkillLogic_2 : MonoBehaviour
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
-    [Header("투사체 프리팹")]
-    [SerializeField] private GameObject projectilePrefab;
+    [Header("Projectile 프리팹")]
+    [SerializeField] private GameObject _projectilePrefab;
 
-    [Header("투사체 수")]
-    [SerializeField] private int objSize = 3;
+    [Header("Projectile 수")]
+    [SerializeField] private int _objCount = 3;
 
     [Header("원 궤도 설정")]
-    [SerializeField] private float circleR = 3f;
-    [SerializeField] private float objSpeed = 140f;
+    [SerializeField] private float _radius = 3f;
+    [SerializeField] private float _objSpeed = 140f;
 
-    private float degree;
-    private GameObject[] targets;
+    [Header("스킬 지속 시간")]
+    [SerializeField] private float _spinDuration = 7f;
 
     [SerializeField] private int _skillLevel = 0;
     [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
+    private GameObject[] _targets;
+    private float _degree;
+    private bool _isCooldown;
+    private bool _spinning;
+
+    private Coroutine _spinRoutine;
+    private Coroutine _durationRoutine;
+    private Coroutine _cooldownRoutine;
 
     private void Start()
     {
-        targets = new GameObject[objSize];
-        for (int i = 0; i < objSize; i++)
+        _targets = new GameObject[_objCount];
+        for (int i = 0; i < _objCount; i++)
         {
-            targets[i] = Instantiate(projectilePrefab, transform);
+            _targets[i] = Instantiate(_projectilePrefab, transform);
+            // _projectilePrefab 비활성화
+            _targets[i].SetActive(false);  
         }
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha3))
+            UseSkill(transform);
+    }
+
+    private void UseSkill(Transform attacker)
+    {
+        // 회전 체크
+        if (_spinning)
         {
-            UseSkill();
+            _spinning = false;
+            if (_spinRoutine != null) StopCoroutine(_spinRoutine);
+            if (_durationRoutine != null) StopCoroutine(_durationRoutine);
+            Debug.Log("회전 멈춤");
+            // _projectilePrefab 비활성화
+            SetTargetsActive(false); 
+            return;
+        }
+
+        // 쿨타임 체크
+        if (_isCooldown) return;
+
+        // 스킬 사용
+        Debug.Log("스킬_2 사용");
+        _spinning = true;
+        // _projectilePrefab 활성화
+        SetTargetsActive(true);  
+
+        // 매 프레임 원 운동 갱신
+        _spinRoutine = StartCoroutine(SpinCoroutine());
+        // 지속시간 체크 시작
+        _durationRoutine = StartCoroutine(SpinDurationCoroutine());
+        // 쿨타임 체크 시작
+        _isCooldown = true;
+        _cooldownRoutine = StartCoroutine(CooldownCoroutine());
+    }
+
+    // 원 운동 로직
+    private void UpdateProjectiles()
+    {
+        float interval = 360f / _objCount;
+        Vector3 center = transform.position;
+
+        for (int i = 0; i < _objCount; i++)
+        {
+            float angle = _degree + interval * i;
+            float rad = angle * Mathf.Deg2Rad;
+            Vector3 offset = new Vector3(
+                Mathf.Sin(rad) * _radius,
+                Mathf.Cos(rad) * _radius,
+                0f
+            );
+            _targets[i].transform.position = center + offset;
         }
     }
 
-    private void UseSkill()
+    #region Coroutine
+    // 원 운동
+    private IEnumerator SpinCoroutine()
     {
-        degree = (degree + Time.deltaTime * objSpeed) % 360f;
-
-        float interval = 360f / objSize;
-        Vector3 center = transform.position;
-
-        // 각 투사체 위치 갱신
-        for (int i = 0; i < objSize; i++)
+        while (_spinning)
         {
-            float angle = degree + interval * i;
-            float rad = angle * Mathf.Deg2Rad;
-
-            Vector3 offset = new Vector3(
-                Mathf.Sin(rad) * circleR,
-                Mathf.Cos(rad) * circleR,
-                0f
-            );
-
-            var go = targets[i];
-            go.transform.position = center + offset;
+            _degree = (_degree + Time.deltaTime * _objSpeed) % 360f;
+            UpdateProjectiles();
+            yield return null;
         }
+    }
+
+    // 지속 시간
+    private IEnumerator SpinDurationCoroutine()
+    {
+        yield return new WaitForSeconds(_spinDuration);
+        _spinning = false;
+        if (_spinRoutine != null) StopCoroutine(_spinRoutine);
+        Debug.Log("스킬 지속 시간 종료");
+        // _projectilePrefab 활성화
+        SetTargetsActive(false);
+    }
+
+    // 쿨타임
+    private IEnumerator CooldownCoroutine()
+    {
+        float remaining = _data.CoolTime;
+        while (remaining > 0f)
+        {
+            Debug.Log($"쿨타임 남음: {remaining}초");
+            yield return new WaitForSeconds(1f);
+            remaining -= 1f;
+        }
+        _isCooldown = false;
+        Debug.Log("쿨타임 종료");
+    }
+    #endregion
+
+    // _projectilePrefab 활성화/비활성화
+    private void SetTargetsActive(bool isActive)
+    {
+        foreach (var t in _targets)
+            t.SetActive(isActive);
+    }
+
+    private void HandleCollision(Collider2D monster)
+    {
+        Debug.Log("_projectilePrefab 이벤트");
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, circleR);
+        Gizmos.DrawWireSphere(transform.position, _radius);
+    }
+
+    private void OnEnable()
+    {
+        Skill_2_Projectile.Skill_2_Event += HandleCollision;
+    }
+
+    private void OnDisable()
+    {
+        Skill_2_Projectile.Skill_2_Event -= HandleCollision;
     }
 
     private void Damage()
     {
         float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
-
         foreach (var monster in _hitMonsters)
         {
             monster.GetComponent<Monster_CYH>().TakeDamage(damage);
