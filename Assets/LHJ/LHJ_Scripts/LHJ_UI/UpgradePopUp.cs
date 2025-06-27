@@ -37,7 +37,7 @@ public class UpgradePopUp : BaseUI
     }
 
     // UI 텍스트 업데이트 함수
-    private void UpdateText()
+    public void UpdateText()
     {
         gradeText.text = $"Grade: {upgrade.CurrentGrade}";
         levelText.text = $"Level: {upgrade.CurrentLevel}";
