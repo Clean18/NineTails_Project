@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -86,43 +87,44 @@ public class PlayerController : MonoBehaviour
     [Header("수동모드 필드변수")]
     public Vector2 MoveDir; // 플레이어의 이동 방향
 
+    void Start()
+    {
+        // 시작은 자동모드
+        CurrentState = AIState.Search;
+        //Mode = ControlMode.Auto;
+        Mode = ControlMode.Manual;
+    }
 
-	void Awake()
-	{
-		CurrentState = AIState.Search;
-		//Mode = ControlMode.Manual;
-		Mode = ControlMode.Auto;
-		
-		GameManager.Instance.PlayerController = this;
-	}
+    public void PlayerInit()
+    {
+        Debug.LogWarning("Player Init 실행됨");
+        StartCoroutine(PlayerInitRoutine());
+    }
 
     void Update()
 	{
-        // TODO : PlayerData를 채우는 트리거 변경하기 임시로 엔터
-        if (_isInit == false && Input.GetKeyDown(KeyCode.Return))
+        if (_isInit == false)
         {
-            // TODO : Awake가 아니라 데이터 로드할때 초기화
-            PlayerModel = new PlayerModel();
-            PlayerModel.InitModel();
-            PlayerView = GetComponent<PlayerView>();
-            PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
-            _isInit = true;
-            Debug.Log("플레이어 스탯 초기화 완료");
+            Debug.Log("초기화가 아직 안됐음");
+            return;
         }
-
-        if (_isInit == false) return;
 
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) PlayerAI.Action();
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
+
+        // TODO : TEST 인풋
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Test_ChangeStat();
+        }
     }
 
 	public void InputHandler()
 	{
 		MoveInput();
-		// TODO : 사용하는 키 정보 필요 > WASD 이동만 공격은 자동으로
 		SkillInput();
 	}
 
@@ -135,16 +137,26 @@ public class PlayerController : MonoBehaviour
 	void SkillInput()
 	{
         // TODO : 키세팅
-		if (Input.GetKeyDown(KeyCode.Mouse0))
-		{
-			var skill = GameManager.Instance.GetSkill("Fireball");
-			if (skill != null)
-			{
-				skill.UseSkill(transform);
-			}
-		}
-        // TODO : 1번 2번 3번
-	}
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("기본공격 사용");
+            PlayerModel.Skill.DefaultAttack.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("1번스킬 사용");
+            var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
+            skill?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("2번스킬 사용");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("3번스킬 사용");
+        }
+    }
 
     /// <summary>
     /// 플레이어가 대미지를 입는 함수
@@ -166,6 +178,66 @@ public class PlayerController : MonoBehaviour
         PlayerModel.ApplyHeal(amount);
         // TODO : view 힐처리
         // TODO : UI 체력증가 처리
+    }
+
+    public void GetItem(long amount)
+    {
+        // TODO : 플레이어 재화 추가
+    }
+
+    public void Test_ChangeStat()
+    {
+        if (PlayerModel == null) return;
+
+        PlayerModel.Data.SetAttackLevel();
+    }
+
+    public void SaveData()
+    {
+        if (PlayerModel == null) return;
+
+        SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
+    }
+
+    /// <summary>
+    /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayerInitRoutine()
+    {
+        while (GameManager.Instance.StatDic == null || GameManager.Instance.StatDic.Count == 0)
+        {
+            Debug.Log("게임매니저 스탯 딕셔너리 null");
+            yield return null;
+        }
+
+        PlayerModel = new PlayerModel();
+        PlayerView = GetComponent<PlayerView>();
+        PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
+
+        // 게임매니저에 자기자신 참조
+        GameManager.Instance.PlayerController = this;
+        // 세이브로드매니저에서 데이터 받아오기
+        PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
+
+        // UI 초기화
+        if (UIManager.Instance.SceneUIList.Count > 0)
+        {
+            foreach (var ui in UIManager.Instance.SceneUIList)
+            {
+                if (ui == null || ui.Equals(null)) continue;
+
+                ui.UIInit();
+            }
+        }
+
+        // TODO : 로딩종료
+
+        _isInit = true;
+
+        Debug.Log("플레이어 데이터 초기화");
+
+        yield break;
     }
 
 	void OnDrawGizmos()

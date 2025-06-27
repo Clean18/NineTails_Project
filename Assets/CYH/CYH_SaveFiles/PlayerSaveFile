@@ -1,9 +1,9 @@
 {
-    "_savedTimeString": "2025-06-27T08:35:21.3736159+09:00",
-    "AttackLevel": 1,
+    "_savedTimeString": "2025-06-27T23:21:31.5793183+09:00",
+    "AttackLevel": 12,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 100,
+    "CurrentHp": 0,
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
     "ShieldHp": 0

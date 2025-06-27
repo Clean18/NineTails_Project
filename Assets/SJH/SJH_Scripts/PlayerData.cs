@@ -1,5 +1,14 @@
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
+
+public struct SavePlayerData
+{
+    public int AttackLevel;
+    public int DefenseLevel;
+    public int HpLevel;
+    public int SpeedLevel;
+    public int IncreaseDamageLevel;
+    public long ShieldHp;
+}
 
 /// <summary>
 /// 플레이어의 스탯 데이터 클래스, 인스턴스화 후 InitData()를 호출하여 플레이어 데이터 넣어야 함
@@ -25,6 +34,7 @@ public class PlayerData
 		get => _attackLevel;
 		private set
 		{
+            Debug.Log("공격력 계산");
 			_attackLevel = Mathf.Clamp(value, 1, 300);
 			Attack = GetStat(StatType.Attack, _attackLevel); 
 		}
@@ -43,7 +53,8 @@ public class PlayerData
 		get => _defenseLevel;
 		private set
 		{
-			_defenseLevel = Mathf.Clamp(value, 1, 300);
+            Debug.Log("방어력 계산");
+            _defenseLevel = Mathf.Clamp(value, 1, 300);
 			Defense = GetStat(StatType.Defense, _defenseLevel);
 		}
 	}
@@ -61,7 +72,8 @@ public class PlayerData
 		get => _hpLevel;
 		private set
 		{
-			_hpLevel = Mathf.Clamp(value, 1, 300);
+            Debug.Log("체력 계산");
+            _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatType.Hp, _hpLevel);
 		}
 	}
@@ -84,7 +96,8 @@ public class PlayerData
 		get => _speedLevel;
 		private set
 		{
-			_speedLevel = Mathf.Clamp(value, 1, 50);
+            Debug.Log("스피드 계산");
+            _speedLevel = Mathf.Clamp(value, 1, 50);
 			Speed = GetStat(StatType.Speed, _speedLevel) / _speedRatio;
 		}
 	}
@@ -99,13 +112,13 @@ public class PlayerData
     /// 가하는 피해 증가 레벨
     /// </summary>
     [Tooltip("가하는 피해 증가 레벨")]
-    [field: SerializeField] public int IncreaseDamageLevel;
+    [field: SerializeField] public int IncreaseDamageLevel; // TODO : 계산식 추가
 
     [Tooltip("죽음체크, true = 사망")]
     [SerializeField] private bool _isDead;
     public bool IsDead
     {
-        get => (Hp <= 0);
+        get => _isDead;
         set { _isDead = value; }
     }
 
@@ -120,43 +133,54 @@ public class PlayerData
     /// <param name="hpLevel"></param>
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
-	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, int speedLevel = 1, int increaseDamageLevel = 0)
+	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, int increaseDamageLevel = 0, long shieldHp = 0)
 	{
-		// 프로퍼티에서 레벨만으로 각 스탯 계산
-		AttackLevel = attackLevel;
+        Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
+        // 프로퍼티에서 레벨만으로 각 스탯 계산
+        AttackLevel = attackLevel;
 		DefenseLevel = defenseLevel;
 		HpLevel = hpLevel;
-        Hp = MaxHp; // TODO : HP는 따로 저장해야할듯 
+        Hp = currentHp;
         SpeedLevel = speedLevel;
 		IncreaseDamageLevel = increaseDamageLevel;
+        ShieldHp = shieldHp;
 	}
 
 	public long GetStat(StatType statType, int level)
 	{
-		if (!GameManager.Instance.StatDic.TryGetValue(statType, out var levelTable)) return 0;
+        if (!GameManager.Instance.StatDic.TryGetValue(statType, out var levelTable))
+        {
+            Debug.Log("게임매니저 StatDic == null");
+            return 0;
+        }
+
 		if (!levelTable.TryGetValue(level, out long statValue)) return 0;
 		return statValue;
 	}
 
 	public void DecreaseHp(long damage)
 	{
-        // TODO : 체력을 감소하기 전 보호막부터 우선 감소
+        // 체력을 감소하기 전 보호막부터 우선 감소
+        long totalDamage = (long)(damage * (float)Defense / (Defense + 300f));
+        totalDamage = (1 > totalDamage) ? 1 : totalDamage; // 최소 1
         if (ShieldHp > 0)
         {
             // 실드가 대미지보다 낮으면
-            if (ShieldHp < damage)
+            if (ShieldHp < totalDamage)
             {
-                damage -= ShieldHp; // 실드에서 대미지 차감 후
+                totalDamage -= ShieldHp; // 실드에서 대미지 차감 후
                 ShieldHp = 0;       // 실드값 0
             }
-            else if (ShieldHp >= damage)
+            else if (ShieldHp >= totalDamage)
             {
-                ShieldHp -= damage;
+                ShieldHp -= totalDamage;
                 return;
             }
         }
-		Hp -= damage;
+		Hp -= totalDamage;
 		if (Hp <= 0) Hp = 0;
+        IsDead = Hp <= 0;
+        Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
 	}
 
     // 체력회복하는 함수
@@ -164,5 +188,24 @@ public class PlayerData
     {
         if ((Hp + amount) > MaxHp) Hp = MaxHp;
         else Hp += amount;
+    }
+
+    // 스탯 변경 함수
+    public void SetAttackLevel()
+    {
+        AttackLevel += 1;
+        Debug.Log($"공격력 업! 레벨 : {AttackLevel}");
+    }
+
+    public SavePlayerData SavePlayerData()
+    {
+        var data = new SavePlayerData();
+        data.AttackLevel = AttackLevel;
+        data.DefenseLevel = DefenseLevel;
+        data.HpLevel = HpLevel;
+        data.SpeedLevel = SpeedLevel;
+        data.IncreaseDamageLevel = IncreaseDamageLevel;
+        data.ShieldHp = ShieldHp;
+        return data;
     }
 }
