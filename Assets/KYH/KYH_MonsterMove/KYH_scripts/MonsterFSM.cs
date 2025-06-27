@@ -12,6 +12,7 @@ public class MonsterFSM : MonoBehaviour
     [SerializeField] private float AttackCooldown = 2f;     // 공격 쿨다운 시간
     [SerializeField] private float MaxHp = 10f;             // 몬스터의 최대 체력
     [SerializeField] private float CurrentHp;               // 몬스터의 현재 체력
+    [SerializeField] private float DamageReduceRate = 0f;   // 몬스터의 데미지 감소율
 
     [Header("Search Player Cooldown")]
     [SerializeField] private float FindInterval = 1.0f;     // 플레이어 재탐색 주기
@@ -219,10 +220,13 @@ public class MonsterFSM : MonoBehaviour
     /// <summary>
     /// 피격 처리
     /// </summary>
-    public void TakeDamage(float amount)
+    public void TakeDamage(float damage)
     {
-        CurrentHp -= amount;
-        Debug.Log($"몬스터 가 플레이어에게서 피해 {amount} 만큼 받음, 현재 체력 : {CurrentHp}");
+        float finalDamage = damage * (1f - DamageReduceRate / 100f);
+
+        CurrentHp -= finalDamage;
+
+        Debug.Log($"플레이어가 몬스터에게 가한 피해 {damage}, 몬스터가 실제로 받은 피해 {finalDamage},  현재 남은 체력 : {CurrentHp}");
 
         if (CurrentHp <= 0)
         {
