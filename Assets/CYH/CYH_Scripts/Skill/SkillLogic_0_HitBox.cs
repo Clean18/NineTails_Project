@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_1 : MonoBehaviour
+public class SkillLogic_0_HitBox : MonoBehaviour
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
-    [SerializeField] private CircleCollider2D _hitBox;
-
+    [SerializeField] private PolygonCollider2D _hitBox;
+    
     [SerializeField] private int _skillLevel = 0;
-
+    [SerializeField] private int _slashCount = 0;
+    
     private Animator _animator;
     private bool _isCooldown = false;
 
     [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
-
 
     private void Awake()
     {
@@ -26,7 +26,7 @@ public class SkillLogic_1 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             UseSkill(transform);
         }
@@ -44,9 +44,10 @@ public class SkillLogic_1 : MonoBehaviour
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
-        EnableHitbox();
+        _slashCount = 1;
+        OnAttackStart();
         AnimationPlay();
-        Debug.Log("스킬사용");
+        Debug.Log("스킬사용 1타");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -54,27 +55,32 @@ public class SkillLogic_1 : MonoBehaviour
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
-        EnableHitbox();
+        _slashCount = 1;
+        OnAttackStart();
         AnimationPlay();
         Debug.Log("스킬사용 1타");
     }
 
-    public void EnableHitbox()
+    public void OnAttackStart()
     {
         _hitBox.enabled = true;
-        Debug.Log("히트박스 켜짐");
+        Debug.Log("콜라이더 킴");
     }
 
-
-    public void DisableHitbox()
+    // 애니메이션이 끝났을 때 이벤트로 호출
+    public void OnAttackEnd()
     {
         _hitBox.enabled = false;
         Debug.Log("콜라이더 끔");
 
         // 몬스터 TakeDamage 처리
         Damage();
-    }
 
+        if (_slashCount == 2)
+        {
+            _slashCount = 0;
+        }
+    }
 
     public void AnimationPlay()
     {
@@ -82,7 +88,7 @@ public class SkillLogic_1 : MonoBehaviour
             return;
         else
         {
-            _animator.SetTrigger("UseSkill_1");
+            _animator.SetTrigger("UseSkill_0");
         }
     }
 
@@ -94,20 +100,45 @@ public class SkillLogic_1 : MonoBehaviour
         {
             _hitMonsters.Add(other.gameObject);
         }
-        Debug.Log($"몬스터 맞음");
+
+        Debug.Log($"몬스터 맞음 : {_slashCount}타");
     }
 
+    //// 애니메이션이 끝났을 때 이벤트로 호출
+    public void SlashCountEvent()
+    {
+        // 1타용 리스트 초기화
+        _hitMonsters.Clear();
+
+        _slashCount = 2;
+        Debug.Log("스킬사용 2타");
+        //OnAttackStart();
+    }
+
+    // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     private void Damage()
     {
-        float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
+        float damage = _playerController.AttackPoint * (100f + _skillLevel) / 100f;
 
-        foreach (var monster in _hitMonsters)
+        if(_slashCount == 1)
         {
-            monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
+            foreach (var monster in _hitMonsters)
+            {
+                monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+                Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
+            }
+        }
+        else if(_slashCount == 2)
+        {
+            foreach (var monster in _hitMonsters)
+            {
+                monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
+                Debug.Log($"{monster.name}에게 {damage * 0.5f}의 피해를 가했음");
+            }
         }
     }
 
+    // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
         float remaining = _data.CoolTime;
