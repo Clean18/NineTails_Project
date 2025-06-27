@@ -51,20 +51,8 @@ public class SkillLogic_2 : MonoBehaviour
 
     private void UseSkill(Transform attacker)
     {
-        // 회전 체크
-        if (_spinning)
-        {
-            _spinning = false;
-            if (_spinRoutine != null) StopCoroutine(_spinRoutine);
-            if (_durationRoutine != null) StopCoroutine(_durationRoutine);
-            Debug.Log("회전 멈춤");
-            // _projectilePrefab 비활성화
-            SetTargetsActive(false); 
-            return;
-        }
-
         // 쿨타임 체크
-        if (_isCooldown) return;
+        if (_isCooldown || _spinning) return;
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
@@ -104,6 +92,7 @@ public class SkillLogic_2 : MonoBehaviour
     // 원 운동
     private IEnumerator SpinCoroutine()
     {
+        //  _projectilePrefab 한 바퀴 회전에 걸리는 시간 : 360f / _objSpeed
         while (_spinning)
         {
             _degree = (_degree + Time.deltaTime * _objSpeed) % 360f;
