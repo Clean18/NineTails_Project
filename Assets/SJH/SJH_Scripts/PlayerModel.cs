@@ -23,12 +23,14 @@ public class PlayerModel
     public void InitModel(GameData gameData)
     {
         // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
-        Debug.Log($"게임데이터 : {gameData.AttackLevel}");
         Data = new PlayerData(); 
         Data.InitData(gameData.AttackLevel, gameData.DefenseLevel, gameData.HpLevel, gameData.CurrentHp, gameData.SpeedLevel, gameData.IncreaseDamageLevel, gameData.ShieldHp);
 
         Cost = new PlayerCost();
+
+        // TODO : 플레이어의 저장된 스킬을 등록
         Skill = new PlayerSkill();
+        Skill.SkillInit();
     }
 
 	public void ApplyDamage(long damage)

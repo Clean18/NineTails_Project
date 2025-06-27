@@ -129,16 +129,36 @@ public class PlayerController : MonoBehaviour
 	void SkillInput()
 	{
         // TODO : 키세팅
-		if (Input.GetKeyDown(KeyCode.Mouse0))
-		{
-			var skill = GameManager.Instance.GetSkill("Fireball");
-			if (skill != null)
-			{
-				skill.UseSkill(transform);
-			}
-		}
+		//if (Input.GetKeyDown(KeyCode.Mouse0))
+		//{
+		//	var skill = GameManager.Instance.GetSkill("Fireball");
+		//	if (skill != null)
+		//	{
+		//		skill.UseSkill(transform);
+		//	}
+		//}
         // TODO : 1번 2번 3번
-	}
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("기본공격 사용");
+            PlayerModel.Skill.DefaultAttack.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("1번스킬 사용");
+            var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
+            skill?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("2번스킬 사용");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("3번스킬 사용");
+        }
+    }
 
     /// <summary>
     /// 플레이어가 대미지를 입는 함수

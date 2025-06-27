@@ -21,4 +21,4 @@ MonoBehaviour:
   <IsCooldown>k__BackingField: 0
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
-  <Range>k__BackingField: 0
+  <Range>k__BackingField: 2

@@ -55,10 +55,13 @@ public class GameUI : SceneUI
 
 		// 플레이어 모드 전환
 		var player = GameManager.Instance.PlayerController;
-		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 
-		// Text On/Off
-		UpdateAIMode(player.Mode);
+        player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
+
+        player.PlayerAI.MonsterSkillCheck();
+
+        // Text On/Off
+        UpdateAIMode(player.Mode);
 
 		// 플레이어 velocity 초기화
 		player.PlayerView.Move(Vector2.zero, 0);
