@@ -1,33 +1,35 @@
-using UnityEngine;
 using System.Collections;
-public class MonsterFSM : MonoBehaviour
+using UnityEngine;
+
+public class RangeMonsterFSM : MonoBehaviour
 {
-    // 몬스터의 상태를 나타내는 열거형
     enum MonsterState { Idle, Move, Attack }
 
     [Header("Monster Status")]
     [SerializeField] private float MoveSpeed = 2f;          // 이동 속도
     [SerializeField] private float DetectRange = 5f;        // 플레이어를 감지하는 범위
-    [SerializeField] private float AttackRange = 1.5f;      // 공격 가능한 거리
+    [SerializeField] private float AttackRange = 5f;        // 공격 가능한 거리
     [SerializeField] private float AttackCooldown = 2f;     // 공격 쿨다운 시간
     [SerializeField] private float MaxHp = 10f;             // 몬스터의 최대 체력
     [SerializeField] private float CurrentHp;               // 몬스터의 현재 체력
     [SerializeField] private float DamageReduceRate = 0f;   // 몬스터의 데미지 감소율
 
     [Header("Search Player Cooldown")]
-    [SerializeField] private float FindInterval = 1.0f;     // 플레이어 재탐색 주기
+    [SerializeField] private float FindInterval = 1.0f;         // 플레이어 재탐색 주기
 
     [Header("FSM Control")]
-    [SerializeField] private float StateChangeColldown = 1f;    // 상태 전환의 쿨타임 변수
+    [SerializeField] private float StateChangeCooldown = 1f;    // 상태 전환 쿨타임
     private float StateChangeTimer = 0f;
 
+
     [Header("Attack Setting")]
-    [SerializeField] private GameObject AttackEffectPrefab; // 공격 이펙트 프리팹
-    [SerializeField] private Transform AttackPoint;         // 공격 기준 위치
-    [SerializeField] private float AttackRadius = 1f;       // 공격 범위 반지름
-    [SerializeField] private float AttackDamage = 10f;      // 공격 데미지
-    [SerializeField] private AudioClip AttackSound;         // 공격 사운드
-    [SerializeField] private Animator MonsterAnimator;      // 애니메이터
+    [SerializeField] private GameObject AttackEffectPrefabs;    // 공격 이펙트 프리팹
+    [SerializeField] private Transform AttackPoint;             // 공격 기준 위치
+    [SerializeField] private GameObject ProjectilePrefabs;      // 투사체 프리팹
+    [SerializeField] private float ProjectileSpeed = 8f;        // 투사체 속도
+    [SerializeField] private float AttackDamage = 10f;          // 공격 데미지
+    [SerializeField] private AudioClip AttackSound;             // 공격 사운드
+    [SerializeField] private Animator MonsterAnimator;          // 애니메이터
 
     private MonsterState _currentState = MonsterState.Idle; // 현재 FSM 상태
     private float _findTimer;         // 플레이어 재탐색 타이머
@@ -36,13 +38,13 @@ public class MonsterFSM : MonoBehaviour
 
     private void Start()
     {
-        CurrentHp = MaxHp; // 체력 초기화
+        CurrentHp = MaxHp;
     }
 
     private void Update()
     {
         _findTimer += Time.deltaTime;
-        StateChangeTimer += Time.deltaTime;     // 상태전환 쿨타임의 타이머 증가
+        StateChangeTimer += Time.deltaTime;     //  쿨타임의 타이머 증가
 
         // 일정 주기마다 가장 가까운 플레이어 탐색
         if (_findTimer >= FindInterval)
@@ -61,46 +63,61 @@ public class MonsterFSM : MonoBehaviour
         float dist = Vector2.Distance(transform.position, targetPlayer.position);
 
         // 상태 변환 조건
-        if (StateChangeTimer >= StateChangeColldown)
+        if (StateChangeTimer >= StateChangeCooldown)    // 상태 전환 쿨타임이 지난 경우에만 상태 변경 가능하게 조건 추가
         {
             switch (_currentState)
             {
                 case MonsterState.Idle:
-                    if (dist < DetectRange)
-                        ChangeState(MonsterState.Move);
-                    break;
 
+                    if (dist < DetectRange)
+                    {
+                        ChangeState(MonsterState.Move);
+                    }
+
+                    break;
                 case MonsterState.Move:
+
                     if (dist < AttackRange)
+                    {
                         ChangeState(MonsterState.Attack);
+                    }
                     else if (dist >= DetectRange)
+                    {
                         ChangeState(MonsterState.Idle);
+                    }
+
                     break;
 
                 case MonsterState.Attack:
+
                     if (dist > AttackRange)
+                    {
                         ChangeState(MonsterState.Move);
+                    }
+
                     break;
+
             }
         }
 
-        // 상태별 행동 처리
+        // 각 몬스터의 상태 별 행동 처리
+
         switch (_currentState)
         {
             case MonsterState.Idle:
-                // 대기 상태
+                // 대기상태 
                 break;
-
             case MonsterState.Move:
                 MoveToPlayer();
                 FaceTarget();
                 break;
-
             case MonsterState.Attack:
-                FaceTarget(); // 방향 유지
+                FaceTarget();
                 break;
         }
+
     }
+
 
     /// <summary>
     /// 현재 플레이어를 가장 가까운 대상으로 설정
@@ -108,7 +125,7 @@ public class MonsterFSM : MonoBehaviour
     private void FindClosestPlayer()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Transform closest = null;
+        Transform Closest = null;
         float minDist = float.MaxValue;
 
         foreach (var playerobj in players)
@@ -119,21 +136,18 @@ public class MonsterFSM : MonoBehaviour
             if (dist < minDist)
             {
                 minDist = dist;
-                closest = playerobj.transform;
+                Closest = playerobj.transform;
             }
         }
 
-        targetPlayer = closest;
+        targetPlayer = Closest;
     }
 
-    /// <summary>
-    /// 상태 변경 처리 + 공격 코루틴 관리
-    /// </summary>
     private void ChangeState(MonsterState newstate)
     {
         if (_currentState == newstate) return;
 
-        Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate}로 변경됨");
+        Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate} 로 변경됨");
 
         // 이전 상태가 공격이면 코루틴 정지
         if (_currentState == MonsterState.Attack && AttackRoutine != null)
@@ -143,9 +157,9 @@ public class MonsterFSM : MonoBehaviour
         }
 
         _currentState = newstate;
-        StateChangeTimer = 0f;
+        StateChangeTimer = 0f;      // 상태 변경 시 쿨타임 초기화
 
-        // 새로운 상태가 공격이면 코루틴 시작
+        // 새로운 상태가 공격이면 코루틴을 실행
         if (newstate == MonsterState.Attack && AttackRoutine == null)
         {
             AttackRoutine = StartCoroutine(AttackRoutineCoroutine());
@@ -154,7 +168,7 @@ public class MonsterFSM : MonoBehaviour
 
     /// <summary>
     /// 이동 처리
-    /// </summary>
+    /// </summary> 
     private void MoveToPlayer()
     {
         Vector2 dir = (targetPlayer.position - transform.position).normalized;
@@ -162,7 +176,7 @@ public class MonsterFSM : MonoBehaviour
     }
 
     /// <summary>
-    /// 방향을 플레이어 쪽으로 조정
+    /// 몬스터가 바라보는 방향을 플레이어 쪽으로 조정
     /// </summary>
     private void FaceTarget()
     {
@@ -177,37 +191,48 @@ public class MonsterFSM : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 공격 코루틴 (이펙트, 애니메이션, 판정 포함)
-    /// </summary>
     private IEnumerator AttackRoutineCoroutine()
     {
         while (_currentState == MonsterState.Attack)
         {
             // 애니메이션
             if (MonsterAnimator != null)
+            {
                 MonsterAnimator.SetTrigger("Attack");
+            }
 
             // 사운드
             if (AttackSound != null)
-                AudioSource.PlayClipAtPoint(AttackSound, transform.position);
-
-            // 이펙트
-            if (AttackEffectPrefab != null && AttackPoint != null)
             {
-                GameObject fx = Instantiate(AttackEffectPrefab, AttackPoint.position, Quaternion.identity);
-                Destroy(fx, 1f); // 1초 후 삭제
+                AudioSource.PlayClipAtPoint(AttackSound, transform.position);
             }
 
-            // 피격 판정
-            Collider2D[] hits = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRadius, LayerMask.GetMask("Player"));
-            foreach (var hit in hits)
+            // 이펙트
+            if (AttackEffectPrefabs != null && AttackPoint != null)
             {
-                Game.Data.PlayerData player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
+                GameObject fx = Instantiate(AttackEffectPrefabs, AttackPoint.position, Quaternion.identity);
+                Destroy(fx, 1f); // 1초 뒤 삭제
+            }
+
+            // 몬스터의 공격으로 인한 플레이어의 피격 판정
+            // 투사체 발사
+            if (ProjectilePrefabs != null && AttackPoint != null && targetPlayer != null)
+            {
+                Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
+
+                GameObject projectile = Instantiate(ProjectilePrefabs, AttackPoint.position, Quaternion.identity);
+                Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+
+                if (rb != null)
+                {                    
+                    rb.AddForce(dir * ProjectileSpeed, ForceMode2D.Impulse);
+                }
+
+                // MonsterProjectile 컴포넌트에 데미지 설정
+                MonsterProjectile mp = projectile.GetComponent<MonsterProjectile>();
+                if (mp != null)
                 {
-                    player.TakeDamage(AttackDamage);
-                    Debug.Log($" 몬스터가 플레이어에게 {AttackDamage}피해를 입힘!");
+                    mp.SetDamage(AttackDamage);
                 }
             }
 
@@ -216,30 +241,28 @@ public class MonsterFSM : MonoBehaviour
 
         AttackRoutine = null;
     }
-
     /// <summary>
     /// 피격 처리
     /// </summary>
     public void TakeDamage(float damage)
     {
-        float finalDamage = damage * (1f - DamageReduceRate / 100f);
 
+        float finalDamage = damage * (1f - DamageReduceRate / 100f);
         CurrentHp -= finalDamage;
 
-        Debug.Log($"플레이어가 몬스터에게 가한 피해 {damage}, 몬스터가 실제로 받은 피해 {finalDamage},  현재 남은 체력 : {CurrentHp}");
+        Debug.Log($" 플레이이어가 몬스터에게 가한 데미지 {damage}, 데미지 감소율이 적용되어 몬스터가 입은 피해 : {finalDamage}  남은 체력 : {CurrentHp}");
 
         if (CurrentHp <= 0)
         {
             Die();
         }
     }
-
     /// <summary>
     /// 사망 처리
     /// </summary>
     private void Die()
     {
-        Debug.Log("몬스터 사망");
+        Debug.Log("몬스터 사망함");
         Destroy(gameObject);
     }
 
@@ -257,7 +280,7 @@ public class MonsterFSM : MonoBehaviour
         if (AttackPoint != null)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
+            Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
         }
     }
 }

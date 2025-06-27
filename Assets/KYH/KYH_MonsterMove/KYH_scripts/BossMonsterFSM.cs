@@ -19,6 +19,7 @@ public class BossMonsterFSM : MonoBehaviour
     [Header("Boss HP")]
     [SerializeField] private float MaxHealth = 1000f;     // 최대 체력
     private float CurrentHealth;                          // 현재 체력
+    [SerializeField] private float DamageReduceRate = 0f; // 몬스터의 데미지 감소율  
 
 
     private BossState CurrentState;         // 현재 FSM 상태
@@ -470,8 +471,11 @@ public class BossMonsterFSM : MonoBehaviour
     {
         if (CurrentState == BossState.Dead) return;
 
-        CurrentHealth -= damage;
-        Debug.Log($"보스에게 데미지 {damage} | 현재 체력: {CurrentHealth}");
+        float finalDamage = damage * (1f - DamageReduceRate / 100f);
+
+        CurrentHealth -= finalDamage;
+
+        Debug.Log($"플레이어가 보스에게 데미지 {damage} 를 입힘, 데미지 감소율 적용된 실제 피해 : {finalDamage} | 현재 보스몬스터의 남은 체력: {CurrentHealth}");
 
         if (CurrentHealth <= 0)
         {
