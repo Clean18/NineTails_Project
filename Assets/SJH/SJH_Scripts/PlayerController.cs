@@ -129,16 +129,6 @@ public class PlayerController : MonoBehaviour
 	void SkillInput()
 	{
         // TODO : 키세팅
-		//if (Input.GetKeyDown(KeyCode.Mouse0))
-		//{
-		//	var skill = GameManager.Instance.GetSkill("Fireball");
-		//	if (skill != null)
-		//	{
-		//		skill.UseSkill(transform);
-		//	}
-		//}
-        // TODO : 1번 2번 3번
-
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("기본공격 사용");
@@ -220,6 +210,12 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.PlayerController = this;
         // 세이브로드매니저에서 데이터 받아오기
         PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
+
+        // UI 초기화
+        foreach (var ui in UIManager.Instance.SceneUIList)
+        {
+            if (ui != null) ui.UIInit();
+        }
 
         // TODO : 로딩종료
 
