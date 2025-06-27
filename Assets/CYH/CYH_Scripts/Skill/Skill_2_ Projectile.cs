@@ -9,7 +9,7 @@ public class Skill_2_Projectile : MonoBehaviour
     {
         if (other.CompareTag("Monster"))
         {
-            Debug.Log($"{gameObject.name}과 {other.name}!");
+            //Debug.Log($"{gameObject.name}과 {other.name}!");
             Skill_2_Event?.Invoke(other);
         }
     }

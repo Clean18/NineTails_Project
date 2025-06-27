@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class SkillLogic_2 : MonoBehaviour
@@ -23,7 +24,7 @@ public class SkillLogic_2 : MonoBehaviour
     [SerializeField] private int _skillLevel = 0;
     [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
-    private GameObject[] _targets;
+    private GameObject[] _projectile;
     private float _degree;
     private bool _isCooldown;
     private bool _spinning;
@@ -32,14 +33,21 @@ public class SkillLogic_2 : MonoBehaviour
     private Coroutine _durationRoutine;
     private Coroutine _cooldownRoutine;
 
+    private WaitForSeconds _spinDurationWait;
+    private WaitForSeconds _cooldownWait;
+
+
     private void Start()
     {
-        _targets = new GameObject[_objCount];
+        _spinDurationWait = new WaitForSeconds(_spinDuration);
+        _cooldownWait = new WaitForSeconds(1f);
+
+        _projectile = new GameObject[_objCount];
         for (int i = 0; i < _objCount; i++)
         {
-            _targets[i] = Instantiate(_projectilePrefab, transform);
+            _projectile[i] = Instantiate(_projectilePrefab, transform);
             // _projectilePrefab 비활성화
-            _targets[i].SetActive(false);  
+            _projectile[i].SetActive(false);  
         }
     }
 
@@ -58,10 +66,11 @@ public class SkillLogic_2 : MonoBehaviour
         Debug.Log("스킬_2 사용");
         _spinning = true;
         // _projectilePrefab 활성화
-        SetTargetsActive(true);  
+        SetProjectileActive(true);  
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
+       
         // 지속시간 체크 시작
         _durationRoutine = StartCoroutine(SpinDurationCoroutine());
         // 쿨타임 체크 시작
@@ -84,7 +93,7 @@ public class SkillLogic_2 : MonoBehaviour
                 Mathf.Cos(rad) * _radius,
                 0f
             );
-            _targets[i].transform.position = center + offset;
+            _projectile[i].transform.position = center + offset;
         }
     }
 
@@ -104,12 +113,12 @@ public class SkillLogic_2 : MonoBehaviour
     // 지속 시간
     private IEnumerator SpinDurationCoroutine()
     {
-        yield return new WaitForSeconds(_spinDuration);
+        yield return _spinDurationWait;
         _spinning = false;
         if (_spinRoutine != null) StopCoroutine(_spinRoutine);
         Debug.Log("스킬 지속 시간 종료");
         // _projectilePrefab 활성화
-        SetTargetsActive(false);
+        SetProjectileActive(false);
     }
 
     // 쿨타임
@@ -118,25 +127,64 @@ public class SkillLogic_2 : MonoBehaviour
         float remaining = _data.CoolTime;
         while (remaining > 0f)
         {
-            Debug.Log($"쿨타임 남음: {remaining}초");
-            yield return new WaitForSeconds(1f);
+            //Debug.Log($"쿨타임 남음: {remaining}초");
+            yield return _cooldownWait;
             remaining -= 1f;
         }
         _isCooldown = false;
         Debug.Log("쿨타임 종료");
     }
+
+    // 피격 쿨타임
+    private IEnumerator DamageCooldownCouroutine(GameObject monsterObj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (_hitMonsters.Contains(monsterObj))
+        {
+            _hitMonsters.Remove(monsterObj);
+            Debug.Log($"{monsterObj.name}를 리스트에서 삭제");
+        }
+    }
     #endregion
 
-    // _projectilePrefab 활성화/비활성화
-    private void SetTargetsActive(bool isActive)
+    private void Damage()
     {
-        foreach (var t in _targets)
+        float damage = _playerController.AttackPoint * (0.25f + 0.0025f * _skillLevel);
+        foreach (var monster in _hitMonsters)
+        {
+            monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
+        }
+    }
+
+    private void Damage(GameObject monsters)
+    {
+        float damage = _playerController.AttackPoint * (0.25f + 0.0025f * _skillLevel);
+        monsters.GetComponent<Monster_CYH>().TakeDamage(damage);
+        Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
+       
+    }
+
+    #region _projectilePrefab, Event
+    // _projectilePrefab 활성화/비활성화
+    private void SetProjectileActive(bool isActive)
+    {
+        foreach (var t in _projectile)
             t.SetActive(isActive);
     }
 
+    // _projectilePrefab와 충돌한 monster를 리스트에 추가 후 피격
     private void HandleCollision(Collider2D monster)
     {
-        Debug.Log("_projectilePrefab 이벤트");
+        //Debug.Log("_projectilePrefab 이벤트");
+        var monsterObj = monster.gameObject;
+        if (!_hitMonsters.Contains(monsterObj))
+        {
+            _hitMonsters.Add(monsterObj);
+            Debug.Log($"리스트에 {monsterObj.name} 추가");
+            Damage(monsterObj);
+            StartCoroutine(DamageCooldownCouroutine(monsterObj, 1f));
+        }
     }
 
     private void OnDrawGizmos()
@@ -154,14 +202,5 @@ public class SkillLogic_2 : MonoBehaviour
     {
         Skill_2_Projectile.Skill_2_Event -= HandleCollision;
     }
-
-    private void Damage()
-    {
-        float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
-        foreach (var monster in _hitMonsters)
-        {
-            monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
-        }
-    }
+    #endregion
 }
