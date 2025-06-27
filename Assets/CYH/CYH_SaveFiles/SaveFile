@@ -1,6 +1,10 @@
 {
-    "_savedTimeString": "2025-06-24T00:38:50.5620438+09:00",
-    "Level_T": 1,
-    "Exp_T": 10.0,
-    "Gold_T": 100
+    "_savedTimeString": "2025-06-27T08:35:21.3736159+09:00",
+    "AttackLevel": 1,
+    "DefenseLevel": 1,
+    "HpLevel": 1,
+    "CurrentHp": 100,
+    "SpeedLevel": 1,
+    "IncreaseDamageLevel": 0,
+    "ShieldHp": 0
 }

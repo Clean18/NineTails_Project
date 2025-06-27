@@ -8,7 +8,8 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigid;
-    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer _sprite;
+    [SerializeField] private Animator _anim;
 
     private float _facingDir;
     [SerializeField] float _spriteSize;
@@ -17,7 +18,8 @@ public class PlayerView : MonoBehaviour
     void Awake()
 	{
 		_rigid = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
+        _sprite = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
 	}
 
 	public void Move(Vector2 dir, float moveSpeed)

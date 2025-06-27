@@ -10,7 +10,7 @@ public class PlayerAI
 	private PlayerModel _model;
 
 	public Transform TargetMonster; // 공격할 몬스터
-	public SkillData TargetSkill;   // 사용할 스킬
+	public ISkill TargetSkill;   // 사용할 스킬
 
 	private Coroutine _searchRoutine;
 	private WaitForSeconds _searchDelay;
@@ -56,30 +56,27 @@ public class PlayerAI
 		TargetSkill = null;
 		//float maxCooldown = float.MinValue;
 
-		List<SkillData> ranSkills = new();
+		List<ISkill> ranSkills = new();
         // TODO : 게임매니저의 딕셔너리가 아닌 플레이어가 등록한 스킬리스트
         // 기본공격은 이 리스트에 없어야함
         // -> 모든 스킬이 쿨타임일 때 사용할 예정 
-        foreach (var skill in GameManager.Instance.SkillDic.Values)
+        foreach (var skill in _model.Skill.SkillMapping.Values)
 		{
-			// 스킬 쿨타임이 아니고 쿨타임이 가장 긴 스킬 우선
-			//if (!skill.IsCooldown && skill.Cooldown > maxCooldown)
-			//{
-			//	maxCooldown = skill.Cooldown;
-			//	TargetSkill = skill;
-			//	Debug.Log($"{TargetSkill.SkillName} 장전");
-			//}
-
             // 쿨타임이 아닌 스킬 등록
-			if (!skill.IsCooldown) ranSkills.Add(skill);
-		}
+            //if (!skill.IsCooldown) ranSkills.Add(skill);
+            if (skill != null && !skill.IsCooldown) ranSkills.Add(skill);
+        }
         // 쿨타임이 아닌 스킬들 중 랜덤 사용
         if (ranSkills.Count > 0)
         {
             TargetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
-            Debug.Log($"{TargetSkill.SkillName} 스킬장전");
         }
         // TODO : else 기본공격을 TargetSkill로 등록
+        else
+        {
+            TargetSkill = _model.Skill.DefaultAttack;
+        }
+        Debug.Log($"{TargetSkill.SkillData.SkillName} 스킬장전");
 
         // 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
         if (TargetSkill != null) _controller.CurrentState = AIState.Chase;
@@ -95,7 +92,7 @@ public class PlayerAI
 		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
 		Vector3 dir = TargetMonster.position - _controller.transform.position;
 		float distance = dir.magnitude;
-		if (distance <= TargetSkill.Range)
+		if (distance <= TargetSkill.SkillData.Range)
 		{
 			_view.Stop();
 			StopSearchRoutine();
@@ -115,7 +112,7 @@ public class PlayerAI
 
 		// 사거리 벗어나면 다시 추격
 		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
-		if (distance > TargetSkill.Range)
+		if (distance > TargetSkill.SkillData.Range)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
 			_controller.CurrentState = AIState.Chase;
@@ -123,7 +120,7 @@ public class PlayerAI
 		}
 
 		// 스킬 사용
-		Debug.Log($"Attack Action : {TargetSkill.SkillName} 스킬 사용");
+		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
 		TargetSkill.UseSkill(_controller.transform, TargetMonster.transform);
 		TargetMonster = null;
 		TargetSkill = null;
@@ -137,7 +134,7 @@ public class PlayerAI
 	/// 공격 대상, 공격 대상의 활성화 상태, 공격 스킬, 공격 스킬의 쿨타임을 체크하여 bool 값을 반환하는 함수
 	/// </summary>
 	/// <returns>true : 공격불가, false : 공격 가능</returns>
-	bool MonsterSkillCheck()
+	public bool MonsterSkillCheck()
 	{
 		bool result = false;
 		if (TargetMonster == null || !TargetMonster.gameObject.activeSelf || TargetSkill == null || TargetSkill.IsCooldown)

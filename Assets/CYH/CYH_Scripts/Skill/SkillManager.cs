@@ -9,5 +9,4 @@ using UnityEngine;
 public class SkillManager : Singleton<SkillManager>
 {
     [SerializeField] private List<ActiveSkillData> _activeSkillData;
-   
 }

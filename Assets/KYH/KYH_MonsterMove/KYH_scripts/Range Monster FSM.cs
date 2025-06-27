@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class RangeMonsterFSM : MonoBehaviour
+public class RangeMonsterFSM : MonoBehaviour, IDamagable
 {
     enum MonsterState { Idle, Move, Attack }
 
@@ -118,29 +118,32 @@ public class RangeMonsterFSM : MonoBehaviour
 
     }
 
+    void OnEnable() => CurrentHp = MaxHp;
+    void OnDisable() => targetPlayer = null;
 
     /// <summary>
     /// 현재 플레이어를 가장 가까운 대상으로 설정
     /// </summary>
     private void FindClosestPlayer()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Transform Closest = null;
-        float minDist = float.MaxValue;
+        //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        //Transform Closest = null;
+        //float minDist = float.MaxValue;
 
-        foreach (var playerobj in players)
-        {
-            if (!playerobj.activeInHierarchy) continue;
+        //foreach (var playerobj in players)
+        //{
+        //    if (!playerobj.activeInHierarchy) continue;
 
-            float dist = Vector2.Distance(transform.position, playerobj.transform.position);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                Closest = playerobj.transform;
-            }
-        }
+        //    float dist = Vector2.Distance(transform.position, playerobj.transform.position);
+        //    if (dist < minDist)
+        //    {
+        //        minDist = dist;
+        //        Closest = playerobj.transform;
+        //    }
+        //}
 
-        targetPlayer = Closest;
+        //targetPlayer = Closest;
+        targetPlayer = GameManager.Instance.PlayerController.transform;
     }
 
     private void ChangeState(MonsterState newstate)
@@ -244,17 +247,17 @@ public class RangeMonsterFSM : MonoBehaviour
     /// <summary>
     /// 피격 처리
     /// </summary>
-    public void TakeDamage(float damage)
+    public void TakeDamage(long damage)
     {
-
-        float finalDamage = damage * (1f - DamageReduceRate / 100f);
+        long finalDamage = (long)(damage * (1f - DamageReduceRate / 100f));
         CurrentHp -= finalDamage;
 
-        Debug.Log($" 플레이이어가 몬스터에게 가한 데미지 {damage}, 데미지 감소율이 적용되어 몬스터가 입은 피해 : {finalDamage}  남은 체력 : {CurrentHp}");
+        Debug.Log($" 플레이어가 몬스터에게 가한 데미지 {damage}, 데미지 감소율이 적용되어 몬스터가 입은 피해 : {finalDamage}  남은 체력 : {CurrentHp}");
 
         if (CurrentHp <= 0)
         {
-            Die();
+            //Die();
+            gameObject.SetActive(false);
         }
     }
     /// <summary>

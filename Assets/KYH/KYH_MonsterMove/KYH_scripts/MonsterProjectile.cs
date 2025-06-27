@@ -22,16 +22,40 @@ public class MonsterProjectile : MonoBehaviour
         // 플레이어 충돌 감지
         if (other.CompareTag("Player"))
         {
-            Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
+            //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
+            var player = GameManager.Instance.PlayerController;
             if (player != null)
             {
-                player.TakeDamage(damage);
-                Debug.Log($"투사체가 플레이어에게 {damage} 데미지 줌");
+                //player.TakeDamage(damage);
+                player.TakeDamage((long)damage);
+                Debug.Log($"투사체가 플레이어에게 {(long)damage} 데미지 줌");
             }
 
             Destroy(gameObject); // 명중 후 파괴
         }
         else if (other.CompareTag("Wall") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Destroy(gameObject); // 벽이나 바닥에 맞으면 파괴
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 플레이어 충돌 감지
+        if (collision.transform.CompareTag("Player"))
+        {
+            //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
+            var player = GameManager.Instance.PlayerController;
+            if (player != null)
+            {
+                //player.TakeDamage(damage);
+                player.TakeDamage((long)damage);
+                Debug.Log($"투사체가 플레이어에게 {(long)damage} 데미지 줌");
+            }
+
+            Destroy(gameObject); // 명중 후 파괴
+        }
+        else if (collision.transform.CompareTag("Wall") || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Destroy(gameObject); // 벽이나 바닥에 맞으면 파괴
         }

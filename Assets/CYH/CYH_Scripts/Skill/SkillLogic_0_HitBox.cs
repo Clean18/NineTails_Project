@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_0_HitBox : MonoBehaviour
+public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
@@ -17,28 +17,36 @@ public class SkillLogic_0_HitBox : MonoBehaviour
 
     [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
+    public PlayerController PlayerController { get; set; }
+    public ActiveSkillData SkillData { get; set; }
+    public bool IsCooldown { get; set; }
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         // 게임 스타트 -> _hitBox collider 끔
         _hitBox.enabled = false;
+        SkillData = _data;
+        IsCooldown = false;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (_isCooldown) return;
+        //if (_isCooldown) return;
+        if (IsCooldown) return;
 
         // 쿨타임 체크 시작
-        _isCooldown = true;
+        //_isCooldown = true;
+        IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
@@ -52,6 +60,15 @@ public class SkillLogic_0_HitBox : MonoBehaviour
 
     public void UseSkill(Transform attacker, Transform defender)
     {
+        // 쿨타임이면 return
+        //if (_isCooldown) return;
+        if (IsCooldown) return;
+
+        // 쿨타임 체크 시작
+        //_isCooldown = true;
+        IsCooldown = true;
+        StartCoroutine(CooldownCoroutine());
+
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
@@ -106,13 +123,15 @@ public class SkillLogic_0_HitBox : MonoBehaviour
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     private void Damage()
     {
-        float damage = _playerController.AttackPoint * (100f + _skillLevel) / 100f;
+        //float damage = _playerController.AttackPoint * (100f + _skillLevel) / 100f;
+        float damage = PlayerController.PlayerModel.Data.Attack * (100f + _skillLevel) / 100f;
 
         if(_slashCount == 1)
         {
             foreach (var monster in _hitMonsters)
             {
-                monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+                //monster.GetComponent<Monster_CYH>().TakeDamage(damage);
+                monster?.GetComponent<IDamagable>().TakeDamage((long)(damage));
                 Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
             }
         }
@@ -120,8 +139,9 @@ public class SkillLogic_0_HitBox : MonoBehaviour
         {
             foreach (var monster in _hitMonsters)
             {
-                monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
-                Debug.Log($"{monster.name}에게 {damage * 0.5f}의 피해를 가했음");
+                //monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
+                monster?.GetComponent<IDamagable>().TakeDamage((long)(damage * 0.5f));
+                Debug.Log($"{monster.name}에게 {(int)(damage * 0.5f)}의 피해를 가했음");
             }
         }
     }
@@ -141,14 +161,16 @@ public class SkillLogic_0_HitBox : MonoBehaviour
     // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = _data.CoolTime;
+        //float remaining = _data.CoolTime;
+        float remaining = SkillData.CoolTime;
         while (remaining > 0f)
         {
             Debug.Log($"쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        _isCooldown = false;
+        //_isCooldown = false;
+        IsCooldown = false;
         Debug.Log("쿨타임 종료");
     }
 }
