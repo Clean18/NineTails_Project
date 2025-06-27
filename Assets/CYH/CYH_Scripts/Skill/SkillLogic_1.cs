@@ -53,7 +53,7 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
 
         EnableHitbox();
         AnimationPlay();
-        Debug.Log("스킬사용");
+        //Debug.Log("스킬사용");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -72,25 +72,23 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
 
         EnableHitbox();
         AnimationPlay();
-        Debug.Log("스킬사용 1타");
+        //Debug.Log("스킬사용");
     }
 
     public void EnableHitbox()
     {
         _hitBox.enabled = true;
-        Debug.Log("히트박스 켜짐");
+        //Debug.Log("콜라이더 켜짐");
     }
-
 
     public void DisableHitbox()
     {
         _hitBox.enabled = false;
-        Debug.Log("콜라이더 끔");
+        //Debug.Log("콜라이더 끔");
 
         // 몬스터 TakeDamage 처리
         Damage();
     }
-
 
     public void AnimationPlay()
     {
@@ -102,16 +100,6 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-
-        if (!other.CompareTag("Monster")) return;
-        if (!_hitMonsters.Contains(other.gameObject))
-        {
-            _hitMonsters.Add(other.gameObject);
-        }
-        Debug.Log($"몬스터 맞음");
-    }
 
     private void Damage()
     {
@@ -124,6 +112,17 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
             monster.GetComponent<IDamagable>().TakeDamage((long)damage);
             Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (!other.CompareTag("Monster")) return;
+        if (!_hitMonsters.Contains(other.gameObject))
+        {
+            _hitMonsters.Add(other.gameObject);
+        }
+        Debug.Log($"Skill_1 : 몬스터 맞음");
     }
 
     private IEnumerator CooldownCoroutine()

@@ -483,11 +483,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289211516}
   m_CullTransparentMesh: 1
---- !u!60 &1409264048 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4822434362291127091, guid: ebf209dd092de8c4792396fa9ea6a868, type: 3}
-  m_PrefabInstance: {fileID: 606705093}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1453615242
 GameObject:
   m_ObjectHideFlags: 0
@@ -1066,8 +1061,6 @@ GameObject:
   - component: {fileID: 7409231950812699962}
   - component: {fileID: 8834188468784387697}
   - component: {fileID: 8834188468784387696}
-  - component: {fileID: 8834188468784387700}
-  - component: {fileID: 8834188468784387701}
   - component: {fileID: 8834188468784387699}
   m_Layer: 0
   m_Name: PlayerA
@@ -1414,11 +1407,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8153223802303168114, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
   m_PrefabInstance: {fileID: 7867585168460036701}
   m_PrefabAsset: {fileID: 0}
---- !u!58 &7867585168460036703 stripped
-CircleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 1979080804078313267, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
-  m_PrefabInstance: {fileID: 7867585168460036701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!212 &8834188468784387695
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1530,41 +1518,6 @@ MonoBehaviour:
   _radius: 2
   _objSpeed: 180
   _spinDuration: 7
-  _skillLevel: 0
-  _hitMonsters: []
---- !u!114 &8834188468784387700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2874512801222223151}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c238eadf819680f4d84412605ca3eb66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
-  _playerController: {fileID: 8834188468784387696}
-  _hitBox: {fileID: 1409264048}
-  _skillLevel: 0
-  _slashCount: 0
-  _hitMonsters: []
---- !u!114 &8834188468784387701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2874512801222223151}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21413a6c049b7734c8fd92d9c0c21c96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 6cea0e09a7f8e484d9d88e32a9498a2d, type: 2}
-  _playerController: {fileID: 8834188468784387696}
-  _hitBox: {fileID: 7867585168460036703}
   _skillLevel: 0
   _hitMonsters: []
 --- !u!20 &8994819570074998775

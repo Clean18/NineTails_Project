@@ -55,7 +55,7 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
         _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
-        Debug.Log("스킬사용 1타");
+        //Debug.Log("스킬사용 1타");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -75,20 +75,20 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
         _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
-        Debug.Log("스킬사용 1타");
+        //Debug.Log("스킬사용 1타");
     }
 
     public void OnAttackStart()
     {
         _hitBox.enabled = true;
-        Debug.Log("콜라이더 킴");
+        //Debug.Log("콜라이더 킴");
     }
 
     // 애니메이션이 끝났을 때 이벤트로 호출
     public void OnAttackEnd()
     {
         _hitBox.enabled = false;
-        Debug.Log("콜라이더 끔");
+        //Debug.Log("콜라이더 끔");
 
         // 몬스터 TakeDamage 처리
         Damage();
@@ -109,18 +109,6 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-
-        if (!other.CompareTag("Monster")) return;
-        if (!_hitMonsters.Contains(other.gameObject))
-        {
-            _hitMonsters.Add(other.gameObject);
-        }
-
-        Debug.Log($"몬스터 맞음 : {_slashCount}타");
-    }
-
     //// 애니메이션이 끝났을 때 이벤트로 호출
     public void SlashCountEvent()
     {
@@ -128,7 +116,7 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
         _hitMonsters.Clear();
 
         _slashCount = 2;
-        Debug.Log("스킬사용 2타");
+        //Debug.Log("스킬사용 2타");
         //OnAttackStart();
     }
 
@@ -156,6 +144,18 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
                 Debug.Log($"{monster.name}에게 {(int)(damage * 0.5f)}의 피해를 가했음");
             }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (!other.CompareTag("Monster")) return;
+        if (!_hitMonsters.Contains(other.gameObject))
+        {
+            _hitMonsters.Add(other.gameObject);
+        }
+
+        Debug.Log($"Skill_0 : 몬스터 맞음 : {_slashCount}타");
     }
 
     // 쿨타임 코루틴
