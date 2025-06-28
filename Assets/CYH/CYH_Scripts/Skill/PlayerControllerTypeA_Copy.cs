@@ -47,14 +47,14 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
         if (moveInput.x < 0f)
         {
             facingDir = -1;
-            transform.localScale = new Vector3(1, 1, 1);
-            //transform.rotation = Quaternion.Euler(0, 0, 0);
+            //transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (moveInput.x > 0f)
         {
             facingDir = 1;
-            transform.localScale = new Vector3(-1, 1, 1);
-            //transform.rotation = Quaternion.Euler(0, 180, 0);
+            //transform.localScale = new Vector3((-1f)*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 

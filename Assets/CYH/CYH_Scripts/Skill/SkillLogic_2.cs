@@ -17,6 +17,7 @@ public class SkillLogic_2 : MonoBehaviour
     [Header("원 궤도 설정")]
     [SerializeField] private float _radius = 3f;
     [SerializeField] private float _objSpeed = 140f;
+    [SerializeField] private Vector3 _centerOffset = Vector3.zero;
 
     [Header("스킬 지속 시간")]
     [SerializeField] private float _spinDuration = 7f;
@@ -82,7 +83,8 @@ public class SkillLogic_2 : MonoBehaviour
     private void UpdateProjectiles()
     {
         float interval = 360f / _objCount;
-        Vector3 center = transform.position;
+        Vector3 center = transform.position + _centerOffset;
+        //Vector3 center = transform.position;
 
         for (int i = 0; i < _objCount; i++)
         {
@@ -190,7 +192,7 @@ public class SkillLogic_2 : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, _radius);
+        Gizmos.DrawWireSphere(transform.position+_centerOffset, _radius);
     }
 
     private void OnEnable()
