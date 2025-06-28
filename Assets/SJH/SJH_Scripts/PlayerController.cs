@@ -75,16 +75,14 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-    // AI 에서 사용하는 필드변수
-    [Header("AI 필드변수")]
-	public AIState CurrentState;		// AI 상태
+    [Header("AI 필드변수")] // AI 에서 사용하는 필드변수
+    public AIState CurrentState;		// AI 상태
 	public float SearchDistance = 8;	// 탐색 거리
 	public int DirectionCount = 8;		// 탐색할 칸의 개수 360 / 8
 	public float SightAngle = 45f;		// 칸마다 각도
 	public LayerMask MonsterLayer;      // 탐색할 레이어
 
-    // Manual 에서 사용하는 필드변수
-    [Header("수동모드 필드변수")]
+    [Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
     public Vector2 MoveDir; // 플레이어의 이동 방향
 
     void Start()

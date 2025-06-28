@@ -235,6 +235,8 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
         Debug.Log($"플레이어가 몬스터에게 가한 피해 {damage}, 몬스터가 실제로 받은 피해 {finalDamage},  현재 남은 체력 : {CurrentHp}");
 
+        UIManager.Instance.ShowDamageText(transform, damage);
+
         if (CurrentHp <= 0)
         {
             //Die();

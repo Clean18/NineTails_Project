@@ -254,6 +254,8 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
 
         Debug.Log($" 플레이어가 몬스터에게 가한 데미지 {damage}, 데미지 감소율이 적용되어 몬스터가 입은 피해 : {finalDamage}  남은 체력 : {CurrentHp}");
 
+        UIManager.Instance.ShowDamageText(transform, damage);
+
         if (CurrentHp <= 0)
         {
             //Die();

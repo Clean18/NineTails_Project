@@ -50,7 +50,9 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowDamageText(Transform spawnPos, long damage)
     {
-        var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
+        if (damageTextPrefab.Equals(null)) return;
 
+        var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
+        go.GetComponent<DamageText>()?.Init($"{damage}");
     }
 }
