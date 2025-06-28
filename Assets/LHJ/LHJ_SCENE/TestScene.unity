@@ -468,6 +468,8 @@ MonoBehaviour:
   powerText: {fileID: 466883879}
   attackText: {fileID: 9804434}
   defenseText: {fileID: 255127179}
+  _hpSlider: {fileID: 0}
+  hpTextt: {fileID: 0}
   hpText: {fileID: 1055634479}
   warmthText: {fileID: 1188888854}
   spritenergyText: {fileID: 238389319}
@@ -2420,7 +2422,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 421459715}
-  - {fileID: 890453970}
   - {fileID: 1684195127}
   - {fileID: 508819473}
   - {fileID: 1819483385}
@@ -2650,6 +2651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 890453970}
   - component: {fileID: 890453969}
+  - component: {fileID: 890453971}
   m_Layer: 0
   m_Name: Triangle (4)
   m_TagString: Untagged
@@ -2718,12 +2720,26 @@ Transform:
   m_GameObject: {fileID: 890453968}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.3259497, y: -12.979744, z: 0}
+  m_LocalPosition: {x: -12.23, y: -4.0600004, z: -1.1484162}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 849047371}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &890453971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890453968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d310043ffa5794db4b0704dbc07552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementTable:
+    values: []
 --- !u!1 &944457754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5935,6 +5951,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1417810559}
+  - {fileID: 890453970}
   - {fileID: 773382957}
   - {fileID: 1543399914}
   - {fileID: 1549279418}
