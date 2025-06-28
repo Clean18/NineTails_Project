@@ -91,8 +91,8 @@ public class PlayerController : MonoBehaviour
     {
         // 시작은 자동모드
         CurrentState = AIState.Search;
-        //Mode = ControlMode.Auto;
-        Mode = ControlMode.Manual;
+        Mode = ControlMode.Auto;
+        //Mode = ControlMode.Manual;
     }
 
     public void PlayerInit()
@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
 
         _isInit = true;
 
-        Debug.Log("플레이어 데이터 초기화");
+        Debug.Log("플레이어 데이터 초기화 완료");
 
         yield break;
     }

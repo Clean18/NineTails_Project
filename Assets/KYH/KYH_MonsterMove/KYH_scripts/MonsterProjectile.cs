@@ -28,7 +28,7 @@ public class MonsterProjectile : MonoBehaviour
             {
                 //player.TakeDamage(damage);
                 player.TakeDamage((long)damage);
-                Debug.Log($"투사체가 플레이어에게 {(long)damage} 데미지 줌");
+                //Debug.Log($"투사체가 플레이어에게 {(long)damage} 데미지 줌");
             }
 
             Destroy(gameObject); // 명중 후 파괴

@@ -150,7 +150,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     {
         if (_currentState == newstate) return;
 
-        Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate} 로 변경됨");
+        //Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate} 로 변경됨");
 
         // 이전 상태가 공격이면 코루틴 정지
         if (_currentState == MonsterState.Attack && AttackRoutine != null)

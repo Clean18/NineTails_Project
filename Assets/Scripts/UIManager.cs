@@ -11,6 +11,8 @@ public class UIManager : Singleton<UIManager>
 
     public List<IUI> SceneUIList = new();
 
+    [SerializeField] private GameObject damageTextPrefab;
+
     private PopUpCanvas popUpCanvas;
     public PopUpCanvas PopUpCanvas
     {
@@ -44,5 +46,11 @@ public class UIManager : Singleton<UIManager>
     public void ClosePopUp()
     {
         PopUpCanvas.CloseUI();
+    }
+
+    public void ShowDamageText(Transform spawnPos, long damage)
+    {
+        var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
+
     }
 }

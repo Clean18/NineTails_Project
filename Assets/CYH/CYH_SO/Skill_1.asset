@@ -15,7 +15,7 @@ MonoBehaviour:
   <SkillName>k__BackingField: "\uBBF8(\u5C3E)\uAC80 \uC81C 2\uC2DD"
   <Description>k__BackingField: "\uAC80\uC5D0 \uD63C\uB839\uC758 \uD798\uC744 \uB2F4\uC544
     \uC8FC\uBCC0\uC758 \uC801\uC5D0\uAC8C \uD06C\uAC8C \uD718\uB450\uB978\uB2E4."
-  <Damage>k__BackingField: 0
+  <Damage>k__BackingField: 1
   <Level>k__BackingField: 0
   <CoolTime>k__BackingField: 5
   <IsCooldown>k__BackingField: 0

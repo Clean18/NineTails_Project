@@ -180,7 +180,7 @@ public class PlayerData
 		Hp -= totalDamage;
 		if (Hp <= 0) Hp = 0;
         IsDead = Hp <= 0;
-        Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
+        //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
 	}
 
     // 체력회복하는 함수
