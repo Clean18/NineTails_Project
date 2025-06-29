@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
     [Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
     public Vector2 MoveDir; // 플레이어의 이동 방향
 
+    [Header("치트모드")]
+    public bool IsCheat = false;
+
     void Start()
     {
         // 시작은 자동모드
@@ -197,17 +200,13 @@ public class PlayerController : MonoBehaviour
 
     public void Test_ChangeStat()
     {
+        // TODO : 5번 누르면 공격력증가
         if (PlayerModel == null) return;
 
         PlayerModel.Data.SetAttackLevel();
     }
 
-    public void SaveData()
-    {
-        if (PlayerModel == null) return;
-
-        SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
-    }
+    public void SaveData() => SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
 
     /// <summary>
     /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화

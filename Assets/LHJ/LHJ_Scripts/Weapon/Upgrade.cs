@@ -46,8 +46,8 @@ public class Upgrade : MonoBehaviour
     // 장비등급, 강화단계 읽기 전용 프로퍼티
     public string CurrentGrade => currentGrade;
     public int CurrentLevel => currentLevel;
-    public long Warmth => (GameManager.Instance.PlayerController == null ? 0 : GameManager.Instance.PlayerController.GetCost(CostType.Warmth));
-    public long SpiritEnergy => (GameManager.Instance.PlayerController == null ? 0 : GameManager.Instance.PlayerController.GetCost(CostType.SpiritEnergy));
+    public long Warmth => (PlayerController.Instance == null ? 0 : PlayerController.Instance.GetCost(CostType.Warmth));
+    public long SpiritEnergy => (PlayerController.Instance == null ? 0 : PlayerController.Instance.GetCost(CostType.SpiritEnergy));
 
     void Start()
     {
@@ -94,7 +94,7 @@ public class Upgrade : MonoBehaviour
         // SSR 등급은 무한히 강화가 되는 구조
         if (currentGrade == "SSR")
         {
-            if (Warmth < baseSSRCost)
+            if (Warmth < baseSSRCost && !PlayerController.Instance.IsCheat)
             {
                 Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
                 return;
@@ -135,9 +135,9 @@ public class Upgrade : MonoBehaviour
         }
 
         // 재화 확인
-        if (Warmth < nextInfo.WarmthCost)
+        if (Warmth < nextInfo.WarmthCost && !PlayerController.Instance.IsCheat)
         {
-            Debug.Log("재화가");
+            Debug.Log("재화가 부족합니다");
             return;
         }
         else

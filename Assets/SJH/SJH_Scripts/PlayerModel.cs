@@ -52,21 +52,22 @@ public class PlayerModel
 
     public GameData GetGameData()
     {
-        SavePlayerData playerData = Data.SavePlayerData();
+        SavePlayerData data = Data.SavePlayerData();
+        SavePlayerCost cost = Cost.SavePlayerCost();
 
         var gameData = SaveLoadManager.Instance.GameData;
         // Data
-        gameData.AttackLevel = Data.AttackLevel;
-        gameData.DefenseLevel = Data.DefenseLevel;
-        gameData.SpeedLevel = Data.SpeedLevel;
-        gameData.HpLevel = Data.HpLevel;
-        gameData.CurrentHp = Data.Hp;
-        gameData.IncreaseDamageLevel = Data.IncreaseDamageLevel;
-        gameData.ShieldHp = Data.ShieldHp;
+        gameData.AttackLevel = data.AttackLevel;
+        gameData.DefenseLevel = data.DefenseLevel;
+        gameData.SpeedLevel = data.SpeedLevel;
+        gameData.HpLevel = data.HpLevel;
+        gameData.CurrentHp = data.CurrentHp;
+        gameData.IncreaseDamageLevel = data.IncreaseDamageLevel;
+        gameData.ShieldHp = data.ShieldHp;
 
         // Cost
-        gameData.Warmth = Cost.Warmth;
-        gameData.SpiritEnergy = Cost.SpiritEnergy;
+        gameData.Warmth = cost.Warmth;
+        gameData.SpiritEnergy = cost.SpiritEnergy;
 
         return gameData;
     }
@@ -81,19 +82,17 @@ public class PlayerModel
     {
         if (amount == 0 || Cost == null) return;
 
-        // TODO : 플레이어 온기 추가
-        if (costType == CostType.Warmth) Cost.IncreaseWarmth(amount);
         // 플레이어 영기 추가
+        if (costType == CostType.Warmth) Cost.IncreaseWarmth(amount);
         else if (costType == CostType.SpiritEnergy) Cost.IncreaseSpiritEnergy(amount);
     }
 
     public void SpendCost(CostType costType, long amount)
     {
-        if (amount == 0 || Cost == null) return;
+        if (amount == 0 || Cost == null || PlayerController.Instance.IsCheat) return;
 
-        // TODO : 플레이어 온기 추가
+        // 플레이어 영기 감소
         if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);
-        // 플레이어 영기 추가
         else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
     }
 }

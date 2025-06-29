@@ -2,6 +2,12 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
+public struct SavePlayerCost
+{
+    public long SpiritEnergy;
+    public long Warmth;
+}
+
 /// <summary>
 /// 플레이어의 스탯 및 장비 성장 재화
 /// </summary>
@@ -70,5 +76,13 @@ public class PlayerCost
     {
         Debug.Log($"온기 {amount} 감소");
         Warmth = math.max(0, Warmth - amount);
+    }
+
+    public SavePlayerCost SavePlayerCost()
+    {
+        var cost = new SavePlayerCost();
+        cost.SpiritEnergy = SpiritEnergy;
+        cost.Warmth = Warmth;
+        return cost;
     }
 }

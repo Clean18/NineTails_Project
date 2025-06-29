@@ -6,6 +6,7 @@ public struct SavePlayerData
     public int AttackLevel;
     public int DefenseLevel;
     public int HpLevel;
+    public long CurrentHp;
     public int SpeedLevel;
     public int IncreaseDamageLevel;
     public long ShieldHp;
@@ -118,11 +119,24 @@ public class PlayerData
     /// </summary>
     [Tooltip("가하는 피해 증가 (특수 스탯) 기본 5%, 0.2% 씩 증가")]
     [field: SerializeField] public float IncreaseDamage;
+
     /// <summary>
     /// 가하는 피해 증가 레벨
     /// </summary>
     [Tooltip("가하는 피해 증가 레벨")]
-    [field: SerializeField] public int IncreaseDamageLevel; // TODO : 계산식 추가
+    [SerializeField] private int _increaseDamageLevel;
+    public int IncreaseDamageLevel
+    {
+        get => _increaseDamageLevel;
+        private set
+        {
+            // 1레벨 0.5% 이후 0.2%씩 증가
+            Debug.Log("가하는 피해 증가 계산");
+            _increaseDamageLevel = Mathf.Max(0, value);
+            if (_increaseDamageLevel == 0) IncreaseDamage = 0f;
+            else IncreaseDamage = 0.5f + ((_increaseDamageLevel - 1) * 0.2f);
+        }
+    }
 
     [Tooltip("죽음체크, true = 사망")]
     [SerializeField] private bool _isDead;
@@ -213,6 +227,7 @@ public class PlayerData
         data.AttackLevel = AttackLevel;
         data.DefenseLevel = DefenseLevel;
         data.HpLevel = HpLevel;
+        data.CurrentHp = Hp;
         data.SpeedLevel = SpeedLevel;
         data.IncreaseDamageLevel = IncreaseDamageLevel;
         data.ShieldHp = ShieldHp;
