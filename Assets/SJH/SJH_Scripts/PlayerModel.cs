@@ -71,13 +71,29 @@ public class PlayerModel
         return gameData;
     }
 
-    public void SetCost(CostType costType, long amount)
+    public long GetCost(CostType costType)
+    {
+        if (costType == CostType.Warmth) return Cost.Warmth;
+        else return Cost.SpiritEnergy;
+    }
+
+    public void AddCost(CostType costType, long amount)
     {
         if (amount == 0 || Cost == null) return;
 
         // TODO : 플레이어 온기 추가
-        if (costType == CostType.Warmth) Cost.AddWarmth(amount);
+        if (costType == CostType.Warmth) Cost.IncreaseWarmth(amount);
         // 플레이어 영기 추가
-        else if (costType == CostType.SpiritEnergy) Cost.AddSpiritEnergy(amount);
+        else if (costType == CostType.SpiritEnergy) Cost.IncreaseSpiritEnergy(amount);
+    }
+
+    public void SpendCost(CostType costType, long amount)
+    {
+        if (amount == 0 || Cost == null) return;
+
+        // TODO : 플레이어 온기 추가
+        if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);
+        // 플레이어 영기 추가
+        else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
     }
 }

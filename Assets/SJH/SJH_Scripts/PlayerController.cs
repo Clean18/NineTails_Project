@@ -64,6 +64,8 @@ public enum CostType
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance => GameManager.Instance.PlayerController;
+
     [Tooltip("플레이어 데이터 로드 여부")]
     [SerializeField ]private bool _isInit = false;
 
@@ -189,7 +191,9 @@ public class PlayerController : MonoBehaviour
         // TODO : UI 체력증가 처리
     }
 
-    public void AddCost(CostType costType, long amount) => PlayerModel.SetCost(costType, amount);
+    public long GetCost(CostType costType) => PlayerModel.GetCost(costType);
+    public void AddCost(CostType costType, long amount) => PlayerModel.AddCost(costType, amount);
+    public void SpendCost(CostType costType, long amount) => PlayerModel.SpendCost(costType, amount);
 
     public void Test_ChangeStat()
     {

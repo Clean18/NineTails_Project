@@ -46,17 +46,29 @@ public class PlayerCost
         Warmth = warmth;
     }
 
-    public void AddSpiritEnergy(long amount)
+    public void IncreaseSpiritEnergy(long amount)
     {
         // 9경9999조9999억9999만9999 까지 쌓임
         Debug.Log($"영기 {amount} 증가");
         SpiritEnergy = math.min(99999999999999999, SpiritEnergy + amount);
     }
 
-    public void AddWarmth(long amount)
+    public void IncreaseWarmth(long amount)
     {
         // 9경9999조9999억9999만9999 까지 쌓임
         Debug.Log($"온기 {amount} 증가");
         Warmth = math.min(99999999999999999, Warmth + amount);
+    }
+
+    public void DecreaseSpiritEnergy(long amount)
+    {
+        Debug.Log($"영기 {amount} 감소");
+        SpiritEnergy = math.max(0, SpiritEnergy - amount);
+    }
+
+    public void DecreaseWarmth(long amount)
+    {
+        Debug.Log($"온기 {amount} 감소");
+        Warmth = math.max(0, Warmth - amount);
     }
 }

@@ -57,7 +57,7 @@ public class Promotion : MonoBehaviour
     /// 재화가 충분하고 확률 체크에 성공하면 승급 처리
     /// 실패 시에도 재화는 차감
     /// </summary>
-    public void TryPromote(ref string currentGrade, ref int currentLevel, ref int warmth)
+    public void TryPromote(ref string currentGrade, ref int currentLevel, long warmth)
     {
         if (currentLevel < 50)
         {

@@ -124,7 +124,6 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log($"비용 : {levelupCost}");
             //Debug.Log($"스피드 : {speed}");
             //Debug.Log("===============");
-
         }
     }
     string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
