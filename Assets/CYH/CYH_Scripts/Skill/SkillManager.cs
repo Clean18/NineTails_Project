@@ -7,9 +7,10 @@ using UnityEngine;
 public class SkillManager : Singleton<SkillManager>
 {
     [SerializeField] private List<GameObject> _skillPrefabs;
-    private List<ISkill> _skillLogics = new List<ISkill>();             // 보유 중인 스킬 목록
+    [SerializeField] private List<int> _skillLevels;
+    private List<ISkill> _skillLogics = new List<ISkill>();         // 보유 중인 스킬 목록
 
-    [SerializeField] private ISkill[] _hotkeys = new ISkill[3];    // 단축키에 등록된 스킬 목록
+    [SerializeField] private ISkill[] _hotkeys = new ISkill[3];     // 단축키에 등록된 스킬 목록
 
 
     private void Start()
@@ -21,8 +22,6 @@ public class SkillManager : Singleton<SkillManager>
             if (iSkill != null)
 
                 _skillLogics.Add(iSkill);
-            else
-                Debug.Log($"[{_skillPrefabs[i].name}] -> ISkill 상속x");
         }
     }
 

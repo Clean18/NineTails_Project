@@ -2321,7 +2321,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796e52f7b24330648b833e5e84992c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillPrefabs: []
+  _skillPrefabs:
+  - {fileID: 1575395230341757593, guid: 9c37086fb94a75e4e81408d752572b48, type: 3}
+  - {fileID: 1575395230341757593, guid: 2ad397569eb326c4fb76a58349d8d802, type: 3}
+  _skillLevels: 
 --- !u!20 &8994819570074998775
 Camera:
   m_ObjectHideFlags: 0
