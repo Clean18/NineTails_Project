@@ -37,6 +37,7 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     [SerializeField] protected Transform PlayerTransform;  // 플레이어 트랜스폼
 
     protected Coroutine BossPatternRoutine;                // 현재 실행 중인 패턴 코루틴 참조
+    protected virtual int PatternCount => 3;
 
     // 시작 시 상태 초기화
     protected virtual void Start()
@@ -99,7 +100,7 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
         if (IdleTimer >= IdleTime)
         {
             IdleTimer = 0f;
-            int rand = Random.Range(0, 3); // 0~2 중 선택
+            int rand = Random.Range(0, PatternCount); // 0~2 중 선택
 
             switch (rand)
             {

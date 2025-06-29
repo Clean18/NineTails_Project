@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 1스테이지 보스 FSM 클래스. BaseBossFSM을 상속하며,
+/// Pattern1 (부채꼴 할퀴기), Pattern2 (낙석), Pattern3 (창귀 투사체) 구현.
+/// </summary>
 public class Stage1BossFSM : BaseBossFSM
 {
     [Header("Pattern1 setting")]
