@@ -58,11 +58,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            UseSkill(transform);
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha3))
+    //        UseSkill(transform);
+    //}
 
     public void UseSkill(Transform attacker)
     {
