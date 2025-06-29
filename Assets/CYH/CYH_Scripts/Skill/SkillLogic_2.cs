@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class SkillLogic_2 : MonoBehaviour
+public class SkillLogic_2 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
@@ -22,13 +22,10 @@ public class SkillLogic_2 : MonoBehaviour
     [Header("스킬 지속 시간")]
     [SerializeField] private float _spinDuration = 7f;
 
-    [SerializeField] private int _skillLevel = 0;
-    [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
-
     private GameObject[] _projectile;
     private float _degree;
-    private bool _isCooldown;
-    private bool _spinning;
+    //private bool _isCooldown;
+    public bool _isSpinning;
 
     private Coroutine _spinRoutine;
     private Coroutine _durationRoutine;
@@ -36,6 +33,10 @@ public class SkillLogic_2 : MonoBehaviour
 
     private WaitForSeconds _spinDurationWait;
     private WaitForSeconds _cooldownWait;
+
+    public PlayerController PlayerController { get; set; }
+    public ActiveSkillData SkillData { get; set; }
+    public bool IsCooldown { get; set; }
 
 
     private void Start()
@@ -58,14 +59,14 @@ public class SkillLogic_2 : MonoBehaviour
             UseSkill(transform);
     }
 
-    private void UseSkill(Transform attacker)
+    public void UseSkill(Transform attacker)
     {
         // 쿨타임 체크
-        if (_isCooldown || _spinning) return;
+        if (IsCooldown || _isSpinning) return;
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
-        _spinning = true;
+        _isSpinning = true;
         // _projectilePrefab 활성화
         SetProjectileActive(true);  
 
@@ -75,7 +76,28 @@ public class SkillLogic_2 : MonoBehaviour
         // 지속시간 체크 시작
         _durationRoutine = StartCoroutine(SpinDurationCoroutine());
         // 쿨타임 체크 시작
-        _isCooldown = true;
+        IsCooldown = true;
+        _cooldownRoutine = StartCoroutine(CooldownCoroutine());
+    }
+
+    public void UseSkill(Transform attacker, Transform defender)
+    {
+        // 쿨타임 체크
+        if (IsCooldown || _isSpinning) return;
+
+        // 스킬 사용
+        Debug.Log("스킬_2 사용");
+        _isSpinning = true;
+        // _projectilePrefab 활성화
+        SetProjectileActive(true);
+
+        // 매 프레임 원 운동 갱신
+        _spinRoutine = StartCoroutine(SpinCoroutine());
+
+        // 지속시간 체크 시작
+        _durationRoutine = StartCoroutine(SpinDurationCoroutine());
+        // 쿨타임 체크 시작
+        IsCooldown = true;
         _cooldownRoutine = StartCoroutine(CooldownCoroutine());
     }
 
@@ -104,7 +126,7 @@ public class SkillLogic_2 : MonoBehaviour
     private IEnumerator SpinCoroutine()
     {
         //  _projectilePrefab 한 바퀴 회전에 걸리는 시간 : 360f / _objSpeed
-        while (_spinning)
+        while (_isSpinning)
         {
             _degree = (_degree + Time.deltaTime * _objSpeed) % 360f;
             UpdateProjectiles();
@@ -116,7 +138,7 @@ public class SkillLogic_2 : MonoBehaviour
     private IEnumerator SpinDurationCoroutine()
     {
         yield return _spinDurationWait;
-        _spinning = false;
+        _isSpinning = false;
         if (_spinRoutine != null) StopCoroutine(_spinRoutine);
         Debug.Log("스킬 지속 시간 종료");
         // _projectilePrefab 활성화
@@ -133,7 +155,7 @@ public class SkillLogic_2 : MonoBehaviour
             yield return _cooldownWait;
             remaining -= 1f;
         }
-        _isCooldown = false;
+        IsCooldown = false;
         Debug.Log("쿨타임 종료");
     }
 
@@ -149,22 +171,13 @@ public class SkillLogic_2 : MonoBehaviour
     }
     #endregion
 
-    private void Damage()
+    protected override void Damage(GameObject monsters)
     {
         float damage = _playerController.AttackPoint * (0.25f + 0.0025f * _skillLevel);
-        foreach (var monster in _hitMonsters)
-        {
-            monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
-        }
-    }
-
-    private void Damage(GameObject monsters)
-    {
-        float damage = _playerController.AttackPoint * (0.25f + 0.0025f * _skillLevel);
+        //float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * _skillLevel);
         monsters.GetComponent<Monster_CYH>().TakeDamage(damage);
+        //monsters?.GetComponent<IDamagable>().TakeDamage((long)damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
-       
     }
 
     #region _projectilePrefab, Event
