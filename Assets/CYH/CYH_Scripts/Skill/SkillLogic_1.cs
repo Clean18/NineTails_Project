@@ -12,7 +12,7 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
     [SerializeField] private int _skillLevel = 0;
 
     private Animator _animator;
-    private bool _isCooldown = false;
+    //private bool _isCooldown = false;
 
     [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
