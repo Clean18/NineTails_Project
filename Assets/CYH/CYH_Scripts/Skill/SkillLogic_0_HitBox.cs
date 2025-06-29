@@ -24,13 +24,13 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         IsCooldown = false;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -156,8 +156,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         {
             _hitMonsters.Add(other.gameObject);
         }
-
-        Debug.Log($"Skill_0 : 몬스터 맞음 : {_slashCount}타");
+        //Debug.Log($"Skill_0 : 몬스터 맞음 : {_slashCount}타");
     }
 
     // 쿨타임 코루틴
