@@ -20,12 +20,6 @@ public partial class GameData
         set => _savedTimeString = value.ToString("o");   // DateTime > string
     }
 
-    //[Header("테스트용 기본 값")]
-    //public int Level_T = 1;
-    //public float Exp_T = 10;
-    //public int Gold_T = 100;
-    //public float Attack_T = 100;
-
     [Header("플레이어 데이터")]
     // 전투력 > 계산식으로 처리해도될듯?
     // 공격 레벨

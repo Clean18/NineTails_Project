@@ -39,6 +39,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool IsCooldown { get; set; }
 
 
+    private void Awake()
+    {
+        _playerController = GetComponentInParent<PlayerControllerTypeA_Copy>();
+    }
+
     private void Start()
     {
         _spinDurationWait = new WaitForSeconds(_spinDuration);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -8,10 +9,22 @@ using UnityEngine;
 /// </summary>
 public class SkillManager : Singleton<SkillManager>
 {
-    [SerializeField] private List<ActiveSkillData> _playerSkillData;
+    [SerializeField] private GameObject skill2Prefab;
 
-    public void UseSkill(int slotIndex)
+    private ISkill _skill2Logic;
+
+    private void Start()
     {
-        
+        // Skill_2 프리팹을 인스턴스화하고, 그 안의 SkillLogic_2를 참조
+        GameObject skill2Instance = Instantiate(skill2Prefab, transform);
+        _skill2Logic = skill2Instance.GetComponent<ISkill>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _skill2Logic?.UseSkill(transform);
+        }
     }
 }

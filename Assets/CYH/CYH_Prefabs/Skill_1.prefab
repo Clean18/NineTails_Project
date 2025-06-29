@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1939428493384606817}
-  - component: {fileID: 8947969789115844825}
+  - component: {fileID: 369943987409652056}
   m_Layer: 0
-  m_Name: Skill_0
+  m_Name: Skill_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8947969789115844825
+--- !u!114 &369943987409652056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1575395230341757593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c238eadf819680f4d84412605ca3eb66, type: 3}
+  m_Script: {fileID: 11500000, guid: 21413a6c049b7734c8fd92d9c0c21c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillLevel: 0
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
+  _data: {fileID: 0}
   _playerController: {fileID: 0}
   _hitBox: {fileID: 0}
-  _slashCount: 0
