@@ -56,8 +56,12 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    // 씬 로드시 실행되는 이벤트
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("씬 로드");
+        UIManager.Instance.SceneUIList.Clear();
+
         Debug.Log("플레이어 오브젝트 생성");
         var go = Instantiate(PlayerPrefab, Vector3.zero, Quaternion.identity);
         go.GetComponent<PlayerController>().PlayerInit();

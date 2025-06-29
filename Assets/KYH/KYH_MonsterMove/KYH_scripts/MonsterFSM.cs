@@ -36,6 +36,9 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] private LayerMask _playerLayer; // 플레이어 레이어
 
+    [SerializeField] private long warmthAmount;
+    [SerializeField] private long spiritEnergyAmount;
+
     private void Start()
     {
         CurrentHp = MaxHp; // 체력 초기화
@@ -237,11 +240,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
         UIManager.Instance.ShowDamageText(transform, damage);
 
-        if (CurrentHp <= 0)
-        {
-            //Die();
-            gameObject.SetActive(false);
-        }
+        if (CurrentHp <= 0) Die();
     }
 
     /// <summary>
@@ -249,8 +248,11 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     /// </summary>
     private void Die()
     {
-        Debug.Log("몬스터 사망");
-        Destroy(gameObject);
+        Debug.Log("몬스터 사망함");
+        // TODO : 플레이어 재화 증가
+        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        gameObject.SetActive(false);
     }
 
     /// <summary>

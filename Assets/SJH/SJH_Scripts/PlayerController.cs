@@ -48,6 +48,17 @@ public enum AIState
 }
 #endregion
 
+#region enum CostType
+/// <summary>
+/// 재화 타입
+/// </summary>
+public enum CostType
+{
+    Warmth,         // 온기
+    SpiritEnergy,   // 영기
+}
+#endregion
+
 /// <summary>
 /// 클라이언트의 입력을 관리하는 컴포넌트
 /// </summary>
@@ -178,10 +189,7 @@ public class PlayerController : MonoBehaviour
         // TODO : UI 체력증가 처리
     }
 
-    public void GetItem(long amount)
-    {
-        // TODO : 플레이어 재화 추가
-    }
+    public void AddCost(CostType costType, long amount) => PlayerModel.SetCost(costType, amount);
 
     public void Test_ChangeStat()
     {
@@ -237,6 +245,8 @@ public class PlayerController : MonoBehaviour
 
         yield break;
     }
+
+    
 
 	void OnDrawGizmos()
 	{

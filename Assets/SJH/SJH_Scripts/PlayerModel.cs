@@ -26,11 +26,13 @@ public class PlayerModel
         Data = new PlayerData(); 
         Data.InitData(gameData.AttackLevel, gameData.DefenseLevel, gameData.HpLevel, gameData.CurrentHp, gameData.SpeedLevel, gameData.IncreaseDamageLevel, gameData.ShieldHp);
 
+        // 재화저장도 추가
         Cost = new PlayerCost();
+        Cost.InitCost(gameData.SpiritEnergy, gameData.Warmth);
 
         // TODO : 플레이어의 저장된 스킬을 등록
         Skill = new PlayerSkill();
-        Skill.SkillInit();
+        Skill.InitSkill();
     }
 
 	public void ApplyDamage(long damage)
@@ -53,6 +55,7 @@ public class PlayerModel
         SavePlayerData playerData = Data.SavePlayerData();
 
         var gameData = SaveLoadManager.Instance.GameData;
+        // Data
         gameData.AttackLevel = Data.AttackLevel;
         gameData.DefenseLevel = Data.DefenseLevel;
         gameData.SpeedLevel = Data.SpeedLevel;
@@ -61,6 +64,20 @@ public class PlayerModel
         gameData.IncreaseDamageLevel = Data.IncreaseDamageLevel;
         gameData.ShieldHp = Data.ShieldHp;
 
+        // Cost
+        gameData.Warmth = Cost.Warmth;
+        gameData.SpiritEnergy = Cost.SpiritEnergy;
+
         return gameData;
+    }
+
+    public void SetCost(CostType costType, long amount)
+    {
+        if (amount == 0 || Cost == null) return;
+
+        // TODO : 플레이어 온기 추가
+        if (costType == CostType.Warmth) Cost.AddWarmth(amount);
+        // 플레이어 영기 추가
+        else if (costType == CostType.SpiritEnergy) Cost.AddSpiritEnergy(amount);
     }
 }

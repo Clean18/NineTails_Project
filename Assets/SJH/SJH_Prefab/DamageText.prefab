@@ -132,6 +132,7 @@ MonoBehaviour:
   text: {fileID: 2927419600120114913}
   speed: 2
   duration: 2
+  offset: 1.5
 --- !u!1 &8726689910571912376
 GameObject:
   m_ObjectHideFlags: 0

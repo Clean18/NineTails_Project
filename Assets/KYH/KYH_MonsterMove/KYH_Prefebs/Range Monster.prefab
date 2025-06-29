@@ -294,3 +294,5 @@ MonoBehaviour:
   AttackDamage: 1
   AttackSound: {fileID: 0}
   MonsterAnimator: {fileID: 0}
+  warmthAmount: 1
+  spiritEnergyAmount: 200

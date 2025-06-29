@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct SavePlayerData
@@ -17,9 +18,14 @@ public struct SavePlayerData
 public class PlayerData
 {
     /// <summary>
+    /// 스탯 변경시 UI 업데이트 이벤트
+    /// </summary>
+    public event Action OnStatChanged;
+
+    /// <summary>
     /// 플레이어 전투력 
     /// </summary> 
-    [SerializeField] public long PowerLevel { get; private set; }
+    [SerializeField] public long PowerLevel { get => (long)((Attack * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
 
     [field: SerializeField] private int _attackLevel;
     /// <summary>
@@ -36,8 +42,9 @@ public class PlayerData
 		{
             Debug.Log("공격력 계산");
 			_attackLevel = Mathf.Clamp(value, 1, 300);
-			Attack = GetStat(StatType.Attack, _attackLevel); 
-		}
+			Attack = GetStat(StatType.Attack, _attackLevel);
+            OnStatChanged?.Invoke();
+        }
 	}
 
     [field: SerializeField] private int _defenseLevel;
@@ -56,7 +63,8 @@ public class PlayerData
             Debug.Log("방어력 계산");
             _defenseLevel = Mathf.Clamp(value, 1, 300);
 			Defense = GetStat(StatType.Defense, _defenseLevel);
-		}
+            OnStatChanged?.Invoke();
+        }
 	}
 
     [field: SerializeField] private int _hpLevel;
@@ -75,7 +83,8 @@ public class PlayerData
             Debug.Log("체력 계산");
             _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatType.Hp, _hpLevel);
-		}
+            OnStatChanged?.Invoke();
+        }
 	}
 
     /// <summary>
@@ -99,7 +108,8 @@ public class PlayerData
             Debug.Log("스피드 계산");
             _speedLevel = Mathf.Clamp(value, 1, 50);
 			Speed = GetStat(StatType.Speed, _speedLevel) / _speedRatio;
-		}
+            OnStatChanged?.Invoke();
+        }
 	}
 	private const int _speedRatio = 50;
 

@@ -335,3 +335,5 @@ MonoBehaviour:
   WarningRectPrefab: {fileID: 8748292838769292659, guid: af01f6bfd67953644a36421ce009e924, type: 3}
   WarningDistance: 2
   PlayerTransform: {fileID: 0}
+  warmthAmount: 100
+  spiritEnergyAmount: 1000

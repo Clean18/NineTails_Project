@@ -36,6 +36,9 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     private Transform targetPlayer;   // 현재 타겟 플레이어
     private Coroutine AttackRoutine;  // 공격 코루틴 저장 변수
 
+    [SerializeField] private long warmthAmount;
+    [SerializeField] private long spiritEnergyAmount;
+
     private void Start()
     {
         CurrentHp = MaxHp;
@@ -256,11 +259,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
 
         UIManager.Instance.ShowDamageText(transform, damage);
 
-        if (CurrentHp <= 0)
-        {
-            //Die();
-            gameObject.SetActive(false);
-        }
+        if (CurrentHp <= 0) Die();
     }
     /// <summary>
     /// 사망 처리
@@ -268,7 +267,10 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     private void Die()
     {
         Debug.Log("몬스터 사망함");
-        Destroy(gameObject);
+        // TODO : 플레이어 재화 증가
+        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        gameObject.SetActive(false);
     }
 
     /// <summary>

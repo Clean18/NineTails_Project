@@ -213,6 +213,8 @@ MonoBehaviour:
   _playerLayer:
     serializedVersion: 2
     m_Bits: 256
+  warmthAmount: 1
+  spiritEnergyAmount: 100
 --- !u!95 &4340298291124325309
 Animator:
   serializedVersion: 5
