@@ -26,11 +26,13 @@ public class PlayerModel
         Data = new PlayerData(); 
         Data.InitData(gameData.AttackLevel, gameData.DefenseLevel, gameData.HpLevel, gameData.CurrentHp, gameData.SpeedLevel, gameData.IncreaseDamageLevel, gameData.ShieldHp);
 
+        // 재화저장도 추가
         Cost = new PlayerCost();
+        Cost.InitCost(gameData.SpiritEnergy, gameData.Warmth);
 
         // TODO : 플레이어의 저장된 스킬을 등록
         Skill = new PlayerSkill();
-        Skill.SkillInit();
+        Skill.InitSkill();
     }
 
 	public void ApplyDamage(long damage)
@@ -38,7 +40,8 @@ public class PlayerModel
 		Data.DecreaseHp(damage);
         if (Data.Hp <= 0)
         {
-            Debug.LogError("플레이어 사망");
+            // TODO : 플레이어 죽음 처리
+            //Debug.LogError("플레이어 사망");
         }
 	}
 
@@ -49,17 +52,47 @@ public class PlayerModel
 
     public GameData GetGameData()
     {
-        SavePlayerData playerData = Data.SavePlayerData();
+        SavePlayerData data = Data.SavePlayerData();
+        SavePlayerCost cost = Cost.SavePlayerCost();
 
         var gameData = SaveLoadManager.Instance.GameData;
-        gameData.AttackLevel = Data.AttackLevel;
-        gameData.DefenseLevel = Data.DefenseLevel;
-        gameData.SpeedLevel = Data.SpeedLevel;
-        gameData.HpLevel = Data.HpLevel;
-        gameData.CurrentHp = Data.Hp;
-        gameData.IncreaseDamageLevel = Data.IncreaseDamageLevel;
-        gameData.ShieldHp = Data.ShieldHp;
+        // Data
+        gameData.AttackLevel = data.AttackLevel;
+        gameData.DefenseLevel = data.DefenseLevel;
+        gameData.SpeedLevel = data.SpeedLevel;
+        gameData.HpLevel = data.HpLevel;
+        gameData.CurrentHp = data.CurrentHp;
+        gameData.IncreaseDamageLevel = data.IncreaseDamageLevel;
+        gameData.ShieldHp = data.ShieldHp;
+
+        // Cost
+        gameData.Warmth = cost.Warmth;
+        gameData.SpiritEnergy = cost.SpiritEnergy;
 
         return gameData;
+    }
+
+    public long GetCost(CostType costType)
+    {
+        if (costType == CostType.Warmth) return Cost.Warmth;
+        else return Cost.SpiritEnergy;
+    }
+
+    public void AddCost(CostType costType, long amount)
+    {
+        if (amount == 0 || Cost == null) return;
+
+        // 플레이어 영기 추가
+        if (costType == CostType.Warmth) Cost.IncreaseWarmth(amount);
+        else if (costType == CostType.SpiritEnergy) Cost.IncreaseSpiritEnergy(amount);
+    }
+
+    public void SpendCost(CostType costType, long amount)
+    {
+        if (amount == 0 || Cost == null || PlayerController.Instance.IsCheat) return;
+
+        // 플레이어 영기 감소
+        if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);
+        else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
     }
 }

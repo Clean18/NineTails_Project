@@ -48,11 +48,24 @@ public enum AIState
 }
 #endregion
 
+#region enum CostType
+/// <summary>
+/// 재화 타입
+/// </summary>
+public enum CostType
+{
+    Warmth,         // 온기
+    SpiritEnergy,   // 영기
+}
+#endregion
+
 /// <summary>
 /// 클라이언트의 입력을 관리하는 컴포넌트
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance => GameManager.Instance.PlayerController;
+
     [Tooltip("플레이어 데이터 로드 여부")]
     [SerializeField ]private bool _isInit = false;
 
@@ -75,24 +88,25 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-    // AI 에서 사용하는 필드변수
-    [Header("AI 필드변수")]
-	public AIState CurrentState;		// AI 상태
+    [Header("AI 필드변수")] // AI 에서 사용하는 필드변수
+    public AIState CurrentState;		// AI 상태
 	public float SearchDistance = 8;	// 탐색 거리
 	public int DirectionCount = 8;		// 탐색할 칸의 개수 360 / 8
 	public float SightAngle = 45f;		// 칸마다 각도
 	public LayerMask MonsterLayer;      // 탐색할 레이어
 
-    // Manual 에서 사용하는 필드변수
-    [Header("수동모드 필드변수")]
+    [Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
     public Vector2 MoveDir; // 플레이어의 이동 방향
+
+    [Header("치트모드")]
+    public bool IsCheat = false;
 
     void Start()
     {
         // 시작은 자동모드
         CurrentState = AIState.Search;
-        //Mode = ControlMode.Auto;
-        Mode = ControlMode.Manual;
+        Mode = ControlMode.Auto;
+        //Mode = ControlMode.Manual;
     }
 
     public void PlayerInit()
@@ -180,24 +194,19 @@ public class PlayerController : MonoBehaviour
         // TODO : UI 체력증가 처리
     }
 
-    public void GetItem(long amount)
-    {
-        // TODO : 플레이어 재화 추가
-    }
+    public long GetCost(CostType costType) => PlayerModel.GetCost(costType);
+    public void AddCost(CostType costType, long amount) => PlayerModel.AddCost(costType, amount);
+    public void SpendCost(CostType costType, long amount) => PlayerModel.SpendCost(costType, amount);
 
     public void Test_ChangeStat()
     {
+        // TODO : 5번 누르면 공격력증가
         if (PlayerModel == null) return;
 
         PlayerModel.Data.SetAttackLevel();
     }
 
-    public void SaveData()
-    {
-        if (PlayerModel == null) return;
-
-        SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
-    }
+    public void SaveData() => SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
 
     /// <summary>
     /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
@@ -205,9 +214,9 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     IEnumerator PlayerInitRoutine()
     {
-        while (GameManager.Instance.StatDic == null || GameManager.Instance.StatDic.Count == 0)
+        while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
         {
-            Debug.Log("게임매니저 스탯 딕셔너리 null");
+            Debug.Log("데이터매니저 스탯 딕셔너리 null");
             yield return null;
         }
 
@@ -235,10 +244,12 @@ public class PlayerController : MonoBehaviour
 
         _isInit = true;
 
-        Debug.Log("플레이어 데이터 초기화");
+        Debug.Log("플레이어 데이터 초기화 완료");
 
         yield break;
     }
+
+    
 
 	void OnDrawGizmos()
 	{

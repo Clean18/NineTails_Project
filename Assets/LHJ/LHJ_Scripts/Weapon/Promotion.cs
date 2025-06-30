@@ -4,18 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 승급 정보 구조체
-/// </summary>
-
-[System.Serializable]
-public struct PromotionInfo
-{
-    public string CurrentGrade;    // 현재 장비의 등급
-    public string UpgradeGrade;    // 승급 장비 등급   
-    public int WarmthCost;         // 승급에 필요한 재화개수
-    public float SuccessRate;      // 승급 성공 확률
-}
 [System.Serializable]
 public class PromotionTable : DataTableParser<PromotionInfo>
 {
@@ -57,7 +45,7 @@ public class Promotion : MonoBehaviour
     /// 재화가 충분하고 확률 체크에 성공하면 승급 처리
     /// 실패 시에도 재화는 차감
     /// </summary>
-    public void TryPromote(ref string currentGrade, ref int currentLevel, ref int warmth)
+    public void TryPromote(ref string currentGrade, ref int currentLevel, long warmth)
     {
         if (currentLevel < 50)
         {
