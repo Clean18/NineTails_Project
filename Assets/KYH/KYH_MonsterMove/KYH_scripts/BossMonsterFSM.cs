@@ -64,6 +64,9 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] private Transform PlayerTransform;
 
+    [SerializeField] private long warmthAmount;
+    [SerializeField] private long spiritEnergyAmount;
+
     private void Start()
     {
         CurrentState = BossState.Null;
@@ -475,6 +478,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     private void DestroySelf()
     {
         Debug.Log("보스 오브젝트 제거됨");
+        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         Destroy(gameObject);
     }
 
@@ -489,6 +494,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
         CurrentHealth -= finalDamage;
 
         Debug.Log($"플레이어가 보스에게 데미지 {damage} 를 입힘, 데미지 감소율 적용된 실제 피해 : {finalDamage} | 현재 보스몬스터의 남은 체력: {CurrentHealth}");
+
+        UIManager.Instance.ShowDamageText(transform, damage);
 
         if (CurrentHealth <= 0)
         {

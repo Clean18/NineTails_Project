@@ -13,6 +13,7 @@ public class GameUI : SceneUI, IUI
 	{
 		UIManager.Instance.GameUI = this;
 		UIManager.Instance.SceneUIList.Add(this);
+        Debug.Log("씬 UI 리스트 추가");
 	}
 
 	void OnEnable() => SubscribeEvent();
