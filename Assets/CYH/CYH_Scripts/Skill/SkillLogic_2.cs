@@ -17,7 +17,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     [Header("원 궤도 설정")]
     [SerializeField] private float _radius = 3f;
     [SerializeField] private float _objSpeed = 140f;
-    [SerializeField] private Vector3 _centerOffset = Vector3.zero;
+    [SerializeField] private Vector3 _centerOffset = new Vector3(-0.18f, 1.34f, 0);
 
     [Header("스킬 지속 시간")]
     [SerializeField] private float _spinDuration = 7f;
@@ -41,15 +41,15 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private void Awake()
     {
-        _playerController = GetComponentInParent<PlayerControllerTypeA_Copy>();
-        SkillData = _data;
         IsCooldown = false;
+        SkillData = _data;
     }
 
     private void Start()
     {
         _spinDurationWait = new WaitForSeconds(_spinDuration);
         _cooldownWait = new WaitForSeconds(1f);
+        _centerOffset = new Vector3(-0.18f, 1.34f, 0);
 
         _projectile = new GameObject[_objCount];
         for (int i = 0; i < _objCount; i++)
@@ -59,12 +59,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
             _projectile[i].SetActive(false);  
         }
     }
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha3))
-    //        UseSkill(transform);
-    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -76,13 +70,15 @@ public class SkillLogic_2 : SkillLogic, ISkill
         _isSpinning = true;
         // _projectilePrefab 활성화
         SetProjectileActive(true);
-        
+        Debug.Log("프리팹 활성화");
+
         // 보호막 체력 설정
         PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
-       
+        Debug.Log("원운동 갱신");
+
         // 지속시간 체크 시작
         _durationRoutine = StartCoroutine(SpinDurationCoroutine());
         // 쿨타임 체크 시작
@@ -117,7 +113,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         float interval = 360f / _objCount;
         Vector3 center = transform.position + _centerOffset;
-        //Vector3 center = transform.position;
 
         for (int i = 0; i < _objCount; i++)
         {
@@ -163,7 +158,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     // 쿨타임
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = _data.CoolTime;
+        float remaining = SkillData.CoolTime;
         while (remaining > 0f)
         {
             //Debug.Log($"쿨타임 남음: {remaining}초");
@@ -188,10 +183,18 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        float damage = _playerController.AttackPoint * (0.25f + 0.0025f * _skillLevel);
-        //float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * _skillLevel);
-        monsters.GetComponent<Monster_CYH>().TakeDamage(damage);
-        //monsters?.GetComponent<IDamagable>().TakeDamage((long)damage);
+        if (PlayerController == null)
+        {
+            Debug.LogError("SkillLogic_2: PlayerController가 할당되지 않았습니다!");
+            return;
+        }
+        if (PlayerController.PlayerModel == null || PlayerController.PlayerModel.Data == null)
+        {
+            Debug.LogError("SkillLogic_2: PlayerModel.Data가 없습니다!");
+            return;
+        }
+        float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * _skillLevel);
+        monsters?.GetComponent<IDamagable>().TakeDamage((long)damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }
 
@@ -206,7 +209,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
     // _projectilePrefab와 충돌한 monster를 리스트에 추가 후 피격
     private void HandleCollision(Collider2D monster)
     {
-        //Debug.Log("_projectilePrefab 이벤트");
         var monsterObj = monster.gameObject;
         if (!_hitMonsters.Contains(monsterObj))
         {

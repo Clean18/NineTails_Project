@@ -165,6 +165,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("2번스킬 사용");
+            // 추가(CYH)
+            var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
+            skill?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
