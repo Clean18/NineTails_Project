@@ -210,7 +210,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         // 6. 사라지는 연출 (Sprite만 꺼서 물리 영향 방지)
         GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<Collider2D>().enabled = false;
 
         Destroy(warning);
         Destroy(aura);
@@ -221,7 +221,7 @@ public class Stage3BossFSM : BaseBossFSM
         transform.position = reappearStartPos;
 
         GetComponent<SpriteRenderer>().enabled = true;
-        GetComponent<Collider2D>().enabled = true;
+        GetComponentInChildren<Collider2D>().enabled = true;
 
         BossRigidbody.isKinematic = true; // Lerp용
         float t2 = 0f;
