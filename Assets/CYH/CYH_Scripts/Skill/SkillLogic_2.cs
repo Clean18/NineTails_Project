@@ -183,16 +183,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        if (PlayerController == null)
-        {
-            Debug.LogError("SkillLogic_2: PlayerController가 할당되지 않았습니다!");
-            return;
-        }
-        if (PlayerController.PlayerModel == null || PlayerController.PlayerModel.Data == null)
-        {
-            Debug.LogError("SkillLogic_2: PlayerModel.Data가 없습니다!");
-            return;
-        }
         float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * _skillLevel);
         monsters?.GetComponent<IDamagable>().TakeDamage((long)damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");

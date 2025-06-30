@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5630737650980582256}
   - component: {fileID: 4352510248569426683}
   - component: {fileID: -693216325610228963}
+  - component: {fileID: -1741061541496524674}
   m_Layer: 8
   m_Name: Player _CYH
   m_TagString: Player
@@ -299,6 +300,23 @@ MonoBehaviour:
   _centerOffset: {x: 0, y: 0, z: 0}
   _spinDuration: 7
   _isSpinning: 0
+--- !u!114 &-1741061541496524674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195018135616766724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796e52f7b24330648b833e5e84992c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillPrefabs:
+  - {fileID: 1575395230341757593, guid: 82c5cad768db56442b526538ce89f33a, type: 3}
+  - {fileID: 1575395230341757593, guid: d3052cadd3d1eb94386a3fd2836c1392, type: 3}
+  - {fileID: 1575395230341757593, guid: 9c37086fb94a75e4e81408d752572b48, type: 3}
+  playerController: {fileID: 0}
 --- !u!1 &4774744751119802566
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,6 +46,9 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        // 추가
+        if (GameManager.Instance.PlayerController == null) return;
+
         _findTimer += Time.deltaTime;
         StateChangeTimer += Time.deltaTime;     //  쿨타임의 타이머 증가
 

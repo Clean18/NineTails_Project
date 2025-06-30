@@ -1,5 +1,5 @@
 {
-    "_savedTimeString": "2025-06-30T12:58:23.8606418+09:00",
+    "_savedTimeString": "2025-06-30T16:56:45.1021938+09:00",
     "AttackLevel": 12,
     "DefenseLevel": 1,
     "HpLevel": 1,
@@ -7,6 +7,6 @@
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
     "ShieldHp": 0,
-    "SpiritEnergy": 33706963,
-    "Warmth": 23391731
+    "SpiritEnergy": 41006890,
+    "Warmth": 30691658
 }
