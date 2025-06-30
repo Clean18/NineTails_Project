@@ -13,18 +13,17 @@ public class Main : BaseUI, IUI
     [SerializeField] private TMP_Text hpText;                   // 체력 / 최대체력
     [SerializeField] private TextMeshProUGUI _warmthText;       // 온기
     [SerializeField] private TextMeshProUGUI _spritenergyText;  // 영기
-    private Upgrade upgrade;  // Test용으로 Upgrade에 있는 Test재화 사용할 변수
     private void Start()
     {
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
-        Debug.Log("씬 UI 리스트 추가");
+        Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
     // 플레이어가 초기화될 때 실행
     public void UIInit()
     {
-        upgrade = FindObjectOfType<Upgrade>();
+        Debug.LogError("Main 초기화");
         GetEvent("Equipment").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>();
         GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();

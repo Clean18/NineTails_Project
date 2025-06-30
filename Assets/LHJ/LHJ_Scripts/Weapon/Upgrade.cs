@@ -53,6 +53,7 @@ public class Upgrade : MonoBehaviour
             info.CooldownReduction = float.Parse(words[3]); // 쿨타임 감소
             info.ReduceDamage = float.Parse(words[4]);      // 방어력 관통
             info.WarmthCost = int.Parse(words[5]);          // 강화 비용
+            info.IncreaseDamageLevel = 0;                   // 가하는 피해 레벨
             return info;
         };
         upgradeTable.Load(csv);
