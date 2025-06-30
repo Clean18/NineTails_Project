@@ -45,7 +45,7 @@ public class PlayerAI
 
 	void SearchAction()
 	{
-		//Debug.Log("Search Action");
+		// Debug.Log("Search Action");
 		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
 

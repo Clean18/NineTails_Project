@@ -38,12 +38,13 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
 
     protected Coroutine BossPatternRoutine;                // 현재 실행 중인 패턴 코루틴 참조
     protected virtual int PatternCount => 3;
-
+    protected Vector3 originalPosition;                               // 초기 위치 저장
     // 시작 시 상태 초기화
     protected virtual void Start()
     {
         CurrentState = BossState.Null;
         StartCoroutine(BossInit());
+        originalPosition = transform.position;
     }
 
     // 게임 매니저에서 플레이어 트랜스폼이 준비되었을 때까지 대기 후 초기화

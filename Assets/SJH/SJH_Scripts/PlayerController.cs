@@ -150,27 +150,33 @@ public class PlayerController : MonoBehaviour
 
 	void SkillInput()
 	{
-		// TODO : 키세팅
-		if (Input.GetKeyDown(KeyCode.Mouse0))
-		{
-			Debug.Log("기본공격 사용");
-			PlayerModel.Skill.DefaultAttack.UseSkill(transform);
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			Debug.Log("1번스킬 사용");
-			var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
-			skill?.UseSkill(transform);
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			Debug.Log("2번스킬 사용");
-		}
-		if (Input.GetKeyDown(KeyCode.Alpha3))
-		{
-			Debug.Log("3번스킬 사용");
-		}
-	}
+        // TODO : 키세팅
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("기본공격 사용");
+            PlayerModel.Skill.DefaultAttack.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("1번스킬 사용");
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
+            //skill?.UseSkill(transform);
+            SkillManager.Instance._skillLogics[1]?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("2번스킬 사용");
+            // 추가(CYH)
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
+            //skill?.UseSkill(transform);
+            SkillManager.Instance._skillLogics[2]?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("3번스킬 사용");
+            SkillManager.Instance._skillLogics[3]?.UseSkill(transform);
+        }
+    }
 
 	/// <summary>
 	/// 플레이어가 대미지를 입는 함수

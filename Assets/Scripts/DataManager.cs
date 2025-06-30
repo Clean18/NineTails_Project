@@ -79,6 +79,18 @@ public struct PromotionInfo
 }
 
 /// <summary>
+/// 미션 정보 구조체
+/// </summary>
+[System.Serializable]
+public struct MissionInfo
+{
+    public string Stage;       // 현재 씬(스테이지)
+    public int TimeLimit;      // 시간제한
+    public int Count;          // 킬 조건
+    public string NextScene;   // 다음 씬
+}
+
+/// <summary>
 /// CSV 데이터를 가지고 있을 매니저
 /// </summary>
 public class DataManager : Singleton<DataManager>
@@ -105,6 +117,10 @@ public class DataManager : Singleton<DataManager>
     // TODO : 스킬 테이블 > 스크립터블 오브젝트로 두고 계산식 사용
     // TODO : 몬스터 테이블
 
+    /// <summary>
+    /// 스테이지별 미션 정보 테이블
+    /// </summary>
+    public Dictionary<string, MissionInfo> MissionTable = new();
     protected override void Awake()
     {
         base.Awake();
@@ -119,6 +135,7 @@ public class DataManager : Singleton<DataManager>
         yield return StartCoroutine(EquipmentUpgradeCostInit());
         yield return StartCoroutine(EquipmentDataInit());
         yield return StartCoroutine(EquipmentUpgradeInit());
+        yield return StartCoroutine(MissionDataInit());
         Debug.Log("모든 데이터 테이블 초기화 완료");
     }
 
@@ -295,6 +312,36 @@ public class DataManager : Singleton<DataManager>
             //Debug.Log($"쿨타임 감소 : {cooldown * 100}%");
             //Debug.Log($"댐감 무시 : {reduceDamage * 100}%");
             //Debug.Log($"성장 비용 : {warmthCost}");
+        }
+    }
+    IEnumerator MissionDataInit()
+    {
+        // CSV 다운로드
+        string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
+        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+        yield return csvData.SendWebRequest();
+
+        if (csvData.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("CSV 다운로드 실패");
+            yield break;
+        }
+
+        // 딕셔너리 초기화
+        MissionTable = new();
+
+        string csv = csvData.downloadHandler.text;
+        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string line = lines[i];
+            string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            string stage = Clean(cells[0]);
+            int timeLimit = int.Parse(Clean(cells[1]));
+            int count = int.Parse(Clean(cells[2]));
+            string nextScene = Clean(cells[3]);
         }
     }
 

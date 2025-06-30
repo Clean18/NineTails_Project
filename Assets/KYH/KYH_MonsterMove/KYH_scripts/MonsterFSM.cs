@@ -46,6 +46,9 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        // 추가
+        if (GameManager.Instance.PlayerController == null) return;
+
         _findTimer += Time.deltaTime;
         StateChangeTimer += Time.deltaTime;     // 상태전환 쿨타임의 타이머 증가
 
