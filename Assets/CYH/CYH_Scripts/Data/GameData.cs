@@ -43,4 +43,10 @@ public partial class GameData
     public long Warmth = 0;
 
     // TODO : PlayerSkill
+
+    [Header("PlayerEquipment")]
+    // 장비 등급
+    public string Grade = "N";
+    // 장비 레벨
+    public int Level = 1;
 }

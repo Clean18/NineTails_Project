@@ -13,6 +13,9 @@ public enum StatDataType
     Speed,      // 이동속도
     Cost        // 레벨업 비용
 }
+/// <summary>
+/// 장비 등급
+/// </summary>
 public enum GradeType
 {
     Normal,     // 평범
@@ -37,18 +40,42 @@ public struct UpgradeInfo
     public float Attack;            // (플레이어) 공격력% 수치
     public float CooldownReduction; // (플레이어) 스킬 쿨타임 감소
     public float ReduceDamage;      // (몬스터) 받는 피해 감소 관통 수치
-    public int WarmthCost;          // 강화에 필요한 재화개수
+    public long WarmthCost;         // 강화에 필요한 재화개수
+    public int IncreaseDamageLevel; // 가하는 피해 증가 레벨
+
+    public UpgradeInfo(string grade = "N", int level = 1, float attack = 0.01f, float cooldown = 0f, float reduceDamage = 0f, long warmthCost = 1, int increaseDamageLevel = 0)
+    {
+        Grade = grade;
+        Level = level;
+        Attack = attack;
+        CooldownReduction = cooldown;
+        ReduceDamage = reduceDamage;
+        WarmthCost = warmthCost;
+        IncreaseDamageLevel = increaseDamageLevel;
+    }
 }
 /// <summary>
 /// 승급 정보 구조체
+/// <br/>* string CurrentGrade : 현재 등급
+/// <br/>* string UpgradeGrade : 다음 등급
+/// <br/>* long WarmthCost : 승급 비용
+/// <br/>* float SuccessRate : 승급 확률
 /// </summary>
 [System.Serializable]
 public struct PromotionInfo
 {
     public string CurrentGrade;    // 현재 장비의 등급
     public string UpgradeGrade;    // 승급 장비 등급   
-    public int WarmthCost;         // 승급에 필요한 재화개수
+    public long WarmthCost;         // 승급에 필요한 재화개수
     public float SuccessRate;      // 승급 성공 확률
+
+    public PromotionInfo(string currentGrade = "N", string upgradeGrade = "R", long warmthCost = 325, float successRate = 1f)
+    {
+        CurrentGrade = currentGrade;
+        UpgradeGrade = upgradeGrade;
+        WarmthCost = warmthCost;
+        SuccessRate = successRate;
+    }
 }
 
 /// <summary>
@@ -83,7 +110,10 @@ public class DataManager : Singleton<DataManager>
     /// <br/> ex) Table[등급][레벨] == 장비 스탯
     /// </summary>
     public Dictionary<GradeType, Dictionary<int, UpgradeInfo>> EquipmentDataTable = new();
-    public List<PromotionInfo> EquipmentUpgradeTable = new();
+    /// <summary>
+    /// 장비 등급별 각성 비용 ex) Table[등급] == 비용
+    /// </summary>
+    public Dictionary<GradeType, PromotionInfo> EquipmentUpgradeTable = new();
     // TODO : 스킬 테이블 > 스크립터블 오브젝트로 두고 계산식 사용
     // TODO : 몬스터 테이블
 
@@ -108,6 +138,8 @@ public class DataManager : Singleton<DataManager>
         yield return StartCoroutine(MissionDataInit());
         Debug.Log("모든 데이터 테이블 초기화 완료");
     }
+
+    string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
 
     IEnumerator StatDataInit()
     {
@@ -139,7 +171,7 @@ public class DataManager : Singleton<DataManager>
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i];
-            string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // 정규식
+            string[] cells = line.Split(',');
 
             int statLevel = int.Parse(Clean(cells[0]));
             long attack = long.Parse(Clean(cells[1]));
@@ -165,7 +197,6 @@ public class DataManager : Singleton<DataManager>
             //Debug.Log("===============");
         }
     }
-    string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
 
     IEnumerator EquipmentUpgradeCostInit()
     {
@@ -204,10 +235,10 @@ public class DataManager : Singleton<DataManager>
             string csv = csvData.downloadHandler.text;
             string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            for (int i = 3; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 string line = lines[i];
-                string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // 정규식
+                string[] cells = line.Split(','); // 정규식
 
                 int level = int.Parse(Clean(cells[0]));
                 long cost = long.Parse(Clean(cells[1]));
@@ -224,7 +255,7 @@ public class DataManager : Singleton<DataManager>
 
     IEnumerator EquipmentDataInit()
     {
-        string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/export?format=csv&gid=0";
+        string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Upgrade";
         UnityWebRequest csvData = UnityWebRequest.Get(csvString);
         yield return csvData.SendWebRequest();
 
@@ -235,7 +266,7 @@ public class DataManager : Singleton<DataManager>
             yield break;
         }
 
-        EquipmentUpgradeCostTable = new()
+        EquipmentDataTable = new()
         {
             [GradeType.Normal] = new(),     // 평범
             [GradeType.Common] = new(),     // 고급
@@ -249,9 +280,38 @@ public class DataManager : Singleton<DataManager>
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i];
-            string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            string[] cells = line.Split(',');
 
             string grade = Clean(cells[0]);
+            int level = int.Parse(Clean(cells[1]));
+            float attack = float.Parse(Clean(cells[2]));
+            float cooldown = float.Parse(Clean(cells[3]));
+            float reduceDamage = float.Parse(Clean(cells[4]));
+            long warmthCost = long.Parse(Clean(cells[5]));
+
+            UpgradeInfo info = new UpgradeInfo
+            {
+                Grade = grade,
+                Level = level,
+                Attack = attack,
+                CooldownReduction = cooldown,
+                ReduceDamage = reduceDamage,
+                WarmthCost = warmthCost,
+            };
+
+            switch (grade)
+            {
+                case "N": EquipmentDataTable[GradeType.Normal][level] = info; break;
+                case "R": EquipmentDataTable[GradeType.Common][level] = info; break;
+                case "SR": EquipmentDataTable[GradeType.Uncommon][level] = info; break;
+            }
+
+            //Debug.Log($"{grade} 등급");
+            //Debug.Log($"레벨 : {level}");
+            //Debug.Log($"공격력 증가 : {attack * 100}%");
+            //Debug.Log($"쿨타임 감소 : {cooldown * 100}%");
+            //Debug.Log($"댐감 무시 : {reduceDamage * 100}%");
+            //Debug.Log($"성장 비용 : {warmthCost}");
         }
     }
     IEnumerator MissionDataInit()
@@ -287,6 +347,83 @@ public class DataManager : Singleton<DataManager>
 
     IEnumerator EquipmentUpgradeInit()
     {
-        yield return null;
+        string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Promotion";
+        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+        yield return csvData.SendWebRequest();
+
+        if (csvData.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("CSV 다운로드 실패");
+            // TODO : 게임종료
+            yield break;
+        }
+
+        EquipmentUpgradeTable = new()
+        {
+            [GradeType.Normal] = new(),     // 평범
+            [GradeType.Common] = new(),     // 고급
+            [GradeType.Uncommon] = new(),   // 진귀
+            [GradeType.Rare] = new(),       // 설화
+        };
+
+        string csv = csvData.downloadHandler.text;
+        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string line = lines[i];
+            string[] cells = line.Split(',');
+
+            string currentGrade = Clean(cells[0]);
+            string nextGrade = Clean(cells[1]);
+            long warmthCost = long.Parse(Clean(cells[2]));
+            float successRate = float.Parse(Clean(cells[3]));
+
+            PromotionInfo info = new PromotionInfo
+            {
+                CurrentGrade = currentGrade,
+                UpgradeGrade = nextGrade,
+                WarmthCost = warmthCost,
+                SuccessRate = successRate,
+            };
+
+            switch (currentGrade)
+            {
+                case "N": EquipmentUpgradeTable[GradeType.Normal] = info; break;
+                case "R": EquipmentUpgradeTable[GradeType.Common] = info; break;
+                case "SR": EquipmentUpgradeTable[GradeType.Uncommon] = info; break;
+            }
+
+            //Debug.Log($"{currentGrade} 등급 -> {nextGrade} 등급");
+            //Debug.Log($"승급 비용 : {warmthCost}");
+            //Debug.Log($"승급 확률 : {successRate * 100}%");
+        }
     }
+
+    #region Table Get 함수
+    /// <summary>
+    /// 플레이어 스탯의 레벨별 수치 데이터
+    /// <br/> ex) Table[스탯타입][레벨] == 스탯값
+    /// <br/> -1 로 예외처리
+    /// </summary>
+    public long GetStatData(StatDataType statType, int level) => StatDataTable.TryGetValue(statType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
+
+    /// <summary>
+    /// 장비 등급별 필요한 성장 비용 데이터
+    /// <br/> ex) Table[등급][레벨] == 성장 비용
+    /// <br/> -1 로 예외처리
+    /// </summary>
+    public long GetEquipmentUpgradeCost(GradeType gradeType, int level) => EquipmentUpgradeCostTable.TryGetValue(gradeType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
+
+    /// <summary>
+    /// 장비 등급별 장비 스탯
+    /// <br/> ex) Table[등급][레벨] == 장비 스탯
+    /// </summary>
+    public UpgradeInfo GetEquipmentUpgradeInfo(GradeType gradeType, int level) => EquipmentDataTable.TryGetValue(gradeType, out var data) && data.TryGetValue(level, out var result) ? result : new UpgradeInfo();
+
+    /// <summary>
+    /// 장비 등급별 각성 비용 ex) Table[등급] == 비용
+    /// </summary>
+    public PromotionInfo GetEquipmentPromotionInfo(GradeType currentGrade) => EquipmentUpgradeTable.TryGetValue(currentGrade, out var result) ? result : new PromotionInfo();
+    #endregion
 }

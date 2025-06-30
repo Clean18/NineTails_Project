@@ -8,7 +8,6 @@ public struct SavePlayerData
     public int HpLevel;
     public long CurrentHp;
     public int SpeedLevel;
-    public int IncreaseDamageLevel;
     public long ShieldHp;
 }
 
@@ -41,7 +40,7 @@ public class PlayerData
 		get => _attackLevel;
 		private set
 		{
-            Debug.Log("공격력 계산");
+            //Debug.Log("공격력 계산");
 			_attackLevel = Mathf.Clamp(value, 1, 300);
 			Attack = GetStat(StatDataType.Attack, _attackLevel);
             OnStatChanged?.Invoke();
@@ -61,7 +60,7 @@ public class PlayerData
 		get => _defenseLevel;
 		private set
 		{
-            Debug.Log("방어력 계산");
+            //Debug.Log("방어력 계산");
             _defenseLevel = Mathf.Clamp(value, 1, 300);
 			Defense = GetStat(StatDataType.Defense, _defenseLevel);
             OnStatChanged?.Invoke();
@@ -81,7 +80,7 @@ public class PlayerData
 		get => _hpLevel;
 		private set
 		{
-            Debug.Log("체력 계산");
+            //Debug.Log("체력 계산");
             _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
             OnStatChanged?.Invoke();
@@ -106,37 +105,13 @@ public class PlayerData
 		get => _speedLevel;
 		private set
 		{
-            Debug.Log("스피드 계산");
+            //Debug.Log("스피드 계산");
             _speedLevel = Mathf.Clamp(value, 1, 50);
 			Speed = GetStat(StatDataType.Speed, _speedLevel) / _speedRatio;
             OnStatChanged?.Invoke();
         }
 	}
 	private const int _speedRatio = 50;
-
-    /// <summary>
-    /// 가하는 피해 증가 (특수 스탯) 기본 5%, 0.2% 씩 증가
-    /// </summary>
-    [Tooltip("가하는 피해 증가 (특수 스탯) 기본 5%, 0.2% 씩 증가")]
-    [field: SerializeField] public float IncreaseDamage;
-
-    /// <summary>
-    /// 가하는 피해 증가 레벨
-    /// </summary>
-    [Tooltip("가하는 피해 증가 레벨")]
-    [SerializeField] private int _increaseDamageLevel;
-    public int IncreaseDamageLevel
-    {
-        get => _increaseDamageLevel;
-        private set
-        {
-            // 1레벨 0.5% 이후 0.2%씩 증가
-            Debug.Log("가하는 피해 증가 계산");
-            _increaseDamageLevel = Mathf.Max(0, value);
-            if (_increaseDamageLevel == 0) IncreaseDamage = 0f;
-            else IncreaseDamage = 0.5f + ((_increaseDamageLevel - 1) * 0.2f);
-        }
-    }
 
     [Tooltip("죽음체크, true = 사망")]
     [SerializeField] private bool _isDead;
@@ -157,16 +132,15 @@ public class PlayerData
     /// <param name="hpLevel"></param>
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
-	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, int increaseDamageLevel = 0, long shieldHp = 0)
+	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0)
 	{
-        Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
+        //Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
         // 프로퍼티에서 레벨만으로 각 스탯 계산
         AttackLevel = attackLevel;
 		DefenseLevel = defenseLevel;
 		HpLevel = hpLevel;
         Hp = currentHp;
         SpeedLevel = speedLevel;
-		IncreaseDamageLevel = increaseDamageLevel;
         ShieldHp = shieldHp;
 	}
 
@@ -229,7 +203,6 @@ public class PlayerData
         data.HpLevel = HpLevel;
         data.CurrentHp = Hp;
         data.SpeedLevel = SpeedLevel;
-        data.IncreaseDamageLevel = IncreaseDamageLevel;
         data.ShieldHp = ShieldHp;
         return data;
     }

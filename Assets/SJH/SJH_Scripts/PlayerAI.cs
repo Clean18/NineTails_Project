@@ -51,7 +51,7 @@ public class PlayerAI
 
 	void SkillLoad()
 	{
-		Debug.Log("SkillLoad Action");
+		//Debug.Log("SkillLoad Action");
 
 		TargetSkill = null;
 		//float maxCooldown = float.MinValue;
@@ -86,7 +86,7 @@ public class PlayerAI
 
 	void ChaseAction()
 	{
-		Debug.Log("Chase Action");
+		//Debug.Log("Chase Action");
 		if (MonsterSkillCheck()) return;
 
 		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
@@ -107,7 +107,7 @@ public class PlayerAI
 
 	void AttackAction()
 	{
-		Debug.Log("Attack Action");
+		//Debug.Log("Attack Action");
 		if (MonsterSkillCheck()) return;
 
 		// 사거리 벗어나면 다시 추격
