@@ -37,7 +37,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
     public bool IsCooldown { get; set; }
-
+    public int SkillLevel { get; set; }
 
     private void Awake()
     {

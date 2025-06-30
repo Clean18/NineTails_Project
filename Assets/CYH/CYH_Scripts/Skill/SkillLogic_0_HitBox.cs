@@ -14,6 +14,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
     public bool IsCooldown { get; set; }
+    public int SkillLevel { get; set; }
 
     private void Awake()
     {
