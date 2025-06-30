@@ -255,6 +255,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
         // TODO : 플레이어 재화 증가
         GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
         GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        MissionManager.Instance.AddKill(); // 돌파미션 킬 체크
         gameObject.SetActive(false);
     }
 

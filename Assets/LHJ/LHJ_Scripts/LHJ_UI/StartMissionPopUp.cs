@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class StartMissionPopUp : BaseUI
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
-    }
+        // Yes 버튼을 누르면 게임 종료
+        GetEvent("Yes").Click += data => {
+            UIManager.Instance.ClosePopUp();
+            MissionManager.Instance.StartMission();  // 미션 시작
+        };
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GetEvent("No").Click += data => UIManager.Instance.ClosePopUp();
     }
 }

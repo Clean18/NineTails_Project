@@ -13,6 +13,7 @@ public class Main : BaseUI, IUI
     [SerializeField] private TMP_Text hpText;                   // 체력 / 최대체력
     [SerializeField] private TextMeshProUGUI _warmthText;       // 온기
     [SerializeField] private TextMeshProUGUI _spritenergyText;  // 영기
+    [SerializeField] private TextMeshProUGUI timeText;          // 미션 시간
     private void Start()
     {
         UIManager.Instance.MainUI = this;
@@ -50,5 +51,18 @@ public class Main : BaseUI, IUI
         // Cost
         _warmthText.text = $"W: {model.Cost?.Warmth}";
         _spritenergyText.text = $"S: {model.Cost?.SpiritEnergy}";
+    }
+    private void Update()
+    {
+        // 미션이 실행 중이면 시간 표시
+        if (MissionManager.Instance != null && MissionManager.Instance.IsRunning())
+        {
+            float time = MissionManager.Instance.GetRemainingTime();
+            timeText.text = $"Time : {Mathf.CeilToInt(time)}s";  // 초 단위로 표시
+        }
+        else
+        {
+            timeText.text = "";
+        }
     }
 }
