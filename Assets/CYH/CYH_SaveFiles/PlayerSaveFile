@@ -6,5 +6,7 @@
     "CurrentHp": 0,
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
-    "ShieldHp": 0
+    "ShieldHp": 0,
+    "SpiritEnergy": 11507185,
+    "Warmth": 1191953
 }

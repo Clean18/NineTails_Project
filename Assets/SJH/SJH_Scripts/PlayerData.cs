@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct SavePlayerData
@@ -5,6 +6,7 @@ public struct SavePlayerData
     public int AttackLevel;
     public int DefenseLevel;
     public int HpLevel;
+    public long CurrentHp;
     public int SpeedLevel;
     public int IncreaseDamageLevel;
     public long ShieldHp;
@@ -17,9 +19,14 @@ public struct SavePlayerData
 public class PlayerData
 {
     /// <summary>
+    /// 스탯 변경시 UI 업데이트 이벤트
+    /// </summary>
+    public event Action OnStatChanged;
+
+    /// <summary>
     /// 플레이어 전투력 
     /// </summary> 
-    [SerializeField] public long PowerLevel { get; private set; }
+    [SerializeField] public long PowerLevel { get => (long)((Attack * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
 
     [field: SerializeField] private int _attackLevel;
     /// <summary>
@@ -36,8 +43,9 @@ public class PlayerData
 		{
             Debug.Log("공격력 계산");
 			_attackLevel = Mathf.Clamp(value, 1, 300);
-			Attack = GetStat(StatType.Attack, _attackLevel); 
-		}
+			Attack = GetStat(StatDataType.Attack, _attackLevel);
+            OnStatChanged?.Invoke();
+        }
 	}
 
     [field: SerializeField] private int _defenseLevel;
@@ -55,8 +63,9 @@ public class PlayerData
 		{
             Debug.Log("방어력 계산");
             _defenseLevel = Mathf.Clamp(value, 1, 300);
-			Defense = GetStat(StatType.Defense, _defenseLevel);
-		}
+			Defense = GetStat(StatDataType.Defense, _defenseLevel);
+            OnStatChanged?.Invoke();
+        }
 	}
 
     [field: SerializeField] private int _hpLevel;
@@ -74,8 +83,9 @@ public class PlayerData
 		{
             Debug.Log("체력 계산");
             _hpLevel = Mathf.Clamp(value, 1, 300);
-			MaxHp = GetStat(StatType.Hp, _hpLevel);
-		}
+			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
+            OnStatChanged?.Invoke();
+        }
 	}
 
     /// <summary>
@@ -98,8 +108,9 @@ public class PlayerData
 		{
             Debug.Log("스피드 계산");
             _speedLevel = Mathf.Clamp(value, 1, 50);
-			Speed = GetStat(StatType.Speed, _speedLevel) / _speedRatio;
-		}
+			Speed = GetStat(StatDataType.Speed, _speedLevel) / _speedRatio;
+            OnStatChanged?.Invoke();
+        }
 	}
 	private const int _speedRatio = 50;
 
@@ -108,11 +119,24 @@ public class PlayerData
     /// </summary>
     [Tooltip("가하는 피해 증가 (특수 스탯) 기본 5%, 0.2% 씩 증가")]
     [field: SerializeField] public float IncreaseDamage;
+
     /// <summary>
     /// 가하는 피해 증가 레벨
     /// </summary>
     [Tooltip("가하는 피해 증가 레벨")]
-    [field: SerializeField] public int IncreaseDamageLevel; // TODO : 계산식 추가
+    [SerializeField] private int _increaseDamageLevel;
+    public int IncreaseDamageLevel
+    {
+        get => _increaseDamageLevel;
+        private set
+        {
+            // 1레벨 0.5% 이후 0.2%씩 증가
+            Debug.Log("가하는 피해 증가 계산");
+            _increaseDamageLevel = Mathf.Max(0, value);
+            if (_increaseDamageLevel == 0) IncreaseDamage = 0f;
+            else IncreaseDamage = 0.5f + ((_increaseDamageLevel - 1) * 0.2f);
+        }
+    }
 
     [Tooltip("죽음체크, true = 사망")]
     [SerializeField] private bool _isDead;
@@ -146,11 +170,11 @@ public class PlayerData
         ShieldHp = shieldHp;
 	}
 
-	public long GetStat(StatType statType, int level)
+	public long GetStat(StatDataType statType, int level)
 	{
-        if (!GameManager.Instance.StatDic.TryGetValue(statType, out var levelTable))
+        if (!DataManager.Instance.StatDataTable.TryGetValue(statType, out var levelTable))
         {
-            Debug.Log("게임매니저 StatDic == null");
+            Debug.Log("데이터매니저 StatDic == null");
             return 0;
         }
 
@@ -180,7 +204,7 @@ public class PlayerData
 		Hp -= totalDamage;
 		if (Hp <= 0) Hp = 0;
         IsDead = Hp <= 0;
-        Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
+        //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
 	}
 
     // 체력회복하는 함수
@@ -203,6 +227,7 @@ public class PlayerData
         data.AttackLevel = AttackLevel;
         data.DefenseLevel = DefenseLevel;
         data.HpLevel = HpLevel;
+        data.CurrentHp = Hp;
         data.SpeedLevel = SpeedLevel;
         data.IncreaseDamageLevel = IncreaseDamageLevel;
         data.ShieldHp = ShieldHp;

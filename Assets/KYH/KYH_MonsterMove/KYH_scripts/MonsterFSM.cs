@@ -36,6 +36,9 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] private LayerMask _playerLayer; // 플레이어 레이어
 
+    [SerializeField] private long warmthAmount;
+    [SerializeField] private long spiritEnergyAmount;
+
     private void Start()
     {
         CurrentHp = MaxHp; // 체력 초기화
@@ -139,7 +142,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     {
         if (_currentState == newstate) return;
 
-        Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate}로 변경됨");
+        //Debug.Log($"몬스터의 행동 상태 변경 : {_currentState} 에서 {newstate}로 변경됨");
 
         // 이전 상태가 공격이면 코루틴 정지
         if (_currentState == MonsterState.Attack && AttackRoutine != null)
@@ -214,7 +217,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
                 if (player != null)
                 {
                     player.TakeDamage((long)AttackDamage);
-                    Debug.Log($" 몬스터가 플레이어에게 {(long)AttackDamage}피해를 입힘!");
+                    //Debug.Log($" 몬스터가 플레이어에게 {(long)AttackDamage}피해를 입힘!");
                 }
             }
 
@@ -235,11 +238,9 @@ public class MonsterFSM : MonoBehaviour, IDamagable
 
         Debug.Log($"플레이어가 몬스터에게 가한 피해 {damage}, 몬스터가 실제로 받은 피해 {finalDamage},  현재 남은 체력 : {CurrentHp}");
 
-        if (CurrentHp <= 0)
-        {
-            //Die();
-            gameObject.SetActive(false);
-        }
+        UIManager.Instance.ShowDamageText(transform, damage);
+
+        if (CurrentHp <= 0) Die();
     }
 
     /// <summary>
@@ -247,8 +248,11 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     /// </summary>
     private void Die()
     {
-        Debug.Log("몬스터 사망");
-        Destroy(gameObject);
+        Debug.Log("몬스터 사망함");
+        // TODO : 플레이어 재화 증가
+        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        gameObject.SetActive(false);
     }
 
     /// <summary>
