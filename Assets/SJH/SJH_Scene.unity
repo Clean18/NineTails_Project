@@ -3232,10 +3232,9 @@ MonoBehaviour:
   attackText: {fileID: 1375299178}
   defenseText: {fileID: 2083332765}
   _hpSlider: {fileID: 1211996533}
-  hpTextt: {fileID: 77163144}
   hpText: {fileID: 0}
-  warmthText: {fileID: 0}
-  spritenergyText: {fileID: 0}
+  _warmthText: {fileID: 0}
+  _spritenergyText: {fileID: 0}
 --- !u!1001 &1687164461
 PrefabInstance:
   m_ObjectHideFlags: 0

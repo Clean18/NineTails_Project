@@ -29,6 +29,7 @@ public class Main : BaseUI, IUI
         GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
         GetEvent("Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>();
+        GetEvent("Mission").Click += data => UIManager.Instance.ShowPopUp<StartMissionPopUp>();
         PlayerStatUI();
 
         var model = GameManager.Instance.PlayerController?.PlayerModel;
