@@ -2,19 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_1 : MonoBehaviour, ISkill
+public class SkillLogic_1 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [SerializeField] private CircleCollider2D _hitBox;
-
-    [SerializeField] private int _skillLevel = 0;
-
-    private Animator _animator;
-    private bool _isCooldown = false;
-
-    [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
@@ -77,6 +70,9 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
 
     public void EnableHitbox()
     {
+        // OnTrigger 플래그
+        _isSkillUsed = true;
+
         _hitBox.enabled = true;
         //Debug.Log("콜라이더 켜짐");
     }
@@ -88,6 +84,9 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
 
         // 몬스터 TakeDamage 처리
         Damage();
+
+        // OnTrigger 플래그
+        _isSkillUsed = false;
     }
 
     public void AnimationPlay()
@@ -100,8 +99,7 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
         }
     }
 
-
-    private void Damage()
+    protected override void Damage()
     {
         //float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
         float damage = PlayerController.PlayerModel.Data.Attack * (0.75f + 0.0075f * _skillLevel);
@@ -122,7 +120,7 @@ public class SkillLogic_1 : MonoBehaviour, ISkill
         {
             _hitMonsters.Add(other.gameObject);
         }
-        Debug.Log($"Skill_1 : 몬스터 맞음");
+        //Debug.Log($"Skill_1 : 몬스터 맞음");
     }
 
     private IEnumerator CooldownCoroutine()

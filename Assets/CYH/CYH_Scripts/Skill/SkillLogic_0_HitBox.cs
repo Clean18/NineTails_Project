@@ -2,20 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
+public class SkillLogic_0_HitBox : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [SerializeField] private PolygonCollider2D _hitBox;
     
-    [SerializeField] private int _skillLevel = 0;
     [SerializeField] private int _slashCount = 0;
-    
-    private Animator _animator;
-    private bool _isCooldown = false;
-
-    [SerializeField] private List<GameObject> _hitMonsters = new List<GameObject>();
 
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
@@ -80,6 +74,9 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
 
     public void OnAttackStart()
     {
+        // OnTrigger 플래그
+        _isSkillUsed = true;
+
         _hitBox.enabled = true;
         //Debug.Log("콜라이더 킴");
     }
@@ -97,6 +94,9 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
         {
             _slashCount = 0;
         }
+
+        // OnTrigger 플래그
+        _isSkillUsed = false;
     }
 
     public void AnimationPlay()
@@ -121,7 +121,7 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
     }
 
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
-    private void Damage()
+    protected override void Damage()
     {
         //float damage = _playerController.AttackPoint * (100f + _skillLevel) / 100f;
         float damage = PlayerController.PlayerModel.Data.Attack * (100f + _skillLevel) / 100f;
@@ -142,20 +142,21 @@ public class SkillLogic_0_HitBox : MonoBehaviour, ISkill
                 //monster.GetComponent<Monster_CYH>().TakeDamage(damage*0.5f);
                 monster?.GetComponent<IDamagable>().TakeDamage((long)(damage * 0.5f));
                 Debug.Log($"{monster.name}에게 {(int)(damage * 0.5f)}의 피해를 가했음");
+                //Debug.Log($"{monster.name}에게 {(damage * 0.5f)}의 피해를 가했음");
             }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!_isSkillUsed) return;
 
         if (!other.CompareTag("Monster")) return;
         if (!_hitMonsters.Contains(other.gameObject))
         {
             _hitMonsters.Add(other.gameObject);
         }
-
-        Debug.Log($"Skill_0 : 몬스터 맞음 : {_slashCount}타");
+        //Debug.Log($"Skill_0 : 몬스터 맞음 : {_slashCount}타");
     }
 
     // 쿨타임 코루틴

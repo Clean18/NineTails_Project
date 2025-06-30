@@ -32,10 +32,11 @@ public class PlayerModel
 
         // TODO : 플레이어의 저장된 스킬을 등록
         Skill = new PlayerSkill();
-        Skill.InitSkill();
+        // Skill.InitSkill() - 주석 처리(CYH)
+        //Skill.InitSkill();
     }
 
-	public void ApplyDamage(long damage)
+    public void ApplyDamage(long damage)
 	{
 		Data.DecreaseHp(damage);
         if (Data.Hp <= 0)

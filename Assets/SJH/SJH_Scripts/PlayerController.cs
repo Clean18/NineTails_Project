@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     [Header("치트모드")]
     public bool IsCheat = false;
 
+
     void Start()
     {
         // 시작은 자동모드
@@ -159,16 +160,22 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("1번스킬 사용");
-            var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
-            skill?.UseSkill(transform);
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
+            //skill?.UseSkill(transform);
+            SkillManager.Instance._skillLogics[1]?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("2번스킬 사용");
+            // 추가(CYH)
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
+            //skill?.UseSkill(transform);
+            SkillManager.Instance._skillLogics[2]?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Debug.Log("3번스킬 사용");
+            SkillManager.Instance._skillLogics[3]?.UseSkill(transform);
         }
     }
 
