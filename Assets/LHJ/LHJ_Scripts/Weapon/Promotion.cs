@@ -4,18 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 승급 정보 구조체
-/// </summary>
-
-[System.Serializable]
-public struct PromotionInfo
-{
-    public string CurrentGrade;    // 현재 장비의 등급
-    public string UpgradeGrade;    // 승급 장비 등급   
-    public int WarmthCost;         // 승급에 필요한 재화개수
-    public float SuccessRate;      // 승급 성공 확률
-}
 [System.Serializable]
 public class PromotionTable : DataTableParser<PromotionInfo>
 {

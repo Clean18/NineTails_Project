@@ -1777,7 +1777,6 @@ MonoBehaviour:
   currentAttack: 1
   CooldownReduction: 0
   ReduceDamage: 0
-  warmth: 11100
   mainUI: {fileID: 0}
 --- !u!4 &659746537
 Transform:

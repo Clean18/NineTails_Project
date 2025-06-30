@@ -198,7 +198,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     void OnApplicationQuit()
     {
-        GameManager.Instance.PlayerController.SaveData();
+        GameManager.Instance.PlayerController?.SaveData();
         SaveData();
     }
 

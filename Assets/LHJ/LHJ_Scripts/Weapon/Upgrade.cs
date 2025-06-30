@@ -4,25 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 강화 정보 구조체
-/// <br/>* string Grade : 장비 등급
-/// <br/>* int Level : 강화 단계
-/// <br/>* float Attack : 공격력 % 수치
-/// <br/>* float CooldownReduction : 스킬 쿨타임 감소
-/// <br/>* float ReduceDamage : 받는 피해 감소 관통 수치
-/// <br/>* int WarmthCost : 강화에 필요한 재화개수
-/// </summary>
-[System.Serializable]
-public struct UpgradeInfo
-{
-    public string Grade;            // 장비의 등급
-    public int Level;               // 강화 단계    
-    public float Attack;            // (플레이어) 공격력% 수치
-    public float CooldownReduction; // (플레이어) 스킬 쿨타임 감소
-    public float ReduceDamage;      // (몬스터) 받는 피해 감소 관통 수치
-    public int WarmthCost;          // 강화에 필요한 재화개수
-}
 [System.Serializable]
 public class UpgradeTable : DataTableParser<UpgradeInfo>
 {

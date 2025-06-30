@@ -43,7 +43,7 @@ public class PlayerData
 		{
             Debug.Log("공격력 계산");
 			_attackLevel = Mathf.Clamp(value, 1, 300);
-			Attack = GetStat(StatType.Attack, _attackLevel);
+			Attack = GetStat(StatDataType.Attack, _attackLevel);
             OnStatChanged?.Invoke();
         }
 	}
@@ -63,7 +63,7 @@ public class PlayerData
 		{
             Debug.Log("방어력 계산");
             _defenseLevel = Mathf.Clamp(value, 1, 300);
-			Defense = GetStat(StatType.Defense, _defenseLevel);
+			Defense = GetStat(StatDataType.Defense, _defenseLevel);
             OnStatChanged?.Invoke();
         }
 	}
@@ -83,7 +83,7 @@ public class PlayerData
 		{
             Debug.Log("체력 계산");
             _hpLevel = Mathf.Clamp(value, 1, 300);
-			MaxHp = GetStat(StatType.Hp, _hpLevel);
+			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
             OnStatChanged?.Invoke();
         }
 	}
@@ -108,7 +108,7 @@ public class PlayerData
 		{
             Debug.Log("스피드 계산");
             _speedLevel = Mathf.Clamp(value, 1, 50);
-			Speed = GetStat(StatType.Speed, _speedLevel) / _speedRatio;
+			Speed = GetStat(StatDataType.Speed, _speedLevel) / _speedRatio;
             OnStatChanged?.Invoke();
         }
 	}
@@ -170,11 +170,11 @@ public class PlayerData
         ShieldHp = shieldHp;
 	}
 
-	public long GetStat(StatType statType, int level)
+	public long GetStat(StatDataType statType, int level)
 	{
-        if (!GameManager.Instance.StatDic.TryGetValue(statType, out var levelTable))
+        if (!DataManager.Instance.StatDataTable.TryGetValue(statType, out var levelTable))
         {
-            Debug.Log("게임매니저 StatDic == null");
+            Debug.Log("데이터매니저 StatDic == null");
             return 0;
         }
 

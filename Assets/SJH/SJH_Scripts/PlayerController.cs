@@ -214,9 +214,9 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     IEnumerator PlayerInitRoutine()
     {
-        while (GameManager.Instance.StatDic == null || GameManager.Instance.StatDic.Count == 0)
+        while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
         {
-            Debug.Log("게임매니저 스탯 딕셔너리 null");
+            Debug.Log("데이터매니저 스탯 딕셔너리 null");
             yield return null;
         }
 
