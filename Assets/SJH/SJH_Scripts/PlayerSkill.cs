@@ -7,7 +7,7 @@ public class PlayerSkill
     public Dictionary<KeyCode, ISkill> SkillMapping;
     public SkillLogic_0_HitBox DefaultAttack;
 
-    public void SkillInit()
+    public void InitSkill()
     {
         DefaultAttack = GameManager.Instance.PlayerController.GetComponent<SkillLogic_0_HitBox>();
         SkillMapping = new()

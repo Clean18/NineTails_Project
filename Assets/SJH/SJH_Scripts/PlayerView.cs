@@ -24,7 +24,10 @@ public class PlayerView : MonoBehaviour
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
-		Vector2 movePos = dir.normalized * moveSpeed;
+        if (dir != Vector2.zero) _anim.SetBool("IsMoving", true);
+        else _anim.SetBool("IsMoving", false);
+
+            Vector2 movePos = dir.normalized * moveSpeed;
 		_rigid.velocity = movePos;
 
         if (dir.x < 0f)
@@ -41,5 +44,9 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-	public void Stop() => _rigid.velocity = Vector2.zero;
+	public void Stop()
+    {
+        _anim.SetBool("IsMoving", false);
+        _rigid.velocity = Vector2.zero;
+    }
 }
