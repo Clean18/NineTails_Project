@@ -9,6 +9,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
     [SerializeField] GameObject _highestMonster;
+
     [Header("데미지 코루틴 (초)")]
     [SerializeField] private float _damageInterval = 0.2f;
     [Header("이펙트 활성 지속 시간 (초)")]
@@ -18,6 +19,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [Header("이펙트 Y 오프셋")]
     [SerializeField] private float _effectYOffset = 0.5f;
 
+    private Animator _animator;
 
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
@@ -30,6 +32,8 @@ public class SkillLogic_3 : SkillLogic, ISkill
         _playerController = GetComponent<PlayerControllerTypeA_Copy>();
         SkillData = _data;
         IsCooldown = false;
+
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -41,6 +45,16 @@ public class SkillLogic_3 : SkillLogic, ISkill
     }
 
     public void UseSkill(Transform attacker)
+    {
+        AnimationPlay();
+    }
+
+    public void UseSkill(Transform attacker, Transform defender)
+    {
+        AnimationPlay();
+    }
+
+    public void SkillRoutine()
     {
         // 쿨타임이면 return
         //if (_isCooldown) return;
@@ -65,31 +79,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
         OnAttackEnd();
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
-    {
-        // 쿨타임이면 return
-        //if (_isCooldown) return;
-        if (IsCooldown) return;
-
-        // 쿨타임 체크 시작
-        //_isCooldown = true;
-        IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
-
-        // 스킬 발동 전 몬스터 목록 초기화
-        _hitMonsters.Clear();
-
-        Debug.Log("스킬3 사용");
-        OnAttackStart();
-        DetectMonster();
-        GetHighestHpMonster();
-
-        if (_highestMonster != null)
-            StartCoroutine(DamageCoroutine(_highestMonster));
-
-        OnAttackEnd();
-    }
-
     public void OnAttackStart()
     {
         _isSkillUsed = true;
@@ -98,6 +87,12 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
+    }
+
+    public void AnimationPlay()
+    {
+        _animator.SetTrigger("UseSkill_3");
+        //PlayerController.Instance.SetTrigger("UseSkill_3");
     }
 
     private void DetectMonster()
