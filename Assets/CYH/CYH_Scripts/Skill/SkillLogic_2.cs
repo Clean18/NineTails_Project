@@ -41,6 +41,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private void Awake()
     {
+        _playerController = GetComponent<PlayerControllerTypeA_Copy>();
         IsCooldown = false;
         SkillData = _data;
     }
@@ -60,6 +61,14 @@ public class SkillLogic_2 : SkillLogic, ISkill
         }
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            UseSkill(transform);
+        }
+    }
+
     public void UseSkill(Transform attacker)
     {
         // 쿨타임 체크
@@ -73,7 +82,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         Debug.Log("프리팹 활성화");
 
         // 보호막 체력 설정
-        PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
+        //PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
@@ -149,7 +158,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         Debug.Log("스킬 지속 시간 종료");
         
         // 스킬 지속 시간 종료 시 보호막 체력 = 0
-        PlayerController.PlayerModel.Data.ShieldHp = 0;
+        //PlayerController.PlayerModel.Data.ShieldHp = 0;
         
         // _projectilePrefab 활성화
         SetProjectileActive(false);

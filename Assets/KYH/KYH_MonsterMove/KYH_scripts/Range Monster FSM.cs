@@ -11,7 +11,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private float AttackRange = 5f;        // 공격 가능한 거리
     [SerializeField] private float AttackCooldown = 2f;     // 공격 쿨다운 시간
     [SerializeField] private float MaxHp = 10f;             // 몬스터의 최대 체력
-    [SerializeField] private float CurrentHp;               // 몬스터의 현재 체력
+    public float CurrentHp;               // 몬스터의 현재 체력
     [SerializeField] private float DamageReduceRate = 0f;   // 몬스터의 데미지 감소율
 
     [Header("Search Player Cooldown")]
