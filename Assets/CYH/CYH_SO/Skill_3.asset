@@ -19,4 +19,5 @@ MonoBehaviour:
   <CoolTime>k__BackingField: 15
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
-  <Range>k__BackingField: 0
+  <SkillPrefab>k__BackingField: {fileID: 0}
+  <Range>k__BackingField: 1

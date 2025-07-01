@@ -821,6 +821,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Melee Monster (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7885765592794172211, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: CurrentHp
       value: 10
@@ -1975,6 +1979,10 @@ PrefabInstance:
     - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: m_Name
       value: Melee Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7885765592794172211, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: CurrentHp
@@ -4066,7 +4074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1938801741
 Transform:
   m_ObjectHideFlags: 0
@@ -4708,6 +4716,10 @@ PrefabInstance:
     - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: m_Name
       value: Melee Monster (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4768633557166485032, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7885765592794172211, guid: 0b80acb8beb6e1946b258bbabe36f647, type: 3}
       propertyPath: CurrentHp

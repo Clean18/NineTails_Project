@@ -15,12 +15,6 @@ public class PlayerSkill
     {
         _controller = PlayerController.Instance.SkillController;
 
-        Debug.Log("플레이어 스킬 초기화 시작");
-        foreach (var skillLogic in _controller.SkillList)
-        {
-            skillLogic.SkillInit();
-        }
-
         // TODO : 단축키 완성되면 연결
         if (_controller.SkillList[0] is SkillLogic_0_HitBox skill) DefaultAttack = skill;
         if (_controller.SkillList[1] is SkillLogic_1 skill1) Skill1 = skill1;

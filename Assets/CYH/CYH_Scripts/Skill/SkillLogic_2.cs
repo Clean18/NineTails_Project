@@ -52,7 +52,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
         _projectile = new GameObject[_objCount];
         for (int i = 0; i < _objCount; i++)
         {
-            //_projectile[i] = Instantiate(_projectilePrefab, PlayerController.Instance.SkillController.transform);
             _projectile[i] = Instantiate(_projectilePrefab, transform);
             // _projectilePrefab 비활성화
             _projectile[i].SetActive(false);
@@ -155,7 +154,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         yield return _spinDurationWait;
         _isSpinning = false;
-        if (_spinRoutine != null) StopCoroutine(_spinRoutine);
+        if (_spinRoutine != null) PlayerController.Instance.StopCoroutine(_spinRoutine);
         Debug.Log("스킬 지속 시간 종료");
 
         // 스킬 지속 시간 종료 시 보호막 체력 = 0

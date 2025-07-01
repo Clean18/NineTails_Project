@@ -10,7 +10,18 @@ public class PlayerAI
 	private PlayerModel _model;
 
 	public Transform TargetMonster; // 공격할 몬스터
-	public ISkill TargetSkill;   // 사용할 스킬
+    private ISkill _targetSkill;
+	public ISkill TargetSkill      // 사용할 스킬
+    {
+        get => _targetSkill;
+        set
+        {
+            _targetSkill = value;
+            if (value != null)
+                _targetSkillName = _targetSkill.SkillData.SkillName;
+        }
+    }
+    [SerializeField] private string _targetSkillName;
 
 	private Coroutine _searchRoutine;
 	private WaitForSeconds _searchDelay;
@@ -45,7 +56,6 @@ public class PlayerAI
 
 	void SearchAction()
 	{
-		// Debug.Log("Search Action");
 		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
 
@@ -54,16 +64,15 @@ public class PlayerAI
 		//Debug.Log("SkillLoad Action");
 
 		TargetSkill = null;
-		//float maxCooldown = float.MinValue;
+        //float maxCooldown = float.MinValue;
 
-		List<ISkill> ranSkills = new();
+        List<ISkill> ranSkills = new();
         // TODO : 게임매니저의 딕셔너리가 아닌 플레이어가 등록한 스킬리스트
         // 기본공격은 이 리스트에 없어야함
         // -> 모든 스킬이 쿨타임일 때 사용할 예정 
         foreach (var skill in _model.Skill.SkillMapping.Values)
 		{
             // 쿨타임이 아닌 스킬 등록
-            //if (!skill.IsCooldown) ranSkills.Add(skill);
             if (skill != null && !skill.IsCooldown) ranSkills.Add(skill);
         }
         // 쿨타임이 아닌 스킬들 중 랜덤 사용
@@ -92,7 +101,7 @@ public class PlayerAI
 		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
 		Vector3 dir = TargetMonster.position - _controller.transform.position;
 		float distance = dir.magnitude;
-		if (distance <= TargetSkill.SkillData.Range)
+		if (distance <= TargetSkill.SkillData.Range || TargetSkill.SkillData.Range == 0)
 		{
 			_view.Stop();
 			StopSearchRoutine();
@@ -100,8 +109,8 @@ public class PlayerAI
 			return;
 		}
 
-		// 공격할 수 없으면 공격거리까지 이동 후 Skill로
-		_view.Move(dir.normalized, _model.Data.Speed);
+        // 공격할 수 없으면 공격거리까지 이동 후 Skill로
+        _view.Move(dir.normalized, _model.Data.Speed);
 		if (_searchRoutine == null) _searchRoutine = _controller.StartCoroutine(SearchRoutine());
 	}
 
@@ -158,7 +167,12 @@ public class PlayerAI
 			if (TargetMonster != null) continue;
 
 			var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
-			if (monsters.Length == 0) continue;
+            if (monsters.Length == 0)
+            {
+                // 범위에 몬스터가 없으면 이동 정지
+                _view.Stop();
+                continue;
+            }
 
 			// 원 안의 몬스터들을 8칸으로 분류
 			Dictionary<int, List<Transform>> searchDic = new();
