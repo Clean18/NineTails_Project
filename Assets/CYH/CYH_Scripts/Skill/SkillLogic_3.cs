@@ -19,8 +19,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [Header("이펙트 Y 오프셋")]
     [SerializeField] private float _effectYOffset = 0.5f;
 
-    private Animator _animator;
-
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
     public bool IsCooldown { get; set; }
@@ -46,33 +44,54 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker)
     {
-        AnimationPlay();
-    }
-
-    public void UseSkill(Transform attacker, Transform defender)
-    {
-        AnimationPlay();
-    }
-
-    public void SkillRoutine()
-    {
         // 쿨타임이면 return
         //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+
+        Debug.Log("스킬3 사용");
 
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
+        AnimationPlay();
+
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
-        Debug.Log("스킬3 사용");
         OnAttackStart();
         DetectMonster();
         GetHighestHpMonster();
+    }
+
+    public void UseSkill(Transform attacker, Transform defender)
+    {
+        // 쿨타임이면 return
+        //if (_isCooldown) return;
+        if (IsCooldown) return;
+        Debug.Log($"IsCooldown: {IsCooldown}");
+        
+        Debug.Log("스킬3 사용");
+
+        // 쿨타임 체크 시작
+        //_isCooldown = true;
+        IsCooldown = true;
+        StartCoroutine(CooldownCoroutine());
+
+        AnimationPlay();
+
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+
+        OnAttackStart();
+        DetectMonster();
+        GetHighestHpMonster();
+    }
+
+    public void SkillRoutine()
+    {
         if (_highestMonster != null)
             StartCoroutine(DamageCoroutine(_highestMonster));
 
