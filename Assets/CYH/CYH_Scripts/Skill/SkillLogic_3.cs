@@ -145,11 +145,11 @@ public class SkillLogic_3 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         Debug.Log("Damage");
-        float damage = _playerController.AttackPoint * (0.75f + 0.0075f * SkillLevel);
-        //float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * SkillLevel);
+        float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
+        //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
         GetHighestHpMonster()?.GetComponent<IDamagable>().TakeDamage((long)damage);
 
-        Debug.Log($"{GetHighestHpMonster().name}에게 {damage}의 피해를 가했음");
+        //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
 
     private IEnumerator CooldownCoroutine()
