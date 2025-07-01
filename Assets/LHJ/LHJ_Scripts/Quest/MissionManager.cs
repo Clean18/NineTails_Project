@@ -13,7 +13,8 @@ public class MissionManager : Singleton<MissionManager>
     private int killCount;                  // 킬 횟수
     private bool isRunning;                 // 미션 실행 여부
 
-
+    public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
+    public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
     // 미션을 실행하는 함수
     public void StartMission()
     {
@@ -55,8 +56,23 @@ public class MissionManager : Singleton<MissionManager>
         else
         {
             Debug.Log("[MissionManager] 미션 실패 (시간 초과)");
+            StartCoroutine(CooldownRoutine());               // 쿨타임 시작
             UIManager.Instance.ShowPopUp<FailedPopUp>();     // 실패 팝업 추가
         }
+    }
+    // 미션 실패 쿨타임
+    IEnumerator CooldownRoutine()
+    {
+        IsCooldownActive = true;    
+        CooldownSeconds = 5f;     // 쿨타임 시간 설정
+
+        while (CooldownSeconds > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            CooldownSeconds--;      // 남은 쿨타임 감소
+        }
+
+        IsCooldownActive = false;
     }
     public void AddKill()
     {
