@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6729909933104546597}
-  - component: {fileID: 6745765364587704085}
   - component: {fileID: 3529345108518974844}
   - component: {fileID: 8685634828596674648}
   - component: {fileID: 5322483683192286247}
   - component: {fileID: 9175627777827666347}
+  - component: {fileID: 1158723843331947341}
   m_Layer: 0
   m_Name: New_1StageBoss
   m_TagString: Monster
@@ -31,34 +31,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7, y: -0.21, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5125, y: 0.65, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4419757341852554562}
   - {fileID: 7496418290296635243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6745765364587704085
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533383796811847016}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: da11eee13b661f1469d91f40f9a61c5c, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &3529345108518974844
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -99,16 +78,16 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: cf9829a926d2ee2439f72b51b30c6194, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 23.039999, y: 17.92125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &8685634828596674648
@@ -173,10 +152,10 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 23.039999, y: 17.92125}
+    newSize: {x: 23.039999, y: 17.92125}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -200,11 +179,11 @@ MonoBehaviour:
   DamageReduceRate: 0
   IdleTime: 3
   PlayerTransform: {fileID: 0}
-  BossAnimator: {fileID: 6745765364587704085}
-  AttackEffectPrefab: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
+  BossAnimator: {fileID: 1158723843331947341}
+  AttackEffectPrefab: {fileID: 1230423181991715143, guid: 5d5e8dcaec5c34044b56caaae8608d15, type: 3}
   AttackOrigin: {fileID: 7496418290296635243}
-  AttackRange: 5
-  AttackAngle: 90
+  AttackRange: 10
+  AttackAngle: 120
   SwingSound: {fileID: 8300000, guid: 63cdd5b587b76464ba5489633c662392, type: 3}
   WarningRangeIndicator: {fileID: 2441017438424874777, guid: 5dc2b682daa191343af1f753e2cf7c72, type: 3}
   Pattern1EffectDuration: 2
@@ -220,6 +199,27 @@ MonoBehaviour:
   SpearGhostSound: {fileID: 8300000, guid: 3651c2279c72cc24fb1d460fe4a302aa, type: 3}
   WarningRectPrefab: {fileID: 8748292838769292659, guid: af01f6bfd67953644a36421ce009e924, type: 3}
   WarningDistance: 2
+--- !u!95 &1158723843331947341
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533383796811847016}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 556cf35bdf38b4e49b4b63ce013952fc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6013666592461346746
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +293,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 9
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -301,7 +301,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7827372206688407710
@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 7827372206688407710}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -10.72, y: -3.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
