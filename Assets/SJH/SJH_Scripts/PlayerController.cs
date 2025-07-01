@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,9 +70,11 @@ public class PlayerController : MonoBehaviour
 	[Tooltip("플레이어 데이터 로드 여부")]
 	[SerializeField ]private bool _isInit = false;
 
-	public PlayerModel PlayerModel;
-	public PlayerView PlayerView;
-	public PlayerAI PlayerAI;
+	[SerializeField] private PlayerModel _model;
+    [SerializeField] private PlayerView _view;
+    [SerializeField] private PlayerAI _ai;
+
+    public SkillController SkillController;
 
 	// TODO : 게임이 시작되면 시작은 Auto
 	[Header("컨트롤 모드 Auto/Manual")]
@@ -106,8 +109,8 @@ public class PlayerController : MonoBehaviour
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
 		Mode = ControlMode.Auto;
-		//Mode = ControlMode.Manual;
-	}
+        //Mode = ControlMode.Manual;
+    }
 
 	public void PlayerInit()
 	{
@@ -119,12 +122,12 @@ public class PlayerController : MonoBehaviour
 	{
 		if (_isInit == false)
 		{
-			Debug.Log("초기화가 아직 안됐음");
+			//Debug.Log("초기화가 아직 안됐음");
 			return;
 		}
 
 		// Auto일 때는 입력 제한
-		if (Mode == ControlMode.Auto) PlayerAI.Action();
+		if (Mode == ControlMode.Auto) _ai.Action();
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
@@ -145,7 +148,7 @@ public class PlayerController : MonoBehaviour
 	void MoveInput()
 	{
 		MoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-		PlayerView.Move(MoveDir, PlayerModel.Data.Speed);
+		_view.Move(MoveDir, _model.Data.Speed);
 	}
 
 	void SkillInput()
@@ -154,37 +157,86 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("기본공격 사용");
-            PlayerModel.Skill.DefaultAttack.UseSkill(transform);
+            _model.Skill.DefaultAttack.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("1번스킬 사용");
-            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
-            //skill?.UseSkill(transform);
-            SkillManager.Instance._skillLogics[1]?.UseSkill(transform);
+            var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
+            skill?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("2번스킬 사용");
-            // 추가(CYH)
-            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
-            //skill?.UseSkill(transform);
-            SkillManager.Instance._skillLogics[2]?.UseSkill(transform);
+            var skill = _model.Skill.GetSkill(KeyCode.Alpha2);
+            skill?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Debug.Log("3번스킬 사용");
-            SkillManager.Instance._skillLogics[3]?.UseSkill(transform);
+            var skill = _model.Skill.GetSkill(KeyCode.Alpha3);
+            skill?.UseSkill(transform);
         }
     }
 
-	/// <summary>
-	/// 플레이어가 대미지를 입는 함수
-	/// </summary>
-	/// <param name="damage"></param>
-	public void TakeDamage(long damage)
+    /// <summary>
+    /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayerInitRoutine()
+    {
+        while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
+        {
+            Debug.Log("데이터매니저 스탯 딕셔너리 null");
+            yield return null;
+        }
+
+        // 게임매니저에 자기자신 참조
+        GameManager.Instance.PlayerController = this;
+
+        // 모델, 뷰, AI, 스킬컨트롤러 초기화
+        _model = new PlayerModel();
+        _view = GetComponent<PlayerView>();
+        _ai = new PlayerAI(this, _view, _model);
+        SkillController = GetComponentInChildren<SkillController>();
+        SkillController.InitSkillController();
+
+        // 세이브로드매니저에서 데이터 받아오기
+        _model.InitModel(SaveLoadManager.Instance.GameData);
+
+        yield return new WaitForSeconds(1f);
+
+
+        // UI 초기화
+        if (UIManager.Instance.SceneUIList.Count > 0)
+        {
+            foreach (var ui in UIManager.Instance.SceneUIList)
+            {
+                if (ui == null || ui.Equals(null)) continue;
+                Debug.Log("UI 초기화");
+                ui.UIInit();
+            }
+        }
+        Debug.Log("UI 초기화 완료");
+
+        // TODO : 로딩종료
+
+        _isInit = true;
+
+        Debug.Log("플레이어 데이터 초기화 완료");
+
+        yield break;
+    }
+
+    #region Model 함수
+
+    /// <summary>
+    /// 플레이어가 대미지를 입는 함수
+    /// </summary>
+    /// <param name="damage"></param>
+    public void TakeDamage(long damage)
 	{
-		PlayerModel.ApplyDamage(damage);
+		_model.ApplyDamage(damage);
 		// TODO : view 피격처리
 		// TODO : UI 체력감소 처리
 	}
@@ -195,89 +247,133 @@ public class PlayerController : MonoBehaviour
 	/// <param name="amount"></param>
 	public void TakeHeal(long amount)
 	{
-		PlayerModel.ApplyHeal(amount);
+		_model.ApplyHeal(amount);
 		// TODO : view 힐처리
 		// TODO : UI 체력증가 처리
 	}
 
+    /// <summary>
+    /// 플레이어가 보호막을 생성하는 함수
+    /// </summary>
+    /// <param name="costType"></param>
+    /// <returns></returns>
+    public void TakeShield(long amount)
+    {
+        _model.ApplyShield(amount);
+        // TODO : view 보호막처리
+        // TODO : UI 보호막 증가 처리
+    }
+
+    /// <summary>
+    /// 플레이어의 죽음 체크
+    /// <br/> true = 죽음
+    /// <br/> false = 살음
+    /// </summary>
+    /// <returns></returns>
+    public bool GetIsDead() => _model.GetIsDead();
+    /// <summary>
+    /// 플레이어의 전투력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetPower() => _model.GetPower();
+    /// <summary>
+    /// 플레이어의 공격력을 반환하는 함수
+    /// </summary>
+    /// <param name="costType"></param>
+    /// <returns></returns>
+    public long GetAttack() => _model.GetAttack();
+    /// <summary>
+    /// 플레이어의 방어력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetDefense() => _model.GetDefense();
+    /// <summary>
+    /// 플레이어의 최대 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetMaxHp() => _model.GetMaxHp();
+    /// <summary>
+    /// 플레이어의 현재 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetHp() => _model.GetHp();
+    /// <summary>
+    /// 플레이어의 실드량을 초기화하는 함수
+    /// </summary>
+    public void ClearShield() => _model.ClearShield();
+    /// <summary>
+    /// 플레이어의 온기 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetWarmth() => _model.GetWarmth();
+    /// <summary>
+    /// 플레이어의 영기 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetSpiritEnergy() => _model.GetSpiritEnergy();
+    /// <summary>
+    /// UI 업데이트 이벤트 연결하는 함수
+    /// </summary>
+    /// <param name="playerStatUI"></param>
+    public void ConnectEvent(Action playerStatUI) => _model.ConnectEvent(playerStatUI);
+
 	#region Cost 관련 함수
-	public long GetCost(CostType costType) => PlayerModel.GetCost(costType);
-	public void AddCost(CostType costType, long amount) => PlayerModel.AddCost(costType, amount);
-	public void SpendCost(CostType costType, long amount) => PlayerModel.SpendCost(costType, amount);
+	public long GetCost(CostType costType) => _model.GetCost(costType);
+	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
+	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
 	#endregion
 
 	public void Test_ChangeStat()
 	{
 		// TODO : 5번 누르면 공격력증가
-		if (PlayerModel == null) return;
+		if (_model == null) return;
 
-		PlayerModel.Data.SetAttackLevel();
+		_model.Data.SetAttackLevel();
 	}
 
-	public void SaveData() => SaveLoadManager.Instance.GameData = PlayerModel.GetGameData();
+	public void SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
 
-	/// <summary>
-	/// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
-	/// </summary>
-	/// <returns></returns>
-	IEnumerator PlayerInitRoutine()
-	{
-		while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
-		{
-			Debug.Log("데이터매니저 스탯 딕셔너리 null");
-			yield return null;
-		}
-
-		PlayerModel = new PlayerModel();
-		PlayerView = GetComponent<PlayerView>();
-		PlayerAI = new PlayerAI(this, PlayerView, PlayerModel);
-
-		// 게임매니저에 자기자신 참조
-		GameManager.Instance.PlayerController = this;
-		// 세이브로드매니저에서 데이터 받아오기
-		PlayerModel.InitModel(SaveLoadManager.Instance.GameData);
-
-        yield return new WaitForSeconds(1f);
-
-		// UI 초기화
-		if (UIManager.Instance.SceneUIList.Count > 0)
-		{
-			foreach (var ui in UIManager.Instance.SceneUIList)
-			{
-				if (ui == null || ui.Equals(null)) continue;
-				Debug.Log("UI 초기화");
-				ui.UIInit();
-			}
-		}
-		else
-		{
-            Debug.Log($"UI 개수 : {UIManager.Instance.SceneUIList.Count}");
-		}
-
-		// TODO : 로딩종료
-
-		_isInit = true;
-
-		Debug.Log("플레이어 데이터 초기화 완료");
-
-		yield break;
-	}
+    #endregion
 
 	#region Equipment 관련 함수
 	/// <summary>
 	/// 플레이어 장비의 등급, 레벨을 반환하는 함수
 	/// </summary>
 	/// <returns></returns>
-	public SaveEquipmentData GetEquipmentData() => PlayerModel.GetEquipmentData();
+	public SaveEquipmentData GetEquipmentData() => _model.GetEquipmentData();
 	/// <summary>
 	/// 플레이어의 장비 강화를 실행하는 함수
 	/// </summary>
-	public void TryEnhance() => PlayerModel.TryEnhance();
+	public void TryEnhance() => _model.TryEnhance();
     /// <summary>
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
-    public void TryPromote() => PlayerModel.TryPromote();
+    public void TryPromote() => _model.TryPromote();
     #endregion
+
+    #region View 함수
+
+    /// <summary>
+    /// 플레이어 애니메이터 전환
+    /// </summary>
+    public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
+    public void Stop() => _view.Stop();
+
+    #endregion
+
+    #region AI 함수
+
+    public void AIInit() => _ai.MonsterSkillCheck();
+
+    #endregion
+
+    // SkillLogic_0 애니메이션 이벤트 함수들
+    public void Skill0_OnAttackStart() => _model.Skill.DefaultAttack.OnAttackStart();
+    public void Skill0_OnAttackEnd() => _model.Skill.DefaultAttack.OnAttackEnd();
+    public void Skill0_SlashCountEvent() => _model.Skill.DefaultAttack.SlashCountEvent();
+
+    // SkillLogic_1 애니메이션 이벤트 함수
+    public void Skill1_DisableHitbox() => _model.Skill.Skill1.DisableHitbox();
 
     void OnDrawGizmos()
 	{
@@ -293,4 +389,9 @@ public class PlayerController : MonoBehaviour
 		// 원
 		Gizmos.DrawWireSphere(transform.position, SearchDistance);
 	}
+
+    //void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Debug.Log(collision.gameObject.name);
+    //}
 }

@@ -188,6 +188,17 @@ public class PlayerData
         else Hp += amount;
     }
 
+    public void HealShield(long amount)
+    {
+        ShieldHp += amount;
+    }
+
+    public void ClearShield()
+    {
+        ShieldHp = 0;
+        // TODO : 실드 UI 업데이트
+    }
+
     // 스탯 변경 함수
     public void SetAttackLevel()
     {

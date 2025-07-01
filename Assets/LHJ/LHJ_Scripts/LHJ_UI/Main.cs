@@ -28,27 +28,24 @@ public class Main : BaseUI, IUI
         GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
         GetEvent("Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>();
-        GetEvent("Mission").Click += data => UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+        //GetEvent("Mission").Click += data => UIManager.Instance.ShowPopUp<StartMissionPopUp>();
         PlayerStatUI();
 
-        var model = GameManager.Instance.PlayerController?.PlayerModel;
-        model.Data.OnStatChanged += PlayerStatUI;
-        model.Cost.OnCostChanged += PlayerStatUI;
+        PlayerController.Instance.ConnectEvent(PlayerStatUI);
     }
 
     // 메인에 플레이어 스탯 정보UI
     public void PlayerStatUI()
     {
-        var model = GameManager.Instance.PlayerController?.PlayerModel;
-        if (model == null) return;
+        var player = PlayerController.Instance;
         // Data
-        powerText.text = $"Power : {model.Data?.PowerLevel}";
-        attackText.text = $"Attack : {model.Data?.Attack}";
-        defenseText.text = $"Defense : {model.Data?.Defense}";
-        _hpSlider.value = (float)model.Data.Hp / model.Data.MaxHp;
-        hpText.text = $"{model.Data?.Hp}/{model.Data?.MaxHp}";
+        powerText.text = $"Power : {player.GetPower()}";
+        attackText.text = $"Attack : {player.GetAttack()}";
+        defenseText.text = $"Defense : {player.GetDefense()}";
+        _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
+        hpText.text = $"{player.GetHp()}/{player.GetMaxHp()}";
         // Cost
-        _warmthText.text = $"W: {model.Cost?.Warmth}";
-        _spritenergyText.text = $"S: {model.Cost?.SpiritEnergy}";
+        _warmthText.text = $"W: {player.GetWarmth()}";
+        _spritenergyText.text = $"S: {player.GetSpiritEnergy()}";
     }
 }

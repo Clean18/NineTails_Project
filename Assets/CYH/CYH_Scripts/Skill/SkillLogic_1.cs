@@ -4,69 +4,55 @@ using UnityEngine;
 
 public class SkillLogic_1 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
-
+    [SerializeField] private GameObject _hitBoxPrefab;
     [SerializeField] private CircleCollider2D _hitBox;
 
-    public PlayerController PlayerController { get; set; }
-    public ActiveSkillData SkillData { get; set; }
-    public bool IsCooldown { get; set; }
-    public int SkillLevel { get; set; }
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
 
-    private void Awake()
+    public void SkillInit()
     {
-        _animator = GetComponent<Animator>();
-        // 게임 스타트 -> _hitBox collider 끔
+        Debug.Log("스킬 1 초기화");
+
+        // 각 프리팹 자식으로 생성
+        GameObject hitBox = Instantiate(_hitBoxPrefab, transform);
+        _hitBox = hitBox.GetComponent<CircleCollider2D>();
         _hitBox.enabled = false;
-        SkillData = _data;
         IsCooldown = false;
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha2))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
-
     public void UseSkill(Transform attacker)
     {
+        Debug.Log("스킬 1 UseSkill");
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
         EnableHitbox();
         AnimationPlay();
-        //Debug.Log("스킬사용");
+        Debug.Log("스킬 1 사용완료");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
-
         EnableHitbox();
         AnimationPlay();
-        //Debug.Log("스킬사용");
     }
 
     public void EnableHitbox()
@@ -75,13 +61,12 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _isSkillUsed = true;
 
         _hitBox.enabled = true;
-        //Debug.Log("콜라이더 켜짐");
     }
 
+    // 이벤트 함수
     public void DisableHitbox()
     {
         _hitBox.enabled = false;
-        //Debug.Log("콜라이더 끔");
 
         // 몬스터 TakeDamage 처리
         Damage();
@@ -92,23 +77,17 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     public void AnimationPlay()
     {
-        if (!_hitBox.enabled)
-            return;
-        else
-        {
-            _animator.SetTrigger("UseSkill_1");
-        }
+        if (!_hitBox.enabled) return;
+        else PlayerController.Instance.SetTrigger("UseSkill_1");
     }
 
     protected override void Damage()
     {
-        //float damage = _playerController.AttackPoint * (0.75f + 0.0075f * _skillLevel);
-        float damage = PlayerController.PlayerModel.Data.Attack * (0.75f + 0.0075f * _skillLevel);
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * _skillLevel)));
 
         foreach (var monster in _hitMonsters)
         {
-            //monster.GetComponent<Monster_CYH>().TakeDamage(damage);
-            monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
+            monster?.GetComponent<IDamagable>().TakeDamage(damage);
             Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
         }
     }
@@ -121,12 +100,10 @@ public class SkillLogic_1 : SkillLogic, ISkill
         {
             _hitMonsters.Add(other.gameObject);
         }
-        //Debug.Log($"Skill_1 : 몬스터 맞음");
     }
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
         float remaining = SkillData.CoolTime;
         while (remaining > 0f)
         {
@@ -134,7 +111,6 @@ public class SkillLogic_1 : SkillLogic, ISkill
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        //_isCooldown = false;
         IsCooldown = false;
         Debug.Log("쿨타임 종료");
     }

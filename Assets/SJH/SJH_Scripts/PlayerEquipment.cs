@@ -119,7 +119,6 @@ public class PlayerEquipment
     {
         Grade = grade;
         _level = level;
-        IncreaseDamageLevel = increaseDamageLevel;
 
         if (grade == "SSR")
         {

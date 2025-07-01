@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -23,6 +24,8 @@ public class PlayerModel
     /// </summary>
     public void InitModel(GameData saveData)
     {
+        if (saveData == null) return;
+
         // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
         Data = new PlayerData();
         Data.InitData(saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
@@ -53,6 +56,27 @@ public class PlayerModel
     public void ApplyHeal(long amount)
     {
         Data.HealHp(amount);
+    }
+
+    public void ApplyShield(long amount)
+    {
+        Data.HealShield(amount);
+    }
+
+    public bool GetIsDead() => Data.IsDead;
+    public long GetPower() => Data.PowerLevel;
+    public long GetAttack() => Data.Attack;
+    public long GetDefense() => Data.Defense;
+    public long GetMaxHp() => Data.MaxHp;
+    public long GetHp() => Data.Hp;
+    public long GetWarmth() => Cost.Warmth;
+    public long GetSpiritEnergy() => Cost.SpiritEnergy;
+    public void ClearShield() => Data.ShieldHp = 0;
+
+    public void ConnectEvent(Action playerStatUI)
+    {
+        Data.OnStatChanged += playerStatUI;
+        Cost.OnCostChanged += playerStatUI;
     }
 
     public GameData GetGameData()
@@ -193,7 +217,7 @@ public class PlayerModel
         if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
 
         // 승급 확률 체크
-        float rate = Random.value;
+        float rate = UnityEngine.Random.value;
         if (rate <= nextData.SuccessRate)
         {
             if (nextData.UpgradeGrade == "SSR")
