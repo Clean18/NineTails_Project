@@ -55,6 +55,7 @@ public class MissionManager : Singleton<MissionManager>
         else
         {
             Debug.Log("[MissionManager] 미션 실패 (시간 초과)");
+            UIManager.Instance.ShowPopUp<FailedPopUp>();     // 실패 팝업 추가
         }
     }
     public void AddKill()
