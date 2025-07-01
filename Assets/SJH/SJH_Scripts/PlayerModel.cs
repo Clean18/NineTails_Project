@@ -135,6 +135,108 @@ public class PlayerModel
     }
     #endregion
 
+    #region PlayerData 관련 함수
+
+    public SavePlayerData GetPlayerData() => Data.SavePlayerData();
+
+    public void TryAttackLevelup()
+    {
+        // 현재 레벨 체크
+        if (Data.AttackLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, Data.AttackLevel);
+        if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        Data.AttackLevelup();
+    }
+
+    public void TryDefenseLevelup()
+    {
+        // 현재 레벨 체크
+        if (Data.DefenseLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, Data.DefenseLevel);
+        if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        Data.DefenseLevelup();
+    }
+
+    public void TryHpLevelup()
+    {
+        // 현재 레벨 체크
+        if (Data.HpLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, Data.HpLevel);
+        if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        Data.HpLevelup();
+    }
+
+    public void TrySpeedLevelup()
+    {
+        // 현재 레벨 체크
+        if (Data.SpeedLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, Data.SpeedLevel);
+        if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        Data.SpeedLevelup();
+    }
+
+    #endregion
+
     #region Equipment 관련 함수
     public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
     public void TryEnhance()
@@ -150,7 +252,7 @@ public class PlayerModel
             }
             Equipment.Level += 1;
             Equipment.IncreaseDamageLevel += 1;
-            PlayerController.Instance.SpendCost(CostType.Warmth, Equipment.BaseSSRCost);
+            if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, Equipment.BaseSSRCost);
             Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
             Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
 

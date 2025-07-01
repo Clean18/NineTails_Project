@@ -277,9 +277,8 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public long GetPower() => _model.GetPower();
     /// <summary>
-    /// 플레이어의 공격력을 반환하는 함수
+    /// 플레이어의 공격력을 반환하는 함수 
     /// </summary>
-    /// <param name="costType"></param>
     /// <returns></returns>
     public long GetAttack() => _model.GetAttack();
     /// <summary>
@@ -328,19 +327,46 @@ public class PlayerController : MonoBehaviour
 		// TODO : 5번 누르면 공격력증가
 		if (_model == null) return;
 
-		_model.Data.SetAttackLevel();
+		_model.Data.AttackLevelup();
 	}
 
-	public void SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
+    /// <summary>
+    /// 플레이어 저장 데이터 반환하는 함수
+    /// </summary>
+	public GameData SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
 
     #endregion
 
-	#region Equipment 관련 함수
-	/// <summary>
-	/// 플레이어 장비의 등급, 레벨을 반환하는 함수
-	/// </summary>
-	/// <returns></returns>
-	public SaveEquipmentData GetEquipmentData() => _model.GetEquipmentData();
+    #region 스탯 강화 관련 함수
+    /// <summary>
+    /// 플레이어 스탯을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public SavePlayerData GetPlayerData() => _model.GetPlayerData();
+    /// <summary>
+    /// 플레이어 공격력 레벨업 함수
+    /// </summary>
+    public void TryAttackLevelup() => _model.TryAttackLevelup();
+    /// <summary>
+    /// 플레이어 방어력 레벨업 함수
+    /// </summary>
+    public void TryDefenseLevelup() => _model.TryDefenseLevelup();
+    /// <summary>
+    /// 플레이어 체력 레벨업 함수
+    /// </summary>
+    public void TryHpLevelup() => _model.TryHpLevelup();
+    /// <summary>
+    /// 플레이어 스피드 레벨업 함수
+    /// </summary>
+    public void TrySpeedLevelup() => _model.TrySpeedLevelup();
+    #endregion
+
+    #region 장비 강화 및 승급 관련 함수
+    /// <summary>
+    /// 플레이어 장비의 등급, 레벨을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public SaveEquipmentData GetEquipmentData() => _model.GetEquipmentData();
 	/// <summary>
 	/// 플레이어의 장비 강화를 실행하는 함수
 	/// </summary>
@@ -367,6 +393,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region 애니메이션 이벤트 함수
+
     // SkillLogic_0 애니메이션 이벤트 함수들
     public void Skill0_OnAttackStart() => _model.Skill.DefaultAttack.OnAttackStart();
     public void Skill0_OnAttackEnd() => _model.Skill.DefaultAttack.OnAttackEnd();
@@ -374,6 +402,8 @@ public class PlayerController : MonoBehaviour
 
     // SkillLogic_1 애니메이션 이벤트 함수
     public void Skill1_DisableHitbox() => _model.Skill.Skill1.DisableHitbox();
+
+    #endregion
 
     void OnDrawGizmos()
 	{

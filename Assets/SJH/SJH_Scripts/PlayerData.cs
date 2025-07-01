@@ -200,12 +200,32 @@ public class PlayerData
     }
 
     // 스탯 변경 함수
-    public void SetAttackLevel()
+    public void AttackLevelup()
     {
         AttackLevel += 1;
         Debug.Log($"공격력 업! 레벨 : {AttackLevel}");
     }
 
+    public void DefenseLevelup()
+    {
+        DefenseLevel += 1;
+        Debug.Log($"방어력 업! 레벨 : {DefenseLevel}");
+    }
+
+    public void HpLevelup()
+    {
+        HpLevel += 1;
+        // TODO : 체력이 증가한 만큼 현재 체력도 회복
+        Debug.Log($"체력 업! 레벨 : {HpLevel}");
+    }
+
+    public void SpeedLevelup()
+    {
+        SpeedLevel += 1;
+        Debug.Log($"스피드 업! 레벨 : {SpeedLevel}");
+    }
+
+    // 플레이어데이터 세이브 구조체
     public SavePlayerData SavePlayerData()
     {
         var data = new SavePlayerData();
