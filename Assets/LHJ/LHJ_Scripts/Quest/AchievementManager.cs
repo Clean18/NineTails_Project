@@ -83,6 +83,22 @@ public class AchievementManager : Singleton<AchievementManager>
             }
         }
     }
+
+    // 스테이지 클리어 업적 함수
+    public void CheckStageClear(string sceneName)
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "StageClear") continue;           // Type에서 StageClear가 아닐경우 무시하고 계속 진행
+            if (achievement.Scene != sceneName) continue;             // 현재 Scene이름과 업적에 있는 Scene이 일치하지않으면 무시하고 계속 진행
+            if (achievedIds.Contains(achievement.Id)) continue;       // 이미 달성된 업적이면 계속진행
+
+            achievedIds.Add(achievement.Id);                          // 업적 달성
+            Debug.Log($"[업적 달성] {achievement.Name} - 스테이지 클리어");
+
+            Reward(achievement);                                      // 보상 지급
+        }
+    }
     private void Reward(AchievementInfo achievementInfo)
     {
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");

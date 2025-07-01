@@ -6,14 +6,15 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// 미션을 실행하고 진행을 관리하는 매니저
 /// </summary>
-public class MissionManager : Singleton<AchievementManager>
+public class MissionManager : Singleton<MissionManager>
 {
     private MissionInfo currentMission;     // 현재 진행 미션
     private float timer;                    // 남은 시간
     private int killCount;                  // 킬 횟수
     private bool isRunning;                 // 미션 실행 여부
 
-
+    public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
+    public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
     // 미션을 실행하는 함수
     public void StartMission()
     {
@@ -50,11 +51,62 @@ public class MissionManager : Singleton<AchievementManager>
         if (killCount >= currentMission.Count)
         {
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
-            SceneManager.LoadScene(currentMission.NextScene); // 다음씬으로 이동
+            // 스테이지 클리어 업적 체크
+            AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
+            UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
         }
         else
         {
             Debug.Log("[MissionManager] 미션 실패 (시간 초과)");
+            StartCoroutine(CooldownRoutine());               // 쿨타임 시작
+            UIManager.Instance.ShowPopUp<FailedPopUp>();     // 실패 팝업 추가
         }
+    }
+    // 미션 실패 쿨타임
+    IEnumerator CooldownRoutine()
+    {
+        IsCooldownActive = true;    
+        CooldownSeconds = 10f;     // 쿨타임 시간 설정
+
+        while (CooldownSeconds > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            CooldownSeconds--;      // 남은 쿨타임 감소
+        }
+
+        IsCooldownActive = false;
+    }
+    public void AddKill()
+    {
+        // 미션이 실행 중이 아닐때 무시
+        if (!isRunning) return;
+
+        killCount++;  // 킬 수 증가
+        Debug.Log($"[MissionManager] 현재 킬 수: {killCount}/{currentMission.Count}");
+
+        // 시간 안에 목표 킬 수를 달성하면 미션 성공
+        if (killCount >= currentMission.Count && timer > 0f)
+        {
+            isRunning = false;
+            Debug.Log("[MissionManager] 미션 조기 성공 (목표 킬 도달)");
+            UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
+        }
+    }
+    // 미션 진행중 확인 여부
+    public bool IsRunning()
+    {
+        return isRunning;
+    }
+
+    // 미션 시간 반환
+    public float GetRemainingTime()
+    {
+        return timer;
+    }
+
+    // 다음 씬 반환
+    public string GetNextScene()
+    {
+        return currentMission.NextScene;
     }
 }
