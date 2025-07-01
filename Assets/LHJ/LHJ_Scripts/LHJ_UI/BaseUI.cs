@@ -56,6 +56,7 @@ public class BaseUI : MonoBehaviour
     public PointerHandler GetEvent(in string name)
     {
         GameObject gameObject = GetUI(name);
+        if (gameObject == null) return null;
         return gameObject.GetOrAddComponent<PointerHandler>();
     }
 }

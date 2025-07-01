@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameUI : SceneUI, IUI
 {
@@ -59,13 +60,13 @@ public class GameUI : SceneUI, IUI
 
 		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 
-		player.PlayerAI.MonsterSkillCheck();
+        player.AIInit();
 
 		// Text On/Off
 		UpdateAIMode(player.Mode);
 
-		// 플레이어 velocity 초기화
-		player.PlayerView.Move(Vector2.zero, 0);
+        // 플레이어 velocity 초기화
+        player.Stop();
 	}
 
 	public void UpdateAIMode(ControlMode mode)

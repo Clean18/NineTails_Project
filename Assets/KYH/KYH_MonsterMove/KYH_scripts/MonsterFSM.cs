@@ -11,7 +11,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private float AttackRange = 1.5f;      // 공격 가능한 거리
     [SerializeField] private float AttackCooldown = 2f;     // 공격 쿨다운 시간
     [SerializeField] private float MaxHp = 10f;             // 몬스터의 최대 체력
-    [SerializeField] private float CurrentHp;               // 몬스터의 현재 체력
+    public float CurrentHp;               // 몬스터의 현재 체력
     [SerializeField] private float DamageReduceRate = 0f;   // 몬스터의 데미지 감소율
 
     [Header("Search Player Cooldown")]
@@ -255,6 +255,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
         // TODO : 플레이어 재화 증가
         GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
         GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        MissionManager.Instance.AddKill(); // 돌파미션 킬 체크
         gameObject.SetActive(false);
     }
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939428493384606817}
   - component: {fileID: 5060313458361025358}
+  - component: {fileID: 4258019148208761534}
   m_Layer: 0
   m_Name: Skill_2
   m_TagString: Untagged
@@ -49,7 +50,6 @@ MonoBehaviour:
   _hitMonsters: []
   _isSkillUsed: 0
   _data: {fileID: 11400000, guid: ce7b313c794676941af9526a8547f2e7, type: 2}
-  _playerController: {fileID: 0}
   _projectilePrefab: {fileID: 1873357373014254779, guid: f32a813fa53bdee4c97b097228d88237, type: 3}
   _objCount: 5
   _radius: 3
@@ -57,3 +57,33 @@ MonoBehaviour:
   _centerOffset: {x: 0, y: 0, z: 0}
   _spinDuration: 7
   _isSpinning: 0
+  <SkillData>k__BackingField: {fileID: 11400000, guid: ce7b313c794676941af9526a8547f2e7, type: 2}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
+--- !u!50 &4258019148208761534
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575395230341757593}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939428493384606817}
   - component: {fileID: 8947969789115844825}
+  - component: {fileID: -6768049430315106548}
   m_Layer: 0
   m_Name: Skill_0
   m_TagString: Untagged
@@ -48,7 +49,36 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
-  _playerController: {fileID: 0}
+  _hitBoxPrefab: {fileID: 8907089833944361431, guid: ebf209dd092de8c4792396fa9ea6a868, type: 3}
   _hitBox: {fileID: 0}
   _slashCount: 0
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
+--- !u!50 &-6768049430315106548
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575395230341757593}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

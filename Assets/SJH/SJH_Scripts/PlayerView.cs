@@ -49,4 +49,9 @@ public class PlayerView : MonoBehaviour
         _anim.SetBool("IsMoving", false);
         _rigid.velocity = Vector2.zero;
     }
+
+    public void SetTrigger(string trigger)
+    {
+        _anim.SetTrigger(trigger);
+    }
 }
