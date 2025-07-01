@@ -60,7 +60,7 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
 
     void SkillInput()
     {
-        // TODO : 키세팅
+        //// TODO : 키세팅
        
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

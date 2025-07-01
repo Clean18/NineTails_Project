@@ -24,7 +24,7 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
 
     [Header("Boss HP")]
     [SerializeField] protected float MaxHealth = 1000f;     // 최대 체력
-    [SerializeField] protected float CurrentHealth;         // 현재 체력
+    public float CurrentHealth;         // 현재 체력
     [SerializeField] protected float DamageReduceRate = 0f; // 몬스터의 데미지 감소율
 
     protected BossState CurrentState;         // 현재 FSM 상태
