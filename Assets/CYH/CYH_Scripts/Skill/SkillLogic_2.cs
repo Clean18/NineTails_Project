@@ -39,7 +39,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private void Awake()
     {
-        _playerController = GetComponent<PlayerControllerTypeA_Copy>();
         IsCooldown = false;
         SkillData = _data;
     }
@@ -63,13 +62,14 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         Debug.Log("스킬 2 초기화");
     }
-    
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             UseSkill(transform);
         }
+    }
 
     public void UseSkill(Transform attacker)
     {

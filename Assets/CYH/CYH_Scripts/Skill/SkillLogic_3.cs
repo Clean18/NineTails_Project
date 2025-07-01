@@ -199,4 +199,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _radius);
     }
+
+    public void SkillInit()
+    {
+        Debug.Log("스킬 3 초기화");
+    }
 }
