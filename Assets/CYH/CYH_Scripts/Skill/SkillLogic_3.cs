@@ -15,6 +15,8 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [SerializeField] private float _effectDuration = 0.1f;
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
+    [Header("이펙트 Y 오프셋")]
+    [SerializeField] private float _effectYOffset = 0.5f;
 
 
     public PlayerController PlayerController { get; set; }
@@ -43,6 +45,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임이면 return
         //if (_isCooldown) return;
         if (IsCooldown) return;
+        Debug.Log($"IsCooldown: {IsCooldown}");
 
         // 쿨타임 체크 시작
         //_isCooldown = true;
@@ -136,7 +139,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
             else if (monster.TryGetComponent<BaseBossFSM>(out var mB))
                 hp = mB.CurrentHealth;
 
-            // 위 세 타입 중 하나라도 만족할 때
+            // 셋 중 하나라도 만족할 때
             if (hp > highestHp)
             {
                 highestHp = hp;
@@ -158,24 +161,47 @@ public class SkillLogic_3 : SkillLogic, ISkill
         //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
-
-        // 현재 :몬스터 하위에 생성 x
-        // 피격 몬스터 하위에 이펙트 생성
-        if (_damageEffectPrefab != null && monster != null)
-        {
-            Instantiate(_damageEffectPrefab, monster.transform.position, Quaternion.identity, monster.transform);
-        }
     }
 
     #region Coroutine
     private IEnumerator DamageCoroutine(GameObject monster)
     {
-        for (int i = 1; i < 6; i++)
+        GameObject effect = null;
+        SpriteRenderer effectSprite = null;
+
+        // 최고 체력 몬스터 자식으로 이펙트 생성
+        if (_damageEffectPrefab != null)
         {
-            Debug.Log($"데미지 {i}번");
-            Damage(_highestMonster);
-            yield return new WaitForSeconds(_damageInterval);
+            // 이펙트 생성 y 값 위치 조정
+            Vector3 spawnPos = monster.transform.position + Vector3.up * _effectYOffset;
+            effect = Instantiate(_damageEffectPrefab, spawnPos, Quaternion.identity, monster.transform);
+            effect.SetActive(false);
+            effectSprite = effect.GetComponent<SpriteRenderer>();
         }
+        else
+            Debug.Log("_damageEffectPrefab 없음");
+
+        // 2) 5번 반복
+        for (int i = 0; i < 5; i++)
+        {
+            if (effect != null)
+            {
+                // 매 반복마다 flipX 반전
+                effectSprite.flipX = !effectSprite.flipX;
+                effect.SetActive(true);
+            }
+
+            // 데미지
+            Damage(monster);
+            yield return new WaitForSeconds(_effectDuration);
+
+            effect.SetActive(false);
+
+            // 총 루프 시간 _damageInterval
+            yield return new WaitForSeconds(_damageInterval - _effectDuration);
+        }
+        // 이펙트 제거
+        Destroy(effect);
     }
 
     private IEnumerator CooldownCoroutine()
@@ -193,7 +219,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         Debug.Log("쿨타임 종료");
     }
     #endregion
-    
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
