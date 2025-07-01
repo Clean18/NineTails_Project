@@ -51,6 +51,8 @@ public class MissionManager : Singleton<MissionManager>
         if (killCount >= currentMission.Count)
         {
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
+            // 스테이지 클리어 업적 체크
+            AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
             UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
         }
         else
@@ -64,7 +66,7 @@ public class MissionManager : Singleton<MissionManager>
     IEnumerator CooldownRoutine()
     {
         IsCooldownActive = true;    
-        CooldownSeconds = 5f;     // 쿨타임 시간 설정
+        CooldownSeconds = 10f;     // 쿨타임 시간 설정
 
         while (CooldownSeconds > 0)
         {
