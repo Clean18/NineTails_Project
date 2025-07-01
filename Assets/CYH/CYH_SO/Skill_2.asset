@@ -16,10 +16,8 @@ MonoBehaviour:
   <Description>k__BackingField: "\uD63C\uB839\uC744 \uC8FC\uBCC0\uC5D0 \uC18C\uD658\uD558\uC5EC
     \uC801\uC5D0\uAC8C \uD53C\uD574\uB97C \uC785\uD788\uACE0, \uC790\uC2E0\uC744
     \uBCF4\uD638\uD558\uB294 \uBCF4\uD638\uB9C9\uC744 \uB9CC\uB4E0\uB2E4."
-  <Damage>k__BackingField: 1
-  <Level>k__BackingField: 0
   <CoolTime>k__BackingField: 12
-  <IsCooldown>k__BackingField: 0
   <SkillSprite>k__BackingField: {fileID: 0}
   <SkillAnimation>k__BackingField: {fileID: 0}
-  <Range>k__BackingField: 0
+  <SkillPrefab>k__BackingField: {fileID: 0}
+  <Range>k__BackingField: 3

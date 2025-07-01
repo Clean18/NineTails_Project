@@ -9,10 +9,8 @@ public class UpgradePopUp : BaseUI
     [SerializeField] private TextMeshProUGUI levelText; // 강화 단계 텍스트
 
     // 활성화 될때마다 호출되는 함수
-    private void OnEnable()
-    {
-        UpdateText();
-    }
+    private void OnEnable() => UpdateText();
+
     private void Start()
     {
         Debug.LogError("UpgradePopUp 초기화");

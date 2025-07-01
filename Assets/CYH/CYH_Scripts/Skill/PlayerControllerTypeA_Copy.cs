@@ -62,26 +62,26 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
     {
         //// TODO : 키세팅
        
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    Debug.Log("1번스킬 사용");
-        //    //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
-        //    //skill?.UseSkill(transform);
-        //    SkillManager.Instance.SkillLogics[1]?.UseSkill(transform);
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    Debug.Log("2번스킬 사용");
-        //    // 추가(CYH)
-        //    //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
-        //    //skill?.UseSkill(transform);
-        //    SkillManager.Instance.SkillLogics[2]?.UseSkill(transform);
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    Debug.Log("3번스킬 사용");
-        //    SkillManager.Instance.SkillLogics[3]?.UseSkill(transform);
-        //}
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("1번스킬 사용");
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha1) as SkillLogic_1;
+            //skill?.UseSkill(transform);
+            //SkillManager.Instance.SkillLogics[1]?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("2번스킬 사용");
+            // 추가(CYH)
+            //var skill = PlayerModel.Skill.GetSkill(KeyCode.Alpha2) as SkillLogic_2;
+            //skill?.UseSkill(transform);
+            //SkillManager.Instance.SkillLogics[2]?.UseSkill(transform);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("3번스킬 사용");
+            //SkillManager.Instance.SkillLogics[3]?.UseSkill(transform);
+        }
     }
     void Attack()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어가 가진 스킬을 관리 및 사용하는 클래스입니다.
 /// </summary>
-public class SkillManager : Singleton<SkillManager>
+public class SkillManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _skillPrefabs;
     

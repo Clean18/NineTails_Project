@@ -11,6 +11,7 @@ public struct SavePlayerCost
 /// <summary>
 /// 플레이어의 스탯 및 장비 성장 재화
 /// </summary>
+[System.Serializable]
 public class PlayerCost
 {
     /// <summary>

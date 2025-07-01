@@ -6,7 +6,6 @@ using UnityEngine;
 public class SkillLogic_2 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [Header("Projectile 프리팹")]
     [SerializeField] private GameObject _projectilePrefab;
@@ -34,10 +33,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
     private WaitForSeconds _spinDurationWait;
     private WaitForSeconds _cooldownWait;
 
-    public PlayerController PlayerController { get; set; }
-    public ActiveSkillData SkillData { get; set; }
-    public bool IsCooldown { get; set; }
-    public int SkillLevel { get; set; }
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
 
     private void Awake()
     {
@@ -57,22 +55,31 @@ public class SkillLogic_2 : SkillLogic, ISkill
         {
             _projectile[i] = Instantiate(_projectilePrefab, transform);
             // _projectilePrefab 비활성화
-            _projectile[i].SetActive(false);  
+            _projectile[i].SetActive(false);
         }
     }
 
+    public void SkillInit()
+    {
+        Debug.Log("스킬 2 초기화");
+    }
+    
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Alpha5))
         {
             UseSkill(transform);
         }
-    }
 
     public void UseSkill(Transform attacker)
     {
+        Debug.Log("스킬 2 UseSkill");
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning) return;
+        if (IsCooldown || _isSpinning)
+        {
+            Debug.Log("스킬 2 쿨타임이거나 사용중입니다.");
+            return;
+        }
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
@@ -83,16 +90,17 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
         // 보호막 체력 설정
         //PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * _skillLevel)));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
         Debug.Log("원운동 갱신");
 
         // 지속시간 체크 시작
-        _durationRoutine = StartCoroutine(SpinDurationCoroutine());
+        _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
         // 쿨타임 체크 시작
         IsCooldown = true;
-        _cooldownRoutine = StartCoroutine(CooldownCoroutine());
+        _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -107,14 +115,14 @@ public class SkillLogic_2 : SkillLogic, ISkill
         SetProjectileActive(true);
 
         // 매 프레임 원 운동 갱신
-        _spinRoutine = StartCoroutine(SpinCoroutine());
+        _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
 
         // 지속시간 체크 시작
-        _durationRoutine = StartCoroutine(SpinDurationCoroutine());
+        _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
         
         // 쿨타임 체크 시작
         IsCooldown = true;
-        _cooldownRoutine = StartCoroutine(CooldownCoroutine());
+        _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
     }
 
     // 원 운동 로직
@@ -154,11 +162,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         yield return _spinDurationWait;
         _isSpinning = false;
-        if (_spinRoutine != null) StopCoroutine(_spinRoutine);
+        if (_spinRoutine != null) PlayerController.Instance.StopCoroutine(_spinRoutine);
         Debug.Log("스킬 지속 시간 종료");
-        
+
         // 스킬 지속 시간 종료 시 보호막 체력 = 0
-        //PlayerController.PlayerModel.Data.ShieldHp = 0;
+        PlayerController.Instance.ClearShield();
         
         // _projectilePrefab 활성화
         SetProjectileActive(false);
@@ -192,8 +200,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        float damage = PlayerController.PlayerModel.Data.Attack * (0.25f + 0.0025f * _skillLevel);
-        monsters?.GetComponent<IDamagable>().TakeDamage((long)damage);
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * _skillLevel)));
+        monsters?.GetComponent<IDamagable>().TakeDamage(damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }
 
@@ -214,7 +222,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
             _hitMonsters.Add(monsterObj);
             Debug.Log($"리스트에 {monsterObj.name} 추가");
             Damage(monsterObj);
-            StartCoroutine(DamageCooldownCouroutine(monsterObj, 1f));
+            PlayerController.Instance.StartCoroutine(DamageCooldownCouroutine(monsterObj, 1f));
         }
     }
 

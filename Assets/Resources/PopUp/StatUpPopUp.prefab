@@ -43,7 +43,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.8078896}
-  m_AnchoredPosition: {x: -0.000030517578, y: 188.1971}
+  m_AnchoredPosition: {x: -0.000061035156, y: 188.19708}
   m_SizeDelta: {x: 0, y: -376.3942}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5423797096108042122
@@ -818,9 +818,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d068046290038409d7f97e7257f3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpLevelText: {fileID: 0}
-  attackLevelText: {fileID: 0}
-  defenseLevelText: {fileID: 0}
+  hpLevelText: {fileID: 2869399885476072661}
+  attackLevelText: {fileID: 2356047914084510598}
+  defenseLevelText: {fileID: 510284923723218287}
   hpCostText: {fileID: 6141518760745508042}
   attackCostText: {fileID: 8091265144633565042}
   defenseCostText: {fileID: 6176593114514504439}
