@@ -54,7 +54,7 @@ public class Stage1BossFSM : BaseBossFSM
     {
         // 1. 고정된 방향으로 설정 (왼쪽)
         Vector2 fixedDirection = Vector2.left;
-        float fixedAngle = 180f;
+        float fixedAngle = 135f;
 
         // 2. 경고 프리팹 인스턴스화 (왼쪽 방향)
         if (WarningRangeIndicator != null)
@@ -77,7 +77,14 @@ public class Stage1BossFSM : BaseBossFSM
         // 5. 이펙트 생성 (왼쪽 방향)
         if (AttackEffectPrefab != null)
         {
-            GameObject fx = Instantiate(AttackEffectPrefab, AttackOrigin.position, Quaternion.Euler(0f, 0f, 0f));
+            // 왼쪽 방향 벡터
+            Vector3 direction = Vector3.left;
+
+            // 생성 위치: AttackOrigin 위치에서 왼쪽으로 1단위 거리 이동
+            float spawnOffset = 5f; // 거리 조절 (값을 늘리면 더 멀리)
+            Vector3 spawnPos = AttackOrigin.position + direction * spawnOffset;
+
+            GameObject fx = Instantiate(AttackEffectPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
             Destroy(fx, Pattern1EffectDuration);
         }
 
