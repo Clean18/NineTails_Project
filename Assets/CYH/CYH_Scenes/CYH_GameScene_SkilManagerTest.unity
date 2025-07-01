@@ -3265,6 +3265,9 @@ MonoBehaviour:
   _hitBox: {fileID: 0}
   _radius: 6
   _highestMonster: {fileID: 0}
+  _damageInterval: 0.2
+  _effectDuration: 0.1
+  _damageEffectPrefab: {fileID: 702732441717082960, guid: 93f93c1ce8781c3498b1d87f1369a5b8, type: 3}
 --- !u!50 &8965787212209531648
 Rigidbody2D:
   serializedVersion: 4

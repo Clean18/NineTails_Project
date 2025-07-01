@@ -9,6 +9,13 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
     [SerializeField] GameObject _highestMonster;
+    [Header("데미지 코루틴 (초)")]
+    [SerializeField] private float _damageInterval = 0.2f;
+    [Header("이펙트 활성 지속 시간 (초)")]
+    [SerializeField] private float _effectDuration = 0.1f;
+    [Header("데미지 이펙트 프리팹")]
+    [SerializeField] private GameObject _damageEffectPrefab;
+
 
     public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
@@ -49,7 +56,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
         OnAttackStart();
         DetectMonster();
         GetHighestHpMonster();
-        Damage(_highestMonster);
+        if (_highestMonster != null)
+            StartCoroutine(DamageCoroutine(_highestMonster));
+
+        OnAttackEnd();
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -70,6 +80,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
         OnAttackStart();
         DetectMonster();
         GetHighestHpMonster();
+
+        if (_highestMonster != null)
+            StartCoroutine(DamageCoroutine(_highestMonster));
+
         OnAttackEnd();
     }
 
@@ -80,8 +94,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void OnAttackEnd()
     {
-        // 몬스터 TakeDamage 처리
-        Damage(_highestMonster);
         _isSkillUsed = false;
     }
 
@@ -112,15 +124,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
         {
             float hp = 0f;
 
-            // 1) MonsterFSM 타입인지 체크
+            // 1) <MonsterFSM>인지 체크
             if (monster.TryGetComponent<MonsterFSM>(out var mM))
                 hp = mM.CurrentHp;
 
-            // 2) RangeMonsterFSM 타입인지 체크
+            // 2) <RangeMonsterFSM>인지 체크
             else if (monster.TryGetComponent<RangeMonsterFSM>(out var mR))
                 hp = mR.CurrentHp;
 
-            // 3) BaseBossFSM 타입인지 체크
+            // 3) <BaseBossFSM>인지 체크
             else if (monster.TryGetComponent<BaseBossFSM>(out var mB))
                 hp = mB.CurrentHealth;
 
@@ -137,19 +149,33 @@ public class SkillLogic_3 : SkillLogic, ISkill
         else
             Debug.Log("감지된 몬스터 x");
 
-        Debug.Log($"_highestMonster : {_highestMonster.name}");
-
         return _highestMonster;
     }
 
     protected override void Damage(GameObject monster)
     {
-        Debug.Log("Damage");
         float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
         //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
-        GetHighestHpMonster()?.GetComponent<IDamagable>().TakeDamage((long)damage);
-
+        monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
+
+        // 현재 :몬스터 하위에 생성 x
+        // 피격 몬스터 하위에 이펙트 생성
+        if (_damageEffectPrefab != null && monster != null)
+        {
+            Instantiate(_damageEffectPrefab, monster.transform.position, Quaternion.identity, monster.transform);
+        }
+    }
+
+    #region Coroutine
+    private IEnumerator DamageCoroutine(GameObject monster)
+    {
+        for (int i = 1; i < 6; i++)
+        {
+            Debug.Log($"데미지 {i}번");
+            Damage(_highestMonster);
+            yield return new WaitForSeconds(_damageInterval);
+        }
     }
 
     private IEnumerator CooldownCoroutine()
@@ -158,7 +184,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         float remaining = SkillData.CoolTime;
         while (remaining > 0f)
         {
-            Debug.Log($"쿨타임 남음: {remaining}초");
+            //Debug.Log($"쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
@@ -166,7 +192,8 @@ public class SkillLogic_3 : SkillLogic, ISkill
         IsCooldown = false;
         Debug.Log("쿨타임 종료");
     }
-
+    #endregion
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
