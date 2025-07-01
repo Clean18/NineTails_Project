@@ -419,47 +419,6 @@ public class DataManager : Singleton<DataManager>
 			//Debug.Log($"승급 확률 : {successRate * 100}%");
 		}
 	}
-
-  IEnumerator MissionDataInit()
-    {
-        // CSV 다운로드
-        string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
-        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
-        yield return csvData.SendWebRequest();
-
-        if (csvData.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("CSV 다운로드 실패");
-            yield break;
-        }
-
-        // 딕셔너리 초기화
-        MissionTable = new();
-
-        string csv = csvData.downloadHandler.text;
-        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-        for (int i = 1; i < lines.Length; i++)
-        {
-            string line = lines[i];
-            string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-            string stage = Clean(cells[0]);
-            int timeLimit = int.Parse(Clean(cells[1]));
-            int count = int.Parse(Clean(cells[2]));
-            string nextScene = Clean(cells[3]);
-            MissionInfo info = new MissionInfo
-            {
-                Stage = stage,
-                TimeLimit = timeLimit,
-                Count = count,
-                NextScene = nextScene
-            };
-
-            MissionTable[stage] = info;
-        }
-    }
-
 	#region Table Get 함수
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
