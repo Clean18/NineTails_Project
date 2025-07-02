@@ -151,7 +151,7 @@ MonoBehaviour:
   Pattern2Delay: 2
   Pattern2DamagePercent: 5
   FeatherCount: 6
-  FeatherDamageRadius: 1
+  FeatherDamageRadius: 5
   Pattern2BoxSize: {x: 20, y: 10}
   Pattern2Center: {fileID: 8300456024747162924}
   WarningRectPrefab: {fileID: 1660686088289365442, guid: b4eda7e859ba6754583aa4bb4a3d64c8, type: 3}

@@ -2,37 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 원거리 공격 몬스터 FSM 클래스
+// BaseMonsterFSM을 상속하여 공격 루틴만 투사체 발사 방식으로 오버라이드
 public class RangedMonsterFSM : BaseMonsterFSM
 {
     [Header("Attack Setting")]
-    [SerializeField] private GameObject AttackEffectPrefab;
-    [SerializeField] private Transform AttackPoint;
-    [SerializeField] private GameObject ProjectilePrefab;
-    [SerializeField] private float ProjectileSpeed = 8f;
-    [SerializeField] private float AttackDamage = 10f;
-    [SerializeField] private AudioClip AttackSound;
-    [SerializeField] private Animator MonsterAnimator;
+    [SerializeField] private GameObject AttackEffectPrefab;    // 공격 시 생성되는 이펙트 프리팹
+    [SerializeField] private Transform AttackPoint;            // 투사체가 생성될 위치
+    [SerializeField] private GameObject ProjectilePrefab;      // 발사할 투사체 프리팹
+    [SerializeField] private float ProjectileSpeed = 8f;       // 투사체 속도
+    [SerializeField] private float AttackDamage = 10f;         // 투사체 데미지
+    [SerializeField] private AudioClip AttackSound;            // 공격 사운드
+    [SerializeField] private Animator MonsterAnimator;         // 애니메이터
 
+    // BaseMonsterFSM의 추상 공격 루틴 구현 (원거리 투사체 방식)
     protected override IEnumerator AttackRoutine()
     {
+        // 공격 상태일 때 반복
         while (_currentState == MonsterState.Attack)
         {
+            // 1. 애니메이션 실행
             MonsterAnimator?.SetTrigger("Attack");
+
+            // 2. 사운드 재생
             AudioSource.PlayClipAtPoint(AttackSound, transform.position);
 
+            // 3. 이펙트 생성 (화염, 연기 등)
             if (AttackEffectPrefab != null && AttackPoint != null)
             {
                 GameObject fx = Instantiate(AttackEffectPrefab, AttackPoint.position, Quaternion.identity);
-                Destroy(fx, 1f);
+                Destroy(fx, 1f); // 이펙트 1초 뒤 자동 제거
             }
 
+            // 4. 투사체 생성 및 방향/속도 적용
             if (ProjectilePrefab != null && AttackPoint != null && targetPlayer != null)
             {
+                // 4-1. 방향 계산 (플레이어 향)
                 Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
+
+                // 4-2. 투사체 생성
                 GameObject projectile = Instantiate(ProjectilePrefab, AttackPoint.position, Quaternion.identity);
+
+                // 4-3. 물리 적용 (속도 방향 설정)
                 Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
                 rb?.AddForce(dir * ProjectileSpeed, ForceMode2D.Impulse);
 
+                // 4-4. 데미지 설정 (MonsterProjectile 스크립트가 있어야 함)
                 MonsterProjectile mp = projectile.GetComponent<MonsterProjectile>();
                 if (mp != null)
                 {
@@ -40,9 +55,23 @@ public class RangedMonsterFSM : BaseMonsterFSM
                 }
             }
 
+            // 5. 공격 쿨타임 후 반복
             yield return new WaitForSeconds(AttackCooldown);
         }
 
+        // 상태가 Attack에서 벗어나면 코루틴 정리
         attackRoutine = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (AttackPoint != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(AttackPoint.position, 0.2f); // 이펙트/발사 위치
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, AttackRange); // 원거리 사거리
+        }
     }
 }

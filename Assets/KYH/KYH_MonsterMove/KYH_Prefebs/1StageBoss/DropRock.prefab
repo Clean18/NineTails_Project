@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamagePercent: 0.1
   TargetTag: Player
-  DamageRadius: 0.6
+  DamageRadius: 1
   StopThreshold: 0.4
   DropForce: 30
   WarningPoint: {fileID: 2865907206060987567, guid: 271cfdac57fb4dc48b83130722a5f3d9, type: 3}
