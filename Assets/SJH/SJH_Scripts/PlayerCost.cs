@@ -71,8 +71,9 @@ public class PlayerCost
     public void IncreaseSpiritEnergy(long amount)
     {
         // 9경9999조9999억9999만9999 까지 쌓임
-        Debug.Log($"영기 {amount} 증가");
+        //Debug.Log($"영기 {amount} 증가");
         SpiritEnergy = math.min(99999999999999999, SpiritEnergy + amount);
+        AchievementManager.Instance?.CheckCurrencyAchievements();  // 영기 누적 업적 카운트
     }
     public void DecreaseSpiritEnergy(long amount)
     {
@@ -82,8 +83,9 @@ public class PlayerCost
     public void IncreaseWarmth(long amount)
     {
         // 9경9999조9999억9999만9999 까지 쌓임
-        Debug.Log($"온기 {amount} 증가");
+        //Debug.Log($"온기 {amount} 증가");
         Warmth = math.min(99999999999999999, Warmth + amount);
+        AchievementManager.Instance?.CheckCurrencyAchievements(); // 온정 누적 업적 카운트
     }
     public void DecreaseWarmth(long amount)
     {

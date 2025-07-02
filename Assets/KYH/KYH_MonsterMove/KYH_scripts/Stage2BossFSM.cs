@@ -17,14 +17,19 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private AudioClip RoarSound1;
     [SerializeField] private float Pattern1Delay = 3f;
     [SerializeField] private Vector2 Pattern1BoxSize = new Vector2(2f, 6f);
+    [SerializeField] private Transform DustEffect1SpawnRight;
+    [SerializeField] private Transform DustEffect1SpawnLeft;
 
     [Header("Pattern2 설정 - 방망이 수평 강타 (1회, 60% 피해)")]
     [SerializeField] private GameObject WarningLineHorizontal;
     [SerializeField] private Transform WarningOrigin2;
     [SerializeField] private GameObject DustEffect2;
+    [SerializeField] private GameObject DustEffect3;
     [SerializeField] private AudioClip RoarSound2;
     [SerializeField] private float Pattern2Delay = 3f;
     [SerializeField] private Vector2 Pattern2BoxSize = new Vector2(6f, 2f);
+    [SerializeField] private Transform SwingBonkPoint1;
+    [SerializeField] private Transform SwingBonkPoint2;
 
     protected override void HandlePattern1()
     {
@@ -50,28 +55,33 @@ public class Stage2BossFSM : BaseBossFSM
         // 3. 경고 유지 시간 대기
         yield return new WaitForSeconds(Pattern1Delay);
 
-        // 4. 1차 타격
-        BossAnimator.Play("Boss_Stomp1");
+        BossAnimator.Play("Giant_StompRight");
         if (DustEffect1 != null)
-            Instantiate(DustEffect1, WarningOrigin1.position, Quaternion.identity);
-
+        {
+            GameObject dust1 = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
+            Destroy(dust1, 2f); // 2초 뒤 삭제
+        }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
-        // 5. 2차 타격
-        BossAnimator.Play("Boss_Stomp2");
+        BossAnimator.Play("Giant_StompLeft");
         if (DustEffect1 != null)
-            Instantiate(DustEffect1, WarningOrigin1.position, Quaternion.identity);
-
+        {
+            GameObject dust2 = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
+            Destroy(dust2, 2f); // 2초 뒤 삭제
+        }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
 
         // 6. 후처리
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
+
         if (warning != null) Destroy(warning);
 
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Giant_Idle");
     }
 
     protected override void HandlePattern2()
@@ -85,7 +95,7 @@ public class Stage2BossFSM : BaseBossFSM
         Debug.Log("Stage2 패턴2 - 방망이 수평 강타 시작");
 
         // 1. 발 두 번 구르고 울부짖는 연출
-        BossAnimator.Play("Boss_StompStart");
+        
         AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
 
         // 2. 경고 범위 표시 (가로 방향)
@@ -99,18 +109,28 @@ public class Stage2BossFSM : BaseBossFSM
         yield return new WaitForSeconds(Pattern2Delay);
 
         // 4. 방망이 강타
-        BossAnimator.Play("Boss_HammerSmash");
-        if (DustEffect2 != null)
-            Instantiate(DustEffect2, WarningOrigin2.position, Quaternion.identity);
+        BossAnimator.Play("Giant_Swing_Bonk");
 
+        yield return new WaitForSeconds(1f);
+
+        if (DustEffect2 != null && DustEffect3 != null)
+        {
+            GameObject dust3 = Instantiate(DustEffect2, SwingBonkPoint1.position, Quaternion.identity);
+            GameObject dust4 = Instantiate(DustEffect3, SwingBonkPoint2.position, Quaternion.identity);
+
+            Destroy(dust3, 2f);
+            Destroy(dust4, 2f);
+        }
         DealBoxDamage(WarningOrigin2.position, Pattern2BoxSize, 0.6f);
 
         // 5. 후처리
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         if (warning != null) Destroy(warning);
 
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Giant_Idle");
     }
 
     protected override void HandlePattern3()
@@ -139,19 +159,34 @@ public class Stage2BossFSM : BaseBossFSM
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        // 패턴 1 - 세로 범위 박스
         if (WarningOrigin1 != null)
         {
+            Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
             Gizmos.DrawCube(WarningOrigin1.position, Pattern1BoxSize);
-            Handles.Label(WarningOrigin1.position + Vector3.up * 0.5f, "Pattern 1 범위");
+            Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern 1 데미지 범위");
         }
 
-        // 패턴 2 - 가로 범위 박스
         if (WarningOrigin2 != null)
         {
+            Gizmos.color = new Color(0f, 1f, 1f, 0.4f);
             Gizmos.DrawCube(WarningOrigin2.position, Pattern2BoxSize);
-            Handles.Label(WarningOrigin2.position + Vector3.up * 0.5f, "Pattern 2 범위");
+            Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern 2 데미지 범위");
+        }
+
+        // Pattern1 이펙트 위치 시각화 (오른발)
+        if (DustEffect1SpawnRight != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(DustEffect1SpawnRight.position, 0.2f);
+            Handles.Label(DustEffect1SpawnRight.position + Vector3.up * 0.1f, "오른발 이펙트 위치");
+        }
+
+        // Pattern1 이펙트 위치 시각화 (왼발)
+        if (DustEffect1SpawnLeft != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
+            Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
         }
     }
 
