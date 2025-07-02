@@ -1,14 +1,14 @@
 {
-    "_savedTimeString": "2025-07-02T10:58:16.9278143+09:00",
+    "_savedTimeString": "2025-07-02T11:36:41.6875885+09:00",
     "AttackLevel": 1,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 95,
+    "CurrentHp": 68,
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
     "ShieldHp": 0,
-    "SpiritEnergy": 499995,
-    "Warmth": 499995,
+    "SpiritEnergy": 11699883,
+    "Warmth": 11699883,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
@@ -24,6 +24,11 @@
             "SkillIndex": 2,
             "SkillLevel": 1,
             "SlotIndex": 2
+        },
+        {
+            "SkillIndex": 3,
+            "SkillLevel": 1,
+            "SlotIndex": 3
         }
     ],
     "Grade": "N",

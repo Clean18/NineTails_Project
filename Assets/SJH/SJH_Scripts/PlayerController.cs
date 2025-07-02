@@ -404,6 +404,9 @@ public class PlayerController : MonoBehaviour
     // SkillLogic_1 애니메이션 이벤트 함수
     public void Skill1_DisableHitbox() => (SkillController.SkillList[1] as SkillLogic_1)?.DisableHitbox();
 
+    // SkillLogic_3 애니메이션 이벤트 함수
+    public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();
+
     #endregion
 
     void OnDrawGizmos()

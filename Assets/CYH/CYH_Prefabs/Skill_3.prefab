@@ -48,14 +48,13 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 0}
-  _playerController: {fileID: 0}
   _hitBox: {fileID: 0}
-  _radius: 2
+  _radius: 5
   _highestMonster: {fileID: 0}
   _damageInterval: 0.2
   _effectDuration: 0.1
-  _damageEffectPrefab: {fileID: 0}
+  _damageEffectPrefab: {fileID: 702732441717082960, guid: 93f93c1ce8781c3498b1d87f1369a5b8, type: 3}
+  _effectYOffset: 0.5
   <SkillData>k__BackingField: {fileID: 11400000, guid: 0da0404a52382c046befc585f17ecd1c, type: 2}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 1
