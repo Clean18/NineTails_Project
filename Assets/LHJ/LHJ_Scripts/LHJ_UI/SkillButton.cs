@@ -33,7 +33,13 @@ public class SkillButton : MonoBehaviour, IUI
             KeyCode.Alpha3,
         };
 
-        SkillButtonUpdate(mappingSkills);
+        // 현재 스킬들 쿨타임 추가
+        coolTimes = new float[4];
+        for (int i = 0; i < coolTimes.Length; i++)
+        {
+            if (mappingSkills.TryGetValue(triggerKeys[i], out var skill) && skill != null && skill.SkillData != null) coolTimes[i] = skill.SkillData.CoolTime;
+            else coolTimes[i] = 1f;
+        }
 
         currentCooltimes = new float[skillButtons.Length];
 
@@ -42,18 +48,6 @@ public class SkillButton : MonoBehaviour, IUI
             int index = i;
             skillButtons[i].onClick.AddListener(() => UseSkill(index));     // 버튼 클릭시 해당 스킬 발동
             coolTimeImages[i].fillAmount = 0;   // 해당 스킬 쿨타임 이미지 초기화
-        }
-    }
-
-    public void SkillButtonUpdate(Dictionary<KeyCode, ISkill> mappingSkills)
-    {
-        Debug.Log("스킬 단축키 UI 업데이트");
-        // 현재 스킬들 쿨타임 추가
-        coolTimes = new float[4];
-        for (int i = 0; i < coolTimes.Length; i++)
-        {
-            if (mappingSkills.TryGetValue(triggerKeys[i], out var skill) && skill != null && skill.SkillData != null) coolTimes[i] = skill.SkillData.CoolTime;
-            else coolTimes[i] = 1f;
         }
     }
 

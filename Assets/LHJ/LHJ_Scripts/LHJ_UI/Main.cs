@@ -33,12 +33,13 @@ public class Main : BaseUI, IUI
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
         GetEvent("Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>();
         GetEvent("Mission").Click += data => {
-            if (MissionManager.Instance.IsCooldownActive) return;
+            if (MissionManager.Instance.IsCooldownActive)
+                return;
             UIManager.Instance.ShowPopUp<StartMissionPopUp>();
         };
         PlayerStatUI();
 
-        PlayerController.Instance.ConnectStatEvent(PlayerStatUI);
+        PlayerController.Instance.ConnectEvent(PlayerStatUI);
     }
 
     // 메인에 플레이어 스탯 정보UI

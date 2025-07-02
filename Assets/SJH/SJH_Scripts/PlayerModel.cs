@@ -35,7 +35,7 @@ public class PlayerModel
 		Cost = new PlayerCost();
 		Cost.InitCost(saveData.SpiritEnergy, saveData.Warmth);
 
-		// 플레이어의 저장된 스킬을 등록
+		// TODO : 플레이어의 저장된 스킬을 등록
 		Skill = new PlayerSkill();
 		Skill.InitSkill(saveData.PlayerSkillList);
 
@@ -80,13 +80,7 @@ public class PlayerModel
 		Cost.OnCostChanged += playerStatUI;
 	}
 
-    public void ConnectSkillSlotEvent(Action<Dictionary<KeyCode, ISkill>> updateSkillUI)
-    {
-        // TODO : 이벤트 연결
-    }
-
-
-    public GameData GetGameData()
+	public GameData GetGameData()
 	{
 		SavePlayerData data = Data.SavePlayerData();
 		SavePlayerCost cost = Cost.SavePlayerCost();
@@ -352,7 +346,6 @@ public class PlayerModel
 			return;
 		}
 	}
-    public float GetIncreaseDamage() => Equipment.IncreaseDamage;
     #endregion
 
     #region PlayerSkill 관련 함수

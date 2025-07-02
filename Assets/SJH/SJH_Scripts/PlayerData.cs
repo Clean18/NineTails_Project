@@ -93,14 +93,8 @@ public class PlayerData
 		private set
 		{
             //Debug.Log("체력 계산");
-            long prevMaxHp = MaxHp;
-
             _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
-
-            long hpHeal = MaxHp - prevMaxHp;
-            Hp = Math.Min(MaxHp, Hp +  hpHeal);
-
             OnStatChanged?.Invoke();
         }
 	}
@@ -243,6 +237,7 @@ public class PlayerData
     public void HpLevelup()
     {
         HpLevel += 1;
+        // TODO : 체력이 증가한 만큼 현재 체력도 회복
         Debug.Log($"체력 업! 레벨 : {HpLevel}");
     }
 
