@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FallingFeather : MonoBehaviour
 {
+    [SerializeField] Animator featherAnimator;
+
     [Header("데미지 설정")]
     [SerializeField] private float DamagePercent = 0.05f;
     [SerializeField] private float DamageRadius = 1.5f;
@@ -27,6 +29,7 @@ public class FallingFeather : MonoBehaviour
 
         if (WarningPoint != null)
         {
+            Debug.Log("헤즈 런치드 트루 진행됨");
             Vector2 dir = (WarningPoint.position - transform.position).normalized;
             rb.AddForce(dir * DropForce, ForceMode2D.Impulse);
             hasLaunched = true;
@@ -37,12 +40,14 @@ public class FallingFeather : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log("픽스 업데이트 들어옴");
+
         if (!hasLaunched || hasDealtDamage || WarningPoint == null) return;
 
         float featherY = transform.position.y;
         float warningY = WarningPoint.position.y;
         float delta = featherY - warningY;
-
+        Debug.Log("픽스 업데이트 진행중");
         if (Mathf.Abs(delta) <= StopThreshold)
         {
             rb.velocity = Vector2.zero;
@@ -51,10 +56,15 @@ public class FallingFeather : MonoBehaviour
             DealDamage();
             hasDealtDamage = true;
 
-            if (WarningPoint != null)
-                Destroy(WarningPoint.gameObject, 1.5f);
+            featherAnimator.Play("Fire_Feather");
 
-            Destroy(gameObject, 1.5f);
+            if (WarningPoint != null)
+            {
+                Debug.Log("경고위치 표기 지우기 시도함");
+                Destroy(WarningPoint.gameObject, 1.5f);
+            }
+
+                Destroy(gameObject, 1.5f);
         }
     }
 
