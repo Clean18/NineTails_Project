@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SkillLogic_2 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-
     [Header("Projectile 프리팹")]
     [SerializeField] private GameObject _projectilePrefab;
 
@@ -36,12 +34,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
-
-    private void Awake()
-    {
-        IsCooldown = false;
-        SkillData = _data;
-    }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
     private void Start()
     {
@@ -61,15 +54,18 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public void SkillInit()
     {
         Debug.Log("스킬 2 초기화");
+        IsCooldown = false;
+        SkillLevel = 0;
+        SlotIndex = 2;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha5))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -90,7 +86,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
         // 보호막 체력 설정
         //PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
-        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * _skillLevel)));
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
@@ -200,7 +196,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * _skillLevel)));
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * SkillLevel)));
         monsters?.GetComponent<IDamagable>().TakeDamage(damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }

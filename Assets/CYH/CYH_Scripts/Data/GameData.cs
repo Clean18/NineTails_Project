@@ -21,6 +21,8 @@ public partial class GameData
     }
 
     [Header("PlayerData")]
+    // 플레이어 이름
+    public string PlayerName = "구미호";
     // 공격 레벨
     public int AttackLevel = 1;
     // 방어 레벨
@@ -43,6 +45,17 @@ public partial class GameData
     public long Warmth = 0;
 
     // TODO : PlayerSkill
+    [Header("PlayerSkill")]
+    public List<SaveSkillData> PlayerSkillList = new()
+    {
+        // 기본공격
+        new SaveSkillData
+        {
+            SkillIndex = 0,
+            SkillLevel = 0,
+            SlotIndex = 0,
+        }
+    };
 
     [Header("PlayerEquipment")]
     // 장비 등급
