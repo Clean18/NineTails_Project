@@ -36,6 +36,8 @@ public class StatUpPopUp : BaseUI
         };
     }
 
+    void OnEnable() => UpdateStatUpUI();
+
     public void UpdateStatUpUI()
     {
         var data = PlayerController.Instance.SaveData();

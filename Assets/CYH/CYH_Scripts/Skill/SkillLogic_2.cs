@@ -196,7 +196,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * SkillLevel)));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((0.25f + 0.0025f * SkillLevel)));
         monsters?.GetComponent<IDamagable>().TakeDamage(damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }

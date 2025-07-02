@@ -320,7 +320,8 @@ public class PlayerController : MonoBehaviour
     /// UI 업데이트 이벤트 연결하는 함수
     /// </summary>
     /// <param name="playerStatUI"></param>
-    public void ConnectEvent(Action playerStatUI) => _model.ConnectEvent(playerStatUI);
+    public void ConnectStatEvent(Action playerStatUI) => _model.ConnectEvent(playerStatUI);
+    public void ConnectSkillSlotEvent(Action<Dictionary<KeyCode, ISkill>> updateSkillUI) => _model.ConnectSkillSlotEvent(updateSkillUI);
     /// <summary>
     /// 플레이어의 이름을 반환하는 함수
     /// </summary>
@@ -347,6 +348,11 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 스피드 레벨업 함수
     /// </summary>
     public void TrySpeedLevelup() => _model.TrySpeedLevelup();
+    /// <summary>
+    /// 플레이어 공격력 * (1 + 가하는 피해 증가)
+    /// </summary>
+    /// <returns></returns>
+    public long GetTotalDamage() => (long)(GetAttack() * (1f + GetIncreaseDamage()));
     #endregion
 
     #region Cost 관련 함수
@@ -369,6 +375,11 @@ public class PlayerController : MonoBehaviour
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
     public void TryPromote() => _model.TryPromote();
+    /// <summary>
+    /// 플레이어의 가하는 피해 증가를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreaseDamage() => _model.GetIncreaseDamage();
     #endregion
 
     #region Skill 관련 함수
