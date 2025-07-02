@@ -6108,6 +6108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   attackSpeed: 15
+  maxHp: 100
+  hp: 10
   rigid: {fileID: 0}
   moveInput: {x: 0, y: 0}
   effectPrefab: {fileID: 1440692181422280772, guid: 5a392d72ec7fc9b4c80ab1e0c05657af, type: 3}

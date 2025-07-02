@@ -99,6 +99,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void SkillRoutine()
     {
         RandomDamage();
+        HealPlayer(_randomMonsters.Count);
         OnAttackEnd();
     }
 
@@ -140,7 +141,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         if (_hitMonsters.Count <= _randomTargetCount)
         {
-            Debug.Log("전부 넣기");
+            Debug.Log("피격 몬스터 전부 리스트에 추가");
             _randomMonsters.AddRange(_hitMonsters);
 
         }
@@ -165,13 +166,25 @@ public class SkillLogic_4 : SkillLogic, ISkill
         }
     }
 
+    // 스킬 사용 시 플레이어 체력 회복 (_randomMonsters.Count 만큼)
+    private void HealPlayer(int count)
+    {
+        if (_randomMonsters.Count == 0) return;
+
+        _playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count;
+        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count}]의 Hp를 회복");
+        //PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel));
+    }
+    
     protected override void Damage(GameObject monster)
     {
-        long damage = (long)(_playerController.AttackPoint * (1.0f + 0.01f * SkillLevel));
-        //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
+        float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * _skillLevel));
+        //long damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * _skillLevel);
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
+
+
 
     private IEnumerator CooldownCoroutine()
     {

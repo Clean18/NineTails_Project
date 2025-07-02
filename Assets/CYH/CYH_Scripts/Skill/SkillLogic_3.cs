@@ -5,7 +5,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     //[SerializeField] private PlayerControllerTypeA_Copy _playerController;
-
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
     [SerializeField] GameObject _highestMonster;
@@ -176,7 +175,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
-
+    
     #region Coroutine
     private IEnumerator DamageCoroutine(GameObject monster)
     {
