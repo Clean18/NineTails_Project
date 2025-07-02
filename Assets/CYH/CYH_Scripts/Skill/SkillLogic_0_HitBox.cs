@@ -125,7 +125,6 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("기본공격 몬스터 추가");
         if (!_isSkillUsed) return;
 
         if (!other.CompareTag("Monster")) return;

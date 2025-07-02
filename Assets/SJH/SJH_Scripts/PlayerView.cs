@@ -23,11 +23,11 @@ public class PlayerView : MonoBehaviour
         _anim = GetComponent<Animator>();
 
         canMove = true;
-
     }
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
+        Debug.Log($"이동 가능 여부 : {canMove}");
         if (!canMove) return;
 
         if (dir != Vector2.zero)

@@ -17,6 +17,7 @@ public class PlayerAI
         set
         {
             _targetSkill = value;
+            // TODO : 인스펙터용
             if (value != null)
                 _targetSkillName = _targetSkill.SkillData.SkillName;
         }
@@ -38,18 +39,10 @@ public class PlayerAI
 	{
 		switch (_controller.CurrentState)
 		{
-			case AIState.Search:
-				SearchAction();
-				break;
-			case AIState.SkillLoad:
-				SkillLoad();
-				break;
-			case AIState.Chase:
-				ChaseAction();
-				break;
-			case AIState.Attack:
-				AttackAction();
-				break;
+			case AIState.Search: SearchAction(); break;
+			case AIState.SkillLoad: SkillLoad(); break;
+			case AIState.Chase: ChaseAction(); break;
+			case AIState.Attack: AttackAction(); break;
 		}
 		UIManager.Instance.GameUI?.ChangeStateText(_controller.CurrentState);
 	}
@@ -67,7 +60,6 @@ public class PlayerAI
         //float maxCooldown = float.MinValue;
 
         List<ISkill> ranSkills = new();
-        // TODO : 게임매니저의 딕셔너리가 아닌 플레이어가 등록한 스킬리스트
         // 기본공격은 이 리스트에 없어야함
         // -> 모든 스킬이 쿨타임일 때 사용할 예정 
         foreach (var skill in _model.Skill.SkillMapping.Values)
@@ -160,7 +152,8 @@ public class PlayerAI
 
 	IEnumerator SearchRoutine()
 	{
-		while (_controller.CurrentState == AIState.Search || _controller.CurrentState == AIState.Chase)
+		while ((_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Search)
+            || (_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Chase))
 		{
 			yield return _searchDelay;
 
