@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SkillLogic_4 : SkillLogic, ISkill
@@ -60,15 +61,13 @@ public class SkillLogic_4 : SkillLogic, ISkill
         IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
-        //AnimationPlay();
-
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
         _randomMonsters.Clear();
 
         OnAttackStart();
+        AnimationPlay();
         DetectMonster();
-        SkillRoutine();
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -85,22 +84,21 @@ public class SkillLogic_4 : SkillLogic, ISkill
         IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
-        //AnimationPlay();
-
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
         _randomMonsters.Clear();
 
         OnAttackStart();
+        AnimationPlay();
         DetectMonster();
-        SkillRoutine();
     }
 
+    // 애니메이션 종료 시 호출 (애니메이션 이벤트)
     public void SkillRoutine()
     {
-
         RandomDamage();
         HealPlayer(_randomMonsters.Count);
+
         // 3초 동안 0.5초마다 데미지 + 이펙트 flipX 토글
         if (_randomMonsters.Count > 0)
             StartCoroutine(TimedDamageCoroutine());
@@ -110,6 +108,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void OnAttackStart()
     {
         _isSkillUsed = true;
+
+        // 플레이어 이동 비활성화
+        //PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
@@ -120,9 +121,10 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void AnimationPlay()
     {
         _animator.SetTrigger("UseSkill_4");
-        //PlayerController.Instance.SetTrigger("UseSkill_3");
+        //PlayerController.Instance.SetTrigger("UseSkill_4");
     }
 
+    // 범위 안의 모든 몬스터 탐색
     private void DetectMonster()
     {
         Vector3 center = transform.position;
@@ -176,7 +178,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         _playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count;
         Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count}]의 Hp를 회복");
-        //PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel));
+        //4PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * _skillLevel));
     }
 
     protected override void Damage(GameObject monster)
@@ -231,6 +233,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 이펙트 삭제
         foreach (var effect in effects)
             Destroy(effect);
+        
+        // 플레이어 이동 활성화
+        //PlayerController.Instance.Move();
     }
 
     private IEnumerator CooldownCoroutine()
