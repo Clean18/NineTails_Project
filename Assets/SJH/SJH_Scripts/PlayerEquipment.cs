@@ -62,6 +62,7 @@ public class PlayerEquipment
         set
         {
             _attack = value;
+            OnEquipmentChanged?.Invoke();
         }
     }
 
@@ -72,6 +73,7 @@ public class PlayerEquipment
         set
         {
             _cooldownReduction = value;
+            OnEquipmentChanged?.Invoke();
         }
     }
 
@@ -82,6 +84,7 @@ public class PlayerEquipment
         set
         {
             _reduceDamage = value;
+            OnEquipmentChanged?.Invoke();
         }
     }
 
@@ -109,6 +112,8 @@ public class PlayerEquipment
             _increaseDamageLevel = Mathf.Max(0, value);
             if (_increaseDamageLevel == 0) IncreaseDamage = 0f;
             else IncreaseDamage = 0.5f + ((_increaseDamageLevel - 1) * 0.2f);
+
+            OnEquipmentChanged?.Invoke();
         }
     }
 

@@ -96,6 +96,8 @@ public struct MissionInfo
 /// </summary>
 public class DataManager : Singleton<DataManager>
 {
+    public static bool isInit { get; private set; }
+
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
 	/// <br/> ex) Table[스탯타입][레벨] == 스탯값
@@ -133,16 +135,17 @@ public class DataManager : Singleton<DataManager>
     /// </summary>
     public Dictionary<int, int> UltSkillCostTable = new();
 
-	protected override void Awake()
-	{
-		base.Awake();
+    protected override void Awake()
+    {
+        base.Awake();
 
-		// 데이터테이블 초기화
-		StartCoroutine(LoadDatas());
-	}
+        isInit = false;
+    }
 
-	IEnumerator LoadDatas()
+    public IEnumerator LoadDatas()
 	{
+        if (isInit) yield break;
+
 		yield return StartCoroutine(StatDataInit());
 		yield return StartCoroutine(EquipmentUpgradeCostInit());
 		yield return StartCoroutine(EquipmentDataInit());
@@ -150,8 +153,11 @@ public class DataManager : Singleton<DataManager>
 		yield return StartCoroutine(MissionDataInit());
 		yield return StartCoroutine(MissionDataInit());
 		yield return StartCoroutine(SkillCostInit());
+
 		Debug.Log("모든 데이터 테이블 초기화 완료");
-	}
+        isInit = true;
+
+    }
 
 	string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
 

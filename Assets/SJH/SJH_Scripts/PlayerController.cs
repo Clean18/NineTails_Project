@@ -111,12 +111,6 @@ public class PlayerController : MonoBehaviour
         //Mode = ControlMode.Manual;
     }
 
-	public void PlayerInit()
-	{
-		Debug.LogWarning("Player Init 실행됨");
-		StartCoroutine(PlayerInitRoutine());
-	}
-
 	void Update()
 	{
         if (_isInit == false)
@@ -207,14 +201,8 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
     /// </summary>
     /// <returns></returns>
-    IEnumerator PlayerInitRoutine()
+    public IEnumerator PlayerInitRoutine()
     {
-        while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
-        {
-            Debug.Log("데이터매니저 스탯 딕셔너리 null");
-            yield return null;
-        }
-
         // 게임매니저에 자기자신 참조
         GameManager.Instance.PlayerController = this;
 
@@ -227,9 +215,6 @@ public class PlayerController : MonoBehaviour
 
         // 세이브로드매니저에서 데이터 받아오기
         _model.InitModel(SaveLoadManager.Instance.GameData);
-
-        yield return new WaitForSeconds(1f);
-
 
         // UI 초기화
         if (UIManager.Instance.SceneUIList.Count > 0)
@@ -246,7 +231,6 @@ public class PlayerController : MonoBehaviour
         // TODO : 로딩종료
 
         _isInit = true;
-        Debug.Log("플레이어 데이터 초기화 완료");
 
         yield break;
     }

@@ -66,7 +66,7 @@ public class PlayerModel
 
 	public bool GetIsDead() => Data.IsDead;
 	public long GetPower() => Data.PowerLevel;
-	public long GetAttack() => Data.Attack;
+	public long GetAttack() => Data.Attack + (long)(Data.Attack * Equipment.Attack);
 	public long GetDefense() => Data.Defense;
 	public long GetMaxHp() => Data.MaxHp;
 	public long GetHp() => Data.Hp;

@@ -2939,8 +2939,12 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  triggerKeys: 
-  currentCooltimes: []
+  triggerKeys: 00000000000000000000000000000000
+  currentCooltimes:
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!1 &940699492
 GameObject:
   m_ObjectHideFlags: 0
