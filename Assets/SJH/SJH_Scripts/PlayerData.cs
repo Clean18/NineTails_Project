@@ -56,7 +56,7 @@ public class PlayerData
 			_attackLevel = Mathf.Clamp(value, 1, 300);
 			Attack = GetStat(StatDataType.Attack, _attackLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 
@@ -77,7 +77,7 @@ public class PlayerData
             _defenseLevel = Mathf.Clamp(value, 1, 300);
 			Defense = GetStat(StatDataType.Defense, _defenseLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();    // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 
@@ -98,7 +98,7 @@ public class PlayerData
             _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 

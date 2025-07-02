@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
 
 	[Tooltip("플레이어 데이터 로드 여부")]
 	[SerializeField ]private bool _isInit = false;
+    public bool IsInit => _isInit;
 
 	[SerializeField] private PlayerModel _model;
     [SerializeField] private PlayerView _view;
