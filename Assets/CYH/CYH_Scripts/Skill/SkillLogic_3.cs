@@ -25,7 +25,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         Debug.Log("스킬 3 초기화");
         IsCooldown = false;
-        SkillLevel = 1;
+        SkillLevel = 0;
         SlotIndex = 3;
     }
 

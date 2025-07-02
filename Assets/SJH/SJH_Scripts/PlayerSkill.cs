@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct SavePlayerSkill
+public struct SaveSkillData
 {
     /// <summary>
     /// 스킬 번호
@@ -46,7 +46,7 @@ public class PlayerSkill
 	};
 
 
-	public void InitSkill(List<SavePlayerSkill> skillDatas)
+	public void InitSkill(List<SaveSkillData> skillDatas)
 	{
 		_controller = PlayerController.Instance.SkillController;
 
@@ -73,21 +73,12 @@ public class PlayerSkill
 
 			// 스킬컨트롤러의 프리팹 순서는 0 기본공격 1~6 스킬순서 맞춰야함
 			var skill = _controller.SkillList[data.SkillIndex];
-			skill.SkillLevel = data.SkillLevel == 0 ? 1 : data.SkillLevel;
+			skill.SkillLevel = data.SkillLevel;
 
 			KeyCode key = SlotIndexToKeyCode(data.SlotIndex);
 			// 기본공격 제외 추가
 			if (key != KeyCode.Mouse0 && data.SkillIndex != 0) SkillMapping[key] = skill;
 		}
-
-		// TODO : 단축키 완성되면 연결
-		//SkillMapping = new()
-		//{
-		//    [KeyCode.Mouse0] = DefaultAttack,
-		//    [KeyCode.Alpha1] = Skill1,
-		//    [KeyCode.Alpha2] = Skill2,
-		//    [KeyCode.Alpha3] = null,
-		//};
 		Debug.Log("플레이어 스킬 초기화 완료");
 	}
 
@@ -97,9 +88,9 @@ public class PlayerSkill
     /// 스킬 저장 함수
     /// </summary>
     /// <returns></returns>
-	public List<SavePlayerSkill> SavePlayerSkill()
+	public List<SaveSkillData> SavePlayerSkill()
 	{
-		List<SavePlayerSkill> saveSkills = new();
+		List<SaveSkillData> saveSkills = new();
 
 		// 단축키 스킬 세이브
 		foreach (var pair in SkillMapping)
@@ -112,16 +103,26 @@ public class PlayerSkill
 			int slotIndex = KeyCodeToSlotIndex(key);
 			int skillLevel = skill.SkillLevel;
 
-			saveSkills.Add(new SavePlayerSkill
+			saveSkills.Add(new SaveSkillData
 			{
 				SlotIndex = slotIndex,
 				SkillIndex = skill.SkillData.SkillIndex,
-				SkillLevel = skillLevel,
+				SkillLevel = skillLevel
 			});
 
 			// 매핑에 없는 슬롯 인덱스는 -1
 		}
         // TODO : 가지고 있는 스킬 세이브
+        // 테스트 해봐야함
+        foreach (var skill in HasSkills)
+        {
+            saveSkills.Add(new SaveSkillData
+            {
+                SlotIndex = -1,
+                SkillIndex = skill.SkillData.SkillIndex,
+                SkillLevel = skill.SkillLevel
+            });
+        }
 
 		return saveSkills;
 	}
@@ -129,6 +130,10 @@ public class PlayerSkill
 	int KeyCodeToSlotIndex(KeyCode key) => KeyCodeToSlotIndexDic.TryGetValue(key, out int result) ? result : -1;
 	KeyCode SlotIndexToKeyCode(int index) => SlotIndexToKeyCodeDic.TryGetValue(index, out KeyCode result) ? result : KeyCode.None;
 
+    /// <summary>
+    /// 테스트용 스킬 추가 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void Test_AddSkill(int skillIndex)
     {
         if (_controller.SkillList.Count < 1 || _controller.SkillList.Count < skillIndex)
@@ -164,8 +169,8 @@ public class PlayerSkill
             key = pair.Key;
             // 슬롯 인덱스 변경
             newSkill.SlotIndex = KeyCodeToSlotIndex(key);
-            // 스킬레벨 1로
-            newSkill.SkillLevel = 1;
+            // 스킬레벨 0으로
+            newSkill.SkillLevel = 0;
 
             Debug.Log($"{newSkill.SlotIndex} 슬롯에 {newSkill.SkillData.SkillName} 스킬 획득");
         }

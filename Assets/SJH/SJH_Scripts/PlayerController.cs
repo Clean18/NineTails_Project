@@ -19,7 +19,6 @@ public enum ControlMode
 	Auto
 }
 #endregion
-
 #region enum AIState
 /// <summary>
 /// 자동 모드에서의 플레이어 AI 상태
@@ -48,7 +47,6 @@ public enum AIState
 	Attack
 }
 #endregion
-
 #region enum CostType
 /// <summary>
 /// 재화 타입
@@ -57,6 +55,7 @@ public enum CostType
 {
 	Warmth,         // 온기
 	SpiritEnergy,   // 영기
+    Soul,           // 혼백
 }
 #endregion
 
@@ -263,7 +262,7 @@ public class PlayerController : MonoBehaviour
         // TODO : view 보호막처리
         // TODO : UI 보호막 증가 처리
     }
-
+    #region Data 관련 함수
     /// <summary>
     /// 플레이어의 죽음 체크
     /// <br/> true = 죽음
@@ -315,9 +314,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="playerStatUI"></param>
     public void ConnectEvent(Action playerStatUI) => _model.ConnectEvent(playerStatUI);
+    /// <summary>
+    /// 플레이어의 이름을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public string GetPlayerName() => _model.GetPlayerName();
+    #endregion
 
-	#region Cost 관련 함수
-	public long GetCost(CostType costType) => _model.GetCost(costType);
+    #region Cost 관련 함수
+    public long GetCost(CostType costType) => _model.GetCost(costType);
 	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
 	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
 	#endregion
@@ -376,6 +381,15 @@ public class PlayerController : MonoBehaviour
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
     public void TryPromote() => _model.TryPromote();
+    #endregion
+
+    #region 스킬 강화 관련 함수
+    /// <summary>
+    /// 플레이어 스킬을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<SaveSkillData> GetSkillData() => _model.GetSkillData();
+    public void TrySkillLevelUp(int skillIndex) => _model.TrySkillLevelUp(skillIndex);
     #endregion
 
     #region View 함수

@@ -21,6 +21,8 @@ public partial class GameData
     }
 
     [Header("PlayerData")]
+    // 플레이어 이름
+    public string PlayerName = "구미호";
     // 공격 레벨
     public int AttackLevel = 1;
     // 방어 레벨
@@ -44,13 +46,13 @@ public partial class GameData
 
     // TODO : PlayerSkill
     [Header("PlayerSkill")]
-    public List<SavePlayerSkill> PlayerSkillList = new()
+    public List<SaveSkillData> PlayerSkillList = new()
     {
         // 기본공격
-        new SavePlayerSkill
+        new SaveSkillData
         {
             SkillIndex = 0,
-            SkillLevel = 1,
+            SkillLevel = 0,
             SlotIndex = 0,
         }
     };

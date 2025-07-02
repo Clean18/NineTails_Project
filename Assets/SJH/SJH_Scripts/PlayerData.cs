@@ -3,6 +3,7 @@ using UnityEngine;
 
 public struct SavePlayerData
 {
+    public string PlayerName;
     public int AttackLevel;
     public int DefenseLevel;
     public int HpLevel;
@@ -21,6 +22,17 @@ public class PlayerData
     /// 스탯 변경시 UI 업데이트 이벤트
     /// </summary>
     public event Action OnStatChanged;
+
+    [SerializeField] private string _playerName;
+    public string PlayerName
+    {
+        get => _playerName;
+        set
+        {
+            _playerName = value;
+            // TODO : UI 변경 이벤트
+        }
+    }
 
     /// <summary>
     /// 플레이어 전투력 
@@ -122,7 +134,16 @@ public class PlayerData
     }
 
     [Tooltip("보호막 체력")]
-    [SerializeField] public long ShieldHp;
+    [SerializeField] private long _shieldHp;
+    public long ShieldHp
+    {
+        get => _shieldHp;
+        set
+        {
+            _shieldHp = value;
+            // TODO : 이벤트 연결
+        }
+    }
 
     /// <summary>
     /// 불러온 플레이어의 데이터를 초기화하는 함수
@@ -146,14 +167,15 @@ public class PlayerData
 
 	public long GetStat(StatDataType statType, int level)
 	{
-        if (!DataManager.Instance.StatDataTable.TryGetValue(statType, out var levelTable))
-        {
-            Debug.Log("데이터매니저 StatDic == null");
-            return 0;
-        }
+  //      if (!DataManager.Instance.StatDataTable.TryGetValue(statType, out var levelTable))
+  //      {
+  //          Debug.Log("데이터매니저 StatDic == null");
+  //          return 0;
+  //      }
+		//if (!levelTable.TryGetValue(level, out long statValue)) return 0;
+		//return statValue;
 
-		if (!levelTable.TryGetValue(level, out long statValue)) return 0;
-		return statValue;
+        return DataManager.Instance.GetStatData(statType, level);
 	}
 
 	public void DecreaseHp(long damage)
@@ -225,10 +247,17 @@ public class PlayerData
         Debug.Log($"스피드 업! 레벨 : {SpeedLevel}");
     }
 
+    public void SetPlayerName(string name)
+    {
+        PlayerName = name;
+        Debug.Log($"플레이어 이름 변경 : {PlayerName}");
+    }
+
     // 플레이어데이터 세이브 구조체
     public SavePlayerData SavePlayerData()
     {
         var data = new SavePlayerData();
+        data.PlayerName = PlayerName;
         data.AttackLevel = AttackLevel;
         data.DefenseLevel = DefenseLevel;
         data.HpLevel = HpLevel;

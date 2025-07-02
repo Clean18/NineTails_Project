@@ -85,7 +85,7 @@ public class PlayerModel
 		SavePlayerData data = Data.SavePlayerData();
 		SavePlayerCost cost = Cost.SavePlayerCost();
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
-		List<SavePlayerSkill> skills = Skill.SavePlayerSkill();
+		List<SaveSkillData> skills = Skill.SavePlayerSkill();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -126,7 +126,8 @@ public class PlayerModel
 		// 플레이어 영기 추가
 		if (costType == CostType.Warmth) Cost.IncreaseWarmth(amount);
 		else if (costType == CostType.SpiritEnergy) Cost.IncreaseSpiritEnergy(amount);
-	}
+        else if (costType == CostType.Soul) Cost.IncreaseSoul(amount);
+    }
 
 	public void SpendCost(CostType costType, long amount)
 	{
@@ -135,13 +136,12 @@ public class PlayerModel
 		// 플레이어 영기 감소
 		if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
+        else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
 	#endregion
 
 	#region PlayerData 관련 함수
-
 	public SavePlayerData GetPlayerData() => Data.SavePlayerData();
-
 	public void TryAttackLevelup()
 	{
 		// 현재 레벨 체크
@@ -238,10 +238,12 @@ public class PlayerModel
 		Data.SpeedLevelup();
 	}
 
-	#endregion
+    public string GetPlayerName() => Data.PlayerName;
 
-	#region Equipment 관련 함수
-	public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
+    #endregion
+
+    #region Equipment 관련 함수
+    public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
 	public void TryEnhance()
 	{
 		var player = PlayerController.Instance;
@@ -344,5 +346,29 @@ public class PlayerModel
 			return;
 		}
 	}
-	#endregion
+    #endregion
+
+    #region PlayerSkill 관련 함수
+    public List<SaveSkillData> GetSkillData() => Skill.SavePlayerSkill();
+    public void TrySkillLevelUp(int skillIndex)
+    {
+        // 레벨 체크
+        // 재화 체크
+        // 레벨업
+        var player = PlayerController.Instance;
+
+        /*
+         * 플레이어의 스킬 보유 여부를 체크안한다면
+         * UI창에서는 가지고 있는 스킬만 활성화하는 방식
+         */
+        var skill = player.SkillController.SkillList[skillIndex];
+        if (skill == null)
+        {
+            Debug.Log("스킬이 없습니다.");
+            return;
+        }
+
+        skill.SkillLevel += 1;
+    }
+    #endregion
 }

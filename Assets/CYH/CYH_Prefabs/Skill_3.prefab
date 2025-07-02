@@ -57,5 +57,5 @@ MonoBehaviour:
   _effectYOffset: 0.5
   <SkillData>k__BackingField: {fileID: 11400000, guid: 0da0404a52382c046befc585f17ecd1c, type: 2}
   <IsCooldown>k__BackingField: 0
-  <SkillLevel>k__BackingField: 1
+  <SkillLevel>k__BackingField: 0
   <SlotIndex>k__BackingField: -1

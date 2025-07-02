@@ -21,7 +21,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _hitBox = hitBox.GetComponent<CircleCollider2D>();
         _hitBox.enabled = false;
         IsCooldown = false;
-        SkillLevel = 1;
+        SkillLevel = 0;
         SlotIndex = 1;
     }
 
@@ -86,7 +86,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * _skillLevel)));
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * SkillLevel)));
 
         foreach (var monster in _hitMonsters)
         {

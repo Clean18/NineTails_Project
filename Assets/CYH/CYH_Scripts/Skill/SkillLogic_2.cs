@@ -55,7 +55,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         Debug.Log("스킬 2 초기화");
         IsCooldown = false;
-        SkillLevel = 1;
+        SkillLevel = 0;
         SlotIndex = 2;
     }
 
@@ -86,7 +86,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
         // 보호막 체력 설정
         //PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
-        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * _skillLevel)));
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = StartCoroutine(SpinCoroutine());
@@ -196,7 +196,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * _skillLevel)));
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.25f + 0.0025f * SkillLevel)));
         monsters?.GetComponent<IDamagable>().TakeDamage(damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }
