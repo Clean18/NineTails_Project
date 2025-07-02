@@ -2467,6 +2467,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_5_Field
       objectReference: {fileID: 0}
+    - target: {fileID: 1175927177390058902, guid: 229f591970e7ca24ba26428f1f8984ca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6533292526488046650, guid: 229f591970e7ca24ba26428f1f8984ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.151472
@@ -5299,24 +5303,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2874512801222223151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46dffd40e336b9643bc8b21dd20aa9f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 92cd9eaadcb868c42b595085324f25c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 8834188468784387697}
   _hitMonsters: []
   _isSkillUsed: 0
-  _hitBox: {fileID: 0}
-  _radius: 4
-  _randomTargetCount: 6
-  _randomMonsters: []
-  _damageInterval: 0.5
-  _effectDuration: 0.5
-  _damageEffectPrefab: {fileID: 702732441717082960, guid: 58dbf483beb256842add86ef98de19bd, type: 3}
-  _effectYOffset: 0.5
-  <SkillData>k__BackingField: {fileID: 0}
+  _data: {fileID: 11400000, guid: 8febe09caf31e4847be1045632c84ca0, type: 2}
+  _playerController: {fileID: 8834188468784387696}
+  _fieldPrefab: {fileID: 1175927177390058902, guid: 229f591970e7ca24ba26428f1f8984ca, type: 3}
+  _damageMultiplier: 1
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 8febe09caf31e4847be1045632c84ca0, type: 2}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
-  <SlotIndex>k__BackingField: 0
+  <SlotIndex>k__BackingField: 5
 --- !u!20 &8994819570074998775
 Camera:
   m_ObjectHideFlags: 0
