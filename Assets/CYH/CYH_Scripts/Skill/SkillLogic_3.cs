@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class SkillLogic_3 : SkillLogic, ISkill
 {
+    [SerializeField] private ActiveSkillData _data;
+    //[SerializeField] private PlayerControllerTypeA_Copy _playerController;
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
     [SerializeField] GameObject _highestMonster;
@@ -21,6 +23,8 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
 
+    //public PlayerController PlayerController { get; set; }
+
     public void SkillInit()
     {
         Debug.Log("스킬 3 초기화");
@@ -28,6 +32,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SkillLevel = 0;
         SlotIndex = 3;
     }
+
+    //private void Awake()
+    //{
+    //    //_playerController = GetComponent<PlayerControllerTypeA_Copy>();
+    //    SkillData = _data;
+
+    //    _animator = GetComponent<Animator>();
+    //}
 
     //private void Update()
     //{
@@ -167,11 +179,11 @@ public class SkillLogic_3 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((1.0f + 0.01f * SkillLevel)));
-        monster?.GetComponent<IDamagable>().TakeDamage(damage);
+        long damage = (long)(PlayerController.Instance.GetAttack() * (1.0f + 0.01f * SkillLevel));
+        monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
-
+    
     #region Coroutine
     private IEnumerator DamageCoroutine(GameObject monster)
     {

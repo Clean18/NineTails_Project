@@ -5,6 +5,8 @@ public class PlayerControllerTypeA_Copy : MonoBehaviour
     // wasd 이동 마우스 에임
     public float moveSpeed;
     public float attackSpeed;
+    public float maxHp;
+    public float hp;
 
     public Rigidbody2D rigid;
     public Vector2 moveInput;
