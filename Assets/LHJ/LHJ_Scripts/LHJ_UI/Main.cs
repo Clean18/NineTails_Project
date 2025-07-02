@@ -22,10 +22,12 @@ public class Main : BaseUI, IUI
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
+    void OnEnable() => PlayerStatUI();
+
     // 플레이어가 초기화될 때 실행
     public void UIInit()
     {
-        Debug.LogError("Main 초기화");
+        Debug.LogWarning("Main 초기화");
         GetEvent("Equipment").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>();
         GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
         GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
@@ -44,6 +46,7 @@ public class Main : BaseUI, IUI
     public void PlayerStatUI()
     {
         var player = PlayerController.Instance;
+        if (player == null) return;
         // Data
         powerText.text = $"Power : {player.GetPower()}";
         attackText.text = $"Attack : {player.GetAttack()}";

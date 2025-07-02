@@ -102,7 +102,6 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     protected override void Damage()
     {
-        Debug.Log($"스킬 레벨 : {SkillLevel}");
         long damage = (long)(PlayerController.Instance.GetAttack() * ((100f + SkillLevel) / 100f));
 
         if(_slashCount == 1)
@@ -125,7 +124,6 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("기본공격 몬스터 추가");
         if (!_isSkillUsed) return;
 
         if (!other.CompareTag("Monster")) return;

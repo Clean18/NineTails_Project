@@ -37,7 +37,7 @@ public class PlayerData
     /// <summary>
     /// 플레이어 전투력 
     /// </summary> 
-    [SerializeField] public long PowerLevel { get => (long)((Attack * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
+    [SerializeField] public long PowerLevel { get => (long)((PlayerController.Instance.GetAttack() * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
 
     [field: SerializeField] private int _attackLevel;
     /// <summary>

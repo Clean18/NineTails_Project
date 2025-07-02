@@ -2935,11 +2935,16 @@ MonoBehaviour:
   - {fileID: 1370096503}
   - {fileID: 1900185840}
   coolTimes:
-  - 2
-  - 5
-  - 10
-  - 15
-  triggerKeys: 31000000320000003300000034000000
+  - 0
+  - 0
+  - 0
+  - 0
+  triggerKeys: 00000000000000000000000000000000
+  currentCooltimes:
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!1 &940699492
 GameObject:
   m_ObjectHideFlags: 0

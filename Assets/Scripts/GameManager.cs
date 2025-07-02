@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,11 +43,28 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("씬 로드");
         UIManager.Instance.SceneUIList.Clear();
 
-        Debug.Log("플레이어 오브젝트 생성");
-        var go = Instantiate(PlayerPrefab, Vector3.zero, Quaternion.identity);
-        go.GetComponent<PlayerController>().PlayerInit();
+        StartCoroutine(SceneInitRoutine());
     }
 
+    IEnumerator SceneInitRoutine()
+    {
+        if (!DataManager.isInit)
+        {
+            // 데이터 매니저 초기화
+            Debug.LogWarning("데이터매니저 초기화 중...");
+            yield return StartCoroutine(DataManager.Instance.LoadDatas());
+            Debug.LogWarning("데이터매니저 초기화 완료");
+        }
+
+        var go = Instantiate(PlayerPrefab, Vector3.zero, Quaternion.identity);
+        var player = go.GetComponent<PlayerController>();
+
+        Debug.LogWarning("플레이어 초기화 중...");
+        yield return StartCoroutine(player.PlayerInitRoutine());
+        Debug.LogWarning("플레이어 초기화 완료");
+
+        Debug.LogWarning("씬 전환 초기화 완료");
+    }
 
     public SkillData GetSkill(string skillName) => SkillDic.TryGetValue(skillName, out SkillData skill) ? skill : null;
 }

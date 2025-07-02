@@ -111,12 +111,6 @@ public class PlayerController : MonoBehaviour
         //Mode = ControlMode.Manual;
     }
 
-	public void PlayerInit()
-	{
-		Debug.LogWarning("Player Init 실행됨");
-		StartCoroutine(PlayerInitRoutine());
-	}
-
 	void Update()
 	{
         if (_isInit == false)
@@ -152,7 +146,6 @@ public class PlayerController : MonoBehaviour
 
 	void SkillInput()
 	{
-        // TODO : 키세팅
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("기본공격 사용");
@@ -178,18 +171,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void SkillInput(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                Debug.Log("기본공격 사용");
+                _model.Skill.DefaultAttack.UseSkill(transform);
+                break;
+            case 1:
+                Debug.Log("1번스킬 사용");
+                var skill1 = _model.Skill.GetSkill(KeyCode.Alpha1);
+                skill1?.UseSkill(transform);
+                break;
+            case 2:
+                Debug.Log("2번스킬 사용");
+                var skill2 = _model.Skill.GetSkill(KeyCode.Alpha2);
+                skill2?.UseSkill(transform);
+                break;
+            case 3:
+                Debug.Log("3번스킬 사용");
+                var skill3 = _model.Skill.GetSkill(KeyCode.Alpha3);
+                skill3?.UseSkill(transform);
+                break;
+        }
+    }
+
     /// <summary>
     /// 플레이어 데이터 초기화, 게임매니저의 스탯테이블을 받아오기 전까지 대기 후 초기화
     /// </summary>
     /// <returns></returns>
-    IEnumerator PlayerInitRoutine()
+    public IEnumerator PlayerInitRoutine()
     {
-        while (DataManager.Instance.StatDataTable == null || DataManager.Instance.StatDataTable.Count == 0)
-        {
-            Debug.Log("데이터매니저 스탯 딕셔너리 null");
-            yield return null;
-        }
-
         // 게임매니저에 자기자신 참조
         GameManager.Instance.PlayerController = this;
 
@@ -202,9 +215,6 @@ public class PlayerController : MonoBehaviour
 
         // 세이브로드매니저에서 데이터 받아오기
         _model.InitModel(SaveLoadManager.Instance.GameData);
-
-        yield return new WaitForSeconds(1f);
-
 
         // UI 초기화
         if (UIManager.Instance.SceneUIList.Count > 0)
@@ -222,13 +232,10 @@ public class PlayerController : MonoBehaviour
 
         _isInit = true;
 
-        Debug.Log("플레이어 데이터 초기화 완료");
-
         yield break;
     }
 
     #region Model 함수
-
     /// <summary>
     /// 플레이어가 대미지를 입는 함수
     /// </summary>
@@ -319,31 +326,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public string GetPlayerName() => _model.GetPlayerName();
-    #endregion
-
-    #region Cost 관련 함수
-    public long GetCost(CostType costType) => _model.GetCost(costType);
-	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
-	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
-	#endregion
-
-	public void Test_Function()
-	{
-		// TODO : 5번 누르면 스킬추가
-
-        _model.Skill.Test_AddSkill(1);
-        _model.Skill.Test_AddSkill(2);
-        _model.Skill.Test_AddSkill(3);
-    }
-
-    /// <summary>
-    /// 플레이어 저장 데이터 반환하는 함수
-    /// </summary>
-	public GameData SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
-
-    #endregion
-
-    #region 스탯 강화 관련 함수
     /// <summary>
     /// 플레이어 스탯을 반환하는 함수
     /// </summary>
@@ -367,30 +349,52 @@ public class PlayerController : MonoBehaviour
     public void TrySpeedLevelup() => _model.TrySpeedLevelup();
     #endregion
 
-    #region 장비 강화 및 승급 관련 함수
+    #region Cost 관련 함수
+    public long GetCost(CostType costType) => _model.GetCost(costType);
+	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
+	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
+    #endregion
+
+    #region Equipment 관련 함수
     /// <summary>
     /// 플레이어 장비의 등급, 레벨을 반환하는 함수
     /// </summary>
     /// <returns></returns>
     public SaveEquipmentData GetEquipmentData() => _model.GetEquipmentData();
-	/// <summary>
-	/// 플레이어의 장비 강화를 실행하는 함수
-	/// </summary>
-	public void TryEnhance() => _model.TryEnhance();
+    /// <summary>
+    /// 플레이어의 장비 강화를 실행하는 함수
+    /// </summary>
+    public void TryEnhance() => _model.TryEnhance();
     /// <summary>
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
     public void TryPromote() => _model.TryPromote();
     #endregion
 
-    #region 스킬 강화 관련 함수
+    #region Skill 관련 함수
     /// <summary>
     /// 플레이어 스킬을 반환하는 함수
     /// </summary>
     /// <returns></returns>
     public List<SaveSkillData> GetSkillData() => _model.GetSkillData();
+    /// <summary>
+    /// skillIndex 번 스킬을 레벨업하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void TrySkillLevelUp(int skillIndex) => _model.TrySkillLevelUp(skillIndex);
+    /// <summary>
+    /// 단축키에 등록된 스킬들을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<KeyCode, ISkill> GetMappingSkills() => _model.GetMappingSkills();
+    /// <summary>
+    /// UI 스킬버튼 클릭으로 스킬 사용하는 함수
+    /// </summary>
+    /// <param name="index"></param>
+    public void UseSkill(int index) => SkillInput(index);
     #endregion
+    #endregion
+
 
     #region View 함수
 
@@ -408,6 +412,12 @@ public class PlayerController : MonoBehaviour
     public void AIInit() => _ai.MonsterSkillCheck();
 
     #endregion
+
+    /// <summary>
+    /// 플레이어 저장 데이터 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+	public GameData SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
 
     #region 애니메이션 이벤트 함수
 
@@ -439,8 +449,15 @@ public class PlayerController : MonoBehaviour
 		Gizmos.DrawWireSphere(transform.position, SearchDistance);
 	}
 
-    //void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    Debug.Log(collision.gameObject.name);
-    //}
+    /// <summary>
+    /// 테스트 함수
+    /// </summary>
+    public void Test_Function()
+    {
+        // TODO : 5번 누르면 스킬추가
+
+        _model.Skill.Test_AddSkill(1);
+        _model.Skill.Test_AddSkill(2);
+        _model.Skill.Test_AddSkill(3);
+    }
 }

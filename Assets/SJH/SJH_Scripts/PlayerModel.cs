@@ -66,7 +66,7 @@ public class PlayerModel
 
 	public bool GetIsDead() => Data.IsDead;
 	public long GetPower() => Data.PowerLevel;
-	public long GetAttack() => Data.Attack;
+	public long GetAttack() => Data.Attack + (long)(Data.Attack * Equipment.Attack);
 	public long GetDefense() => Data.Defense;
 	public long GetMaxHp() => Data.MaxHp;
 	public long GetHp() => Data.Hp;
@@ -352,23 +352,62 @@ public class PlayerModel
     public List<SaveSkillData> GetSkillData() => Skill.SavePlayerSkill();
     public void TrySkillLevelUp(int skillIndex)
     {
-        // 레벨 체크
-        // 재화 체크
-        // 레벨업
         var player = PlayerController.Instance;
-
-        /*
-         * 플레이어의 스킬 보유 여부를 체크안한다면
-         * UI창에서는 가지고 있는 스킬만 활성화하는 방식
-         */
         var skill = player.SkillController.SkillList[skillIndex];
         if (skill == null)
         {
             Debug.Log("스킬이 없습니다.");
             return;
         }
+        // 레벨 체크
+        if (skill.SkillLevel >= 100)
+        {
+            Debug.Log("스킬 레벨을 더 이상 올릴 수 없습니다.");
+            return;
+        }
+        // 재화 체크
+        // TODO : 스킬이 노말인지 궁극기인지 구분해야함
+        bool isUlt = skill.SkillData.SkillIndex == 6;
 
+        if (isUlt) // 궁극기 강화
+        {
+            var ultCost = DataManager.Instance.GetUltSkillCost(skill.SkillLevel);
+            if (ultCost == int.MaxValue)
+            {
+                Debug.Log("스킬을 강화할 수 없습니다.");
+                return;
+            }
+            // 노말체크
+            if (player.GetSpiritEnergy() < ultCost)
+            {
+                Debug.Log("영기가 부족합니다.");
+                return;
+            }
+            // 재화 감소
+            player.SpendCost(CostType.SpiritEnergy, ultCost);
+        }
+        else // 노말 강화
+        {
+            var normalCost = DataManager.Instance.GetNormalSkillCost(skill.SkillLevel);
+            if (normalCost == int.MaxValue)
+            {
+                Debug.Log("스킬을 강화할 수 없습니다.");
+                return;
+            }
+            if (player.GetSpiritEnergy() < normalCost)
+            {
+                Debug.Log("영기가 부족합니다.");
+                return;
+            }
+            player.SpendCost(CostType.SpiritEnergy, normalCost);
+        }
+        /*
+         * 플레이어의 스킬 보유 여부를 체크안한다면
+         * UI창에서는 가지고 있는 스킬만 활성화하는 방식
+         */
         skill.SkillLevel += 1;
+        Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
+    public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
     #endregion
 }

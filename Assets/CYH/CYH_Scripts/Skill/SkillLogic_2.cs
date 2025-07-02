@@ -89,7 +89,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 매 프레임 원 운동 갱신
-        _spinRoutine = StartCoroutine(SpinCoroutine());
+        _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
         Debug.Log("원운동 갱신");
 
         // 지속시간 체크 시작
