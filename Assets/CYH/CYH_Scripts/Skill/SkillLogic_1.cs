@@ -10,6 +10,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
     public void SkillInit()
     {
@@ -20,6 +21,8 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _hitBox = hitBox.GetComponent<CircleCollider2D>();
         _hitBox.enabled = false;
         IsCooldown = false;
+        SkillLevel = 0;
+        SlotIndex = 1;
     }
 
     public void UseSkill(Transform attacker)
@@ -83,7 +86,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * _skillLevel)));
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * SkillLevel)));
 
         foreach (var monster in _hitMonsters)
         {

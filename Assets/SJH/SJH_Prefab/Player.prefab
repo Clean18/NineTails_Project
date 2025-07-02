@@ -182,10 +182,6 @@ MonoBehaviour:
     Cost:
       _spiritEnergy: 0
       _warmth: 0
-    Skill:
-      DefaultAttack: {fileID: 0}
-      Skill1: {fileID: 0}
-      Skill2: {fileID: 0}
     Equipment:
       _grade: 0
       _level: 0
@@ -201,6 +197,7 @@ MonoBehaviour:
   _view: {fileID: 0}
   _ai:
     TargetMonster: {fileID: 0}
+    _targetSkillName: 
   SkillController: {fileID: 0}
   _mode: 0
   CurrentState: 1
@@ -325,7 +322,7 @@ MonoBehaviour:
   - {fileID: 1575395230341757593, guid: 82c5cad768db56442b526538ce89f33a, type: 3}
   - {fileID: 1575395230341757593, guid: d3052cadd3d1eb94386a3fd2836c1392, type: 3}
   - {fileID: 1575395230341757593, guid: 9c37086fb94a75e4e81408d752572b48, type: 3}
-  SkillList: []
+  - {fileID: 1575395230341757593, guid: a2bf73001addb0246a10619d8f5fd15d, type: 3}
 --- !u!1 &4774744751119802566
 GameObject:
   m_ObjectHideFlags: 0
