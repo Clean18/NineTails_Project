@@ -1,14 +1,19 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_3 : SkillLogic, ISkill
+public class SkillLogic_4 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
-    [SerializeField] GameObject _highestMonster;
+
+    [Header("랜덤 대상 개수")]
+    [SerializeField] private int _randomTargetCount = 6;
+
+    [SerializeField] List<GameObject> _randomMonsters = new List<GameObject>();
 
     [Header("데미지 코루틴 (초)")]
     [SerializeField] private float _damageInterval = 0.2f;
@@ -28,15 +33,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
     private void Awake()
     {
         _playerController = GetComponent<PlayerControllerTypeA_Copy>();
+        _animator = GetComponent<Animator>();
         SkillData = _data;
         IsCooldown = false;
-
-        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             UseSkill(transform);
         }
@@ -49,21 +53,22 @@ public class SkillLogic_3 : SkillLogic, ISkill
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
 
-        Debug.Log("스킬3 사용");
+        Debug.Log("스킬4 사용");
 
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
-        AnimationPlay();
+        //AnimationPlay();
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
+        _randomMonsters.Clear();
 
         OnAttackStart();
         DetectMonster();
-        GetHighestHpMonster();
+        SkillRoutine();
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -72,29 +77,28 @@ public class SkillLogic_3 : SkillLogic, ISkill
         //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
-        
-        Debug.Log("스킬3 사용");
+
+        Debug.Log("스킬4 사용");
 
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
         StartCoroutine(CooldownCoroutine());
 
-        AnimationPlay();
+        //AnimationPlay();
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
+        _randomMonsters.Clear();
 
         OnAttackStart();
         DetectMonster();
-        GetHighestHpMonster();
+        SkillRoutine();
     }
 
     public void SkillRoutine()
     {
-        if (_highestMonster != null)
-            StartCoroutine(DamageCoroutine(_highestMonster));
-
+        RandomDamage();
         OnAttackEnd();
     }
 
@@ -110,7 +114,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void AnimationPlay()
     {
-        _animator.SetTrigger("UseSkill_3");
+        _animator.SetTrigger("UseSkill_4");
         //PlayerController.Instance.SetTrigger("UseSkill_3");
     }
 
@@ -129,44 +133,36 @@ public class SkillLogic_3 : SkillLogic, ISkill
         }
     }
 
-    // 피격 몬스터 리스트 중 가장 체력이 높은 몬스터 반환
-    private GameObject GetHighestHpMonster()
+    // 피격 몬스터 목록으로 새 랜덤 목록 생성
+    private void RandomDamage()
     {
-        Debug.Log($"감지된 몬스터 수: {_hitMonsters.Count}");
+        if (_hitMonsters.Count == 0) return;
 
-        _highestMonster = null;
-        float highestHp = float.MinValue;
-
-        foreach (var monster in _hitMonsters)
+        if (_hitMonsters.Count <= _randomTargetCount)
         {
-            float hp = 0f;
+            Debug.Log("전부 넣기");
+            _randomMonsters.AddRange(_hitMonsters);
 
-            // 1) <MonsterFSM>인지 체크
-            if (monster.TryGetComponent<MonsterFSM>(out var mM))
-                hp = mM.CurrentHp;
+        }
+        else
+        {
+            _randomMonsters = new List<GameObject>(_hitMonsters);
 
-            // 2) <RangeMonsterFSM>인지 체크
-            else if (monster.TryGetComponent<RangeMonsterFSM>(out var mR))
-                hp = mR.CurrentHp;
-
-            // 3) <BaseBossFSM>인지 체크
-            else if (monster.TryGetComponent<BaseBossFSM>(out var mB))
-                hp = mB.CurrentHealth;
-
-            // 셋 중 하나라도 만족할 때
-            if (hp > highestHp)
+            // _randomTargetCount번 뽑고 뽑을 때마다 제거 -> 중복 방지
+            for (int i = 0; i < _randomTargetCount; i++)
             {
-                highestHp = hp;
-                _highestMonster = monster;
+                int index = Random.Range(0, _randomMonsters.Count);
+                _randomMonsters.Add(_randomMonsters[index]);
+                _randomMonsters.RemoveAt(index);
             }
         }
 
-        if (_highestMonster != null)
-            Debug.Log($"최고 체력 몬스터: {_highestMonster.name} : HP {highestHp}");
-        else
-            Debug.Log("감지된 몬스터 x");
-
-        return _highestMonster;
+        // 랜덤 리스트의 모든 몬스터 데미지 가함
+        foreach (var monster in _randomMonsters)
+        {
+            Debug.Log($"_randomMonsters : {monster.name}");
+            Damage(monster);
+        }
     }
 
     protected override void Damage(GameObject monster)
@@ -174,48 +170,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
         //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
-        //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
-    }
-
-    #region Coroutine
-    private IEnumerator DamageCoroutine(GameObject monster)
-    {
-        GameObject effect = null;
-        SpriteRenderer effectSprite = null;
-
-        // 최고 체력 몬스터 자식으로 이펙트 생성
-        if (_damageEffectPrefab != null)
-        {
-            // 이펙트 생성 y 값 위치 조정
-            Vector3 spawnPos = monster.transform.position + Vector3.up * _effectYOffset;
-            effect = Instantiate(_damageEffectPrefab, spawnPos, Quaternion.identity, monster.transform);
-            effect.SetActive(false);
-            effectSprite = effect.GetComponent<SpriteRenderer>();
-        }
-        else
-            Debug.Log("_damageEffectPrefab 없음");
-
-        // 2) 5번 반복
-        for (int i = 0; i < 5; i++)
-        {
-            if (effect != null)
-            {
-                // 매 반복마다 flipX 반전
-                effectSprite.flipX = !effectSprite.flipX;
-                effect.SetActive(true);
-            }
-
-            // 데미지
-            Damage(monster);
-            yield return new WaitForSeconds(_effectDuration);
-
-            effect.SetActive(false);
-
-            // 총 루프 시간 _damageInterval
-            yield return new WaitForSeconds(_damageInterval - _effectDuration);
-        }
-        // 이펙트 제거
-        Destroy(effect);
+        Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
 
     private IEnumerator CooldownCoroutine()
@@ -232,7 +187,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
         IsCooldown = false;
         Debug.Log("쿨타임 종료");
     }
-    #endregion
 
     private void OnDrawGizmos()
     {
@@ -242,6 +196,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void SkillInit()
     {
-        Debug.Log("스킬 3 초기화");
+        Debug.Log("스킬 4 초기화");
     }
 }
+

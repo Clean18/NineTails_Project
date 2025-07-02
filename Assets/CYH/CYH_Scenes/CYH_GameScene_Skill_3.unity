@@ -867,7 +867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1817879509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,7 +1125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isInit: 0
-  PlayerModel:
+  _model:
     Data:
       _attackLevel: 0
       <Attack>k__BackingField: 0
@@ -1138,6 +1138,13 @@ MonoBehaviour:
       <Speed>k__BackingField: 0
       _isDead: 0
       ShieldHp: 0
+    Cost:
+      _spiritEnergy: 0
+      _warmth: 0
+    Skill:
+      DefaultAttack: {fileID: 0}
+      Skill1: {fileID: 0}
+      Skill2: {fileID: 0}
     Equipment:
       _grade: 0
       _level: 0
@@ -1150,9 +1157,11 @@ MonoBehaviour:
       _increaseDamageLevel: 0
       _baseSSRCost: 0
       BaseSSRCost: 0
-  PlayerView: {fileID: 0}
-  PlayerAI:
+  _view: {fileID: 0}
+  _ai:
     TargetMonster: {fileID: 0}
+    _targetSkillName: 
+  SkillController: {fileID: 0}
   _mode: 0
   CurrentState: 1
   SearchDistance: 8
@@ -1335,9 +1344,11 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 11400000, guid: 6cea0e09a7f8e484d9d88e32a9498a2d, type: 2}
-  _playerController: {fileID: 0}
+  _hitBoxPrefab: {fileID: 0}
   _hitBox: {fileID: 6169749376982270442}
+  <SkillData>k__BackingField: {fileID: 0}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
 --- !u!4 &1768136524537279353
 Transform:
   m_ObjectHideFlags: 0
@@ -3268,6 +3279,7 @@ MonoBehaviour:
   _damageInterval: 0.2
   _effectDuration: 0.1
   _damageEffectPrefab: {fileID: 702732441717082960, guid: 93f93c1ce8781c3498b1d87f1369a5b8, type: 3}
+  _effectYOffset: 0.5
 --- !u!50 &8965787212209531648
 Rigidbody2D:
   serializedVersion: 4
@@ -3362,10 +3374,12 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
-  _playerController: {fileID: 0}
+  _hitBoxPrefab: {fileID: 0}
   _hitBox: {fileID: 4139639658695224470}
   _slashCount: 0
+  <SkillData>k__BackingField: {fileID: 0}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
 --- !u!4 &9212419557231626190
 Transform:
   m_ObjectHideFlags: 0
