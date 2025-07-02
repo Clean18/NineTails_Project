@@ -1912,6 +1912,7 @@ GameObject:
   - component: {fileID: 961981349}
   - component: {fileID: 961981348}
   - component: {fileID: 961981350}
+  - component: {fileID: 961981351}
   m_Layer: 0
   m_Name: UIManager_Test
   m_TagString: Untagged
@@ -1926,7 +1927,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961981347}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbc9a3e1274be624d9aca32eefad70ab, type: 3}
   m_Name: 
@@ -1959,6 +1960,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e2bd287c6a828d4f93b93f97c93a8d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &961981351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961981347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064e699c03e1c5b4fbb7a358023a4e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartUI: {fileID: 0}
+  GameUI: {fileID: 0}
+  MainUI: {fileID: 0}
+  damageTextPrefab: {fileID: 0}
 --- !u!1 &1031324029
 GameObject:
   m_ObjectHideFlags: 0

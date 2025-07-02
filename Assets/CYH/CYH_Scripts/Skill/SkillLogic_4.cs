@@ -146,14 +146,14 @@ public class SkillLogic_4 : SkillLogic, ISkill
         }
         else
         {
-            _randomMonsters = new List<GameObject>(_hitMonsters);
+            List<GameObject> tempList = new List<GameObject>(_hitMonsters);
 
             // _randomTargetCount번 뽑고 뽑을 때마다 제거 -> 중복 방지
             for (int i = 0; i < _randomTargetCount; i++)
             {
-                int index = Random.Range(0, _randomMonsters.Count);
-                _randomMonsters.Add(_randomMonsters[index]);
-                _randomMonsters.RemoveAt(index);
+                int index = Random.Range(0, tempList.Count);
+                _randomMonsters.Add(tempList[index]);
+                tempList.RemoveAt(index);
             }
         }
 
@@ -167,10 +167,10 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monster)
     {
-        float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
+        long damage = (long)(_playerController.AttackPoint * (1.0f + 0.01f * SkillLevel));
         //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
-        Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
+        //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
 
     private IEnumerator CooldownCoroutine()
