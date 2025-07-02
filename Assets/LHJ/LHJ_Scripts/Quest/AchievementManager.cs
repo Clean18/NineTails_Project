@@ -26,6 +26,7 @@ public class AchievementTable : DataTableParser<AchievementInfo>
 public class AchievementManager : Singleton<AchievementManager>
 {
     public AchievementTable achievementTable;
+    private int totalDeathCount = 0;
 
     void Start()
     {
@@ -144,6 +145,23 @@ public class AchievementManager : Singleton<AchievementManager>
                 achievedIds.Add(achievement.Id);     // 해당 업적 달성    
                 Debug.Log($"[업적 달성] {achievement.Name} - 전투력 조건 달성");
                 Reward(achievement);                 // 보상 지급
+            }
+        }
+    }
+    public void CheckDeathAchievements()
+    {
+        totalDeathCount++;  // 죽음 1회 누적
+
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Death") continue;              // Type에서 Death가 아닐경우 무시하고 계속 진행
+            if (achievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시하고 진행
+
+            if (totalDeathCount >= achievement.Purpose)
+            {
+                achievedIds.Add(achievement.Id);    // 해당 업적 달성 
+                Debug.Log($"[업적 달성] {achievement.Name} - 누적 {totalDeathCount}회 사망");
+                Reward(achievement);                // 보상 지급
             }
         }
     }
