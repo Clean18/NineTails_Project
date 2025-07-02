@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class SkillLogic_4 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
+    //[SerializeField] private ActiveSkillData _data;
+    //[SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [SerializeField] private CircleCollider2D _hitBox;
     [SerializeField] private float _radius = 2f;
@@ -25,27 +25,28 @@ public class SkillLogic_4 : SkillLogic, ISkill
     [Header("이펙트 Y 오프셋")]
     [SerializeField] private float _effectYOffset = 0.5f;
 
-    public PlayerController PlayerController { get; set; }
-    public ActiveSkillData SkillData { get; set; }
-    public bool IsCooldown { get; set; }
-    public int SkillLevel { get; set; }
-    public int SlotIndex { get; set; }
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
-    private void Awake()
+    //public PlayerController PlayerController { get; set; }
+
+    public void SkillInit()
     {
-        _playerController = GetComponent<PlayerControllerTypeA_Copy>();
-        _animator = GetComponent<Animator>();
-        SkillData = _data;
+        Debug.Log("스킬 4 초기화");
         IsCooldown = false;
+        SkillLevel = 0;
+        SlotIndex = 4;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha4))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -120,8 +121,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void AnimationPlay()
     {
-        _animator.SetTrigger("UseSkill_4");
-        //PlayerController.Instance.SetTrigger("UseSkill_4");
+        //_animator.SetTrigger("UseSkill_4");
+        PlayerController.Instance.SetTrigger("UseSkill_4");
     }
 
     // 범위 안의 모든 몬스터 탐색
@@ -176,15 +177,15 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         if (_randomMonsters.Count == 0) return;
 
-        _playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count;
-        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count}]의 Hp를 회복");
-        //4PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * _skillLevel));
+        //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count;
+        PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count);
+        //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
     }
 
     protected override void Damage(GameObject monster)
     {
-        float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * _skillLevel));
-        //long damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * _skillLevel);
+        //float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetAttack() * (0.15f + 0.0015f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
@@ -235,7 +236,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
             Destroy(effect);
         
         // 플레이어 이동 활성화
-        //PlayerController.Instance.Move();
+        PlayerController.Instance.Move();
     }
 
     private IEnumerator CooldownCoroutine()
@@ -259,9 +260,6 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Gizmos.DrawWireSphere(transform.position, _radius);
     }
 
-    public void SkillInit()
-    {
-        Debug.Log("스킬 4 초기화");
-    }
+    
 }
 
