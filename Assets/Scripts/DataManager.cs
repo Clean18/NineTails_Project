@@ -375,7 +375,16 @@ public class DataManager : Singleton<DataManager>
 			int timeLimit = int.Parse(Clean(cells[1]));
 			int count = int.Parse(Clean(cells[2]));
 			string nextScene = Clean(cells[3]);
-		}
+
+            MissionInfo info = new MissionInfo
+            {
+                Stage = stage,
+                TimeLimit = timeLimit,
+                Count = count,
+                NextScene = nextScene
+            };
+            MissionTable[stage] = info;
+        }
 	}
 	IEnumerator EquipmentUpgradeInit()
 	{
