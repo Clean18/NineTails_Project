@@ -130,6 +130,24 @@ public class AchievementManager : Singleton<AchievementManager>
             }
         }
     }
+    // 전투력 업적 조건을 확인하고 달성 여부를 판단하는 함수
+    public void CheckPowerAchievements()
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Power") continue;               // Type에서 Power가 아닐경우 무시하고 계속진행
+            if (achievedIds.Contains(achievement.Id)) continue;      // 이미 달성된 업적이면 무시하고 진행
+
+            // 전투력 업적과 플레이어 전투력 비교
+            if (PlayerController.Instance.GetPower() >= achievement.Purpose)
+            {
+                achievedIds.Add(achievement.Id);     // 해당 업적 달성    
+                Debug.Log($"[업적 달성] {achievement.Name} - 전투력 조건 달성");
+                Reward(achievement);                 // 보상 지급
+            }
+        }
+    }
+
     private void Reward(AchievementInfo achievementInfo)
     {
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
