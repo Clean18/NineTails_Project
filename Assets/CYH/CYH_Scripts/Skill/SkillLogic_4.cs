@@ -176,10 +176,10 @@ public class SkillLogic_4 : SkillLogic, ISkill
     private void HealPlayer(int count)
     {
         if (_randomMonsters.Count == 0) return;
-
         //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count;
         PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
+        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
     }
 
     protected override void Damage(GameObject monster)
@@ -259,7 +259,5 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _radius);
     }
-
-    
 }
 
