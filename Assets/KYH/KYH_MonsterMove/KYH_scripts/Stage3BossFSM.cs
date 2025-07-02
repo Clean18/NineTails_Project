@@ -85,7 +85,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         // 2. 경고 제거 및 애니메이션+사운드 재생
         Destroy(warning);
-        BossAnimator.Play("Boss_WingOpen");
+        // BossAnimator.Play("Boss_WingOpen");
         AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
 
         // 3. 회오리 이펙트 생성
@@ -103,7 +103,7 @@ public class Stage3BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Bird_Idle_1");
+        // BossAnimator.Play("Bird_Idle_2");
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         // 2. 경고 대기 후 연출
         yield return new WaitForSeconds(Pattern2Delay);
-        BossAnimator.Play("Boss_WingOpen");
+        // BossAnimator.Play("Boss_WingOpen");
         AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
 
         // 3. 깃털 생성
@@ -164,7 +164,7 @@ public class Stage3BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Bird_Idle_1");
+        // BossAnimator.Play("Bird_Idle_2");
     }
 
     /// <summary>
@@ -244,7 +244,7 @@ public class Stage3BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Bird_Idle_1");
+        // BossAnimator.Play("Bird_Idle_2");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
