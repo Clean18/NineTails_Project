@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		if (_isInit == false)
+        if (_isInit == false)
 		{
 			//Debug.Log("초기화가 아직 안됐음");
 			return;
@@ -399,6 +399,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
     public void Stop() => _view.Stop();
+    public void Move() => _view.Move();
 
     #endregion
 
