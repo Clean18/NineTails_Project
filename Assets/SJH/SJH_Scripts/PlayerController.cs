@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
 		// TODO : TEST 인풋
 		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
-			Test_ChangeStat();
+			Test_Function();
 		}
 	}
 
@@ -322,13 +322,14 @@ public class PlayerController : MonoBehaviour
 	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
 	#endregion
 
-	public void Test_ChangeStat()
+	public void Test_Function()
 	{
-		// TODO : 5번 누르면 공격력증가
-		if (_model == null) return;
+		// TODO : 5번 누르면 스킬추가
 
-		_model.Data.AttackLevelup();
-	}
+        _model.Skill.Test_AddSkill(1);
+        _model.Skill.Test_AddSkill(2);
+        _model.Skill.Test_AddSkill(3);
+    }
 
     /// <summary>
     /// 플레이어 저장 데이터 반환하는 함수
@@ -396,12 +397,12 @@ public class PlayerController : MonoBehaviour
     #region 애니메이션 이벤트 함수
 
     // SkillLogic_0 애니메이션 이벤트 함수들
-    public void Skill0_OnAttackStart() => _model.Skill.DefaultAttack.OnAttackStart();
-    public void Skill0_OnAttackEnd() => _model.Skill.DefaultAttack.OnAttackEnd();
-    public void Skill0_SlashCountEvent() => _model.Skill.DefaultAttack.SlashCountEvent();
+    public void Skill0_OnAttackStart() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackStart();
+    public void Skill0_OnAttackEnd() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackEnd();
+    public void Skill0_SlashCountEvent() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.SlashCountEvent();
 
     // SkillLogic_1 애니메이션 이벤트 함수
-    public void Skill1_DisableHitbox() => _model.Skill.Skill1.DisableHitbox();
+    public void Skill1_DisableHitbox() => (SkillController.SkillList[1] as SkillLogic_1)?.DisableHitbox();
 
     #endregion
 

@@ -10,6 +10,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
     public void SkillInit()
     {
@@ -20,6 +21,8 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _hitBox = hitBox.GetComponent<CircleCollider2D>();
         _hitBox.enabled = false;
         IsCooldown = false;
+        SkillLevel = 1;
+        SlotIndex = 1;
     }
 
     public void UseSkill(Transform attacker)

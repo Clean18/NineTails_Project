@@ -51,3 +51,12 @@ MonoBehaviour:
   _data: {fileID: 0}
   _playerController: {fileID: 0}
   _hitBox: {fileID: 0}
+  _radius: 2
+  _highestMonster: {fileID: 0}
+  _damageInterval: 0.2
+  _effectDuration: 0.1
+  _damageEffectPrefab: {fileID: 0}
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 0da0404a52382c046befc585f17ecd1c, type: 2}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 1
+  <SlotIndex>k__BackingField: -1

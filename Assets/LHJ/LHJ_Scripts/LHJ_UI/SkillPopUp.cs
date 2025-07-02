@@ -12,10 +12,30 @@ public class SkillPopUp : BaseUI
     private void Start()
     {
         GetEvent("BackButton").Click += data => UIManager.Instance.ClosePopUp();
-        GetEvent("Skill0Up").Click += data => { /*스킬0레벨 증가*/; Debug.Log("스킬0 강화 버튼"); UpdateSkill(); };
-        GetEvent("Skill1Up").Click += data => { /*스킬1레벨 증가*/; Debug.Log("스킬1 강화 버튼"); UpdateSkill(); };
-        GetEvent("Skill2Up").Click += data => { /*스킬2레벨 증가*/; Debug.Log("스킬2 강화 버튼"); UpdateSkill(); };
-        GetEvent("Skill3Up").Click += data => { /*스킬3레벨 증가*/; Debug.Log("스킬3 강화 버튼"); UpdateSkill(); };
+        GetEvent("Skill0Up").Click += data =>
+        {
+            /*스킬0레벨 증가*/;
+            Debug.Log("스킬0 강화 버튼");
+            UpdateSkill();
+        };
+        GetEvent("Skill1Up").Click += data =>
+        {
+            /*스킬1레벨 증가*/;
+            Debug.Log("스킬1 강화 버튼");
+            UpdateSkill();
+        };
+        GetEvent("Skill2Up").Click += data =>
+        {
+            /*스킬2레벨 증가*/;
+            Debug.Log("스킬2 강화 버튼");
+            UpdateSkill();
+        };
+        GetEvent("Skill3Up").Click += data =>
+        {
+            /*스킬3레벨 증가*/;
+            Debug.Log("스킬3 강화 버튼");
+            UpdateSkill();
+        };
     }
 
     public void UpdateSkill()

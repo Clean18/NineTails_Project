@@ -49,7 +49,6 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _data: {fileID: 11400000, guid: ce7b313c794676941af9526a8547f2e7, type: 2}
   _projectilePrefab: {fileID: 1873357373014254779, guid: f32a813fa53bdee4c97b097228d88237, type: 3}
   _objCount: 5
   _radius: 3
@@ -59,7 +58,8 @@ MonoBehaviour:
   _isSpinning: 0
   <SkillData>k__BackingField: {fileID: 11400000, guid: ce7b313c794676941af9526a8547f2e7, type: 2}
   <IsCooldown>k__BackingField: 0
-  <SkillLevel>k__BackingField: 0
+  <SkillLevel>k__BackingField: 1
+  <SlotIndex>k__BackingField: -1
 --- !u!50 &4258019148208761534
 Rigidbody2D:
   serializedVersion: 4

@@ -21,3 +21,5 @@ MonoBehaviour:
   <SkillAnimation>k__BackingField: {fileID: 0}
   <SkillPrefab>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 1
+  <SkillIndex>k__BackingField: 3
+  <SlotIndex>k__BackingField: -1

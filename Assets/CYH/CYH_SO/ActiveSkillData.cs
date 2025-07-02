@@ -4,4 +4,5 @@ using UnityEngine;
 public class ActiveSkillData : SkillData_CYH
 {
     [field: SerializeField] public float Range { get; private set; }
+    [field: SerializeField] public int SkillIndex { get; set; }
 }

@@ -53,7 +53,8 @@ MonoBehaviour:
   _hitBox: {fileID: 0}
   <SkillData>k__BackingField: {fileID: 11400000, guid: 6cea0e09a7f8e484d9d88e32a9498a2d, type: 2}
   <IsCooldown>k__BackingField: 0
-  <SkillLevel>k__BackingField: 0
+  <SkillLevel>k__BackingField: 1
+  <SlotIndex>k__BackingField: -1
 --- !u!50 &4849277670154264992
 Rigidbody2D:
   serializedVersion: 4

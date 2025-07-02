@@ -16,13 +16,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
 
-
-    public PlayerController PlayerController { get; set; }
-    public ActiveSkillData SkillData { get; set; }
-    public bool IsCooldown { get; set; }
-    public int SkillLevel { get; set; }
-
-
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
     private void Awake()
     {
         _playerController = GetComponent<PlayerControllerTypeA_Copy>();
@@ -30,13 +27,21 @@ public class SkillLogic_3 : SkillLogic, ISkill
         IsCooldown = false;
     }
 
-    private void Update()
+    public void SkillInit()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UseSkill(transform);
-        }
+        Debug.Log("스킬 3 초기화");
+        IsCooldown = false;
+        SkillLevel = 1;
+        SlotIndex = 3;
     }
+
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha3))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -154,9 +159,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monster)
     {
-        float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
-        //float damage = PlayerController.PlayerModel.Data.Attack * (1.0f + 0.01f * SkillLevel);
-        monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
+        //float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((1.0f + 0.01f * SkillLevel)));
+        monster?.GetComponent<IDamagable>().TakeDamage(damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
 
         // 현재 :몬스터 하위에 생성 x
@@ -198,10 +203,5 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _radius);
-    }
-
-    public void SkillInit()
-    {
-        Debug.Log("스킬 3 초기화");
     }
 }

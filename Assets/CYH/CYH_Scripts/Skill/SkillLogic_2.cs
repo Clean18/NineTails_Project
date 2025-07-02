@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SkillLogic_2 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-
     [Header("Projectile 프리팹")]
     [SerializeField] private GameObject _projectilePrefab;
 
@@ -36,12 +34,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
-
-    private void Awake()
-    {
-        IsCooldown = false;
-        SkillData = _data;
-    }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
     private void Start()
     {
@@ -61,15 +54,18 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public void SkillInit()
     {
         Debug.Log("스킬 2 초기화");
+        IsCooldown = false;
+        SkillLevel = 1;
+        SlotIndex = 2;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha5))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {

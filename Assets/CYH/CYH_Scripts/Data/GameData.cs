@@ -43,6 +43,17 @@ public partial class GameData
     public long Warmth = 0;
 
     // TODO : PlayerSkill
+    [Header("PlayerSkill")]
+    public List<SavePlayerSkill> PlayerSkillList = new()
+    {
+        // 기본공격
+        new SavePlayerSkill
+        {
+            SkillIndex = 0,
+            SkillLevel = 1,
+            SlotIndex = 0,
+        }
+    };
 
     [Header("PlayerEquipment")]
     // 장비 등급
