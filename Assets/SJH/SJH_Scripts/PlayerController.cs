@@ -19,7 +19,6 @@ public enum ControlMode
 	Auto
 }
 #endregion
-
 #region enum AIState
 /// <summary>
 /// 자동 모드에서의 플레이어 AI 상태
@@ -48,7 +47,6 @@ public enum AIState
 	Attack
 }
 #endregion
-
 #region enum CostType
 /// <summary>
 /// 재화 타입
@@ -57,6 +55,7 @@ public enum CostType
 {
 	Warmth,         // 온기
 	SpiritEnergy,   // 영기
+    Soul,           // 혼백
 }
 #endregion
 
@@ -120,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		if (_isInit == false)
+        if (_isInit == false)
 		{
 			//Debug.Log("초기화가 아직 안됐음");
 			return;
@@ -135,7 +134,7 @@ public class PlayerController : MonoBehaviour
 		// TODO : TEST 인풋
 		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
-			Test_ChangeStat();
+			Test_Function();
 		}
 	}
 
@@ -263,7 +262,7 @@ public class PlayerController : MonoBehaviour
         // TODO : view 보호막처리
         // TODO : UI 보호막 증가 처리
     }
-
+    #region Data 관련 함수
     /// <summary>
     /// 플레이어의 죽음 체크
     /// <br/> true = 죽음
@@ -315,20 +314,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="playerStatUI"></param>
     public void ConnectEvent(Action playerStatUI) => _model.ConnectEvent(playerStatUI);
+    /// <summary>
+    /// 플레이어의 이름을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public string GetPlayerName() => _model.GetPlayerName();
+    #endregion
 
-	#region Cost 관련 함수
-	public long GetCost(CostType costType) => _model.GetCost(costType);
+    #region Cost 관련 함수
+    public long GetCost(CostType costType) => _model.GetCost(costType);
 	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
 	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
 	#endregion
 
-	public void Test_ChangeStat()
+	public void Test_Function()
 	{
-		// TODO : 5번 누르면 공격력증가
-		if (_model == null) return;
+		// TODO : 5번 누르면 스킬추가
 
-		_model.Data.AttackLevelup();
-	}
+        _model.Skill.Test_AddSkill(1);
+        _model.Skill.Test_AddSkill(2);
+        _model.Skill.Test_AddSkill(3);
+    }
 
     /// <summary>
     /// 플레이어 저장 데이터 반환하는 함수
@@ -377,6 +383,15 @@ public class PlayerController : MonoBehaviour
     public void TryPromote() => _model.TryPromote();
     #endregion
 
+    #region 스킬 강화 관련 함수
+    /// <summary>
+    /// 플레이어 스킬을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<SaveSkillData> GetSkillData() => _model.GetSkillData();
+    public void TrySkillLevelUp(int skillIndex) => _model.TrySkillLevelUp(skillIndex);
+    #endregion
+
     #region View 함수
 
     /// <summary>
@@ -384,6 +399,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
     public void Stop() => _view.Stop();
+    public void Move() => _view.Move();
 
     #endregion
 
@@ -396,12 +412,15 @@ public class PlayerController : MonoBehaviour
     #region 애니메이션 이벤트 함수
 
     // SkillLogic_0 애니메이션 이벤트 함수들
-    public void Skill0_OnAttackStart() => _model.Skill.DefaultAttack.OnAttackStart();
-    public void Skill0_OnAttackEnd() => _model.Skill.DefaultAttack.OnAttackEnd();
-    public void Skill0_SlashCountEvent() => _model.Skill.DefaultAttack.SlashCountEvent();
+    public void Skill0_OnAttackStart() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackStart();
+    public void Skill0_OnAttackEnd() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackEnd();
+    public void Skill0_SlashCountEvent() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.SlashCountEvent();
 
     // SkillLogic_1 애니메이션 이벤트 함수
-    public void Skill1_DisableHitbox() => _model.Skill.Skill1.DisableHitbox();
+    public void Skill1_DisableHitbox() => (SkillController.SkillList[1] as SkillLogic_1)?.DisableHitbox();
+
+    // SkillLogic_3 애니메이션 이벤트 함수
+    public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();
 
     #endregion
 

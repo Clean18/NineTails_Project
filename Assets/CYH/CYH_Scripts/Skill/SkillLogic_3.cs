@@ -15,8 +15,13 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [SerializeField] private float _effectDuration = 0.1f;
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
+
     [Header("이펙트 Y 오프셋")]
     [SerializeField] private float _effectYOffset = 0.5f;
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
     //public PlayerController PlayerController { get; set; }
     public ActiveSkillData SkillData { get; set; }
@@ -33,13 +38,13 @@ public class SkillLogic_3 : SkillLogic, ISkill
         //_animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha3))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -53,7 +58,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
@@ -77,7 +82,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
@@ -92,7 +97,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void SkillRoutine()
     {
         if (_highestMonster != null)
-            StartCoroutine(DamageCoroutine(_highestMonster));
+            PlayerController.Instance.StartCoroutine(DamageCoroutine(_highestMonster));
 
         OnAttackEnd();
     }
@@ -237,10 +242,5 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _radius);
-    }
-
-    public void SkillInit()
-    {
-        Debug.Log("스킬 3 초기화");
     }
 }

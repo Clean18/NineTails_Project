@@ -29,7 +29,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public ActiveSkillData SkillData { get; set; }
     public bool IsCooldown { get; set; }
     public int SkillLevel { get; set; }
-
+    public int SlotIndex { get; set; }
 
     private void Awake()
     {
