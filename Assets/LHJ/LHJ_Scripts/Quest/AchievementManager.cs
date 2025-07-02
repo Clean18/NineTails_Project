@@ -10,7 +10,8 @@ public struct AchievementInfo
     public string Type;          // 업적타입
     public string Id;            // 업적고유 ID
     public string Name;          // 업적이름
-    public string Scene;       // 조건(스테이지)
+    public string Scene;         // 스테이지
+    public int Purpose;          // 업적 달성 조건
     public int WarmthReward;     // 온정보상
     public int SpritReward;      // 영기보상
 }
@@ -50,9 +51,10 @@ public class AchievementManager : Singleton<AchievementManager>
             info.Type = words[0];                      // 업적 타입
             info.Id = words[1];                        // 업적 고유 ID
             info.Name = words[2];                      // 업적 이름
-            info.Scene = words[3];                   // 목적
-            info.WarmthReward = int.Parse(words[4]);   // 온정 보상
-            info.SpritReward = int.Parse(words[5]);    // 영기 보상
+            info.Scene = words[3];                     // 스테이지
+            info.Purpose = int.Parse(words[4]);        // 업적 달성 조건
+            info.WarmthReward = int.Parse(words[5]);   // 온정 보상
+            info.SpritReward = int.Parse(words[6]);    // 영기 보상
             return info;
         };
         achievementTable.Load(csv);
@@ -75,7 +77,7 @@ public class AchievementManager : Singleton<AchievementManager>
             killCount[achievement.Id]++;
 
             // 업적 달성 (Test로 5킬 적용)
-            if (killCount[achievement.Id] >= 5) 
+            if (killCount[achievement.Id] >= achievement.Purpose) 
             {
                 achievedIds.Add(achievement.Id);    // 업적 달성 처리
                 Debug.Log($"[업적 달성] {achievement.Name} - {killCount[achievement.Id]}킬");
@@ -99,6 +101,53 @@ public class AchievementManager : Singleton<AchievementManager>
             Reward(achievement);                                      // 보상 지급
         }
     }
+
+    // 재화 업적 함수
+    public void CheckCurrencyAchievements()
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Currency") continue;       // Type에서 Currnecy가 아닐경우 무시하고 계속진행
+            if (achievedIds.Contains(achievement.Id)) continue; // 이미 달성된 업적이면 무시하고 진행
+
+            bool isAchieved = false;    // 업적 달성여부
+
+            // 온정 업적 체크: 보상이 온정이고 플레이어 보유 온정이 조건보다 높거나 같을때 
+            if (achievement.WarmthReward > 0 &&
+                PlayerController.Instance.GetCost(CostType.Warmth) >= achievement.Purpose)
+                isAchieved = true;
+
+            // 영기 업적 체크: 보상이 영기이고 플레이어 보유 영기가 조건보다 높거나 같을때 
+            if (achievement.SpritReward > 0 &&
+                PlayerController.Instance.GetCost(CostType.SpiritEnergy) >= achievement.Purpose)
+                isAchieved = true;
+
+            if (isAchieved) // 조건이 하나라도 만족할때
+            {
+                achievedIds.Add(achievement.Id);    // 해당 업적 달성
+                Debug.Log($"[업적 달성] {achievement.Name} - 재화 조건 달성");
+                Reward(achievement);
+            }
+        }
+    }
+    // 전투력 업적 조건을 확인하고 달성 여부를 판단하는 함수
+    public void CheckPowerAchievements()
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Power") continue;               // Type에서 Power가 아닐경우 무시하고 계속진행
+            if (achievedIds.Contains(achievement.Id)) continue;      // 이미 달성된 업적이면 무시하고 진행
+
+            // 전투력 업적과 플레이어 전투력 비교
+            if (PlayerController.Instance.GetPower() >= achievement.Purpose)
+            {
+                achievedIds.Add(achievement.Id);     // 해당 업적 달성    
+                Debug.Log($"[업적 달성] {achievement.Name} - 전투력 조건 달성");
+                Reward(achievement);                 // 보상 지급
+            }
+        }
+    }
+
     private void Reward(AchievementInfo achievementInfo)
     {
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
