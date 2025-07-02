@@ -14,20 +14,34 @@ public class PlayerView : MonoBehaviour
     private float _facingDir;
     [SerializeField] float _spriteSize;
 
+    [SerializeField] private bool canMove;
 
     void Awake()
 	{
 		_rigid = GetComponent<Rigidbody2D>();
         _sprite = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
-	}
+
+        canMove = true;
+
+    }
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
-        if (dir != Vector2.zero) _anim.SetBool("IsMoving", true);
-        else _anim.SetBool("IsMoving", false);
+        if (!canMove) return;
 
-            Vector2 movePos = dir.normalized * moveSpeed;
+        if (dir != Vector2.zero)
+        {
+            _anim.SetBool("IsMoving", true);
+            Debug.Log("IsMoving = true");
+        }
+        else
+        {
+            _anim.SetBool("IsMoving", false);
+            Debug.Log("IsMoving = false");
+        }
+
+        Vector2 movePos = dir.normalized * moveSpeed;
 		_rigid.velocity = movePos;
 
         if (dir.x < 0f)
@@ -46,9 +60,12 @@ public class PlayerView : MonoBehaviour
 
 	public void Stop()
     {
+        canMove = false;
         _anim.SetBool("IsMoving", false);
         _rigid.velocity = Vector2.zero;
     }
+
+    public void Move() => canMove = true;
 
     public void SetTrigger(string trigger)
     {
