@@ -16,9 +16,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
     [SerializeField] List<GameObject> _randomMonsters = new List<GameObject>();
 
     [Header("데미지 코루틴 (초)")]
-    [SerializeField] private float _damageInterval = 0.2f;
+    [SerializeField] private float _damageInterval = 0.5f;
     [Header("이펙트 활성 지속 시간 (초)")]
-    [SerializeField] private float _effectDuration = 0.1f;
+    [SerializeField] private float _effectDuration = 0.5f;
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
     [Header("이펙트 Y 오프셋")]
@@ -98,8 +98,12 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void SkillRoutine()
     {
+
         RandomDamage();
         HealPlayer(_randomMonsters.Count);
+        // 3초 동안 0.5초마다 데미지 + 이펙트 flipX 토글
+        if (_randomMonsters.Count > 0)
+            StartCoroutine(TimedDamageCoroutine());
         OnAttackEnd();
     }
 
@@ -157,13 +161,12 @@ public class SkillLogic_4 : SkillLogic, ISkill
                 tempList.RemoveAt(index);
             }
         }
-
-        // 랜덤 리스트의 모든 몬스터 데미지 가함
-        foreach (var monster in _randomMonsters)
-        {
-            Debug.Log($"_randomMonsters : {monster.name}");
-            Damage(monster);
-        }
+        // 랜덤 리스트의 모든 몬스터 데미지 적용
+        //foreach (var monster in _randomMonsters)
+        //{
+        //    Debug.Log($"_randomMonsters : {monster.name}");
+        //    Damage(monster);
+        //}
     }
 
     // 스킬 사용 시 플레이어 체력 회복 (_randomMonsters.Count 만큼)
@@ -175,7 +178,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * _skillLevel) * count}]의 Hp를 회복");
         //PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel));
     }
-    
+
     protected override void Damage(GameObject monster)
     {
         float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * _skillLevel));
@@ -184,7 +187,51 @@ public class SkillLogic_4 : SkillLogic, ISkill
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
 
+    // 데미지, 이펙트 코루틴 (0.5초 간격으로 3초 동안)
+    private IEnumerator TimedDamageCoroutine()
+    {
+        // 이펙트 관리 리스트
+        var effects = new List<GameObject>();
 
+        if (_damageEffectPrefab != null)
+        {
+            foreach (var monster in _randomMonsters)
+            {
+                Vector3 spawnPos = monster.transform.position + Vector3.up * _effectYOffset;
+                var effect = Instantiate(_damageEffectPrefab, spawnPos, Quaternion.identity, monster.transform);
+
+                // 이펙트 크기 조정
+                effect.transform.localScale = _damageEffectPrefab.transform.localScale;
+                effects.Add(effect);
+            }
+        }
+
+        // 경과 시간, flip 초기화
+        float time = 0f;
+        bool flip = false;
+
+        while (time < 3f)
+        {
+            // 0.5초마다 데미지 적용
+            foreach (var monster in _randomMonsters)
+                Damage(monster);
+            Debug.Log("Damage 적용");
+
+            // 이펙트 flipX
+            foreach (var effect in effects)
+            {
+                var effectSprite = effect.GetComponent<SpriteRenderer>();
+                effectSprite.flipX = flip;
+            }
+            flip = !flip;
+
+            yield return new WaitForSeconds(_damageInterval);
+            time += _damageInterval;
+        }
+        // 이펙트 삭제
+        foreach (var effect in effects)
+            Destroy(effect);
+    }
 
     private IEnumerator CooldownCoroutine()
     {
