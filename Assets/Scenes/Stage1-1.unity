@@ -4703,6 +4703,8 @@ MonoBehaviour:
   hpText: {fileID: 77163144}
   _warmthText: {fileID: 688341977}
   _spritenergyText: {fileID: 1599153278}
+  timeText: {fileID: 0}
+  retrycoolTimeText: {fileID: 0}
 --- !u!1 &1690765030
 GameObject:
   m_ObjectHideFlags: 0

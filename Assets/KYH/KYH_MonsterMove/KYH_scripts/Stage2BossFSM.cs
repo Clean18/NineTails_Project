@@ -24,9 +24,12 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private GameObject WarningLineHorizontal;
     [SerializeField] private Transform WarningOrigin2;
     [SerializeField] private GameObject DustEffect2;
+    [SerializeField] private GameObject DustEffect3;
     [SerializeField] private AudioClip RoarSound2;
     [SerializeField] private float Pattern2Delay = 3f;
     [SerializeField] private Vector2 Pattern2BoxSize = new Vector2(6f, 2f);
+    [SerializeField] private Transform SwingBonkPoint1;
+    [SerializeField] private Transform SwingBonkPoint2;
 
     protected override void HandlePattern1()
     {
@@ -52,24 +55,27 @@ public class Stage2BossFSM : BaseBossFSM
         // 3. 경고 유지 시간 대기
         yield return new WaitForSeconds(Pattern1Delay);
 
-        // 4. 1차 타격
         BossAnimator.Play("Giant_StompRight");
         if (DustEffect1 != null)
-            Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
-
+        {
+            GameObject dust1 = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
+            Destroy(dust1, 2f); // 2초 뒤 삭제
+        }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
-        // 5. 2차 타격
         BossAnimator.Play("Giant_StompLeft");
         if (DustEffect1 != null)
-            Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
-
+        {
+            GameObject dust2 = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
+            Destroy(dust2, 2f); // 2초 뒤 삭제
+        }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
 
         // 6. 후처리
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
+
         if (warning != null) Destroy(warning);
 
         TransitionToState(BossState.Idle);
@@ -103,18 +109,28 @@ public class Stage2BossFSM : BaseBossFSM
         yield return new WaitForSeconds(Pattern2Delay);
 
         // 4. 방망이 강타
-        BossAnimator.Play("Boss_HammerSmash");
-        if (DustEffect2 != null)
-            Instantiate(DustEffect2, WarningOrigin2.position, Quaternion.identity);
+        BossAnimator.Play("Giant_Swing_Bonk");
 
+        yield return new WaitForSeconds(1f);
+
+        if (DustEffect2 != null && DustEffect3 != null)
+        {
+            GameObject dust3 = Instantiate(DustEffect2, SwingBonkPoint1.position, Quaternion.identity);
+            GameObject dust4 = Instantiate(DustEffect3, SwingBonkPoint2.position, Quaternion.identity);
+
+            Destroy(dust3, 2f);
+            Destroy(dust4, 2f);
+        }
         DealBoxDamage(WarningOrigin2.position, Pattern2BoxSize, 0.6f);
 
         // 5. 후처리
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         if (warning != null) Destroy(warning);
 
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Giant_Idle");
     }
 
     protected override void HandlePattern3()

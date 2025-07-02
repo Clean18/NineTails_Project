@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1268472704501020521}
   - component: {fileID: 6363571827731124655}
   - component: {fileID: 992056899868396465}
-  - component: {fileID: 337028214704243513}
+  - component: {fileID: -6634828117489559820}
   m_Layer: 0
   m_Name: 3StageBoss
   m_TagString: Untagged
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 5302198693414457420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1028336}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2409656554703173392}
@@ -108,15 +108,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f67161d056d7f784e92017b6d2a87508, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 30, y: 20}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &992056899868396465
@@ -162,10 +162,10 @@ MonoBehaviour:
   ChargeForce: 20
   ChargeStartPos: {fileID: 901650526432405170}
   ChargeEndPos: {fileID: 1317349505045386407}
-  BossAnimator: {fileID: 337028214704243513}
+  BossAnimator: {fileID: 0}
   BossRigidbody: {fileID: 1268472704501020521}
   ChargeCollider: {fileID: 8819723863059629524}
---- !u!95 &337028214704243513
+--- !u!95 &-6634828117489559820
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -175,7 +175,7 @@ Animator:
   m_GameObject: {fileID: 5302198693414457420}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e47aa23f696e0424b98a7f0c27f05672, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5eb32718477bd344b9ae80877271a810, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -213,7 +213,7 @@ Transform:
   m_GameObject: {fileID: 5470536494085540429}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -260,15 +260,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 30, y: 20}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &8819723863059629524
@@ -303,18 +303,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.50089186, y: 0.10852671}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 30, y: 20}
+    newSize: {x: 30, y: 20}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.2707095, y: 2.9534783}
   m_EdgeRadius: 0
 --- !u!1 &6842502208882439182
 GameObject:

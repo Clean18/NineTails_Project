@@ -102,6 +102,8 @@ public class Stage3BossFSM : BaseBossFSM
         Destroy(whirlwind);
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Bird_Idle_1");
     }
 
     /// <summary>
@@ -161,6 +163,8 @@ public class Stage3BossFSM : BaseBossFSM
         // 4. FSM 상태 전환
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Bird_Idle_1");
     }
 
     /// <summary>
@@ -239,6 +243,8 @@ public class Stage3BossFSM : BaseBossFSM
         // 8. 상태 전환
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+
+        BossAnimator.Play("Bird_Idle_1");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
