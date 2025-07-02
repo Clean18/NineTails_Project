@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#region Data Enum
 public enum StatDataType
 {
 	Attack,     // 공격력
@@ -77,7 +78,6 @@ public struct PromotionInfo
 		SuccessRate = successRate;
 	}
 }
-
 /// <summary>
 /// 미션 정보 구조체
 /// </summary>
@@ -89,6 +89,7 @@ public struct MissionInfo
 	public int Count;          // 킬 조건
 	public string NextScene;   // 다음 씬
 }
+#endregion
 
 /// <summary>
 /// CSV 데이터를 가지고 있을 매니저
@@ -98,7 +99,6 @@ public class DataManager : Singleton<DataManager>
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
 	/// <br/> ex) Table[스탯타입][레벨] == 스탯값
-	/// </summary>
 	/// </summary>
 	public Dictionary<StatDataType, Dictionary<int, long>> StatDataTable = new();
 	/// <summary>
@@ -120,13 +120,19 @@ public class DataManager : Singleton<DataManager>
 	/// 장비 등급별 각성 비용 ex) Table[등급] == 비용
 	/// </summary>
 	public Dictionary<GradeType, PromotionInfo> EquipmentUpgradeTable = new();
-	// TODO : 스킬 테이블 > 스크립터블 오브젝트로 두고 계산식 사용
-	// TODO : 몬스터 테이블
-
 	/// <summary>
 	/// 스테이지별 미션 정보 테이블
 	/// </summary>
 	public Dictionary<string, MissionInfo> MissionTable = new();
+    /// <summary>
+    /// 일반 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
+    /// </summary>
+    public Dictionary<int, int> NormalSkillCostTable = new();
+    /// <summary>
+    /// 궁극기 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
+    /// </summary>
+    public Dictionary<int, int> UltSkillCostTable = new();
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -142,6 +148,8 @@ public class DataManager : Singleton<DataManager>
 		yield return StartCoroutine(EquipmentDataInit());
 		yield return StartCoroutine(EquipmentUpgradeInit());
 		yield return StartCoroutine(MissionDataInit());
+		yield return StartCoroutine(MissionDataInit());
+		yield return StartCoroutine(SkillCostInit());
 		Debug.Log("모든 데이터 테이블 초기화 완료");
 	}
 
@@ -157,8 +165,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-			// TODO : 게임종료
-			yield break;
+            DownloadFailed();
+            yield break;
 		}
 
 		// 딕셔너리 초기화
@@ -217,7 +225,6 @@ public class DataManager : Singleton<DataManager>
             //Debug.Log("===============");
         }
 	}
-
 	IEnumerator EquipmentUpgradeCostInit()
 	{
 		// CSV 다운로드
@@ -248,8 +255,8 @@ public class DataManager : Singleton<DataManager>
 			if (csvData.result != UnityWebRequest.Result.Success)
 			{
 				Debug.Log("CSV 다운로드 실패");
-				// TODO : 게임종료
-				yield break;
+                DownloadFailed();
+                yield break;
 			}
 
 			string csv = csvData.downloadHandler.text;
@@ -272,7 +279,6 @@ public class DataManager : Singleton<DataManager>
 			}
 		}
 	}
-
 	IEnumerator EquipmentDataInit()
 	{
 		string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Upgrade";
@@ -282,8 +288,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-			// TODO : 게임종료
-			yield break;
+            DownloadFailed();
+            yield break;
 		}
 
 		EquipmentDataTable = new()
@@ -344,7 +350,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-			yield break;
+            DownloadFailed();
+            yield break;
 		}
 
 		// 딕셔너리 초기화
@@ -364,7 +371,6 @@ public class DataManager : Singleton<DataManager>
 			string nextScene = Clean(cells[3]);
 		}
 	}
-
 	IEnumerator EquipmentUpgradeInit()
 	{
 		string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Promotion";
@@ -374,8 +380,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-			// TODO : 게임종료
-			yield break;
+            DownloadFailed();
+            yield break;
 		}
 
 		EquipmentUpgradeTable = new()
@@ -419,6 +425,53 @@ public class DataManager : Singleton<DataManager>
 			//Debug.Log($"승급 확률 : {successRate * 100}%");
 		}
 	}
+    IEnumerator SkillCostInit()
+    {
+        // CSV 다운로드
+        string csvString = "https://docs.google.com/spreadsheets/d/1DrO4aB5Gmi2taIy4tMzLPItZq4yxLkfufWEaGDU-d4Q/gviz/tq?tqx=out:csv&sheet=SkillUpgrade";
+        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+        yield return csvData.SendWebRequest();
+
+        if (csvData.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("CSV 다운로드 실패");
+            DownloadFailed();
+            yield break;
+        }
+
+        // 딕셔너리 초기화
+        NormalSkillCostTable = new();
+
+        UltSkillCostTable = new();
+
+        string csv = csvData.downloadHandler.text;
+        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 3; i < lines.Length; i++)
+        {
+            string line = lines[i];
+            string[] cells = line.Split(',');
+
+            int skilllevel = int.Parse(Clean(cells[0]));
+            int normalCost = int.Parse(Clean(cells[1]));
+            int ultCost = int.Parse(Clean(cells[2]));
+
+            NormalSkillCostTable[skilllevel] = normalCost;
+            UltSkillCostTable[skilllevel] = ultCost;
+
+            //Debug.Log("===============");
+            //Debug.Log($"{skilllevel} 레벨");
+            //Debug.Log($"노말 스킬 비용 : {normalCost}");
+            //Debug.Log($"궁극기 비용 : {ultCost}");
+            //Debug.Log("===============");
+        }
+    }
+
+    void DownloadFailed()
+    {
+
+    }
+
 	#region Table Get 함수
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
@@ -426,30 +479,36 @@ public class DataManager : Singleton<DataManager>
 	/// <br/> -1 로 예외처리
 	/// </summary>
 	public long GetStatData(StatDataType statType, int level) => StatDataTable.TryGetValue(statType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
-
   /// <summary>
 	/// 플레이어 스탯의 레벨별 성장비용
 	/// <br/> ex) Table[스탯타입][레벨] == 성장비용
 	/// <br/> long.MaxValue 로 예외처리
 	/// </summary>
     public long GetStatCost(StatDataType statType, int level) => StatCostTable.TryGetValue(statType, out var cost) && cost.TryGetValue(level, out long result) ? result : long.MaxValue;
-
 	/// <summary>
 	/// 장비 등급별 필요한 성장 비용 데이터
 	/// <br/> ex) Table[등급][레벨] == 성장 비용
 	/// <br/> -1 로 예외처리
 	/// </summary>
 	public long GetEquipmentUpgradeCost(GradeType gradeType, int level) => EquipmentUpgradeCostTable.TryGetValue(gradeType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
-
 	/// <summary>
 	/// 장비 등급별 장비 스탯
 	/// <br/> ex) Table[등급][레벨] == 장비 스탯
 	/// </summary>
 	public UpgradeInfo GetEquipmentUpgradeInfo(GradeType gradeType, int level) => EquipmentDataTable.TryGetValue(gradeType, out var data) && data.TryGetValue(level, out var result) ? result : new UpgradeInfo();
-
 	/// <summary>
 	/// 장비 등급별 각성 비용 ex) Table[등급] == 비용
 	/// </summary>
 	public PromotionInfo GetEquipmentPromotionInfo(GradeType currentGrade) => EquipmentUpgradeTable.TryGetValue(currentGrade, out var result) ? result : new PromotionInfo();
-	#endregion
+    /// <summary>
+    /// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
+    /// </summary>
+    /// <returns></returns>
+    public int GetNormalSkillCost(int level) => NormalSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
+    /// <summary>
+    /// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
+    /// </summary>
+    /// <returns></returns>
+    public int GetUltSkillCost(int level) => UltSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
+    #endregion
 }
