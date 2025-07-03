@@ -184,19 +184,20 @@ MonoBehaviour:
   AttackOrigin: {fileID: 7496418290296635243}
   AttackRange: 10
   AttackAngle: 120
-  SwingSound: {fileID: 8300000, guid: 63cdd5b587b76464ba5489633c662392, type: 3}
+  SwingSound: {fileID: 8300000, guid: 59d0c6db6e7fc4940a1532337d1c7734, type: 3}
   WarningRangeIndicator: {fileID: 2441017438424874777, guid: 5dc2b682daa191343af1f753e2cf7c72, type: 3}
   Pattern1EffectDuration: 2
+  RoarSound1: {fileID: 8300000, guid: d34ed68980202b24bbc9c9efdf466e74, type: 3}
   DropRockPrefab: {fileID: 5730476442735446347, guid: d9a99a8739addbe4781fe206a224d17e, type: 3}
   WarningCirclePrefab: {fileID: 5428769712336746288, guid: 271cfdac57fb4dc48b83130722a5f3d9, type: 3}
   DropPosition: {fileID: 6729909933104546597}
-  RoarSound: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound2: {fileID: 8300000, guid: 20cd23ab830d65a47b2956a1cb519d37, type: 3}
   Pattern2Delay: 3
   Pattern2EffectDuration: 2
   DropRadius: 3
   SpearGhostPrefebs: {fileID: 5341108527615289755, guid: cad1049275b55444e9a01c57616e31df, type: 3}
   SpearSpeed: 10
-  SpearGhostSound: {fileID: 8300000, guid: 3651c2279c72cc24fb1d460fe4a302aa, type: 3}
+  RoarSound3: {fileID: 8300000, guid: 3dbb224a5740e6e4790ce009f047f7d8, type: 3}
   WarningRectPrefab: {fileID: 8748292838769292659, guid: af01f6bfd67953644a36421ce009e924, type: 3}
   WarningDistance: 2
 --- !u!95 &1158723843331947341

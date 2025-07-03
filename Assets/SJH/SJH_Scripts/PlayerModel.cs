@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
@@ -20,10 +21,13 @@ public class PlayerModel
 	// 플레이어 장비
 	public PlayerEquipment Equipment;
 
-	/// <summary>
-	/// PlayerModel 초기화
-	/// </summary>
-	public void InitModel(GameData saveData)
+    // 플레이어 업적, 미션
+    public PlayerQuest Quest;
+
+    /// <summary>
+    /// PlayerModel 초기화
+    /// </summary>
+    public void InitModel(GameData saveData)
 	{
 		if (saveData == null) return;
 
@@ -42,16 +46,27 @@ public class PlayerModel
 		// 플레이어 장비
 		Equipment = new PlayerEquipment();
 		Equipment.InitEquipment(saveData.Grade, saveData.Level, saveData.IncreaseDamageLevel);
+
+        Quest = new PlayerQuest();
+        Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
+
 	}
 
 	public void ApplyDamage(long damage)
 	{
-		Data.DecreaseHp(damage);
-		if (Data.Hp <= 0)
+        string scene = SceneManager.GetActiveScene().name;
+
+        if (scene == "1-3" || scene == "2-3" || scene == "3-3")
+        {
+            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+        }
+        Data.DecreaseHp(damage);
+        if (Data.Hp <= 0)
 		{
-			// TODO : 플레이어 죽음 처리
-			//Debug.LogError("플레이어 사망");
-		}
+            // TODO : 플레이어 죽음 처리
+            //Debug.LogError("플레이어 사망");
+            AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
+        }
 	}
 
 	public void ApplyHeal(long amount)
@@ -80,12 +95,19 @@ public class PlayerModel
 		Cost.OnCostChanged += playerStatUI;
 	}
 
+    /// <summary>
+    /// 플레이어 모든 데이터 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public GameData GetGameData()
 	{
 		SavePlayerData data = Data.SavePlayerData();
 		SavePlayerCost cost = Cost.SavePlayerCost();
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
+        List<SaveAchievementData> achievments = Quest.SaveAchievementData();
+        // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
+        //List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -100,14 +122,20 @@ public class PlayerModel
 		// Cost
 		gameData.Warmth = cost.Warmth;
 		gameData.SpiritEnergy = cost.SpiritEnergy;
+        gameData.GetFirstWarmth = cost.GetFirstWarmth;
+        gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
 
-		// Skill
-		gameData.PlayerSkillList = skills;
+        // Skill
+        gameData.PlayerSkillList = skills;
 
 		// Equipment
 		gameData.Grade = equip.Grade;
 		gameData.Level = equip.Level;
 		gameData.IncreaseDamageLevel = equip.IncreaseDamageLevel;
+
+        // Quest
+        gameData.PlayerAchivementList = achievments;
+        //gameData.PlayerMissionList = missions;
 
 		return gameData;
 	}
@@ -288,7 +316,8 @@ public class PlayerModel
 		Equipment.InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
 		Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 		Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-		UIManager.Instance.MainUI?.PlayerStatUI();
+        AchievementManager.Instance?.CheckEnhancementAchievements(Equipment.Level); // 강화 업적 조건 체크
+        UIManager.Instance.MainUI?.PlayerStatUI();
 	}
 	public void TryPromote()
 	{
@@ -332,18 +361,21 @@ public class PlayerModel
 				Equipment.InitEquipment("SSR", 1, 1);
 				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
+
 			}
 			else
 			{
 				Equipment.InitEquipment(nextData.UpgradeGrade, 1, 0);
 				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-			}
+                AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,true);
+            }
 		}
 		else
 		{
 			Debug.Log("승급에 실패했습니다...");
-			return;
+            AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,false);
+            return;
 		}
 	}
     #endregion
@@ -409,5 +441,10 @@ public class PlayerModel
         Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
+    #endregion
+
+    #region Quest 관련 함수
+    public List<SaveAchievementData> GetAchievData() => Quest.SaveAchievementData();
+    public List<SaveMissionData> GetMissionData() => Quest.SaveMissionData();
     #endregion
 }

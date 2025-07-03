@@ -19,9 +19,11 @@ public class FallingRock : MonoBehaviour
     private Rigidbody2D rb;
     private bool hasDealtDamage = false;        // 데미지 판정이 이미 이루어졌는지 여부확인
     private bool hasLaunched = false;           // 낙하가 시작되었는지의 여부 확인
+    [SerializeField] AudioClip DropRockSound;
 
     private void Start()
     {
+        AudioSource.PlayClipAtPoint(DropRockSound, transform.position);
         rb = GetComponent<Rigidbody2D>();       // Rigidbody2D 컴포넌트 가져오기
         rb.gravityScale = 0f;                   // 중력 제거      
 

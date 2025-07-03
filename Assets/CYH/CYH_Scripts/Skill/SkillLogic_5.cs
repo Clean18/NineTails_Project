@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class SkillLogic_5 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
-    
     [SerializeField] private GameObject _fieldPrefab;
 
     private GameObject _fieldInstance;
@@ -26,33 +23,26 @@ public class SkillLogic_5 : SkillLogic, ISkill
         SlotIndex = 5;
     }
 
-    private void Awake()
-    {
-        _playerController = GetComponentInParent<PlayerControllerTypeA_Copy>();
-        _animator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.Alpha5))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
-        Debug.Log("스킬4 사용");
+        Debug.Log("스킬5 사용");
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
@@ -64,16 +54,15 @@ public class SkillLogic_5 : SkillLogic, ISkill
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
-        Debug.Log("스킬4 사용");
+        Debug.Log("스킬5 사용");
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
@@ -99,8 +88,8 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
     public void AnimationPlay()
     {
-        _animator.SetTrigger("UseSkill_5");
-        //PlayerController.Instance.SetTrigger("UseSkill_5");
+        //_animator.SetTrigger("UseSkill_5");
+        PlayerController.Instance.SetTrigger("UseSkill_5");
     }
 
     // Field 생성
@@ -124,8 +113,7 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monster)
     {
-        float damage = (float)(_playerController.AttackPoint * (0.12f + 0.0012f * SkillLevel));
-        //long damage = (long)(PlayerController.Instance.GetAttack() * (0.12f + 0.0012f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetAttack() * (0.12f + 0.0012f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }

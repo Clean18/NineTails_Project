@@ -150,35 +150,43 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("기본공격 사용");
-            _model.Skill.DefaultAttack.UseSkill(transform);
+            //_model.Skill.DefaultAttack.UseSkill(transform);
+            var skill = _model.Skill.GetSkill(KeyCode.Mouse0);
+            skill?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("1번스킬 사용");
+            Debug.Log("1번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
             skill?.UseSkill(transform);
+            SkillButton.Instance.UpdateCooldown(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("2번스킬 사용");
+            Debug.Log("2번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha2);
             skill?.UseSkill(transform);
+            SkillButton.Instance.UpdateCooldown(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("3번스킬 사용");
+            Debug.Log("3번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha3);
             skill?.UseSkill(transform);
+            SkillButton.Instance.UpdateCooldown(3);
         }
     }
 
     void SkillInput(int index)
     {
+        // 여긴 스킬버튼에서 쿨타임 UI 처리
         switch (index)
         {
             case 0:
                 Debug.Log("기본공격 사용");
-                _model.Skill.DefaultAttack.UseSkill(transform);
+                //_model.Skill.DefaultAttack.UseSkill(transform);
+                var skill0 = _model.Skill.GetSkill(KeyCode.Mouse0);
+                skill0?.UseSkill(transform);
                 break;
             case 1:
                 Debug.Log("1번스킬 사용");
@@ -394,8 +402,20 @@ public class PlayerController : MonoBehaviour
     /// <param name="index"></param>
     public void UseSkill(int index) => SkillInput(index);
     #endregion
-    #endregion
 
+    #region Achievment, Mission 관련 함수
+    /// <summary>
+    /// 플레이어의 업적 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<SaveAchievementData> GetAchievData() => _model.GetAchievData();
+    /// <summary>
+    /// 플레이어의 돌파 미션 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<SaveMissionData> GetMissionData() => _model.GetMissionData();
+    #endregion
+    #endregion
 
     #region View 함수
 
@@ -406,7 +426,7 @@ public class PlayerController : MonoBehaviour
     public void Stop() => _view.Stop();
     public void Move() => _view.Move();
     public void AIStop() => _view.AIStop();
-
+    public bool MoveCheck() => _view.GetMoveCheck();
     #endregion
 
     #region AI 함수
@@ -437,6 +457,9 @@ public class PlayerController : MonoBehaviour
     // SkillLogic_4 애니메이션 이벤트 함수
     public void Skill4_SkillRoutine() => (SkillController.SkillList[4] as SkillLogic_4)?.SkillRoutine();
 
+    // SkillLogic_5 애니메이션 이벤트 함수
+    public void Skill5_SkillRoutine() => (SkillController.SkillList[5] as SkillLogic_5)?.SkillRoutine();
+
     #endregion
 
     void OnDrawGizmos()
@@ -461,8 +484,10 @@ public class PlayerController : MonoBehaviour
     {
         // TODO : 5번 누르면 스킬추가
 
-        _model.Skill.Test_AddSkill(1);
-        _model.Skill.Test_AddSkill(2);
-        _model.Skill.Test_AddSkill(4);
+        _model.Skill.AddSkill(1);
+        _model.Skill.AddSkill(2);
+        _model.Skill.AddSkill(3);
+        _model.Skill.AddSkill(4);
+        _model.Skill.AddSkill(5);
     }
 }
