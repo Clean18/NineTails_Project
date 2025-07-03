@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Skill_5_Field : MonoBehaviour
 {
-    public static event Action<List<GameObject>> OnMonstersDetected;
+    public static event Action<List<GameObject>> Skill_5_Event;
 
     [SerializeField] private float _detectionRadius = 4f;
     [SerializeField] private float _detectionInterval = 0.5f;
@@ -28,7 +28,7 @@ public class Skill_5_Field : MonoBehaviour
         {
             var monsters = new List<GameObject>();
             float time = 0f;
-            int count = 0;
+            int count = 1;
 
             while (time < _effectDuration)
             {
@@ -41,10 +41,10 @@ public class Skill_5_Field : MonoBehaviour
                 foreach (var col in hits)
                 {
                     monsters.Add(col.gameObject);
-                    Debug.Log($"{col.gameObject.name}");
+                    //Debug.Log($"{col.gameObject.name}");
                 }
 
-                OnMonstersDetected?.Invoke(monsters);
+                Skill_5_Event?.Invoke(monsters);
 
                 yield return _wait;
                 time += _detectionInterval;
@@ -57,12 +57,6 @@ public class Skill_5_Field : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _detectionRadius);
-    }
-
     private void OnEnable()
     {
         StartCoroutine(DetectCoroutine());
@@ -71,5 +65,11 @@ public class Skill_5_Field : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _detectionRadius);
     }
 }

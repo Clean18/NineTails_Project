@@ -66,7 +66,7 @@ public class GameUI : SceneUI, IUI
 		UpdateAIMode(player.Mode);
 
         // 플레이어 velocity 초기화
-        player.Stop();
+        player.AIStop();
 	}
 
 	public void UpdateAIMode(ControlMode mode)

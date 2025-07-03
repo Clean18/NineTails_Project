@@ -56,7 +56,7 @@ public class PlayerData
 			_attackLevel = Mathf.Clamp(value, 1, 300);
 			Attack = GetStat(StatDataType.Attack, _attackLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 
@@ -77,7 +77,7 @@ public class PlayerData
             _defenseLevel = Mathf.Clamp(value, 1, 300);
 			Defense = GetStat(StatDataType.Defense, _defenseLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();    // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 
@@ -98,14 +98,25 @@ public class PlayerData
             _hpLevel = Mathf.Clamp(value, 1, 300);
 			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
             OnStatChanged?.Invoke();
-            AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
+            if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
 	}
 
+    [SerializeField] private long _hp;
     /// <summary>
     /// 현재 체력
     /// </summary>
-    [field: SerializeField] public long Hp { get; private set; }
+    public long Hp
+    {
+        get => _hp;
+        set
+        {
+            var amount = Math.Clamp(value, 0, MaxHp);
+            _hp = amount;
+            Debug.Log($"플레이어 {amount} 회복");
+            OnStatChanged?.Invoke();
+        }
+    }
 
     [field: SerializeField] private int _speedLevel;
     /// <summary>
@@ -145,6 +156,7 @@ public class PlayerData
         {
             _shieldHp = value;
             // TODO : 이벤트 연결
+            OnStatChanged?.Invoke();
         }
     }
 
@@ -200,8 +212,7 @@ public class PlayerData
                 return;
             }
         }
-		Hp -= totalDamage;
-		if (Hp <= 0) Hp = 0;
+        Hp = Math.Max(0, Hp - totalDamage);
         IsDead = Hp <= 0;
         //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
 	}
@@ -209,8 +220,7 @@ public class PlayerData
     // 체력회복하는 함수
     public void HealHp(long amount)
     {
-        if ((Hp + amount) > MaxHp) Hp = MaxHp;
-        else Hp += amount;
+        Hp += amount;
     }
 
     public void HealShield(long amount)

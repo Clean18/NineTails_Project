@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939428493384606817}
   - component: {fileID: 4437756138843906315}
+  - component: {fileID: 5840638557102369795}
   m_Layer: 0
   m_Name: Skill_3
   m_TagString: Untagged
@@ -44,10 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d736721b0cadb4469194e8503384d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillLevel: 0
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
+  _data: {fileID: 0}
   _hitBox: {fileID: 0}
   _radius: 5
   _highestMonster: {fileID: 0}
@@ -59,3 +60,30 @@ MonoBehaviour:
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
   <SlotIndex>k__BackingField: -1
+--- !u!50 &5840638557102369795
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575395230341757593}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
