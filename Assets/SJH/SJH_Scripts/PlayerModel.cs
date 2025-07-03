@@ -441,6 +441,48 @@ public class PlayerModel
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
     public List<ISkill> GetSkillMappingList() => Skill.SkillMapping.Values.ToList();
     public List<ISkill> GetHasSkillList() => Skill.HasSkills;
+    public void AddSkill(int skillIndex)
+    {
+        // 중복 체크
+        var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
+        if (skill == null)
+        {
+            Debug.Log("배울 수 없는 스킬입니다.");
+            return;
+        }
+        var mapping = Skill.SkillMapping.Values.ToList();
+        var has = Skill.HasSkills;
+        
+        foreach (var mappingSkill in mapping)
+        {
+            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+            {
+                Debug.Log("이미 배운 스킬입니다.");
+                return;
+            }
+        }
+        foreach (var mappingSkill in has)
+        {
+            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+            {
+                Debug.Log("이미 배운 스킬입니다.");
+                return;
+            }
+        }
+
+        // 플레이어 재화 체크
+        if (Cost.Soul < 1 && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log("혼백이 부족합니다.");
+            return;
+        }
+
+        // 재화 감소
+        if (!PlayerController.Instance.IsCheat) Cost.DecreaseSoul(1);
+
+        // 스킬 추가
+        Skill.AddSkill(skillIndex);
+    }
     #endregion
 
     #region Quest 관련 함수

@@ -62,6 +62,7 @@ public class SkillPopUp : BaseUI
             skillUIList[i].getButton.onClick.AddListener(() =>
             {
                 // TODO : 스킬 획득
+                PlayerController.Instance.AddSkill(skillIndex);
                 Debug.Log($"스킬 {skillIndex} 습득 버튼 클릭됨");
                 UpdateSkill();
             });
@@ -70,24 +71,6 @@ public class SkillPopUp : BaseUI
         //{
         //    PlayerController.Instance.TrySkillLevelUp(0);
         //    Debug.Log("스킬0 강화 버튼");
-        //    UpdateSkill();
-        //};
-        //GetEvent("Skill1Up").Click += data =>
-        //{
-        //    PlayerController.Instance.TrySkillLevelUp(1);
-        //    Debug.Log("스킬1 강화 버튼");
-        //    UpdateSkill();
-        //};
-        //GetEvent("Skill2Up").Click += data =>
-        //{
-        //    PlayerController.Instance.TrySkillLevelUp(2);
-        //    Debug.Log("스킬2 강화 버튼");
-        //    UpdateSkill();
-        //};
-        //GetEvent("Skill3Up").Click += data =>
-        //{
-        //    PlayerController.Instance.TrySkillLevelUp(3);
-        //    Debug.Log("스킬3 강화 버튼");
         //    UpdateSkill();
         //};
     }
@@ -108,7 +91,7 @@ public class SkillPopUp : BaseUI
         hasSkills.Sort((a, b) => a.SkillData.SkillIndex.CompareTo(b.SkillData.SkillIndex));
         var allSkills = PlayerController.Instance.SkillController.SkillList;
 
-        // 배열 에러방지 딕셔너리로 변경
+        // 배열 에러나서 딕셔너리로 변경
         Dictionary<int, ISkill> hasSkillDic = new();
         foreach (var skill in hasSkills)
         {
@@ -124,13 +107,15 @@ public class SkillPopUp : BaseUI
             // 스킬 보유중이 아님
             if (!hasSkillDic.TryGetValue(i, out ISkill skillData))
             {
-                // TODO : 스킬컨트롤러에서 기본 정보 받아오기
+                // 스킬컨트롤러에서 기본 정보 받아오기
                 // 아이콘
                 ui.icon.sprite = allSkills[i].SkillData.SkillSprite;
-                //설명
+                // 설명
                 ui.descText.text = allSkills[i].SkillData.Description;
+                // 강화 비용
                 ui.costText.text = $"강화비용";
 
+                // 습득 버튼 상태 설정
                 ui.getButton.gameObject.SetActive(true);
             }
             // 스킬 보유중

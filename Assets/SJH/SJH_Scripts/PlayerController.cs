@@ -104,7 +104,11 @@ public class PlayerController : MonoBehaviour
 	[Header("치트모드")]
 	public bool IsCheat = false;
 
-	void Start()
+    [Header("무적")]
+    public bool IsImmortal = false;
+
+
+    void Start()
 	{
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
@@ -251,12 +255,18 @@ public class PlayerController : MonoBehaviour
     /// <param name="damage"></param>
     public void TakeDamage(long damage)
 	{
+        if (IsImmortal)
+        {
+            Debug.Log("플레이어는 무적상태입니다.");
+            return;
+        }
+
 		_model.ApplyDamage(damage);
 		// TODO : view 피격처리
 		// TODO : UI 체력감소 처리
 
-        // TODO : 대미지 색상 변경
-        UIManager.Instance.ShowDamageText(transform, damage);
+        // 대미지 색상 변경
+        UIManager.Instance.ShowDamageText(transform, damage, Color.red);
 	}
 
 	/// <summary>
@@ -439,6 +449,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="index"></param>
     public void UseSkill(int index) => SkillInput(index);
+
+    public void AddSkill(int skillIndex) => _model.AddSkill(skillIndex);
     #endregion
 
     #region Achievment, Mission 관련 함수
@@ -460,6 +472,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 플레이어 애니메이터 전환
     /// </summary>
+    /// <param name="trigger"></param>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
     public void Stop() => _view.Stop();
     public void Move() => _view.Move();
