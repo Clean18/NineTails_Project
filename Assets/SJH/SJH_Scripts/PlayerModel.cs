@@ -289,7 +289,8 @@ public class PlayerModel
 		Equipment.InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
 		Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 		Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-		UIManager.Instance.MainUI?.PlayerStatUI();
+        AchievementManager.Instance?.CheckEnhancementAchievements(Equipment.Level); // 강화 업적 조건 체크
+        UIManager.Instance.MainUI?.PlayerStatUI();
 	}
 	public void TryPromote()
 	{
@@ -333,18 +334,21 @@ public class PlayerModel
 				Equipment.InitEquipment("SSR", 1, 1);
 				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
+
 			}
 			else
 			{
 				Equipment.InitEquipment(nextData.UpgradeGrade, 1, 0);
 				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
 				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-			}
+                AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,true);
+            }
 		}
 		else
 		{
 			Debug.Log("승급에 실패했습니다...");
-			return;
+            AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,false);
+            return;
 		}
 	}
     #endregion

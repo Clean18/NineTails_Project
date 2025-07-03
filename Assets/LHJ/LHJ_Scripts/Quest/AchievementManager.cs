@@ -23,6 +23,13 @@ public class AchievementTable : DataTableParser<AchievementInfo>
     { 
     }
 }
+public enum PromotionAchievementType
+{
+    Fail = 1,
+    NtoR = 2,
+    RtoSR = 3,
+    SRtoSSR = 4
+}
 public class AchievementManager : Singleton<AchievementManager>
 {
     public AchievementTable achievementTable;
@@ -162,6 +169,57 @@ public class AchievementManager : Singleton<AchievementManager>
                 achievedIds.Add(achievement.Id);    // 해당 업적 달성 
                 Debug.Log($"[업적 달성] {achievement.Name} - 누적 {totalDeathCount}회 사망");
                 Reward(achievement);                // 보상 지급
+            }
+        }
+    }
+    // 장비 강화 업적 조건을 확인하고 달성 여부를 판단하는 함수
+    public void CheckEnhancementAchievements(int currentEnhancementLevel)
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Enhancement") continue;               // Type에서 Enhancement가 아닐 경우 무시
+            if (achievedIds.Contains(achievement.Id)) continue;            // 이미 달성된 업적이면 무시
+
+            if (currentEnhancementLevel >= achievement.Purpose)
+            {
+                achievedIds.Add(achievement.Id);                           // 업적 달성 처리
+                Debug.Log($"[업적 달성] {achievement.Name} - 강화 레벨 {currentEnhancementLevel} 도달");
+                Reward(achievement);                                       // 보상 지급
+            }
+        }
+    }
+
+    // 승급 업적 조건
+    public void CheckPromotionAchievements(string currentGrade, string nextGrade, bool isSuccess)
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Promotion") continue;          // Type에서 Promotion이 아닐경우 무시
+            if (achievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시
+
+            var purpose = (PromotionAchievementType)achievement.Purpose;    // 엄적 목표
+
+            if (isSuccess)
+            {       
+                // 승급 성공시   N->R에서 현재 등급이 N이고 다음단계가R일때
+                if (purpose == PromotionAchievementType.NtoR && currentGrade == "N" && nextGrade == "R" ||
+                    purpose == PromotionAchievementType.RtoSR && currentGrade == "R" && nextGrade == "SR" ||
+                    purpose == PromotionAchievementType.SRtoSSR && currentGrade == "SR" && nextGrade == "SSR")
+                {
+                    achievedIds.Add(achievement.Id);    // 업적 달성 처리
+                    Debug.Log($"[업적 달성] {achievement.Name} - 승급 성공: {currentGrade} → {nextGrade}");
+                    Reward(achievement);  // 보상 획득
+                }
+            }
+            else
+            {
+                // 승급 실패시
+                if (purpose == PromotionAchievementType.Fail)
+                {
+                    achievedIds.Add(achievement.Id);    // 업적 달성 처리
+                    Debug.Log($"[업적 달성] {achievement.Name} - 승급 실패");
+                    Reward(achievement);    // 보상 획득
+                }
             }
         }
     }
