@@ -44,7 +44,7 @@ public class AchievementManager : Singleton<AchievementManager>
     // 업적 CSV 스프레드 시트 URL
     private const string AchievementURL = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=0";
 
-    private HashSet<string> achievedIds = new();                // 업적 중복 방지
+    public HashSet<string> achievedIds = new();                // 업적 중복 방지
     private Dictionary<string, int> killCount = new();          // 업적별 조건 달성 여부 확인
     IEnumerator DownloadRoutine()
     {
