@@ -78,7 +78,7 @@ public class RangedMonsterFSM : BaseMonsterFSM
 
 
         // 오브젝트 비활성화
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0.5f);
     }
 
     private void OnDrawGizmosSelected()

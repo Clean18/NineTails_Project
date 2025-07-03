@@ -63,7 +63,7 @@ public class HeavyMonsterFSM : BaseMonsterFSM
 
 
         // 오브젝트 비활성화
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0.5f);
     }
 
     // Unity 편집기에서 공격 범위 확인용 Gizmo 그리기
