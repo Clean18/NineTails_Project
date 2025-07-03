@@ -29,7 +29,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     {
         Debug.Log("스킬 1 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -46,7 +46,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return;
 
         // 쿨타임 체크 시작
         IsCooldown = true;

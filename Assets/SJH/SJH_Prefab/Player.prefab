@@ -175,7 +175,7 @@ MonoBehaviour:
       <Defense>k__BackingField: 0
       _hpLevel: 0
       <MaxHp>k__BackingField: 0
-      <Hp>k__BackingField: 0
+      _hp: 0
       _speedLevel: 0
       <Speed>k__BackingField: 0
       _isDead: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   - {fileID: 1575395230341757593, guid: 9c37086fb94a75e4e81408d752572b48, type: 3}
   - {fileID: 1575395230341757593, guid: a2bf73001addb0246a10619d8f5fd15d, type: 3}
   - {fileID: 5990876499532869789, guid: 499e360ce79c1ce49b9771d231d4e370, type: 3}
+  - {fileID: 5624062577994399364, guid: 78be92e0e2b873a44ab62b172b0082d0, type: 3}
 --- !u!1 &4774744751119802566
 GameObject:
   m_ObjectHideFlags: 0

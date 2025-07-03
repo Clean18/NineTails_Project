@@ -52,6 +52,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         Debug.Log("스킬4 사용");
 
@@ -73,6 +74,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         Debug.Log("스킬4 사용");
 
