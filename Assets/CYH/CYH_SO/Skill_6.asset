@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d734c7b664dcedf478c2aab6d5aa9ec0, type: 3}
+  m_Name: Skill_6
+  m_EditorClassIdentifier: 
+  <SkillName>k__BackingField: "\uC57D\uC18D\uB41C \uC2B9\uB9AC\uC758 \uD63C"
+  <Description>k__BackingField: "\uBAA8\uB4E0 \uD63C\uB839\uC758 \uD798\uC744 \uAC80\uC5D0
+    \uBAA8\uC544 \uC804\uBC29\uC758 \uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uAC15\uB825\uD55C
+    \uACF5\uACA9\uC744 \uAC00\uD55C\uB2E4."
+  <CoolTime>k__BackingField: 50
+  <SkillSprite>k__BackingField: {fileID: 0}
+  <SkillAnimation>k__BackingField: {fileID: 0}
+  <SkillPrefab>k__BackingField: {fileID: 0}
+  <Range>k__BackingField: 3
+  <SkillIndex>k__BackingField: 6
