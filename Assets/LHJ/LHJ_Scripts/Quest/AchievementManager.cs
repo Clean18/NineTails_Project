@@ -224,6 +224,39 @@ public class AchievementManager : Singleton<AchievementManager>
         }
     }
 
+    public void CheckBossAchievements(string scene)
+    {
+        foreach (var achievement in achievementTable.Values)
+        {
+            if (achievement.Type != "Boss") continue;   // Type이 보스가 아니면 무시
+            if (achievedIds.Contains(achievement.Id)) continue; // 이미 달성한 업적이면 무시
+            if (achievement.Scene != scene) continue;   // 업적에 해당하는씬이 아니면 무시
+
+            float purpose = achievement.Purpose;
+
+            if (PlayerController.Instance.GetPower() < purpose)     // 권장 전투력 보다 전투력이 낮을때
+            {
+                Debug.Log($"[업적 달성] {achievement.Name} - 권장 전투력 미만 클리어 (보유 전투력: {PlayerController.Instance.GetPower()}, 조건: {purpose})");
+                Reward(achievement);
+            }
+     
+            else if (purpose > 0f) // 체력 퍼센트 조건
+            {
+                float hpPercent = (float)PlayerController.Instance.GetHp() / PlayerController.Instance.GetMaxHp();
+
+                if (hpPercent < purpose)    // 클리어 당시 플레이어 체력이 목적퍼센트보다 미만일때
+                {
+                    Debug.Log($"[업적 달성] {achievement.Name} - 체력 조건 충족 현재: {hpPercent}, 조건: {purpose})");
+                    Reward(achievement);
+                }
+            }
+            else if (purpose == 0f) // 피격되지 않고 클리어
+            {
+                Debug.Log($"[업적 달성] {achievement.Name} - 노히트 클리어");
+                Reward(achievement);
+            }
+        }
+    }
     private void Reward(AchievementInfo achievementInfo)
     {
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
