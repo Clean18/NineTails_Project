@@ -4155,6 +4155,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2081190918094020834, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -5410,11 +5414,10 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: e5946e1b35f20474f8209274a720b8ed, type: 2}
   _playerController: {fileID: 0}
   _hitBoxSize: {x: 6.98, y: 1.44}
-  _boxOffset: {x: -Infinity, y: 0}
+  _boxOffset: {x: Infinity, y: 0}
   _monsterLayer:
     serializedVersion: 2
     m_Bits: 512
-  _yAngle: -1
   <SkillData>k__BackingField: {fileID: 11400000, guid: e5946e1b35f20474f8209274a720b8ed, type: 2}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0

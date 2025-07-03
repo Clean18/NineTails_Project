@@ -12,6 +12,10 @@ public class SkillLogic_6 : SkillLogic, ISkill
     [SerializeField] private Vector2 _boxOffset = new Vector2(0, 0);
     [SerializeField] private LayerMask _monsterLayer;
 
+    [Header("데미지 코루틴")]
+    [SerializeField] private float _damageInterval = 0.1f;
+    [SerializeField] private int _damageCount = 5;
+
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
@@ -91,7 +95,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public void SkillRoutine()
     {
-        DetectMonster();
+        StartCoroutine(DamageRoutine());
         OnAttackEnd();
     }
 
@@ -128,11 +132,18 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         float damage = _playerController.AttackPoint * (4.0f + 0.04f * SkillLevel);
         //long damage = (long)(PlayerController.Instance.GetAttack() * (4.0f + 0.04f * SkillLevel));
-        foreach (var mon in _hitMonsters)
-        {
-            mon?.GetComponent<IDamagable>().TakeDamage((long)damage);
-        }
+        monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
+    }
+
+    private IEnumerator DamageRoutine()
+    {
+        for (int i = 0; i < _damageCount; i++)
+        {
+            foreach (var monster in _hitMonsters)
+                Damage(monster);
+            yield return new WaitForSeconds(_damageInterval);
+        }
     }
 
     private IEnumerator CooldownCoroutine()
@@ -141,7 +152,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         while (remaining > 0f)
         {
             yield return new WaitForSeconds(1f);
-            remaining -= 1f;
+            remaining -= 1f;  
         }
         //_isCooldown = false;
         IsCooldown = false;
