@@ -21,8 +21,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
     [SerializeField] private float _effectDuration = 0.5f;
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
-    [Header("이펙트 Y 오프셋")]
-    [SerializeField] private float _effectYOffset = 0.5f;
+    [Header("이펙트 오프셋")]
+    [SerializeField] private float _effectOffset = 0.5f;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
@@ -94,7 +94,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void SkillRoutine()
     {
         RandomDamage();
-        HealPlayer(_randomMonsters.Count);
+        // 데미지 적용 직후로 수정
+        //HealPlayer(_randomMonsters.Count);
 
         // 3초 동안 0.5초마다 데미지 + 이펙트 flipX 토글
         if (_randomMonsters.Count > 0) PlayerController.Instance.StartCoroutine(TimedDamageCoroutine());
@@ -106,7 +107,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         _isSkillUsed = true;
 
         // 플레이어 이동 비활성화
-        //PlayerController.Instance.Stop();
+        PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
@@ -168,15 +169,27 @@ public class SkillLogic_4 : SkillLogic, ISkill
     }
 
     // 스킬 사용 시 플레이어 체력 회복 (_randomMonsters.Count 만큼)
-    private void HealPlayer(int count)
+    //private void HealPlayer(int count)
+    //{
+    //    if (_randomMonsters.Count == 0) return;
+    //    //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count;
+    //    long baseHeal = PlayerController.Instance.GetMaxHp() * (long)(0.05f + 0.0005f * SkillLevel) * count;
+    //    long healAmount = System.Math.Max(1, baseHeal);
+    //    PlayerController.Instance.TakeHeal(healAmount);
+    //    //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
+    //    Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{healAmount}]의 Hp를 회복");
+    //}
+
+    // 플레이어 체력 회복
+    private void HealPlayer()
     {
         if (_randomMonsters.Count == 0) return;
-        //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count;
-        long baseHeal = PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count;
+        //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel);
+        long baseHeal = PlayerController.Instance.GetMaxHp() * (long)(0.05f + 0.0005f * SkillLevel);
         long healAmount = System.Math.Max(1, baseHeal);
         PlayerController.Instance.TakeHeal(healAmount);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
-        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{healAmount}]의 Hp를 회복");
+        Debug.Log($"Hp [{healAmount}] 회복");
     }
 
     protected override void Damage(GameObject monster)
@@ -197,7 +210,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         {
             foreach (var monster in _randomMonsters)
             {
-                Vector3 spawnPos = monster.transform.position + Vector3.up * _effectYOffset;
+                Vector3 spawnPos = monster.transform.position + Vector3.up * _effectOffset;
                 var effect = Instantiate(_damageEffectPrefab, spawnPos, Quaternion.identity, monster.transform);
 
                 // 이펙트 크기 조정
@@ -212,10 +225,14 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         while (time < 3f)
         {
-            // 0.5초마다 데미지 적용
+            // 0.5초마다 데미지 적용, 플레이어 체력 회복
             foreach (var monster in _randomMonsters)
+            {
                 Damage(monster);
-            Debug.Log("Damage 적용");
+                HealPlayer();
+            }
+
+            //Debug.Log("Damage 적용");
 
             // 이펙트 flipX
             foreach (var effect in effects)
