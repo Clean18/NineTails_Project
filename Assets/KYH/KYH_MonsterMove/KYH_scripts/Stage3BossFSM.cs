@@ -12,6 +12,7 @@ public class Stage3BossFSM : BaseBossFSM
     [SerializeField] private GameObject WarningCirclePrefab;        // 회오리 패턴 경고 원 프리팹
     [SerializeField] private GameObject WhirlwindEffect;            // 회오리 이펙트 프리팹
     [SerializeField] private AudioClip RoarSound1;                  // 회오리 공격 전 포효 사운드
+    [SerializeField] private AudioClip CycloneSound;
     [SerializeField] private float Pattern1Duration = 3f;           // 회오리 공격 지속 시간
     [SerializeField] private float Pattern1HitInterval = 0.5f;      // 회오리 데미지 판정 간격
     [SerializeField] private float Pattern1DamagePercent = 5f;      // 회오리 1회 데미지 비율(%)
@@ -21,7 +22,7 @@ public class Stage3BossFSM : BaseBossFSM
     [Header("Pattern2 - 깃털 낙하")]
     [SerializeField] private GameObject FeatherProjectilePrefab;                // 실제 깃털 오브젝트 프리팹
     [SerializeField] private GameObject WarningFeatherSpotPrefab;               // 깃털 경고 프리팹
-    [SerializeField] private GameObject FeatherEffectPrefab;                    // 깃털 이펙트 프리팹
+  //  [SerializeField] private GameObject FeatherEffectPrefab;                    // 깃털 이펙트 프리팹
     [SerializeField] private AudioClip RoarSound2;                              // 깃털 공격 전 사운드
     [SerializeField] private float Pattern2Delay = 2f;                          // 경고 후 깃털 낙하까지 대기 시간
     [SerializeField] private float Pattern2DamagePercent = 5f;                  // 낙하한 깃털 데미지 비율(%)
@@ -33,6 +34,7 @@ public class Stage3BossFSM : BaseBossFSM
     [Header("Pattern3 - 돌진 공격")]
     [SerializeField] private GameObject WarningRectPrefab;          // 돌진 경고 직사각형 프리팹
     [SerializeField] private GameObject AuraEffect;                 // 돌진 시 오라 이펙트
+    [SerializeField] private AudioClip RoarSound3;
     [SerializeField] private AudioClip ChargeSound;                 // 돌진 사운드
     [SerializeField] private float ChargeDelay = 3f;                // 돌진 전 대기 시간
     [SerializeField] private float Pattern3DamagePercent = 70f;     // 돌진 충돌 시 데미지 비율(%)
@@ -90,7 +92,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         // 3. 회오리 이펙트 생성
         GameObject whirlwind = Instantiate(WhirlwindEffect, Pattern1Origin.position, Quaternion.identity);
-
+        AudioSource.PlayClipAtPoint(CycloneSound, transform.position);
         // 4. 지속 시간 동안 일정 간격으로 데미지
         int hitCount = Mathf.FloorToInt(Pattern1Duration / Pattern1HitInterval);
         for (int i = 0; i < hitCount; i++)
@@ -154,10 +156,10 @@ public class Stage3BossFSM : BaseBossFSM
             }
 
             // 시각적 이펙트 생성
-            if (FeatherEffectPrefab != null)
-            {
-                Instantiate(FeatherEffectPrefab, positions[i], Quaternion.identity);
-            }
+           // if (FeatherEffectPrefab != null)
+           // {
+           //     Instantiate(FeatherEffectPrefab, positions[i], Quaternion.identity);
+           // }
         }
 
         // 4. FSM 상태 전환
@@ -176,7 +178,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         hasChargedHit = false;
         isCharging = false;
-
+        AudioSource.PlayClipAtPoint(RoarSound3, transform.position);
         // 1. 경고 프리팹 생성
         GameObject warning = Instantiate(WarningRectPrefab, transform.position, Quaternion.identity);
 
@@ -199,6 +201,7 @@ public class Stage3BossFSM : BaseBossFSM
         }
 
         // 4. 돌진 시작
+        BossAnimator.Play("Bird_BodyAttack");
         Vector2 dir = (ChargeEndPos.position - ChargeStartPos.position).normalized;
 
         isCharging = true;
@@ -219,6 +222,9 @@ public class Stage3BossFSM : BaseBossFSM
         Destroy(warning);
         Destroy(aura);
         yield return new WaitForSeconds(1f);
+
+
+        BossAnimator.Play("Bird_Idle_2");
 
         // 7. 위에서 천천히 내려오는 연출
         Vector3 reappearStartPos = originalPosition + new Vector3(0f, 6f, 0f);

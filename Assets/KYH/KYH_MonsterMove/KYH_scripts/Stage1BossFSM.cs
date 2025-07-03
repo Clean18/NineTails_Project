@@ -18,13 +18,14 @@ public class Stage1BossFSM : BaseBossFSM
     [SerializeField] private AudioClip SwingSound;              // 팔 휘두르는 사운드
     [SerializeField] private GameObject WarningRangeIndicator;  // 공격 경고 범위 ( 빨간 UI 와 같은것 )
     [SerializeField] private float Pattern1EffectDuration = 2f; // 이펙트와 경고의 유지시간.
+    [SerializeField] private AudioClip RoarSound1;              // 울부짖는 소리 1
     private GameObject CurrentWarningIndicator;
 
     [Header("Pattern2 Setting")]
     [SerializeField] private GameObject DropRockPrefab;         // 떨어지는 돌 프리팹
     [SerializeField] private GameObject WarningCirclePrefab;    // 바닥에 표시될 경고 원 프리팹
     [SerializeField] private Transform DropPosition;            // 돌이 떨어질 위치 (보스 앞 등)
-    [SerializeField] private AudioClip RoarSound;               // 돌 떨어뜨리기 전 포효 사운드
+    [SerializeField] private AudioClip RoarSound2;              // 돌 떨어뜨리기 전 포효 사운드
     [SerializeField] private float Pattern2Delay = 3f;          // 경고 표시 후 돌이 떨어지는 시간
     [SerializeField] private float Pattern2EffectDuration = 2f; // 돌 이펙트가 유지되는 시간
     [SerializeField] private float DropRadius = 3f;             // 플레이어 위치 기준 낙석 출현 범위
@@ -32,7 +33,7 @@ public class Stage1BossFSM : BaseBossFSM
     [Header("Pattern3 Setting")]
     [SerializeField] private GameObject SpearGhostPrefebs;   // 창귀 투사체 프리팹
     [SerializeField] private float SpearSpeed = 10f;            // 투사체 속도
-    [SerializeField] private AudioClip SpearGhostSound;         // 발사 사운드
+    [SerializeField] private AudioClip RoarSound3;         // 포효 사운드
     [SerializeField] private GameObject WarningRectPrefab; // 경고용 직사각형 오브젝트
     [SerializeField] private float WarningDistance = 2f;   // 보스로부터 경고 오브젝트까지의 거리
     private List<GameObject> warningRects = new List<GameObject>();
@@ -52,6 +53,8 @@ public class Stage1BossFSM : BaseBossFSM
 
     private IEnumerator Pattern1Coroutine()
     {
+        AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
+
         // 1. 고정된 방향으로 설정 (왼쪽)
         Vector2 fixedDirection = Vector2.left;
         float fixedAngle = 135f;
@@ -154,7 +157,7 @@ public class Stage1BossFSM : BaseBossFSM
     {
         // 1. 보스 애니메이션, 사운드
         BossAnimator.Play("Tiger_Pattern2");
-        AudioSource.PlayClipAtPoint(RoarSound, transform.position);
+        AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
 
 
         // 2. 낙석 위치 랜덤 계산
@@ -222,7 +225,7 @@ public class Stage1BossFSM : BaseBossFSM
             FireSpearGhost(baseAngle, offset);
         }
 
-        AudioSource.PlayClipAtPoint(SpearGhostSound, transform.position);
+        AudioSource.PlayClipAtPoint(RoarSound3, transform.position);
         yield return new WaitForSeconds(1f);
 
         // 6. 경고 제거
