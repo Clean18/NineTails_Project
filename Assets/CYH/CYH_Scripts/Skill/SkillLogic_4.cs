@@ -21,8 +21,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
     [SerializeField] private float _effectDuration = 0.5f;
     [Header("데미지 이펙트 프리팹")]
     [SerializeField] private GameObject _damageEffectPrefab;
-    [Header("이펙트 Y 오프셋")]
-    [SerializeField] private float _effectYOffset = 0.5f;
+    [Header("이펙트 오프셋")]
+    [SerializeField] private float _effectOffset = 0.5f;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
@@ -210,7 +210,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         {
             foreach (var monster in _randomMonsters)
             {
-                Vector3 spawnPos = monster.transform.position + Vector3.up * _effectYOffset;
+                Vector3 spawnPos = monster.transform.position + Vector3.up * _effectOffset;
                 var effect = Instantiate(_damageEffectPrefab, spawnPos, Quaternion.identity, monster.transform);
 
                 // 이펙트 크기 조정

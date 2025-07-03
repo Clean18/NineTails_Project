@@ -1,13 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_6 : SkillLogic, ISkill
 {
     [SerializeField] private ActiveSkillData _data;
     [SerializeField] private PlayerControllerTypeA_Copy _playerController;
-    
-    [SerializeField] private Vector2 _hitBoxSize = new Vector2(1,1);
+
+    [Header("데미지 범위")]
+    [SerializeField] private Vector2 _hitBoxSize = new Vector2(1, 1);
+    [Header("데미지 범위 오프셋")]
+    [SerializeField] private Vector2 _boxOffset = new Vector2(0, 0);
     [SerializeField] private LayerMask _monsterLayer;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
@@ -53,7 +55,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
-        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+        StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
@@ -76,7 +78,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
-        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+        StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
@@ -89,6 +91,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public void SkillRoutine()
     {
+        DetectMonster();
         OnAttackEnd();
     }
 
@@ -108,33 +111,35 @@ public class SkillLogic_6 : SkillLogic, ISkill
         //PlayerController.Instance.SetTrigger("UseSkill_6");
     }
 
+    // 피격 몬스터 감지
     private void DetectMonster()
     {
-        Vector2 center = transform.position;
-        Collider2D[] hits = Physics2D.OverlapBoxAll(center, _hitBoxSize, 0f, _monsterLayer); ;
+        float offsetX = _boxOffset.x * Mathf.Sign(transform.localScale.x);
+        Vector2 center = (Vector2)transform.position + new Vector2(offsetX, _boxOffset.y);
 
-        foreach (var col in hits)
+        Collider2D[] monsters = Physics2D.OverlapBoxAll(center, _hitBoxSize, 0f, _monsterLayer);
+        foreach (var monster in monsters)
         {
-            _hitMonsters.Add(col.gameObject);
-            //Debug.Log($"{col.gameObject.name}");
+            _hitMonsters.Add(monster.gameObject);
         }
     }
 
     protected override void Damage(GameObject monster)
     {
-        //float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
-        long damage = (long)(PlayerController.Instance.GetAttack() * (1.0f + 0.01f * SkillLevel));
-        monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
+        float damage = _playerController.AttackPoint * (4.0f + 0.04f * SkillLevel);
+        //long damage = (long)(PlayerController.Instance.GetAttack() * (4.0f + 0.04f * SkillLevel));
+        foreach (var mon in _hitMonsters)
+        {
+            mon?.GetComponent<IDamagable>().TakeDamage((long)damage);
+        }
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
         float remaining = SkillData.CoolTime;
         while (remaining > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
@@ -145,6 +150,11 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     private void OnDrawGizmos()
     {
-        
+        Gizmos.color = Color.red;
+        float offsetX = _boxOffset.x * Mathf.Sign(transform.localScale.x);
+        Vector3 center = transform.position + new Vector3(offsetX, _boxOffset.y, 0f);
+        Vector3 boxSize = new Vector3(_hitBoxSize.x, _hitBoxSize.y, 0.01f);
+
+        Gizmos.DrawWireCube(center, boxSize);
     }
 }
