@@ -151,29 +151,29 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("기본공격 사용");
             //_model.Skill.DefaultAttack.UseSkill(transform);
-            var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
+            var skill = _model.Skill.GetSkill(KeyCode.Mouse0);
             skill?.UseSkill(transform);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("1번스킬 사용");
+            Debug.Log("1번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
             skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(skill.SlotIndex);
+            SkillButton.Instance.UpdateCooldown(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("2번스킬 사용");
+            Debug.Log("2번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha2);
             skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(skill.SlotIndex);
+            SkillButton.Instance.UpdateCooldown(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("3번스킬 사용");
+            Debug.Log("3번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha3);
             skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(skill.SlotIndex);
+            SkillButton.Instance.UpdateCooldown(3);
         }
     }
 

@@ -39,6 +39,9 @@ public class SkillButton : MonoBehaviour, IUI
             KeyCode.Alpha3,
         };
 
+        // 스킬 아이콘 변경
+        UpdateButtonImage();
+
         // 현재 스킬들 쿨타임 추가 1 ~ 3스킬
         coolTimes = new float[3];
         for (int i = 0; i < coolTimes.Length; i++)
@@ -54,8 +57,12 @@ public class SkillButton : MonoBehaviour, IUI
         for (int i = 0; i < skillButtons.Length; i++)
         {
             int index = i + 1;
-            skillButtons[i].onClick.AddListener(() => UseSkill(index));     // 버튼 클릭시 해당 스킬 발동
-            coolTimeImages[i].fillAmount = 0;   // 해당 스킬 쿨타임 이미지 초기화
+            skillButtons[i].onClick.AddListener(() => // 버튼 클릭시 해당 스킬 발동
+            {
+                Debug.Log($"{index} 스킬버튼 클릭");
+                UseSkill(index);
+            });
+            coolTimeImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
         }
     }
 
@@ -78,7 +85,7 @@ public class SkillButton : MonoBehaviour, IUI
                 if (currentCooltimes[i] <= 0)
                 {
                     skillButtons[i].interactable = true;   // 스킬버튼 클릭 활성화
-                    coolTimeImages[i].fillAmount = 0;      
+                    coolTimeImages[i].fillAmount = 1;      
                 }
             }
         }
@@ -87,13 +94,14 @@ public class SkillButton : MonoBehaviour, IUI
     // 버튼 클릭시 스킬 사용시 쿨타임
     public void UseSkill(int index)
     {
-        if (index < 0 || index >= currentCooltimes.Length) return;
-        if (currentCooltimes[index] > 0) return;
+        int uiIndex = index - 1;
+        if (uiIndex < 0 || uiIndex >= currentCooltimes.Length) return;
+        if (currentCooltimes[uiIndex] > 0) return;
 
         PlayerController.Instance.UseSkill(index);
 
-        currentCooltimes[index] = coolTimes[index]; // 쿨타임
-        skillButtons[index].interactable = false;   // 스킬 버튼 클릭 비활성화
+        currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
+        skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
     }
 
     // 플레이어가 1 ~ 3 입력, AI가 스킬 사용시 쿨타임
@@ -106,5 +114,15 @@ public class SkillButton : MonoBehaviour, IUI
 
         currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
         skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
+    }
+
+    public void UpdateButtonImage()
+    {
+        var mappingSkills = PlayerController.Instance.GetMappingSkills();
+
+        for (int i = 0; i < coolTimeImages.Length; i++)
+        {
+            coolTimeImages[i].sprite = mappingSkills[triggerKeys[i]].SkillData.SkillSprite;
+        }
     }
 }
