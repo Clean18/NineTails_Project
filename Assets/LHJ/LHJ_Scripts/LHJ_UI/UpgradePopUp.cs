@@ -13,7 +13,7 @@ public class UpgradePopUp : BaseUI
 
     private void Start()
     {
-        Debug.LogError("UpgradePopUp 초기화");
+        Debug.LogWarning("UpgradePopUp 초기화");
         // 뒤로가기 버튼 클릭시 팝업창 닫기
         GetEvent("BackButton").Click += data => UIManager.Instance.ClosePopUp();
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,19 +26,33 @@ public class Main : BaseUI, IUI
     public void UIInit()
     {
         Debug.LogWarning("Main 초기화");
-        GetEvent("Btn_Stat").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>(); // Stats
-        GetEvent("Btn_Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>(); // Skill
-        GetEvent("Btn_Weapon").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>(); //Equipment
-        GetEvent("Btn_Option").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>(); // Setting
-        var mission = GetEvent("Mission");
-        if (mission != null)
+        // 여기서 버튼들 팝업 활성화
+        GetEvent("Btn_Stat").Click += data => // Stats
         {
-            mission.Click += data => {
-                if (MissionManager.Instance.IsCooldownActive)
-                    return;
-                UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-            };
-        }
+            Debug.Log("스탯 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
+        };
+        GetEvent("Btn_Skill").Click += data => // Skill
+        {
+            Debug.Log("스킬 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<SkillPopUp>();
+        };
+        GetEvent("Btn_Weapon").Click += data => //Equipment
+        {
+            Debug.Log("장비 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<UpgradePopUp>();
+        };
+        GetEvent("Btn_Option").Click += data => // Setting
+        {
+            Debug.Log("옵션 UI 활성화");
+            UIManager.Instance.ShowPopUp<SettingPopUp>();
+        };
+        //GetEvent("Mission").Click += data => // Mission
+        //{
+        //    if (MissionManager.Instance.IsCooldownActive)
+        //        return;
+        //    UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+        //};
         PlayerStatUI();
 
         PlayerController.Instance.ConnectEvent(PlayerStatUI);

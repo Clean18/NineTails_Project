@@ -100,7 +100,7 @@ public class PlayerModel
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
         List<SaveAchievementData> achievments = Quest.SaveAchievementData();
         // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
-        //List<SaveMissionData> missions = Quest.SaveMissionData();
+        List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -128,7 +128,7 @@ public class PlayerModel
 
         // Quest
         gameData.PlayerAchivementList = achievments;
-        //gameData.PlayerMissionList = missions;
+        gameData.PlayerMissionList = missions;
 
 		return gameData;
 	}
