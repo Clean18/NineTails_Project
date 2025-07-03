@@ -91,11 +91,12 @@ public class PlayerAI
 		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
 		Vector3 dir = TargetMonster.position - _controller.transform.position;
 		float distance = dir.magnitude;
-		if (distance <= TargetSkill.SkillData.Range || TargetSkill.SkillData.Range == 0)
+		if (!MonsterSkillCheck() && distance <= TargetSkill.SkillData.Range || TargetSkill.SkillData.Range == 0)
 		{
 			_view.AIStop();
 			StopSearchRoutine();
 			_controller.CurrentState = AIState.Attack;
+            Debug.Log("사거리 안 공격시작");
 			return;
 		}
 
@@ -111,7 +112,7 @@ public class PlayerAI
 
 		// 사거리 벗어나면 다시 추격
 		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
-		if (distance > TargetSkill.SkillData.Range)
+		if (distance > TargetSkill.SkillData.Range && TargetSkill.SkillData.Range != 0)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
 			_controller.CurrentState = AIState.Chase;
@@ -219,10 +220,6 @@ public class PlayerAI
 			}
 
 			if (searchDic[targetSector].Count == 0) continue;
-
-			// 1. 선택된 칸 중 랜덤 몬스터 선택
-			//int ran = Random.Range(0, searchDic[targetSector].Count);
-			//TargetMonster = searchDic[targetSector][ran];
 
 			// 2. 선택된 칸 중 가까운 몬스터 선택
 			float minDistance = float.MaxValue;

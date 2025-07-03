@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -150,7 +151,6 @@ public class DataManager : Singleton<DataManager>
 		yield return StartCoroutine(EquipmentUpgradeCostInit());
 		yield return StartCoroutine(EquipmentDataInit());
 		yield return StartCoroutine(EquipmentUpgradeInit());
-		yield return StartCoroutine(MissionDataInit());
 		yield return StartCoroutine(MissionDataInit());
 		yield return StartCoroutine(SkillCostInit());
 
@@ -348,6 +348,7 @@ public class DataManager : Singleton<DataManager>
 	}
 	IEnumerator MissionDataInit()
 	{
+        yield break;
 		// CSV 다운로드
 		string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
 		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
