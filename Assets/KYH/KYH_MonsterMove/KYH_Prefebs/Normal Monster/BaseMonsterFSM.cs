@@ -111,12 +111,6 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         }
     }
 
-    public enum MonsterType
-    {
-        Melee,
-        Range,
-        Tank,
-    }
     // 플레이어에게 이동
     protected virtual void MoveToPlayer()
     {
