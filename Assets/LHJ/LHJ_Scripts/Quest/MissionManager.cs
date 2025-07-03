@@ -13,6 +13,8 @@ public class MissionManager : Singleton<MissionManager>
     private int killCount;                  // 킬 횟수
     private bool isRunning;                 // 미션 실행 여부
 
+    public HashSet<string> missionIds = new();  // 미션 중복 방지
+
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
     // 미션을 실행하는 함수
@@ -24,6 +26,11 @@ public class MissionManager : Singleton<MissionManager>
         if (!DataManager.Instance.MissionTable.TryGetValue(stage, out currentMission))
         {
             Debug.Log("해당 스테이지 미션 정보 없음");
+            return;
+        }
+        // 클리어 미션이면 재실행하지않음
+        if (missionIds.Contains(currentMission.Id))
+        {
             return;
         }
         // 초기값 설정
@@ -53,6 +60,8 @@ public class MissionManager : Singleton<MissionManager>
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
+            missionIds.Add(currentMission.Id);  // 미션 클리어 
+            Reward(currentMission); // 미션 보상
             UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
         }
         else
@@ -88,8 +97,6 @@ public class MissionManager : Singleton<MissionManager>
         if (killCount >= currentMission.Count && timer > 0f)
         {
             isRunning = false;
-            Debug.Log("[MissionManager] 미션 조기 성공 (목표 킬 도달)");
-            UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
         }
     }
     // 미션 진행중 확인 여부
@@ -108,5 +115,11 @@ public class MissionManager : Singleton<MissionManager>
     public string GetNextScene()
     {
         return currentMission.NextScene;
+    }
+    
+    // 미션 보상
+    private void Reward(MissionInfo mission)
+    {
+        Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
     }
 }

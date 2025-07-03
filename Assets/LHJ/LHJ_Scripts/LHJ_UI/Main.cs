@@ -28,15 +28,19 @@ public class Main : BaseUI, IUI
     public void UIInit()
     {
         Debug.LogWarning("Main 초기화");
-        GetEvent("Equipment").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>();
-        GetEvent("Setting").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>();
-        GetEvent("Stats").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>();
-        GetEvent("Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>();
-        GetEvent("Mission").Click += data => {
-            if (MissionManager.Instance.IsCooldownActive)
-                return;
-            UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-        };
+        GetEvent("Btn_Stat").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>(); // Stats
+        GetEvent("Btn_Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>(); // Skill
+        GetEvent("Btn_Weapon").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>(); //Equipment
+        GetEvent("Btn_Option").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>(); // Setting
+        var mission = GetEvent("Mission");
+        if (mission != null)
+        {
+            mission.Click += data => {
+                if (MissionManager.Instance.IsCooldownActive)
+                    return;
+                UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            };
+        }
         PlayerStatUI();
 
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
@@ -51,7 +55,8 @@ public class Main : BaseUI, IUI
         powerText.text = $"Power : {player.GetPower()}";
         attackText.text = $"Attack : {player.GetAttack()}";
         defenseText.text = $"Defense : {player.GetDefense()}";
-        _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
+        // TODO : UI 전부 추가하면 지우기
+        if (_hpSlider != null) _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
         hpText.text = $"{player.GetHp()}/{player.GetMaxHp()}";
         // Cost
         _warmthText.text = $"W: {player.GetWarmth()}";
@@ -74,11 +79,11 @@ public class Main : BaseUI, IUI
         if (MissionManager.Instance.IsCooldownActive)
         {
             float seconds = MissionManager.Instance.CooldownSeconds;
-            retrycoolTimeText.text = $"RetryCoolTime: {Mathf.CeilToInt(seconds)}s";  // 남은 쿨타임 표시
+            if (retrycoolTimeText != null) retrycoolTimeText.text = $"RetryCoolTime: {Mathf.CeilToInt(seconds)}s";  // 남은 쿨타임 표시
         }
         else
         {
-            retrycoolTimeText.text = "";    // 쿨타임 끝나면 텍스트 초기화
+            if (retrycoolTimeText != null) retrycoolTimeText.text = "";    // 쿨타임 끝나면 텍스트 초기화
         }
     }
 }

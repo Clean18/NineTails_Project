@@ -68,4 +68,6 @@ public class PlayerView : MonoBehaviour
     {
         _anim.SetTrigger(trigger);
     }
+
+    public bool GetMoveCheck() => canMove;
 }

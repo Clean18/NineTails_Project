@@ -76,6 +76,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
             Debug.Log("스킬 2 쿨타임이거나 사용중입니다.");
             return;
         }
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
@@ -103,6 +104,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         // 쿨타임 체크
         if (IsCooldown || _isSpinning) return;
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
