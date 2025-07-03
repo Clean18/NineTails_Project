@@ -405,6 +405,7 @@ public class PlayerController : MonoBehaviour
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
     public void Stop() => _view.Stop();
     public void Move() => _view.Move();
+    public void AIStop() => _view.AIStop();
 
     #endregion
 
@@ -433,6 +434,9 @@ public class PlayerController : MonoBehaviour
     // SkillLogic_3 애니메이션 이벤트 함수
     public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();
 
+    // SkillLogic_4 애니메이션 이벤트 함수
+    public void Skill4_SkillRoutine() => (SkillController.SkillList[4] as SkillLogic_4)?.SkillRoutine();
+
     #endregion
 
     void OnDrawGizmos()
@@ -459,6 +463,6 @@ public class PlayerController : MonoBehaviour
 
         _model.Skill.Test_AddSkill(1);
         _model.Skill.Test_AddSkill(2);
-        _model.Skill.Test_AddSkill(3);
+        _model.Skill.Test_AddSkill(4);
     }
 }
