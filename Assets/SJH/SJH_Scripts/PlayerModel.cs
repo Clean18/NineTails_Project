@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -438,6 +439,8 @@ public class PlayerModel
         Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
+    public List<ISkill> GetSkillMappingList() => Skill.SkillMapping.Values.ToList();
+    public List<ISkill> GetHasSkillList() => Skill.HasSkills;
     #endregion
 
     #region Quest 관련 함수

@@ -254,6 +254,9 @@ public class PlayerController : MonoBehaviour
 		_model.ApplyDamage(damage);
 		// TODO : view 피격처리
 		// TODO : UI 체력감소 처리
+
+        // TODO : 대미지 색상 변경
+        UIManager.Instance.ShowDamageText(transform, damage);
 	}
 
 	/// <summary>
@@ -361,6 +364,11 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 스피드 레벨업 함수
     /// </summary>
     public void TrySpeedLevelup() => _model.TrySpeedLevelup();
+    /// <summary>
+    /// 플레이어 공격력 * (1 + 가하는 피해 증가)
+    /// </summary>
+    /// <returns></returns>
+    public long GetTotalDamage() => (long)(_model.GetAttack() * (1f + _model.GetIncreseDamage()));
     #endregion
 
     #region Cost 관련 함수
@@ -412,10 +420,20 @@ public class PlayerController : MonoBehaviour
     /// <param name="skillIndex"></param>
     public void TrySkillLevelUp(int skillIndex) => _model.TrySkillLevelUp(skillIndex);
     /// <summary>
-    /// 단축키에 등록된 스킬들을 반환하는 함수
+    /// 단축키에 등록된 스킬들을 Dictionary<KeyCode, ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => _model.GetMappingSkills();
+    /// <summary>
+    /// 플레이어 단축키에 등록된 스킬들을 List<ISkill> 로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetSkillMappingList() => _model.GetSkillMappingList();
+    /// <summary>
+    /// 플레이어가 보유중이고 단축키에 등록되지 않은 스킬들을 List<ISkill> 로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetHasSkillList() => _model.GetHasSkillList();
     /// <summary>
     /// UI 스킬버튼 클릭으로 스킬 사용하는 함수
     /// </summary>

@@ -86,7 +86,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * SkillLevel)));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((0.75f + 0.0075f * SkillLevel)));
 
         foreach (var monster in _hitMonsters)
         {

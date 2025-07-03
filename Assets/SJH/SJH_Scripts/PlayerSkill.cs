@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -185,4 +186,7 @@ public class PlayerSkill
         }
 
     }
+
+    public List<ISkill> GetSkillMappingList() => SkillMapping.Values.ToList();
+    public List<ISkill> GetHasSkillList() => HasSkills;
 }
