@@ -1,15 +1,16 @@
 {
-    "_savedTimeString": "2025-07-03T17:34:35.3541564+09:00",
+    "_savedTimeString": "2025-07-03T16:27:14.3586424+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 3,
     "DefenseLevel": 2,
     "HpLevel": 3,
     "CurrentHp": 0,
     "SpeedLevel": 1,
-    "IncreaseDamageLevel": 0,
-    "ShieldHp": 0,
-    "SpiritEnergy": 23447517,
-    "Warmth": 26194569,
+    "ShieldHp": 26,
+    "SpiritEnergy": 46047336,
+    "Warmth": 48794388,
+    "GetFirstSpiritEnergy": false,
+    "GetFirstWarmth": false,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
@@ -22,16 +23,115 @@
             "SlotIndex": 1
         },
         {
-            "SkillIndex": 2,
+            "SkillIndex": 3,
             "SkillLevel": 53,
             "SlotIndex": 2
         },
         {
-            "SkillIndex": 4,
+            "SkillIndex": 2,
             "SkillLevel": 0,
             "SlotIndex": 3
+        },
+        {
+            "SkillIndex": 4,
+            "SkillLevel": 0,
+            "SlotIndex": -1
         }
     ],
     "Grade": "R",
-    "Level": 6
+    "Level": 6,
+    "IncreaseDamageLevel": 0,
+    "PlayerAchivementList": [
+        {
+            "Id": "A16",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A17",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A18",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A20",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A21",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A22",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A23",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A24",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A25",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A26",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A27",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A28",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A29",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A30",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A31",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A32",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A33",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ],
+    "PlayerMissionList": []
 }

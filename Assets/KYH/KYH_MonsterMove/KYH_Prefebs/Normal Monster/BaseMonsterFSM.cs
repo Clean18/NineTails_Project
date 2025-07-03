@@ -35,6 +35,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     protected Transform targetPlayer;                           // 타겟팅된 플레이어
     protected Coroutine attackRoutine;                          // 공격 루틴 저장
 
+    [SerializeField] protected Animator _anim;
+    [SerializeField] protected MonsterType MonType;
+
     // 초기화
     protected virtual void Start()
     {
@@ -94,6 +97,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         {
             case MonsterState.Idle:
                 // 아무것도 하지 않음
+                // TODO : 애니메이션을 종료하는 함수 Idle로 전환
                 break;
 
             case MonsterState.Move:
@@ -107,12 +111,19 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         }
     }
 
+    public enum MonsterType
+    {
+        Melee,
+        Range,
+        Tank,
+    }
     // 플레이어에게 이동
     protected virtual void MoveToPlayer()
     {
         if (targetPlayer == null) return;
         Vector2 dir = (targetPlayer.position - transform.position).normalized;
         transform.position += (Vector3)dir * MoveSpeed * Time.deltaTime;
+        
     }
 
     // 플레이어를 바라보게 방향 회전
