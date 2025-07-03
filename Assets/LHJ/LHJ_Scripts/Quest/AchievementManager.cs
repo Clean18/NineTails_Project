@@ -45,7 +45,7 @@ public class AchievementManager : Singleton<AchievementManager>
     private const string AchievementURL = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=0";
 
     public HashSet<string> AchievedIds = new();                // 업적 중복 방지
-    public Dictionary<string, int> KillCountDic = new();          // 업적별 조건 달성 여부 확인
+    public Dictionary<string, int> KillCountDic = new();       // 업적별 조건 달성 여부 확인
     IEnumerator DownloadRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(AchievementURL);
@@ -162,11 +162,11 @@ public class AchievementManager : Singleton<AchievementManager>
         foreach (var achievement in achievementTable.Values)
         {
             if (achievement.Type != "Death") continue;              // Type에서 Death가 아닐경우 무시하고 계속 진행
-            if (achievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시하고 진행
+            if (AchievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시하고 진행
 
             if (totalDeathCount >= achievement.Purpose)
             {
-                achievedIds.Add(achievement.Id);    // 해당 업적 달성 
+                AchievedIds.Add(achievement.Id);    // 해당 업적 달성 
                 Debug.Log($"[업적 달성] {achievement.Name} - 누적 {totalDeathCount}회 사망");
                 Reward(achievement);                // 보상 지급
             }
@@ -178,11 +178,11 @@ public class AchievementManager : Singleton<AchievementManager>
         foreach (var achievement in achievementTable.Values)
         {
             if (achievement.Type != "Enhancement") continue;               // Type에서 Enhancement가 아닐 경우 무시
-            if (achievedIds.Contains(achievement.Id)) continue;            // 이미 달성된 업적이면 무시
+            if (AchievedIds.Contains(achievement.Id)) continue;            // 이미 달성된 업적이면 무시
 
             if (currentEnhancementLevel >= achievement.Purpose)
             {
-                achievedIds.Add(achievement.Id);                           // 업적 달성 처리
+                AchievedIds.Add(achievement.Id);                           // 업적 달성 처리
                 Debug.Log($"[업적 달성] {achievement.Name} - 강화 레벨 {currentEnhancementLevel} 도달");
                 Reward(achievement);                                       // 보상 지급
             }
@@ -195,7 +195,7 @@ public class AchievementManager : Singleton<AchievementManager>
         foreach (var achievement in achievementTable.Values)
         {
             if (achievement.Type != "Promotion") continue;          // Type에서 Promotion이 아닐경우 무시
-            if (achievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시
+            if (AchievedIds.Contains(achievement.Id)) continue;     // 이미 달성된 업적이면 무시
 
             var purpose = (PromotionAchievementType)achievement.Purpose;    // 엄적 목표
 
@@ -206,7 +206,7 @@ public class AchievementManager : Singleton<AchievementManager>
                     purpose == PromotionAchievementType.RtoSR && currentGrade == "R" && nextGrade == "SR" ||
                     purpose == PromotionAchievementType.SRtoSSR && currentGrade == "SR" && nextGrade == "SSR")
                 {
-                    achievedIds.Add(achievement.Id);    // 업적 달성 처리
+                    AchievedIds.Add(achievement.Id);    // 업적 달성 처리
                     Debug.Log($"[업적 달성] {achievement.Name} - 승급 성공: {currentGrade} → {nextGrade}");
                     Reward(achievement);  // 보상 획득
                 }
@@ -216,7 +216,7 @@ public class AchievementManager : Singleton<AchievementManager>
                 // 승급 실패시
                 if (purpose == PromotionAchievementType.Fail)
                 {
-                    achievedIds.Add(achievement.Id);    // 업적 달성 처리
+                    AchievedIds.Add(achievement.Id);    // 업적 달성 처리
                     Debug.Log($"[업적 달성] {achievement.Name} - 승급 실패");
                     Reward(achievement);    // 보상 획득
                 }

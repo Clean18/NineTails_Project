@@ -122,6 +122,7 @@ public class PlayerAI
 		// 스킬 사용
 		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
 		TargetSkill.UseSkill(_controller.transform, TargetMonster.transform);
+        SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
 		TargetMonster = null;
 		TargetSkill = null;
 
