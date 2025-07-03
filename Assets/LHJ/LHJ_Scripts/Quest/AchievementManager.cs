@@ -229,7 +229,7 @@ public class AchievementManager : Singleton<AchievementManager>
         foreach (var achievement in achievementTable.Values)
         {
             if (achievement.Type != "Boss") continue;   // Type이 보스가 아니면 무시
-            if (achievedIds.Contains(achievement.Id)) continue; // 이미 달성한 업적이면 무시
+            if (AchievedIds.Contains(achievement.Id)) continue; // 이미 달성한 업적이면 무시
             if (achievement.Scene != scene) continue;   // 업적에 해당하는씬이 아니면 무시
 
             float purpose = achievement.Purpose;
