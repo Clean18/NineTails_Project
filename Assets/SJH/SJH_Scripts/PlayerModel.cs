@@ -21,10 +21,13 @@ public class PlayerModel
 	// 플레이어 장비
 	public PlayerEquipment Equipment;
 
-	/// <summary>
-	/// PlayerModel 초기화
-	/// </summary>
-	public void InitModel(GameData saveData)
+    // 플레이어 업적, 미션
+    public PlayerQuest Quest;
+
+    /// <summary>
+    /// PlayerModel 초기화
+    /// </summary>
+    public void InitModel(GameData saveData)
 	{
 		if (saveData == null) return;
 
@@ -43,6 +46,10 @@ public class PlayerModel
 		// 플레이어 장비
 		Equipment = new PlayerEquipment();
 		Equipment.InitEquipment(saveData.Grade, saveData.Level, saveData.IncreaseDamageLevel);
+
+        Quest = new PlayerQuest();
+        Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
+
 	}
 
 	public void ApplyDamage(long damage)
@@ -88,12 +95,19 @@ public class PlayerModel
 		Cost.OnCostChanged += playerStatUI;
 	}
 
+    /// <summary>
+    /// 플레이어 모든 데이터 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public GameData GetGameData()
 	{
 		SavePlayerData data = Data.SavePlayerData();
 		SavePlayerCost cost = Cost.SavePlayerCost();
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
+        List<SaveAchievementData> achievments = Quest.SaveAchievementData();
+        // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
+        //List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -108,14 +122,20 @@ public class PlayerModel
 		// Cost
 		gameData.Warmth = cost.Warmth;
 		gameData.SpiritEnergy = cost.SpiritEnergy;
+        gameData.GetFirstWarmth = cost.GetFirstWarmth;
+        gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
 
-		// Skill
-		gameData.PlayerSkillList = skills;
+        // Skill
+        gameData.PlayerSkillList = skills;
 
 		// Equipment
 		gameData.Grade = equip.Grade;
 		gameData.Level = equip.Level;
 		gameData.IncreaseDamageLevel = equip.IncreaseDamageLevel;
+
+        // Quest
+        gameData.PlayerAchivementList = achievments;
+        //gameData.PlayerMissionList = missions;
 
 		return gameData;
 	}
@@ -421,5 +441,10 @@ public class PlayerModel
         Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
+    #endregion
+
+    #region Quest 관련 함수
+    public List<SaveAchievementData> GetAchievData() => Quest.SaveAchievementData();
+    public List<SaveMissionData> GetMissionData() => Quest.SaveMissionData();
     #endregion
 }

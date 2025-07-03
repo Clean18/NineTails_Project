@@ -131,10 +131,10 @@ public class PlayerSkill
 	KeyCode SlotIndexToKeyCode(int index) => SlotIndexToKeyCodeDic.TryGetValue(index, out KeyCode result) ? result : KeyCode.None;
 
     /// <summary>
-    /// 테스트용 스킬 추가 함수
+    /// 스킬을 추가하는 함수
     /// </summary>
     /// <param name="skillIndex"></param>
-    public void Test_AddSkill(int skillIndex)
+    public void AddSkill(int skillIndex)
     {
         if (_controller.SkillList.Count < 1 || _controller.SkillList.Count < skillIndex)
         {
@@ -174,10 +174,15 @@ public class PlayerSkill
 
             Debug.Log($"{newSkill.SlotIndex} 슬롯에 {newSkill.SkillData.SkillName} 스킬 획득");
         }
-        
+
         if (isSlotAdd) SkillMapping[key] = newSkill;
 
         // 2. 스킬리스트 추가
-        else if (!isSlotAdd) HasSkills.Add(newSkill);
+        else if (!isSlotAdd)
+        {
+            HasSkills.Add(newSkill);
+            Debug.Log($"{newSkill.SkillData.SkillName} 스킬 획득");
+        }
+
     }
 }

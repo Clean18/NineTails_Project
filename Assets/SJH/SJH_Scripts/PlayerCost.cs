@@ -4,9 +4,11 @@ using UnityEngine;
 
 public struct SavePlayerCost
 {
-    public long SpiritEnergy;
-    public long Warmth;
-    public long Soul;
+    public long SpiritEnergy;           // 저장할 영기
+    public long Warmth;                 // 저장할 온정
+    public long Soul;                   // 저장할 혼백
+    public bool GetFirstWarmth;         // 첫 온정 획득 트리거
+    public bool GetFirstSpiritEnergy;   // 첫 영기 획득 트리거
 }
 
 /// <summary>
@@ -30,6 +32,12 @@ public class PlayerCost
         get => _spiritEnergy;
         set
         {
+            if (!GetFirstSpiritEnergy)
+            {
+                GetFirstSpiritEnergy = true;
+                Debug.Log("첫 영기 획득");
+            }
+
             _spiritEnergy = value;
             OnCostChanged?.Invoke();
         }
@@ -45,6 +53,11 @@ public class PlayerCost
         get => _warmth;
         set
         {
+            if (!GetFirstWarmth)
+            {
+                GetFirstWarmth = true;
+                Debug.Log("첫 온정 획득");
+            }
             _warmth = value;
             OnCostChanged?.Invoke();
         }
@@ -61,11 +74,18 @@ public class PlayerCost
         }
     }
 
-    public void InitCost(long spiritEnergy = 0, long warmth = 0, long soul = 0)
+    // 첫 온정 획득
+    public bool GetFirstWarmth;
+    // 첫 영기 획득
+    public bool GetFirstSpiritEnergy;
+
+    public void InitCost(long spiritEnergy = 0, long warmth = 0, long soul = 0, bool getFirstWarmth = false, bool getFirstSpiritEnergy = false)
     {
         SpiritEnergy = spiritEnergy;
         Warmth = warmth;
         Soul = soul;
+        GetFirstWarmth = getFirstWarmth;
+        GetFirstSpiritEnergy = getFirstSpiritEnergy;
     }
 
     public void IncreaseSpiritEnergy(long amount)
@@ -110,6 +130,8 @@ public class PlayerCost
         cost.SpiritEnergy = SpiritEnergy;
         cost.Warmth = Warmth;
         cost.Soul = Soul;
+        cost.GetFirstWarmth = GetFirstWarmth;
+        cost.GetFirstSpiritEnergy = GetFirstSpiritEnergy;
         return cost;
     }
 }

@@ -8,7 +8,6 @@ public class GameUI : SceneUI, IUI
 {
 	public TMP_Text AIStateText;
 	public Button ControlModeBtn;
-	public Button Test_BossStateBtn;
 
 	void Start()
 	{
@@ -23,13 +22,11 @@ public class GameUI : SceneUI, IUI
 	void SubscribeEvent()
 	{
 		ControlModeBtn?.onClick.AddListener(OnControlModeBtn);
-		Test_BossStateBtn?.onClick.AddListener(OnBossStageBtn);
 	}
 
 	void UnsubscribeEvent()
 	{
         ControlModeBtn?.onClick.RemoveListener(OnControlModeBtn);
-        Test_BossStateBtn?.onClick.RemoveListener(OnBossStageBtn);
     }
 
 	public void ChangeStateText(AIState state)

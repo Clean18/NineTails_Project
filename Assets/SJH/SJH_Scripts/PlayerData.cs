@@ -113,7 +113,6 @@ public class PlayerData
         {
             var amount = Math.Clamp(value, 0, MaxHp);
             _hp = amount;
-            Debug.Log($"플레이어 {amount} 회복");
             OnStatChanged?.Invoke();
         }
     }
@@ -221,6 +220,7 @@ public class PlayerData
     public void HealHp(long amount)
     {
         Hp += amount;
+        Debug.Log($"플레이어 {amount} 회복");
     }
 
     public void HealShield(long amount)

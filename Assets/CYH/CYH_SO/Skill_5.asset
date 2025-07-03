@@ -20,7 +20,7 @@ MonoBehaviour:
     \uD6C4, \uD50C\uB808\uC774\uC5B4\uB294 \uC774\uB3D9\uC774 \uAC00\uB2A5\uD558\uBA70,
     \uD544\uB4DC\uB294 \uD574\uB2F9 \uC704\uCE58\uC5D0 \uACE0\uC815\uB41C\uB2E4."
   <CoolTime>k__BackingField: 15
-  <SkillSprite>k__BackingField: {fileID: 0}
+  <SkillSprite>k__BackingField: {fileID: 21300000, guid: d4f4feb8b305cca4bb78bf1a2c694577, type: 3}
   <SkillAnimation>k__BackingField: {fileID: 0}
   <SkillPrefab>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 0
