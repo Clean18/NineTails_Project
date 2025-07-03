@@ -94,6 +94,20 @@ public struct MissionInfo
     public int SpritReward;    // 영기 보상
     public int SkillPoint;     // 스킬 포인트
 }
+/// <summary>
+/// 업적 정보 구조체
+/// </summary>
+[System.Serializable]
+public struct AchievementInfo
+{
+    public string Type;          // 업적타입
+    public string Id;            // 업적고유 ID
+    public string Name;          // 업적이름
+    public string Scene;         // 스테이지
+    public float Purpose;          // 업적 달성 조건
+    public int WarmthReward;     // 온정보상
+    public int SpritReward;      // 영기보상
+}
 #endregion
 
 /// <summary>
@@ -139,6 +153,10 @@ public class DataManager : Singleton<DataManager>
     /// 궁극기 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
     /// </summary>
     public Dictionary<int, int> UltSkillCostTable = new();
+    /// <summary>
+	/// 업적 정보 테이블
+	/// </summary>
+    public Dictionary<string, AchievementInfo> AchievementTable = new();
 
     protected override void Awake()
     {
@@ -156,7 +174,8 @@ public class DataManager : Singleton<DataManager>
 		yield return StartCoroutine(EquipmentDataInit());
 		yield return StartCoroutine(EquipmentUpgradeInit());
 		yield return StartCoroutine(MissionDataInit());
-		yield return StartCoroutine(SkillCostInit());
+        yield return StartCoroutine(AchievementDataInit());
+        yield return StartCoroutine(SkillCostInit());
 
 		Debug.Log("모든 데이터 테이블 초기화 완료");
         isInit = true;
@@ -399,7 +418,39 @@ public class DataManager : Singleton<DataManager>
             MissionTable[stage] = info;
         }
 	}
-	IEnumerator EquipmentUpgradeInit()
+    IEnumerator AchievementDataInit()
+    {
+        string url = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=0";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("CSV 다운로드 실패");
+            yield break;
+        }
+
+        AchievementTable = new();
+        string csv = request.downloadHandler.text;
+        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string[] cells = lines[i].Split(',');
+            AchievementInfo info = new AchievementInfo
+            {
+                Type = Clean(cells[0]),
+                Id = Clean(cells[1]),
+                Name = Clean(cells[2]),
+                Scene = Clean(cells[3]),
+                Purpose = float.Parse(Clean(cells[4])),
+                WarmthReward = int.Parse(Clean(cells[5])),
+                SpritReward = int.Parse(Clean(cells[6])),
+            };
+            AchievementTable[info.Id] = info;
+        }
+    }
+    IEnumerator EquipmentUpgradeInit()
 	{
 		string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Promotion";
 		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
