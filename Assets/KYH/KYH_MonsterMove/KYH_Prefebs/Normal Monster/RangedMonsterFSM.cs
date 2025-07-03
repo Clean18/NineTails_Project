@@ -69,7 +69,16 @@ public class RangedMonsterFSM : BaseMonsterFSM
         // 상태가 Attack에서 벗어나면 코루틴 정리
         attackRoutine = null;
 
-        MonsterAnimator.Play("Walk_Ranged");
+        MonsterAnimator.Play("Idle_Ranged");
+    }
+    protected override void Die()
+    {
+        base.Die();
+        MonsterAnimator.Play("Dead_Ranged");
+
+
+        // 오브젝트 비활성화
+        Destroy(gameObject, 1f);
     }
 
     private void OnDrawGizmosSelected()

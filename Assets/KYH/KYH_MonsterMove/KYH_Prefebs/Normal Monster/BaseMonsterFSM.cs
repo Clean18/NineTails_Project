@@ -182,7 +182,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         MissionManager.Instance.AddKill();
 
         // 오브젝트 비활성화
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 
     // 공격 루틴은 자식 클래스에서 반드시 오버라이드 해야 함

@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 2
-  AttackRange: 15
+  AttackRange: 5
   AttackCooldown: 2
   MaxHp: 10
   DamageReduceRate: 0
@@ -293,7 +293,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 971121944272405935, guid: a0a6a8ea2ec99e84188126013a156d20, type: 3}
   ProjectileSpeed: 8
   AttackDamage: 10
-  AttackSound: {fileID: 0}
+  AttackSound: {fileID: 8300000, guid: 63cdd5b587b76464ba5489633c662392, type: 3}
   MonsterAnimator: {fileID: 2592131970118158102}
 --- !u!95 &2592131970118158102
 Animator:

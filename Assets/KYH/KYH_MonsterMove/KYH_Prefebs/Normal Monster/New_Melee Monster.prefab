@@ -180,9 +180,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.005693674, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.58435035
 --- !u!114 &-5317227283272594692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,12 +206,12 @@ MonoBehaviour:
   warmthAmount: 0
   spiritEnergyAmount: 0
   AttackPoint: {fileID: 3497390072653564041}
-  AttackRadius: 1
+  AttackRadius: 0.7
   AttackDamage: 10
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 256
-  AttackSound: {fileID: 0}
+  AttackSound: {fileID: 8300000, guid: 63cdd5b587b76464ba5489633c662392, type: 3}
   MonsterAnimator: {fileID: 422630640219831312}
 --- !u!95 &422630640219831312
 Animator:

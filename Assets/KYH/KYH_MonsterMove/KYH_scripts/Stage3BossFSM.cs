@@ -22,7 +22,7 @@ public class Stage3BossFSM : BaseBossFSM
     [Header("Pattern2 - 깃털 낙하")]
     [SerializeField] private GameObject FeatherProjectilePrefab;                // 실제 깃털 오브젝트 프리팹
     [SerializeField] private GameObject WarningFeatherSpotPrefab;               // 깃털 경고 프리팹
-    [SerializeField] private GameObject FeatherEffectPrefab;                    // 깃털 이펙트 프리팹
+  //  [SerializeField] private GameObject FeatherEffectPrefab;                    // 깃털 이펙트 프리팹
     [SerializeField] private AudioClip RoarSound2;                              // 깃털 공격 전 사운드
     [SerializeField] private float Pattern2Delay = 2f;                          // 경고 후 깃털 낙하까지 대기 시간
     [SerializeField] private float Pattern2DamagePercent = 5f;                  // 낙하한 깃털 데미지 비율(%)
@@ -156,10 +156,10 @@ public class Stage3BossFSM : BaseBossFSM
             }
 
             // 시각적 이펙트 생성
-            if (FeatherEffectPrefab != null)
-            {
-                Instantiate(FeatherEffectPrefab, positions[i], Quaternion.identity);
-            }
+           // if (FeatherEffectPrefab != null)
+           // {
+           //     Instantiate(FeatherEffectPrefab, positions[i], Quaternion.identity);
+           // }
         }
 
         // 4. FSM 상태 전환
@@ -176,7 +176,6 @@ public class Stage3BossFSM : BaseBossFSM
     {
         Debug.Log("[보스] 몸통 박치기 패턴 실행됨");
 
-        BossAnimator.Play("Bird_BodyAttack");
         hasChargedHit = false;
         isCharging = false;
         AudioSource.PlayClipAtPoint(RoarSound3, transform.position);
@@ -202,6 +201,7 @@ public class Stage3BossFSM : BaseBossFSM
         }
 
         // 4. 돌진 시작
+        BossAnimator.Play("Bird_BodyAttack");
         Vector2 dir = (ChargeEndPos.position - ChargeStartPos.position).normalized;
 
         isCharging = true;

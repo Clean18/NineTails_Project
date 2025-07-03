@@ -1,10 +1,10 @@
 {
-    "_savedTimeString": "2025-07-03T16:22:48.6921934+09:00",
+    "_savedTimeString": "2025-07-03T17:25:12.3375722+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 3,
     "DefenseLevel": 2,
     "HpLevel": 3,
-    "CurrentHp": 3,
+    "CurrentHp": 0,
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
     "ShieldHp": 0,
