@@ -85,10 +85,14 @@ public struct PromotionInfo
 [System.Serializable]
 public struct MissionInfo
 {
+    public string Id;          // 미션 Id
 	public string Stage;       // 현재 씬(스테이지)
 	public int TimeLimit;      // 시간제한
 	public int Count;          // 킬 조건
 	public string NextScene;   // 다음 씬
+    public int WarmthReward;   // 온정 보상
+    public int SpritReward;    // 영기 보상
+    public int SkillPoint;     // 스킬 포인트
 }
 #endregion
 
@@ -372,11 +376,28 @@ public class DataManager : Singleton<DataManager>
 			string line = lines[i];
 			string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
-			string stage = Clean(cells[0]);
-			int timeLimit = int.Parse(Clean(cells[1]));
-			int count = int.Parse(Clean(cells[2]));
-			string nextScene = Clean(cells[3]);
-		}
+            string id = Clean(cells[0]);
+			string stage = Clean(cells[1]);
+			int timeLimit = int.Parse(Clean(cells[2]));
+			int count = int.Parse(Clean(cells[3]));
+			string nextScene = Clean(cells[4]);
+            int warmthReward = int.Parse(Clean(cells[5]));
+            int spritReward = int.Parse(Clean(cells[6]));
+            int skillPoint = int.Parse(Clean(cells[7]));
+
+            MissionInfo info = new MissionInfo
+            {
+                Id = id,
+                Stage = stage,
+                TimeLimit = timeLimit,
+                Count = count,
+                NextScene = nextScene,
+                WarmthReward = warmthReward,
+                SpritReward = spritReward,
+                SkillPoint = skillPoint
+            };
+            MissionTable[stage] = info;
+        }
 	}
 	IEnumerator EquipmentUpgradeInit()
 	{
