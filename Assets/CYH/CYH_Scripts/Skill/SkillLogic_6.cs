@@ -1,13 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class SkillLogic_6 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData _data;
-    [SerializeField] private PlayerControllerTypeA_Copy _playerController;
+    //[SerializeField] private ActiveSkillData _data;
+    //[SerializeField] private PlayerControllerTypeA_Copy _playerController;
 
     [Header("데미지 범위")]
     [SerializeField] private Vector2 _hitBoxSize = new Vector2(1, 1);
+    
     [Header("데미지 범위 오프셋")]
     [SerializeField] private Vector2 _boxOffset = new Vector2(0, 0);
     [SerializeField] private LayerMask _monsterLayer;
@@ -18,6 +20,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     [SerializeField] private GameObject _videoPrefab;
     [SerializeField] private GameObject _effectPrefab;
+    [SerializeField] private VideoPlayer _videoPlayer;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
@@ -34,21 +37,21 @@ public class SkillLogic_6 : SkillLogic, ISkill
         SlotIndex = 6;
     }
 
-    private void Awake()
-    {
-        _playerController = GetComponent<PlayerControllerTypeA_Copy>();
-        SkillData = _data;
+    //private void Awake()
+    //{
+    //    _playerController = GetComponent<PlayerControllerTypeA_Copy>();
+    //    SkillData = _data;
 
-        _animator = GetComponent<Animator>();
-    }
+    //    _animator = GetComponent<Animator>();
+    //}
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            UseSkill(transform);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha6))
+    //    {
+    //        UseSkill(transform);
+    //    }
+    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -112,8 +115,8 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public void AnimationPlay()
     {
-        _animator.SetTrigger("UseSkill_6");
-        //PlayerController.Instance.SetTrigger("UseSkill_6");
+        //_animator.SetTrigger("UseSkill_6");
+        PlayerController.Instance.SetTrigger("UseSkill_6");
     }
 
     // 궁극기 비디오 생성
@@ -121,6 +124,10 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         Transform camera = transform.Find("Main Camera");
         GameObject video = Instantiate(_videoPrefab, position, Quaternion.identity, camera);
+
+        VideoPlayer videoPlayer = video.GetComponentInChildren<VideoPlayer>();
+        videoPlayer.Play();
+
         Destroy(video, 4f);
         StartCoroutine(PlayVideoDelayed(4f));
     }
@@ -141,8 +148,8 @@ public class SkillLogic_6 : SkillLogic, ISkill
     // 데미지 적용
     protected override void Damage(GameObject monster)
     {
-        float damage = _playerController.AttackPoint * (4.0f + 0.04f * SkillLevel);
-        //long damage = (long)(PlayerController.Instance.GetAttack() * (4.0f + 0.04f * SkillLevel));
+        //float damage = _playerController.AttackPoint * (4.0f + 0.04f * SkillLevel);
+        long damage = (long)(PlayerController.Instance.GetAttack() * (4.0f + 0.04f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
@@ -168,7 +175,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 3초 뒤 삭제
         Destroy(effect, 3f);
     }
-
+    
     private IEnumerator CooldownCoroutine()
     {
         float remaining = SkillData.CoolTime;
