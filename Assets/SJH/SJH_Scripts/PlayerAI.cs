@@ -18,8 +18,7 @@ public class PlayerAI
         {
             _targetSkill = value;
             // TODO : 인스펙터용
-            if (value != null)
-                _targetSkillName = _targetSkill.SkillData.SkillName;
+            if (value != null) _targetSkillName = _targetSkill.SkillData.SkillName;
         }
     }
     [SerializeField] private string _targetSkillName;
@@ -72,7 +71,6 @@ public class PlayerAI
         {
             TargetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
         }
-        // TODO : else 기본공격을 TargetSkill로 등록
         else
         {
             TargetSkill = _model.Skill.DefaultAttack;
@@ -95,7 +93,7 @@ public class PlayerAI
 		float distance = dir.magnitude;
 		if (distance <= TargetSkill.SkillData.Range || TargetSkill.SkillData.Range == 0)
 		{
-			_view.Stop();
+			_view.AIStop();
 			StopSearchRoutine();
 			_controller.CurrentState = AIState.Attack;
 			return;
@@ -163,7 +161,7 @@ public class PlayerAI
             if (monsters.Length == 0)
             {
                 // 범위에 몬스터가 없으면 이동 정지
-                _view.Stop();
+                _view.AIStop();
                 continue;
             }
 
