@@ -7,7 +7,7 @@ using UnityEngine;
 public class RangedMonsterFSM : BaseMonsterFSM
 {
     [Header("Attack Setting")]
-    [SerializeField] private GameObject AttackEffectPrefab;    // 공격 시 생성되는 이펙트 프리팹
+   // [SerializeField] private GameObject AttackEffectPrefab;    // 공격 시 생성되는 이펙트 프리팹
     [SerializeField] private Transform AttackPoint;            // 투사체가 생성될 위치
     [SerializeField] private GameObject ProjectilePrefab;      // 발사할 투사체 프리팹
     [SerializeField] private float ProjectileSpeed = 8f;       // 투사체 속도
@@ -15,6 +15,12 @@ public class RangedMonsterFSM : BaseMonsterFSM
     [SerializeField] private AudioClip AttackSound;            // 공격 사운드
     [SerializeField] private Animator MonsterAnimator;         // 애니메이터
 
+
+    protected override void MoveToPlayer()
+    {
+        base.MoveToPlayer();
+        MonsterAnimator.Play("Walk_Ranged");
+    }
     // BaseMonsterFSM의 추상 공격 루틴 구현 (원거리 투사체 방식)
     protected override IEnumerator AttackRoutine()
     {
@@ -22,21 +28,22 @@ public class RangedMonsterFSM : BaseMonsterFSM
         while (_currentState == MonsterState.Attack)
         {
             // 1. 애니메이션 실행
-            MonsterAnimator.Play("Attack");
+            MonsterAnimator.Play("ThrowDagger");
 
             // 2. 사운드 재생
             AudioSource.PlayClipAtPoint(AttackSound, transform.position);
 
-            // 3. 이펙트 생성 (화염, 연기 등)
-            if (AttackEffectPrefab != null && AttackPoint != null)
-            {
-                GameObject fx = Instantiate(AttackEffectPrefab, AttackPoint.position, Quaternion.identity);
-                Destroy(fx, 1f); // 이펙트 1초 뒤 자동 제거
-            }
-
+            // // 3. 이펙트 생성 (화염, 연기 등)
+            // if (AttackEffectPrefab != null && AttackPoint != null)
+            // {
+            //     GameObject fx = Instantiate(AttackEffectPrefab, AttackPoint.position, Quaternion.identity);
+            //     Destroy(fx, 1f); // 이펙트 1초 뒤 자동 제거
+            // }
+            Debug.Log("투사체 제작 해야함");
             // 4. 투사체 생성 및 방향/속도 적용
             if (ProjectilePrefab != null && AttackPoint != null && targetPlayer != null)
             {
+                Debug.Log("투사체 생성됨");
                 // 4-1. 방향 계산 (플레이어 방향)
                 Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
 
@@ -61,6 +68,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
 
         // 상태가 Attack에서 벗어나면 코루틴 정리
         attackRoutine = null;
+
+        MonsterAnimator.Play("Walk_Ranged");
     }
 
     private void OnDrawGizmosSelected()

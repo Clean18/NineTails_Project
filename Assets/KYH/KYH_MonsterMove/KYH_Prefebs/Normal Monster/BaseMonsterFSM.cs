@@ -9,9 +9,13 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 몬스터의 상태를 정의하는 열거형
     protected enum MonsterState { Idle, Move, Attack }
 
+    // 몬스터의 타입을 정의하는 열거형 
+
+    protected enum MonsterType { Melee, Ranged, Heavy }
+
     [Header("Monster Status")]
     [SerializeField] protected float MoveSpeed = 2f;            // 이동 속도
-    [SerializeField] protected float AttackRange = 1.5f;        // 공격 사거리 (공통)
+    public float AttackRange = 1.5f;        // 공격 사거리 (공통)
     [SerializeField] protected float AttackCooldown = 2f;       // 공격 쿨타임 (공통)
     [SerializeField] protected float MaxHp = 10f;               // 최대 체력
     [SerializeField] protected float DamageReduceRate = 0f;     // 데미지 감소율 (퍼센트)
@@ -104,7 +108,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     }
 
     // 플레이어에게 이동
-    protected void MoveToPlayer()
+    protected virtual void MoveToPlayer()
     {
         if (targetPlayer == null) return;
         Vector2 dir = (targetPlayer.position - transform.position).normalized;
