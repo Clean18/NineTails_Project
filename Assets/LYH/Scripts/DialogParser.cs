@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using JetBrains.Annotations;
+using System.Runtime.CompilerServices;
 
 // 데이터 구조 정의
 [System.Serializable]
@@ -29,15 +30,19 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogText;
     [SerializeField] private GameObject dialogUI;
     [SerializeField] private GameObject playerDialog;
+    [SerializeField] private RectTransform logBoxSize;
     [SerializeField] private TextMeshProUGUI playerDialogBox;
+    [SerializeField] private TextMeshProUGUI logText;
+    [SerializeField] private AudioSource soundPlayer;
     [SerializeField] private Image[] charImgs = new Image[5];
+    [SerializeField] private Sprite[] charSprites = new Sprite[14];
+    [SerializeField] private AudioClip[] sounds = new AudioClip[20];
 
-    [SerializeField] private string foxName;
+    [SerializeField] private string foxName; // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
+    [SerializeField] private int spacing;
 
     private List<DialogLine> dialogLines = new List<DialogLine>();
     private int currentIndex = 0;
-
-    private string imgFolderPath = Application.streamingAssetsPath + "/Imports/LYH/CharacterImg/";
 
     void Start()
     {
@@ -63,10 +68,10 @@ public class DialogParser : MonoBehaviour
             DialogLine line = new DialogLine
             {
                 index = int.Parse(values[0]),
-                charName = values[1],
-                charIndex = int.Parse(values[2]) - 1,
+                charName = values[1].Replace("구미호", foxName),
+                charIndex = int.Parse(values[2]),
                 imgName = values[3],
-                dialog = values[4].Replace("`", ",").Replace("구미호",foxName), // ` 를 ,로 변환
+                dialog = values[4].Replace("`", ",").Replace("구미호", foxName), // ` 를 ,로 변환
                 animation = values[5],
                 location = values[6],
                 sound = values[7],
@@ -81,7 +86,7 @@ public class DialogParser : MonoBehaviour
         Debug.Log($"총 {dialogLines.Count}개의 대사가 로드되었습니다.");
     }
 
-    void ShowLine(int index)
+    void ShowLine(int index) // 다음 대사를 표시하는 버튼을 눌렀을때 행동하는 함수
     {
         if (index < 0 || index >= dialogLines.Count)
         {
@@ -105,12 +110,34 @@ public class DialogParser : MonoBehaviour
             // line 입력 (대사 / 연출 / 사운드 / 브금 / 배경)
             playerDialogBox.text = line.dialog;
         }
+        else if (line.charIndex == -1) // 이펙트 분류
+        {
+            if (line.charName == "sound") // 사운드 + 이펙트만 재생할 경우
+            {
+                playerDialog.SetActive(false);
+                dialogUI.SetActive(false);
+                StartCoroutine(startSound());
+            }
+            else if (line.charName == "background") // 배경 컷씬
+            {
+                // 대화창 모두 숨기고
+                // coroutine
+                // 검은색 트랜지션 1회
+                // 3초 디스플레이
+                // 검은색 트랜지션 1회
+                // NextLine();
+            }
+            else if (line.charName == "animation")
+            {
+                // animation 타입에 맞춰서 animation1() 등 함수 발동
+            }
+        }
         else // 주인공 이외의 캐릭터 대사가 나올 경우 (이미지 표시 & 대사 & 이름 변경)
         {
             // 모든 이미지 비활성화 후 해당 인덱스만 활성화
             for (int i = 0; i < charImgs.Length; i++)
             {
-                charImgs[i].gameObject.SetActive(i == line.charIndex);
+                charImgs[i].gameObject.SetActive(i == line.charIndex - 1);
             }
             // 플레이어 선택 버튼을 숨기고, 대화창을 나타나게 함
             playerDialog.SetActive(false);
@@ -120,8 +147,39 @@ public class DialogParser : MonoBehaviour
             charNameText.text = line.charName;
             dialogText.text = line.dialog;
             SetLocation(line.location, line.charIndex);
-            // charImgs[line.charIndex].sprite = 
+
+            for (int i=0; i < charSprites.Length; i++)
+            {
+                if (charSprites[i].name == line.imgName)
+                {
+                    charImgs[line.charIndex].sprite = charSprites[i];
+                }
+            }
         }
+    }
+
+    public void showLog() // 자동으로 로그 텍스트 입력 및 텍스트 박스 사이즈 조정
+    {
+        int horiSize = 50;
+        logText.text = "";
+
+        // Debug.Log(logBoxSize.sizeDelta);
+        for (int i = 0; i < currentIndex + 1; i++)
+        {
+            if (dialogLines[i].dialog != "")
+            {
+                logText.text += "\n";
+                logText.text += "\n";
+                if (dialogLines[i].charName != "")
+                {
+                    logText.text += dialogLines[i].charName;
+                    logText.text += ": ";
+                }
+                logText.text += dialogLines[i].dialog;
+                horiSize += spacing;
+            }
+        }
+        logBoxSize.sizeDelta = new Vector2(logBoxSize.sizeDelta.x, horiSize);
     }
 
     // 다음 대사로 넘어가는 예시 (나중에 버튼에 연결)
@@ -131,10 +189,12 @@ public class DialogParser : MonoBehaviour
         {
             currentIndex++;
             ShowLine(currentIndex);
+            // 사라지는 등장인물 보이지 않게
         }
         else
         {
             Debug.Log("모든 대사 종료");
+            Debug.Log("다음 씬으로 전환");
         }
     }
     public void PreviousLine()
@@ -163,5 +223,12 @@ public class DialogParser : MonoBehaviour
         {
             charImgs[imgNum].rectTransform.anchoredPosition = new Vector2(0f, charImgs[imgNum].rectTransform.anchoredPosition.y);
         }
+    }
+    private IEnumerator startSound()
+    {
+        // soundPlayer.audioSource.audioClip = 
+        Debug.Log("effect Played");
+        yield return new WaitForSeconds(2f);
+        NextLine();
     }
 }
