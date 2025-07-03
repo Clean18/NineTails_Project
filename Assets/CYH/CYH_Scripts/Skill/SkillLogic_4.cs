@@ -107,7 +107,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         _isSkillUsed = true;
 
         // 플레이어 이동 비활성화
-        //PlayerController.Instance.Stop();
+        PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
