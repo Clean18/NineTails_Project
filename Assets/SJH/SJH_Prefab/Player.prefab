@@ -168,6 +168,7 @@ MonoBehaviour:
   _isInit: 0
   _model:
     Data:
+      _playerName: 
       _attackLevel: 0
       <Attack>k__BackingField: 0
       _defenseLevel: 0
@@ -178,10 +179,11 @@ MonoBehaviour:
       _speedLevel: 0
       <Speed>k__BackingField: 0
       _isDead: 0
-      ShieldHp: 0
+      _shieldHp: 0
     Cost:
       _spiritEnergy: 0
       _warmth: 0
+      _soul: 0
     Equipment:
       _grade: 0
       _level: 0
@@ -225,6 +227,7 @@ MonoBehaviour:
   _sprite: {fileID: 0}
   _anim: {fileID: 0}
   _spriteSize: 0.2
+  canMove: 0
 --- !u!95 &1176920183912794695
 Animator:
   serializedVersion: 5
@@ -323,6 +326,7 @@ MonoBehaviour:
   - {fileID: 1575395230341757593, guid: d3052cadd3d1eb94386a3fd2836c1392, type: 3}
   - {fileID: 1575395230341757593, guid: 9c37086fb94a75e4e81408d752572b48, type: 3}
   - {fileID: 1575395230341757593, guid: a2bf73001addb0246a10619d8f5fd15d, type: 3}
+  - {fileID: 5990876499532869789, guid: 499e360ce79c1ce49b9771d231d4e370, type: 3}
 --- !u!1 &4774744751119802566
 GameObject:
   m_ObjectHideFlags: 0

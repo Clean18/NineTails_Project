@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-07-02T17:07:54.8245083+09:00",
+    "_savedTimeString": "2025-07-03T09:06:32.6385678+09:00",
     "PlayerName": "구미호",
-    "AttackLevel": 1,
-    "DefenseLevel": 1,
-    "HpLevel": 1,
-    "CurrentHp": 0,
+    "AttackLevel": 3,
+    "DefenseLevel": 2,
+    "HpLevel": 3,
+    "CurrentHp": 2,
     "SpeedLevel": 1,
     "IncreaseDamageLevel": 0,
     "ShieldHp": 0,
-    "SpiritEnergy": 14859125,
-    "Warmth": 17595165,
+    "SpiritEnergy": 23447517,
+    "Warmth": 26194569,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
@@ -18,17 +18,17 @@
         },
         {
             "SkillIndex": 1,
-            "SkillLevel": 53,
+            "SkillLevel": 54,
             "SlotIndex": 1
         },
         {
             "SkillIndex": 2,
-            "SkillLevel": 52,
+            "SkillLevel": 53,
             "SlotIndex": 2
         },
         {
-            "SkillIndex": 3,
-            "SkillLevel": 50,
+            "SkillIndex": 4,
+            "SkillLevel": 0,
             "SlotIndex": 3
         }
     ],

@@ -27,19 +27,10 @@ public class PlayerView : MonoBehaviour
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
-        Debug.Log($"이동 가능 여부 : {canMove}");
         if (!canMove) return;
 
-        if (dir != Vector2.zero)
-        {
-            _anim.SetBool("IsMoving", true);
-            Debug.Log("IsMoving = true");
-        }
-        else
-        {
-            _anim.SetBool("IsMoving", false);
-            Debug.Log("IsMoving = false");
-        }
+        if (dir != Vector2.zero) _anim.SetBool("IsMoving", true);
+        else _anim.SetBool("IsMoving", false);
 
         Vector2 movePos = dir.normalized * moveSpeed;
 		_rigid.velocity = movePos;
@@ -66,6 +57,12 @@ public class PlayerView : MonoBehaviour
     }
 
     public void Move() => canMove = true;
+
+    public void AIStop()
+    {
+        _anim.SetBool("IsMoving", false);
+        _rigid.velocity = Vector2.zero;
+    }
 
     public void SetTrigger(string trigger)
     {

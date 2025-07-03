@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class SkillLogic_4 : SkillLogic, ISkill
@@ -51,16 +50,14 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
 
         Debug.Log("스킬4 사용");
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
@@ -74,7 +71,6 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
 
@@ -83,7 +79,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         //_isCooldown = true;
         IsCooldown = true;
-        StartCoroutine(CooldownCoroutine());
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
@@ -101,8 +97,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         HealPlayer(_randomMonsters.Count);
 
         // 3초 동안 0.5초마다 데미지 + 이펙트 flipX 토글
-        if (_randomMonsters.Count > 0)
-            StartCoroutine(TimedDamageCoroutine());
+        if (_randomMonsters.Count > 0) PlayerController.Instance.StartCoroutine(TimedDamageCoroutine());
         OnAttackEnd();
     }
 
@@ -177,9 +172,11 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         if (_randomMonsters.Count == 0) return;
         //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count;
-        PlayerController.Instance.TakeHeal(PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count);
+        long baseHeal = PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count;
+        long healAmount = System.Math.Max(1, baseHeal);
+        PlayerController.Instance.TakeHeal(healAmount);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
-        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{PlayerController.Instance.GetDefense() * (long)(0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
+        Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{healAmount}]의 Hp를 회복");
     }
 
     protected override void Damage(GameObject monster)
