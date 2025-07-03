@@ -1,72 +1,120 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillLogic_1 : MonoBehaviour
+public class SkillLogic_1 : SkillLogic, ISkill
 {
-    [SerializeField] private ActiveSkillData data;
-    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject _hitBoxPrefab;
+    [SerializeField] private CircleCollider2D _hitBox;
 
-    private CapsuleCollider2D SwordCollider;
+    [field: SerializeField] public ActiveSkillData SkillData { get; set; }
+    [field: SerializeField] public bool IsCooldown { get; set; }
+    [field: SerializeField] public int SkillLevel { get; set; }
+    [field: SerializeField] public int SlotIndex { get; set; }
 
-
-    private void Awake()
+    public void SkillInit()
     {
-        SwordCollider = GetComponent<CapsuleCollider2D>();
-        SwordCollider.enabled = false;
+        Debug.Log("스킬 1 초기화");
+
+        // 각 프리팹 자식으로 생성
+        GameObject hitBox = Instantiate(_hitBoxPrefab, transform);
+        _hitBox = hitBox.GetComponent<CircleCollider2D>();
+        _hitBox.enabled = false;
+        IsCooldown = false;
+        SkillLevel = 0;
+        SlotIndex = 1;
     }
 
-    private void Update()
+    public void UseSkill(Transform attacker)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UseSkill();
-        }
+        Debug.Log("스킬 1 UseSkill");
+        // 쿨타임이면 return
+        if (IsCooldown) return;
+
+        // 쿨타임 체크 시작
+        IsCooldown = true;
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+
+        EnableHitbox();
+        AnimationPlay();
+        Debug.Log("스킬 1 사용완료");
     }
-    public void UseSkill()
+
+    public void UseSkill(Transform attacker, Transform defender)
     {
-        OnAttackStart();
-        Debug.Log("스킬사용");
+        // 쿨타임이면 return
+        if (IsCooldown) return;
+
+        // 쿨타임 체크 시작
+        IsCooldown = true;
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+        EnableHitbox();
         AnimationPlay();
     }
 
-    public void OnAttackStart()
+    public void EnableHitbox()
     {
-        SwordCollider.enabled = true;
-        Debug.Log("콜라이더 킴");
+        // OnTrigger 플래그
+        _isSkillUsed = true;
+
+        _hitBox.enabled = true;
     }
 
-    public void OnAttackEnd()
+    // 이벤트 함수
+    public void DisableHitbox()
     {
-        SwordCollider.enabled = false;
-        Debug.Log("콜라이더 끔");
-    }
+        _hitBox.enabled = false;
 
+        // 몬스터 TakeDamage 처리
+        Damage();
+
+        // OnTrigger 플래그
+        _isSkillUsed = false;
+    }
 
     public void AnimationPlay()
     {
-        if (!SwordCollider.enabled)
-            return;
-        else
+        if (!_hitBox.enabled) return;
+        else PlayerController.Instance.SetTrigger("UseSkill_1");
+    }
+
+    protected override void Damage()
+    {
+        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * SkillLevel)));
+
+        foreach (var monster in _hitMonsters)
         {
-            animator.SetTrigger("UseSkill");
+            monster?.GetComponent<IDamagable>().TakeDamage(damage);
+            Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Monster"))
+
+        if (!other.CompareTag("Monster")) return;
+        if (!_hitMonsters.Contains(other.gameObject))
         {
-            Debug.Log("몬스터 맞음");
-            // 데미지 로직 호출
+            _hitMonsters.Add(other.gameObject);
         }
     }
 
-    private void OnEnable()
+    private IEnumerator CooldownCoroutine()
     {
-        SkillEvent.OnAAnimationEnd += OnAttackEnd;
-    }
-
-    private void OnDisable()
-    {
-        SkillEvent.OnAAnimationEnd -= OnAttackEnd;
+        float remaining = SkillData.CoolTime;
+        while (remaining > 0f)
+        {
+            Debug.Log($"쿨타임 남음: {remaining}초");
+            yield return new WaitForSeconds(1f);
+            remaining -= 1f;
+        }
+        IsCooldown = false;
+        Debug.Log("쿨타임 종료");
     }
 }

@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartUI: {fileID: 0}
   GameUI: {fileID: 0}
+  MainUI: {fileID: 0}
+  damageTextPrefab: {fileID: 6080588013198760713, guid: a94389db9e8d1e443a735fc6c89bbf63, type: 3}

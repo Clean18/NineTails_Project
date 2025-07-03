@@ -8,6 +8,6 @@ public class SceneChangerManager_Test : MonoBehaviour
 {
     public void ChangeScene()
     {
-        SceneManager.LoadScene("CYH_GameScene");
+        SceneManager.LoadScene("Stage1-1"); // CYH_GameScene
     }
 }

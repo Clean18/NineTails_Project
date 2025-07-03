@@ -1,14 +1,17 @@
 using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
     public StartUI StartUI;
-
     public GameUI GameUI;
+    public Main MainUI;
+
+    public List<IUI> SceneUIList = new();
+
+    [SerializeField] private GameObject damageTextPrefab;
 
     private PopUpCanvas popUpCanvas;
     public PopUpCanvas PopUpCanvas
@@ -43,5 +46,13 @@ public class UIManager : Singleton<UIManager>
     public void ClosePopUp()
     {
         PopUpCanvas.CloseUI();
+    }
+
+    public void ShowDamageText(Transform spawnPos, long damage)
+    {
+        if (damageTextPrefab.Equals(null)) return;
+
+        var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
+        go.GetComponent<DamageText>()?.Init($"{damage}");
     }
 }

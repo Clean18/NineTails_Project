@@ -39,7 +39,7 @@ public class Fireball : SkillData
 		var go = Instantiate(SkillPrefab, spawnPos, Quaternion.identity);
 		go.transform.up = dir;
 		go.GetComponent<Rigidbody2D>().velocity = dir * 10;
-		var projectile = go.GetComponent<Projectile>().TotalDamage = Damage * (int)player.PlayerModel.Data.Attack;
+		var projectile = go.GetComponent<Projectile>().TotalDamage = Damage * (int)player.GetAttack();
 
 		Debug.Log($"{SkillName} 스킬 사용 대미지 : {projectile}");
 	}

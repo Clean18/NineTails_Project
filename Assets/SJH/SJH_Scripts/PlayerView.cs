@@ -8,21 +8,31 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigid;
-    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer _sprite;
+    [SerializeField] private Animator _anim;
 
     private float _facingDir;
     [SerializeField] float _spriteSize;
 
+    [SerializeField] private bool canMove;
 
     void Awake()
 	{
 		_rigid = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
-	}
+        _sprite = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
+
+        canMove = true;
+    }
 
 	public void Move(Vector2 dir, float moveSpeed)
 	{
-		Vector2 movePos = dir.normalized * moveSpeed;
+        if (!canMove) return;
+
+        if (dir != Vector2.zero) _anim.SetBool("IsMoving", true);
+        else _anim.SetBool("IsMoving", false);
+
+        Vector2 movePos = dir.normalized * moveSpeed;
 		_rigid.velocity = movePos;
 
         if (dir.x < 0f)
@@ -39,5 +49,23 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-	public void Stop() => _rigid.velocity = Vector2.zero;
+	public void Stop()
+    {
+        canMove = false;
+        _anim.SetBool("IsMoving", false);
+        _rigid.velocity = Vector2.zero;
+    }
+
+    public void Move() => canMove = true;
+
+    public void AIStop()
+    {
+        _anim.SetBool("IsMoving", false);
+        _rigid.velocity = Vector2.zero;
+    }
+
+    public void SetTrigger(string trigger)
+    {
+        _anim.SetTrigger(trigger);
+    }
 }

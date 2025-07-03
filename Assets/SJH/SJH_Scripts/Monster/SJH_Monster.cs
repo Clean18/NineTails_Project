@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class SJH_Monster : MonoBehaviour
@@ -60,7 +59,7 @@ public class SJH_Monster : MonoBehaviour
 
     public void IdleAction()
     {
-        if (!GameManager.Instance.PlayerController.PlayerModel.Data.IsDead) MonsterState = AIState.Chase;
+        if (!PlayerController.Instance.GetIsDead()) MonsterState = AIState.Chase;
     }
 
     public void ChaseAction()
