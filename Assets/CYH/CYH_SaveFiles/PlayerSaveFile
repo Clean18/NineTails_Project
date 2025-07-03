@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-07-03T22:40:56.5328424+09:00",
+    "_savedTimeString": "2025-07-04T00:02:02.5905760+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 5,
     "DefenseLevel": 4,
     "HpLevel": 8,
-    "CurrentHp": 0,
+    "CurrentHp": 53,
     "SpeedLevel": 2,
     "ShieldHp": 0,
-    "SpiritEnergy": 46047336,
-    "Warmth": 48793237,
-    "GetFirstSpiritEnergy": false,
+    "SpiritEnergy": 46047365,
+    "Warmth": 37684808,
+    "GetFirstSpiritEnergy": true,
     "GetFirstWarmth": true,
     "PlayerSkillList": [
         {
@@ -38,9 +38,9 @@
             "SlotIndex": -1
         }
     ],
-    "Grade": "R",
-    "Level": 6,
-    "IncreaseDamageLevel": 0,
+    "Grade": "SSR",
+    "Level": 7,
+    "IncreaseDamageLevel": 7,
     "PlayerAchivementList": [
         {
             "Id": "A16",
@@ -129,6 +129,41 @@
         },
         {
             "Id": "A33",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A46",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A47",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A48",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A49",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A50",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A51",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A53",
             "IsClear": true,
             "CurrentCondition": -1
         }

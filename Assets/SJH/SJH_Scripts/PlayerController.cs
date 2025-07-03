@@ -326,6 +326,11 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public long GetSpiritEnergy() => _model.GetSpiritEnergy();
     /// <summary>
+    /// 플레이어의 혼백 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetSoul() => _model.GetSoul();
+    /// <summary>
     /// UI 업데이트 이벤트 연결하는 함수
     /// </summary>
     /// <param name="playerStatUI"></param>
@@ -378,6 +383,21 @@ public class PlayerController : MonoBehaviour
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
     public void TryPromote() => _model.TryPromote();
+    /// <summary>
+    /// 플레이어의 장비 등급을 GradeType으로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public GradeType GetGradeType() => _model.GetGradeType();
+    /// <summary>
+    /// 플레이어 장비의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage() => _model.GetIncreseDamage();
+    /// <summary>
+    /// 레벨에 따라 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage(int level) => _model.GetIncreseDamage(level);
     #endregion
 
     #region Skill 관련 함수

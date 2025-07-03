@@ -80,6 +80,7 @@ public class PlayerModel
 	public long GetHp() => Data.Hp;
 	public long GetWarmth() => Cost.Warmth;
 	public long GetSpiritEnergy() => Cost.SpiritEnergy;
+    public long GetSoul() => Cost.Soul;
 	public void ClearShield() => Data.ShieldHp = 0;
 
 	public void ConnectEvent(Action playerStatUI)
@@ -371,6 +372,9 @@ public class PlayerModel
             return;
 		}
 	}
+    public GradeType GetGradeType() => Equipment.GradeType;
+    public float GetIncreseDamage() => Equipment.GetIncreseDamage();
+    public float GetIncreseDamage(int level) => Equipment.GetIncreseDamage(level);
     #endregion
 
     #region PlayerSkill 관련 함수
