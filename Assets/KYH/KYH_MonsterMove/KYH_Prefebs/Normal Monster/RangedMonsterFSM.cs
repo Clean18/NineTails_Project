@@ -22,7 +22,7 @@ public class RangedMonsterFSM : BaseMonsterFSM
         while (_currentState == MonsterState.Attack)
         {
             // 1. 애니메이션 실행
-            MonsterAnimator?.SetTrigger("Attack");
+            MonsterAnimator.Play("Attack");
 
             // 2. 사운드 재생
             AudioSource.PlayClipAtPoint(AttackSound, transform.position);
@@ -37,7 +37,7 @@ public class RangedMonsterFSM : BaseMonsterFSM
             // 4. 투사체 생성 및 방향/속도 적용
             if (ProjectilePrefab != null && AttackPoint != null && targetPlayer != null)
             {
-                // 4-1. 방향 계산 (플레이어 향)
+                // 4-1. 방향 계산 (플레이어 방향)
                 Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
 
                 // 4-2. 투사체 생성

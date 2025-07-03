@@ -21,7 +21,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
         while (_currentState == MonsterState.Attack)
         {
             // 1. 애니메이션 재생 (Attack 트리거)
-            MonsterAnimator?.SetTrigger("Attack");
+            MonsterAnimator.Play("Attack");
 
             // 2. 공격 사운드 재생
             AudioSource.PlayClipAtPoint(AttackSound, transform.position);
@@ -34,8 +34,8 @@ public class MeleeMonsterFSM : BaseMonsterFSM
             }
 
             // 4. 범위 내 플레이어 탐지 및 데미지 처리
-            Collider2D[] hits = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRadius, PlayerLayer);
-            foreach (var hit in hits)
+            Collider2D hit = Physics2D.OverlapCircle(AttackPoint.position, AttackRadius, PlayerLayer);
+            if (hit != null)
             {
                 // 실제론 플레이어마다 다르게 처리해야 하지만 단일 플레이어 전제하에 아래로 단순화
                 GameManager.Instance.PlayerController.TakeDamage((long)AttackDamage);

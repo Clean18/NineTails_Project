@@ -11,7 +11,6 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     [Header("Monster Status")]
     [SerializeField] protected float MoveSpeed = 2f;            // 이동 속도
-    [SerializeField] protected float DetectRange = 5f;          // 플레이어 탐지 범위
     [SerializeField] protected float AttackRange = 1.5f;        // 공격 사거리 (공통)
     [SerializeField] protected float AttackCooldown = 2f;       // 공격 쿨타임 (공통)
     [SerializeField] protected float MaxHp = 10f;               // 최대 체력
@@ -70,20 +69,18 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
             switch (_currentState)
             {
                 case MonsterState.Idle:
-                    if (dist < DetectRange)
-                        ChangeState(MonsterState.Move); // 탐지범위 안이면 이동
+                    if (targetPlayer != null)
+                        ChangeState(MonsterState.Move); // 타겟 있으면 무조건 이동
                     break;
 
                 case MonsterState.Move:
                     if (dist < AttackRange)
                         ChangeState(MonsterState.Attack); // 사거리 안이면 공격
-                    else if (dist >= DetectRange)
-                        ChangeState(MonsterState.Idle); // 다시 멀어지면 대기
                     break;
 
                 case MonsterState.Attack:
                     if (dist > AttackRange)
-                        ChangeState(MonsterState.Move); // 공격 범위 벗어나면 다시 이동
+                        ChangeState(MonsterState.Move); // 사거리 벗어나면 다시 이동
                     break;
             }
         }

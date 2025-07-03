@@ -150,8 +150,8 @@ public class DataManager : Singleton<DataManager>
 		yield return StartCoroutine(EquipmentUpgradeCostInit());
 		yield return StartCoroutine(EquipmentDataInit());
 		yield return StartCoroutine(EquipmentUpgradeInit());
-		yield return StartCoroutine(MissionDataInit());
-		yield return StartCoroutine(MissionDataInit());
+		
+		// yield return StartCoroutine(MissionDataInit());
 		yield return StartCoroutine(SkillCostInit());
 
 		Debug.Log("모든 데이터 테이블 초기화 완료");
