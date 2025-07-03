@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using JetBrains.Annotations;
 
-// µ¥ÀÌÅÍ ±¸Á¶ Á¤ÀÇ
+// ë°ì´í„° êµ¬ì¡° ì •ì˜
 [System.Serializable]
 public class DialogLine
 {
@@ -24,7 +24,6 @@ public class DialogLine
 
 public class DialogParser : MonoBehaviour
 {
-
     [SerializeField] private TextAsset dialogData;
     [SerializeField] private TextMeshProUGUI charNameText;
     [SerializeField] private TextMeshProUGUI dialogText;
@@ -38,6 +37,8 @@ public class DialogParser : MonoBehaviour
     private List<DialogLine> dialogLines = new List<DialogLine>();
     private int currentIndex = 0;
 
+    private string imgFolderPath = Application.streamingAssetsPath + "/Imports/LYH/CharacterImg/";
+
     void Start()
     {
         LoadDialog();
@@ -48,12 +49,12 @@ public class DialogParser : MonoBehaviour
     {
         string[] lines = dialogData.text.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
 
-        // Ã¹ ÁÙÀº Çì´õÀÌ¹Ç·Î »ı·«
+        // ì²« ì¤„ì€ í—¤ë”ì´ë¯€ë¡œ ìƒëµ
         for (int i = 1; i < lines.Length; i++)
         {
             string[] values = lines[i].Split(',');
 
-            // CSV ÇÊµå°¡ ´©¶ôµÇ¾úÀ» °æ¿ì ¹æÁö
+            // CSV í•„ë“œê°€ ëˆ„ë½ë˜ì—ˆì„ ê²½ìš° ë°©ì§€
             while (values.Length < 11)
             {
                 System.Array.Resize(ref values, 11);
@@ -65,7 +66,7 @@ public class DialogParser : MonoBehaviour
                 charName = values[1],
                 charIndex = int.Parse(values[2]) - 1,
                 imgName = values[3],
-                dialog = values[4].Replace("`", ",").Replace("±¸¹ÌÈ£",foxName), // ` ¸¦ ,·Î º¯È¯
+                dialog = values[4].Replace("`", ",").Replace("êµ¬ë¯¸í˜¸",foxName), // ` ë¥¼ ,ë¡œ ë³€í™˜
                 animation = values[5],
                 location = values[6],
                 sound = values[7],
@@ -77,48 +78,53 @@ public class DialogParser : MonoBehaviour
             dialogLines.Add(line);
         }
 
-        Debug.Log($"ÃÑ {dialogLines.Count}°³ÀÇ ´ë»ç°¡ ·ÎµåµÇ¾ú½À´Ï´Ù.");
+        Debug.Log($"ì´ {dialogLines.Count}ê°œì˜ ëŒ€ì‚¬ê°€ ë¡œë“œë˜ì—ˆìŠµë‹ˆë‹¤.");
     }
 
     void ShowLine(int index)
     {
         if (index < 0 || index >= dialogLines.Count)
         {
-            Debug.LogWarning("´ë»ç ÀÎµ¦½º ¹üÀ§¸¦ ¹ş¾î³²");
+            Debug.LogWarning("ëŒ€ì‚¬ ì¸ë±ìŠ¤ ë²”ìœ„ë¥¼ ë²—ì–´ë‚¨");
             return;
         }
 
         DialogLine line = dialogLines[index];
 
+        // ì£¼ì¸ê³µ (í”Œë ˆì´ì–´)ì˜ ëŒ€ì‚¬ê°€ ë‚˜ì˜¬ ê²½ìš°
         if (line.charIndex == 0)
         {
-            // ¸ğµç ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
+            // ëª¨ë“  ì´ë¯¸ì§€ ë¹„í™œì„±í™”
             for (int i = 0; i < charImgs.Length; i++)
             {
                 charImgs[i].gameObject.SetActive(false);
             }
-
+            // ëŒ€í™”ì°½ì„ ìˆ¨ê¸°ê³  í”Œë ˆì´ì–´ ì„ íƒ ë²„íŠ¼ì„ ìƒì„±
             playerDialog.SetActive(true);
             dialogUI.SetActive(false);
+            // line ì…ë ¥ (ëŒ€ì‚¬ / ì—°ì¶œ / ì‚¬ìš´ë“œ / ë¸Œê¸ˆ / ë°°ê²½)
             playerDialogBox.text = line.dialog;
         }
-        else
+        else // ì£¼ì¸ê³µ ì´ì™¸ì˜ ìºë¦­í„° ëŒ€ì‚¬ê°€ ë‚˜ì˜¬ ê²½ìš° (ì´ë¯¸ì§€ í‘œì‹œ & ëŒ€ì‚¬ & ì´ë¦„ ë³€ê²½)
         {
-            // ¸ğµç ÀÌ¹ÌÁö ºñÈ°¼ºÈ­ ÈÄ ÇØ´ç ÀÎµ¦½º¸¸ È°¼ºÈ­
+            // ëª¨ë“  ì´ë¯¸ì§€ ë¹„í™œì„±í™” í›„ í•´ë‹¹ ì¸ë±ìŠ¤ë§Œ í™œì„±í™”
             for (int i = 0; i < charImgs.Length; i++)
             {
                 charImgs[i].gameObject.SetActive(i == line.charIndex);
             }
-
+            // í”Œë ˆì´ì–´ ì„ íƒ ë²„íŠ¼ì„ ìˆ¨ê¸°ê³ , ëŒ€í™”ì°½ì„ ë‚˜íƒ€ë‚˜ê²Œ í•¨
             playerDialog.SetActive(false);
             dialogUI.SetActive(true);
+
+            // line ì…ë ¥ (ì´ë¦„ / ëŒ€ì‚¬ / ì´ë¯¸ì§€ / ìœ„ì¹˜ / ì• ë‹ˆë©”ì´ì…˜ / ì‚¬ìš´ë“œ / ë¸Œê¸ˆ / ë°°ê²½)
             charNameText.text = line.charName;
             dialogText.text = line.dialog;
             SetLocation(line.location, line.charIndex);
+            // charImgs[line.charIndex].sprite = 
         }
     }
 
-    // ´ÙÀ½ ´ë»ç·Î ³Ñ¾î°¡´Â ¿¹½Ã (³ªÁß¿¡ ¹öÆ°¿¡ ¿¬°á)
+    // ë‹¤ìŒ ëŒ€ì‚¬ë¡œ ë„˜ì–´ê°€ëŠ” ì˜ˆì‹œ (ë‚˜ì¤‘ì— ë²„íŠ¼ì— ì—°ê²°)
     public void NextLine()
     {
         if (currentIndex < dialogLines.Count - 1)
@@ -128,7 +134,7 @@ public class DialogParser : MonoBehaviour
         }
         else
         {
-            Debug.Log("¸ğµç ´ë»ç Á¾·á");
+            Debug.Log("ëª¨ë“  ëŒ€ì‚¬ ì¢…ë£Œ");
         }
     }
     public void PreviousLine()
@@ -140,7 +146,7 @@ public class DialogParser : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ã¹ ´ë»ç Ãâ·Â ¿Ï·á");
+            Debug.Log("ì²« ëŒ€ì‚¬ ì¶œë ¥ ì™„ë£Œ");
         }
     }
     void SetLocation(string location, int imgNum)
