@@ -23,8 +23,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
 
-    //public PlayerController PlayerController { get; set; }
-
     public void SkillInit()
     {
         Debug.Log("스킬 3 초기화");
@@ -32,22 +30,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SkillLevel = 0;
         SlotIndex = -1;
     }
-
-    //private void Awake()
-    //{
-    //    //_playerController = GetComponent<PlayerControllerTypeA_Copy>();
-    //    SkillData = _data;
-
-    //    _animator = GetComponent<Animator>();
-    //}
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha3))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
 
     public void UseSkill(Transform attacker)
     {
@@ -227,8 +209,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
         while (remaining > 0f)
         {
             //Debug.Log($"쿨타임 남음: {remaining}초");

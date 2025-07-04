@@ -37,22 +37,6 @@ public class SkillLogic_6 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
-    //private void Awake()
-    //{
-    //    _playerController = GetComponent<PlayerControllerTypeA_Copy>();
-    //    SkillData = _data;
-
-    //    _animator = GetComponent<Animator>();
-    //}
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha6))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
-
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -181,7 +165,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
         while (remaining > 0f)
         {
             yield return new WaitForSeconds(1f);

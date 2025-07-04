@@ -120,8 +120,7 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
         while (remaining > 0f)
         {
             //Debug.Log($"쿨타임 남음: {remaining}초");
