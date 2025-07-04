@@ -11824,6 +11824,7 @@ MonoBehaviour:
   - 0
   - 0
   triggerKeys: 00000000000000000000000000000000
+  _disableImages: []
   currentCooltimes:
   - 0
   - 0
@@ -15951,12 +15952,13 @@ MonoBehaviour:
   attackText: {fileID: 573127439}
   defenseText: {fileID: 1801692276}
   _hpSlider: {fileID: 0}
+  _shieldSlider: {fileID: 0}
   hpText: {fileID: 444780597}
   _warmthText: {fileID: 269302463}
   _spritenergyText: {fileID: 2120174344}
   _soulText: {fileID: 1627908608}
   timeText: {fileID: 663183907}
-  retrycoolTimeText: {fileID: 0}
+  retrycoolTimeText: {fileID: 1796644688}
   txt_Nickname: {fileID: 2089186113}
 --- !u!1 &1304602922
 GameObject:
@@ -20493,6 +20495,7 @@ MonoBehaviour:
   attackText: {fileID: 1375299178}
   defenseText: {fileID: 2083332765}
   _hpSlider: {fileID: 1211996533}
+  _shieldSlider: {fileID: 0}
   hpText: {fileID: 77163144}
   _warmthText: {fileID: 688341977}
   _spritenergyText: {fileID: 1599153278}
@@ -22982,7 +22985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1795002595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23038,7 +23041,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 800, y: 100}
+  m_AnchoredPosition: {x: 614, y: 100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1796644686
@@ -26894,6 +26897,7 @@ MonoBehaviour:
   - 0
   - 0
   triggerKeys: 000000000000000000000000
+  _disableImages: []
   currentCooltimes:
   - 0
   - 0

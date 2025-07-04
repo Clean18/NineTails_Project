@@ -6,6 +6,6 @@ public class FailedPopUp : BaseUI
 {
     private void Start()
     {
-        GetEvent("Close").Click += data => UIManager.Instance.ClosePopUp();
+        GetEvent("Btn_close").Click += data => UIManager.Instance.ClosePopUp();
     }
 }
