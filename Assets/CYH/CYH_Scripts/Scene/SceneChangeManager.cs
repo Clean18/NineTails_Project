@@ -7,29 +7,29 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeManager : Singleton<SceneChangeManager>
 {
-    // 1. Dictionary<TextAsset이름, 씬 이름>
-    // 2. 각 씬을 딕셔너리 인덱스 순서대로 로드
-    // 3. 로드한 씬이 대화씬이라면 DialogParser DialogName에 씬 이름 넣어주기
-
     private AsyncOperation _asyncLoad;
 
-    private float _loadStartTime;                       // 로딩 시작 시각 
-    private float _minLoadingTime;                      // 최소 로드 시간
-    private string _targetSceneName;                    // 로드할 씬
+    private float _loadStartTime;                           // 로딩 시작 시각 
+    private float _minLoadingTime;                          // 최소 로드 시간
+    private string _targetSceneName;                        // 로드할 씬
 
-    [SerializeField] private int SceneNum = 0;          // 현재 씬 번호                     
-
-    private Dictionary<string, string> _gameSceneDict;  // 스테이지 정보 딕셔너리
-
-    [SerializeField] private List<string> _stageInfo;   // 스테이지 리스트
+    [SerializeField] private int _currentSceneIndex = 0;    // 현재 씬 번호                     
+    [SerializeField] private List<string> _stageInfo;       // 스테이지 리스트
+    private Dictionary<string, string> _gameSceneDict;      // 스테이지 정보 딕셔너리
 
 
     protected override void Awake()
     {
         base.Awake();
 
-        _gameSceneDict = LoadCsvToDictionary("Csvs/GameScenes");
         _stageInfo = LoadCsvToList("Csvs/StageInfo");
+        _gameSceneDict = LoadCsvToDictionary("Csvs/GameScenes");
+    }
+
+    private void Start()
+    {
+        // GameStart 씬 로드
+        LoadSceneAsync(_gameSceneDict[_stageInfo[0]]);
     }
 
     void Update()
@@ -45,15 +45,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene", 5f);
 
         // 씬 -> 씬
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            SceneChangeManager.Instance.LoadSceneAsync("BattleScene");
-
-        // 씬 -> 씬
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            SceneChangeManager.Instance.LoadSceneAsync("BossScene");
-
-        // 씬 -> 씬
-        if (Input.GetKeyDown(KeyCode.Alpha4))
             SceneChangeManager.Instance.LoadNextScene();
     }
 
@@ -62,31 +54,20 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     /// </summary>
     public void LoadNextScene()
     {
-        // 현재 씬 이름
-        string currentSceneName = SceneManager.GetActiveScene().name;
+        // 다음 인덱스 계산
+        int nextIndex = _currentSceneIndex + 1;
 
-        // 현재 씬의 인덱스
-        SceneNum = _stageInfo.IndexOf(currentSceneName);
-        Debug.Log($"currentScene : {currentSceneName} : {SceneNum}번째 씬");
-
-        // 다음 씬 인덱스
-        int nextIndex = SceneNum + 1;
-        Debug.Log($"nextIndex : {nextIndex}");
-
-        if (SceneNum >= 0 && nextIndex < _stageInfo.Count)
+        // 유효 범위 체크
+        if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
-            // 리스트에서 바로 다음 씬 이름 가져오기
-            string nextSceneName = _gameSceneDict[_stageInfo[nextIndex]];
-            Debug.Log($"nextSceneName : {nextSceneName}");
-
-            // 씬 로드
-            LoadSceneAsync(nextSceneName);
-            Debug.Log($"nextSceneName : {nextSceneName} : {nextIndex}번째 씬 로드 완료");
-            //LoadFileName();
+            // 씬 정보로 씬 이름 가져오기
+            string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
+            LoadSceneAsync(nextScene);
+            _currentSceneIndex = nextIndex;
         }
         else
         {
-            Debug.LogWarning("로드 불가");
+            Debug.LogWarning("더 이상 로드할 씬 없음");
         }
     }
 
@@ -110,7 +91,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         // 딕셔너리의 key -> 리스트로 변환
 
         // DialogName에 들어갈 파일 이름
-        string dialogFileName = _stageInfo[SceneNum];
+        string dialogFileName = _stageInfo[_currentSceneIndex];
 
         // 씬 내 DialogParser 컴포넌트 찾아서 세팅
         var parser = FindObjectOfType<DialogParser>();
