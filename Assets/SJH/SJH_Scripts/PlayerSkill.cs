@@ -27,8 +27,6 @@ public class PlayerSkill
     public List<ISkill> HasSkills;
 	private SkillController _controller;
 	public ISkill DefaultAttack => SkillMapping[KeyCode.Mouse0];
-	//public SkillLogic_1 Skill1;
-	//public SkillLogic_2 Skill2;
 
 	// 슬롯인덱스 키코드 변환 딕셔너리
 	private readonly Dictionary<KeyCode, int> KeyCodeToSlotIndexDic = new()
@@ -46,14 +44,11 @@ public class PlayerSkill
 		{ 3, KeyCode.Alpha3 }
 	};
 
+    [SerializeField] private List<SaveSkillData> skillList;
 
 	public void InitSkill(List<SaveSkillData> skillDatas)
 	{
 		_controller = PlayerController.Instance.SkillController;
-
-        //if (_controller.SkillList[0] is SkillLogic_0_HitBox skill0) DefaultAttack = skill0;
-        //if (_controller.SkillList[1] is SkillLogic_1 skill1) Skill1 = skill1;
-        //if (_controller.SkillList[2] is SkillLogic_2 skill2) Skill2 = skill2;
 
         // 가진 스킬
         HasSkills = new();
@@ -66,8 +61,7 @@ public class PlayerSkill
             [KeyCode.Alpha3] = null,
         };
 
-		// 기본공격 미리 추가
-
+        // 단축키 초기화
 		foreach (var data in skillDatas)
 		{
 			if (data.SkillIndex < 0) continue;
@@ -77,8 +71,21 @@ public class PlayerSkill
 			skill.SkillLevel = data.SkillLevel;
 
 			KeyCode key = SlotIndexToKeyCode(data.SlotIndex);
-			// 기본공격 제외 추가
-			if (key != KeyCode.Mouse0 && data.SkillIndex != 0) SkillMapping[key] = skill;
+
+            // 기본공격 제외 추가
+            if (key != KeyCode.Mouse0 && data.SkillIndex != 0 && key != KeyCode.None)
+            {
+                SkillMapping[key] = skill;
+                skill.SlotIndex = data.SlotIndex;
+            }
+            // 남은 스킬 추가
+            else
+            {
+                if (data.SkillIndex == 0) continue;
+                skill.SlotIndex = -1;
+                HasSkills.Add(skill);
+            }
+
 		}
 		Debug.Log("플레이어 스킬 초기화 완료");
 	}
@@ -124,7 +131,8 @@ public class PlayerSkill
                 SkillLevel = skill.SkillLevel
             });
         }
-
+        Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
+        skillList = saveSkills;
 		return saveSkills;
 	}
 
@@ -139,7 +147,7 @@ public class PlayerSkill
     {
         if (_controller.SkillList.Count < 1 || _controller.SkillList.Count < skillIndex)
         {
-            Debug.Log("스킬이 없습니다.1");
+            Debug.Log("스킬컨트롤러에 스킬 프리팹이 없습니다.1");
             return;
         }
 
@@ -147,11 +155,10 @@ public class PlayerSkill
 
         if (newSkill == null)
         {
-            Debug.Log("스킬이 없습니다.2");
+            Debug.Log("스킬 인덱스에 맞는 스킬이 없습니다.");
             return;
         }
 
-        // TODO : 스킬 중복체크
         if (SkillMapping.ContainsValue(newSkill) || HasSkills.Contains(newSkill))
         {
             Debug.Log($"{newSkill.SkillData.SkillName} 스킬은 이미 가지고 있는 스킬입니다.");
@@ -184,6 +191,7 @@ public class PlayerSkill
             HasSkills.Add(newSkill);
             Debug.Log($"{newSkill.SkillData.SkillName} 스킬 획득");
         }
+        SkillButton.Instance.UIInit();
     }
 
     public List<ISkill> GetSkillMappingList() => SkillMapping.Values.ToList();

@@ -3361,49 +3361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ee0ce260b8b4441956d2c759f2e451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillUIList:
-  - icon: {fileID: 82357186668139229}
-    descText: {fileID: 1420883545783448223}
-    costText: {fileID: 2726915309609962227}
-    upgradeButton: {fileID: 5802765027898336238}
-    getButton: {fileID: 935289814872467836}
-    Active: {fileID: 5389961896382861886}
-  - icon: {fileID: 6696744049009875279}
-    descText: {fileID: 2933848726702196163}
-    costText: {fileID: 5407503598939023715}
-    upgradeButton: {fileID: 2664678796000616690}
-    getButton: {fileID: 1719967804254983750}
-    Active: {fileID: 3526408503357360829}
-  - icon: {fileID: 2436478849998632079}
-    descText: {fileID: 868704341503522985}
-    costText: {fileID: 7910605707886468155}
-    upgradeButton: {fileID: 5712601063309810497}
-    getButton: {fileID: 6111039326732603699}
-    Active: {fileID: 7271889194119777606}
-  - icon: {fileID: 2481044360601984148}
-    descText: {fileID: 1419164754331684766}
-    costText: {fileID: 1575789807940349073}
-    upgradeButton: {fileID: 8761576432900310632}
-    getButton: {fileID: 1945094006523972476}
-    Active: {fileID: 5325973334568998716}
-  - icon: {fileID: 4211390079008827773}
-    descText: {fileID: 3368539244273310410}
-    costText: {fileID: 3747135207368988057}
-    upgradeButton: {fileID: 2064579089281338625}
-    getButton: {fileID: 6848652222635013647}
-    Active: {fileID: 651532544736685089}
-  - icon: {fileID: 4704999630895422908}
-    descText: {fileID: 1322181518155541790}
-    costText: {fileID: 7920918462285842381}
-    upgradeButton: {fileID: 6157167676365694689}
-    getButton: {fileID: 8353134204862689732}
-    Active: {fileID: 4056711654926250655}
-  - icon: {fileID: 3402717196456442342}
-    descText: {fileID: 1211724270913832531}
-    costText: {fileID: 5775298361976674141}
-    upgradeButton: {fileID: 4669812151254363465}
-    getButton: {fileID: 7522508873599069995}
-    Active: {fileID: 6212592742797738076}
+  skillUIList: []
 --- !u!1 &3622339684397873728
 GameObject:
   m_ObjectHideFlags: 0
