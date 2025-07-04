@@ -247,6 +247,7 @@ MonoBehaviour:
   CurrentHealth: 0
   DamageReduceRate: 0
   IdleTime: 3
+  sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}
   BossAnimator: {fileID: 7577438767268800427}
   WarningLineVertical: {fileID: 9209678113999117585, guid: d874238c6b0601341becdf7596fbc7e0, type: 3}
