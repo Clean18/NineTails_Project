@@ -9,15 +9,17 @@ using UnityEngine.UI;
 public class SkillUI
 {
 	public Image _icon;
+    public TMP_Text _level;
 	public TMP_Text _descText;
 	public TMP_Text _costText;
 	public Button _upgradeButton;
 	public Button _getButton;
 	public Button _active;
 
-    public SkillUI(Image icon, TMP_Text desc, TMP_Text cost, Button upgrade, Button get, Button active)
+    public SkillUI(Image icon, TMP_Text level, TMP_Text desc, TMP_Text cost, Button upgrade, Button get, Button active)
     {
         _icon = icon;
+        _level = level;
         _descText = desc;
         _costText = cost;
         _upgradeButton = upgrade;
@@ -111,13 +113,14 @@ public class SkillPopUp : BaseUI
             string index = i.ToString();
 
             var icon = GetUI<Image>($"Icon{index}");
+            var level = GetUI<TMP_Text>($"Level{index}");
             var desc = GetUI<TMP_Text>($"Desc{index}Text");
             var cost = GetUI<TMP_Text>($"Cost{index}Text");
             var upgrade = GetUI<Button>($"UpgradeBtn{index}");
             var get = GetUI<Button>($"GetBtn{index}");
             var active = GetUI<Button>($"Active{index}");
 
-            var ui = new SkillUI(icon, desc, cost, upgrade, get, active);
+            var ui = new SkillUI(icon, level, desc, cost, upgrade, get, active);
             skillUIList.Add(ui);
         }
     }
@@ -159,6 +162,7 @@ public class SkillPopUp : BaseUI
 				// 스킬컨트롤러에서 기본 정보 받아오기
 				// 아이콘
 				ui._icon.sprite = allSkills[i].SkillData.SkillSprite;
+                ui._level.text = "Lv. 0";
 				// 설명
 				ui._descText.text = allSkills[i].SkillData.Description;
 				// 강화 비용
@@ -172,6 +176,10 @@ public class SkillPopUp : BaseUI
 			{
 				// 아이콘
 				ui._icon.sprite = skillData.SkillData.SkillSprite;
+
+                // 스킬 레벨
+                ui._level.text = $"Lv. {skillData.SkillLevel}";
+
                 float cur1 = GetSkillDamage(i, skillData.SkillLevel) * 100;
                 float next1 = GetSkillDamage(i, skillData.SkillLevel + 1) * 100;
 
