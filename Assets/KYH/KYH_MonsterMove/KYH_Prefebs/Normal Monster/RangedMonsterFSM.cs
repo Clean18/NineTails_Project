@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
     [SerializeField] private float ProjectileSpeed = 8f;       // 투사체 속도
     [SerializeField] private float AttackDamage = 10f;         // 투사체 데미지
     [SerializeField] private AudioClip AttackSound;            // 공격 사운드
+    [SerializeField] private AudioClip HitSound;               // 피격 사운드
+    [SerializeField] private AudioClip DeadSound;              // 죽을때 사운드
     [SerializeField] private Animator MonsterAnimator;         // 애니메이터
 
 
@@ -71,10 +74,19 @@ public class RangedMonsterFSM : BaseMonsterFSM
 
         MonsterAnimator.Play("Idle_Ranged");
     }
+
+    public override void TakeDamage(long damage)
+    {
+        base.TakeDamage(damage); // 부모의 공통 데미지 처리 로직 호출
+
+        // 피격 사운드 재생
+        PlaySound(HitSound); // BaseMonsterFSM에 정의된 PlaySound(clip)
+    }
     protected override void Die()
     {
         base.Die();
         MonsterAnimator.Play("Dead_Ranged");
+        PlaySound(DeadSound);
 
         StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
         // 오브젝트 비활성화

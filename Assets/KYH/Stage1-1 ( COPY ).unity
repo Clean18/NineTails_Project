@@ -11938,6 +11938,7 @@ MonoBehaviour:
   - 0
   - 0
   triggerKeys: 00000000000000000000000000000000
+  _disableImages: []
   currentCooltimes:
   - 0
   - 0
@@ -27006,6 +27007,7 @@ MonoBehaviour:
   - 0
   - 0
   triggerKeys: 000000000000000000000000
+  _disableImages: []
   currentCooltimes:
   - 0
   - 0
