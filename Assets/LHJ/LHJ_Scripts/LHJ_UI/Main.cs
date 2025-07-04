@@ -14,12 +14,16 @@ public class Main : BaseUI, IUI
     [SerializeField] private TMP_Text _soulText;                // 혼백
     [SerializeField] private TextMeshProUGUI timeText;          // 미션 시간
     [SerializeField] private TextMeshProUGUI retrycoolTimeText; // 미션 재도전 남은시간
+
+    [SerializeField] private TMP_Text txt_Nickname;  // 닉네임 텍스트
+
     private void Start()
     {
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
         UIInit();
+        UpdateNicknameUI();
     }
 
     void OnEnable() => PlayerStatUI();
@@ -77,6 +81,22 @@ public class Main : BaseUI, IUI
         // 플레이어 스킬이 7개가 아니면 활성화
         _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.GetSkillData().Count != 7);
         _soulText.text = $"{player.GetSoul()}";
+    }
+
+    // 닉네임 갱신
+    public void UpdateNicknameUI()
+    {
+        // 현재 플레이어 이름값
+        string playerName = UIManager.Instance.PlayerName;
+        if (string.IsNullOrEmpty(playerName))
+        {
+            txt_Nickname.text = "구미호";
+        }
+        else
+        {
+            // 플레이어가 입력한 이름을 표시
+            txt_Nickname.text = playerName;
+        }
     }
     private void Update()
     {

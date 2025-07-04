@@ -143,8 +143,6 @@ public class StagePopUp : BaseUI
                 SceneManager.LoadScene(sceneName);
             }
         };
-
-
         GetEvent("Btn_close").Click += data => UIManager.Instance.ClosePopUp();
     }
 }

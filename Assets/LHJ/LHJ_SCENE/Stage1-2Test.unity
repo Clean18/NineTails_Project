@@ -15957,6 +15957,7 @@ MonoBehaviour:
   _soulText: {fileID: 1627908608}
   timeText: {fileID: 663183907}
   retrycoolTimeText: {fileID: 0}
+  txt_Nickname: {fileID: 2089186113}
 --- !u!1 &1304602922
 GameObject:
   m_ObjectHideFlags: 0
@@ -20498,6 +20499,7 @@ MonoBehaviour:
   _soulText: {fileID: 0}
   timeText: {fileID: 29473411}
   retrycoolTimeText: {fileID: 1604760717}
+  txt_Nickname: {fileID: 0}
 --- !u!1 &1617508341
 GameObject:
   m_ObjectHideFlags: 0

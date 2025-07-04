@@ -60,7 +60,15 @@ public class MissionManager : Singleton<MissionManager>
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
             MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
-            UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
+            if (currentMission.Id == "M1") // M1미션일때
+            {
+                UIManager.Instance.ShowPopUp<NameInputPopUp>(); // 닉네임 팝업창 생성
+            }
+            else
+            {
+                // 그 외 미션은 일반 클리어 팝업
+                UIManager.Instance.ShowPopUp<CompletePopUp>();  // 미션 성공 팝업창 생성
+            }
         }
         else
         {

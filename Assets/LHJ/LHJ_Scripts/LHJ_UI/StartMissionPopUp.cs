@@ -15,10 +15,9 @@ public class StartMissionPopUp : BaseUI
     {
         GetEvent("Btn_Y").Click += data => {
             UIManager.Instance.ClosePopUp();
-            MissionManager.Instance.StartMission(_sceneName);
+            MissionManager.Instance.StartMission(_sceneName); // 해당 씬에 해당되는 미션 시작
             SceneManager.LoadScene(_sceneName); // 씬 이동
         };
         GetEvent("Btn_N").Click += data => UIManager.Instance.ClosePopUp();
     }
-
 }
