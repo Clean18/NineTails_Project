@@ -51,7 +51,7 @@ public class UpgradePopUp : BaseUI
         var currentData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.GetGradeType(), equipmentData.Level);
         var nextData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.GetGradeType(), equipmentData.Level + 1);
 
-		_currentGradeText.text = $"현재 등급 : {equipmentData.Grade}\n현재 레벨 : {equipmentData.Level}";
+		_currentGradeText.text = $"현재 등급 : {GradeEngToKor(equipmentData.Grade)}\n현재 레벨 : {equipmentData.Level}";
 
         // TODO : 무기 등급에 따라 텍스트 바뀜
         string nextGradeText = "";
@@ -76,6 +76,17 @@ public class UpgradePopUp : BaseUI
         if (promotionBtn != null)
         {
             promotionBtn.gameObject.SetActive(equipmentData.Level == 50);
+        }
+    }
+
+    string GradeEngToKor(string eng)
+    {
+        switch(eng)
+        {
+            case "R": return "고급";
+            case "SR": return "보물";
+            case "SSR": return "설화";
+            default: return "평범";
         }
     }
 }

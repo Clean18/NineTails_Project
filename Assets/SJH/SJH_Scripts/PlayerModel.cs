@@ -88,6 +88,7 @@ public class PlayerModel
 	public long GetDefense() => Data.Defense;
 	public long GetMaxHp() => Data.MaxHp;
 	public long GetHp() => Data.Hp;
+	public long GetShieldHp() => Data.ShieldHp;
 	public long GetWarmth() => Cost.Warmth;
 	public long GetSpiritEnergy() => Cost.SpiritEnergy;
     public long GetSoul() => Cost.Soul;
