@@ -104,9 +104,10 @@ public struct AchievementInfo
     public string Id;            // 업적고유 ID
     public string Name;          // 업적이름
     public string Scene;         // 스테이지
-    public float Purpose;          // 업적 달성 조건
+    public float Purpose;        // 업적 달성 조건
     public int WarmthReward;     // 온정보상
     public int SpritReward;      // 영기보상
+    public string Description;   // 업적 내용
 }
 #endregion
 
@@ -446,6 +447,7 @@ public class DataManager : Singleton<DataManager>
                 Purpose = float.Parse(Clean(cells[4])),
                 WarmthReward = int.Parse(Clean(cells[5])),
                 SpritReward = int.Parse(Clean(cells[6])),
+                Description = Clean(cells[7])
             };
             AchievementTable[info.Id] = info;
         }

@@ -184,6 +184,7 @@ public class AchievementManager : Singleton<AchievementManager>
 
             if (PlayerController.Instance.GetPower() < purpose)     // 권장 전투력 보다 전투력이 낮을때
             {
+                AchievedIds.Add(achievement.Id);    // 업적 달성 처리
                 Debug.Log($"[업적 달성] {achievement.Name} - 권장 전투력 미만 클리어 (보유 전투력: {PlayerController.Instance.GetPower()}, 조건: {purpose})");
                 Reward(achievement);
             }
@@ -194,22 +195,28 @@ public class AchievementManager : Singleton<AchievementManager>
 
                 if (hpPercent < purpose)    // 클리어 당시 플레이어 체력이 목적퍼센트보다 미만일때
                 {
+                    AchievedIds.Add(achievement.Id);    // 업적 달성 처리
                     Debug.Log($"[업적 달성] {achievement.Name} - 체력 조건 충족 현재: {hpPercent}, 조건: {purpose})");
                     Reward(achievement);
                 }
             }
             else if (purpose == 0f) // 피격되지 않고 클리어
             {
+                AchievedIds.Add(achievement.Id);    // 업적 달성 처리
                 Debug.Log($"[업적 달성] {achievement.Name} - 노히트 클리어");
                 Reward(achievement);
             }
         }
     }
-    private void Reward(AchievementInfo achievementInfo)
+    public void Reward(AchievementInfo achievementInfo)
     {
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
         PlayerController.Instance.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
         PlayerController.Instance.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
         // TODO : 업적 정보 넘겨서 클리어 체크
+    }
+    public bool IsAchieved(string achievementId)
+    {
+        return AchievedIds.Contains(achievementId);
     }
 }

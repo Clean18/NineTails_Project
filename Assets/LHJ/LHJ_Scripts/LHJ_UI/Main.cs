@@ -42,7 +42,7 @@ public class Main : BaseUI, IUI
             };
         }
         PlayerStatUI();
-
+        GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
     }
 
