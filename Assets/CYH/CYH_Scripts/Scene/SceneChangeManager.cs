@@ -7,21 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeManager : Singleton<SceneChangeManager>
 {
-    // 1. Dictionary<TextAsset이름, 씬 이름>
-    // 2. 각 씬을 딕셔너리 인덱스 순서대로 로드
-    // 3. 로드한 씬이 대화씬이라면 DialogParser DialogName에 씬 이름 넣어주기
-
     private AsyncOperation _asyncLoad;
 
-    private float _loadStartTime;                       // 로딩 시작 시각 
-    private float _minLoadingTime;                      // 최소 로드 시간
-    private string _targetSceneName;                    // 로드할 씬
+    private float _loadStartTime;                           // 로딩 시작 시각 
+    private float _minLoadingTime;                          // 최소 로드 시간
+    private string _targetSceneName;                        // 로드할 씬
 
-    [SerializeField] private int SceneNum = 0;          // 현재 씬 번호                     
-
-    private Dictionary<string, string> _gameSceneDict;  // 스테이지 정보 딕셔너리
-
-    [SerializeField] private List<string> _stageInfo;   // 스테이지 리스트
+    public int _currentSceneIndex = 0;                      // 현재 씬 번호                     
+    public List<string> _stageInfo;                         // 스테이지 리스트
+    private Dictionary<string, string> _gameSceneDict;      // 스테이지 정보 딕셔너리
 
 
     protected override void Awake()
@@ -32,97 +26,43 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         _stageInfo = LoadCsvToList("Csvs/StageInfo");
     }
 
-    void Update()
+    private void Start()
     {
-        // 테스트
-
-        // 일반씬 -> 로딩씬 -> 목표씬
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene");
-
-        // 일반씬 -> 로딩씬 -> 목표씬 (최소 로드시간 보장)
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene", 5f);
-
-        // 씬 -> 씬
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            SceneChangeManager.Instance.LoadSceneAsync("BattleScene");
-
-        // 씬 -> 씬
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            SceneChangeManager.Instance.LoadSceneAsync("BossScene");
-
-        // 씬 -> 씬
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            SceneChangeManager.Instance.LoadNextScene();
+        // GameStart 씬 로드
+        LoadSceneAsync(_gameSceneDict[_stageInfo[0]]);
     }
 
     /// <summary>
-    /// 현재 씬의 다음 씬 로드
+    /// 현재 씬의 다음 씬 로드 (SceneChangeManager.Instance.LoadNextScene())
     /// </summary>
     public void LoadNextScene()
     {
-        // 현재 씬 이름
-        string currentSceneName = SceneManager.GetActiveScene().name;
+        // 다음 인덱스 계산
+        int nextIndex = _currentSceneIndex + 1;
 
-        // 현재 씬의 인덱스
-        SceneNum = _stageInfo.IndexOf(currentSceneName);
-        Debug.Log($"currentScene : {currentSceneName} : {SceneNum}번째 씬");
-
-        // 다음 씬 인덱스
-        int nextIndex = SceneNum + 1;
-        Debug.Log($"nextIndex : {nextIndex}");
-
-        if (SceneNum >= 0 && nextIndex < _stageInfo.Count)
+        // 유효 범위 체크
+        if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
-            // 리스트에서 바로 다음 씬 이름 가져오기
-            string nextSceneName = _gameSceneDict[_stageInfo[nextIndex]];
-            Debug.Log($"nextSceneName : {nextSceneName}");
-
-            // 씬 로드
-            LoadSceneAsync(nextSceneName);
-            Debug.Log($"nextSceneName : {nextSceneName} : {nextIndex}번째 씬 로드 완료");
-            //LoadFileName();
+            // 씬 정보로 씬 이름 가져오기
+            string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
+            LoadSceneAsync(nextScene);
+            _currentSceneIndex = nextIndex;
         }
         else
         {
-            Debug.LogWarning("로드 불가");
+            Debug.LogWarning("더 이상 로드할 씬 없음");
         }
     }
 
     /// <summary>
-    /// 현재 씬의 다음 씬 로드 (씬 이름)
+    /// 다른 씬 로드 (스테이지 정보 ex.Stage1-1_Start)
     /// </summary>
-    public void LoadNextScene(string sceneName)
+    public void LoadNextScene(string stageInfo)
     {
-        LoadSceneAsync(sceneName);
-    }
-
-    /// <summary>
-    /// DialogParser DialogName에 파일 이름 넣기
-    /// </summary>
-    public void LoadFileName()
-    {
-        // 현재 씬이 대화씬인지 체크
-        if (SceneManager.GetActiveScene().name != "DialogScene")
-            return;
-
-        // 딕셔너리의 key -> 리스트로 변환
-
-        // DialogName에 들어갈 파일 이름
-        string dialogFileName = _stageInfo[SceneNum];
-
-        // 씬 내 DialogParser 컴포넌트 찾아서 세팅
-        var parser = FindObjectOfType<DialogParser>();
-        if (parser != null)
-        {
-            //parser.DialogName = dialogFileName;
-            Debug.Log($"DialogName 변경: {dialogFileName}");
-        }
-        else
-        {
-            Debug.LogWarning("현재 씬에 DialogParser 없음");
-        }
+        // stageInfo 씬 로드
+        LoadSceneAsync(_gameSceneDict[stageInfo]);
+        // 현재 씬 번호 -> 이동할 씬 번호로 변경                     
+        _currentSceneIndex = _stageInfo.IndexOf(stageInfo);
     }
 
     /// <summary>
@@ -169,9 +109,9 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     /// </summary>
     private IEnumerator LoadTwoSceneCoroutine(string loadingSceneName)
     {
-        // 1) 로딩씬 바로 로드
+        // 로딩씬 바로 로드
         yield return StartCoroutine(LoadSceneCoroutine(loadingSceneName));
-        // 2) 목표씬 바로 로드
+        // 목표씬 바로 로드
         yield return StartCoroutine(LoadSceneCoroutine(_targetSceneName));
     }
 
@@ -180,10 +120,9 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     /// </summary>
     private IEnumerator LoadTwoSceneCoroutineWithMinTime()
     {
-        // 1) 로딩씬 바로 로드
+        // 로딩씬 바로 로드
         yield return StartCoroutine(LoadSceneCoroutine("LoadingScene"));
-
-        // 2) 목표씬은 최소 로드시간 보장 후 로드
+        // 목표씬은 최소 로드시간 보장 후 로드
         yield return StartCoroutine(LoadingLoadSceneCoroutine(_targetSceneName, _minLoadingTime));
     }
 
@@ -209,9 +148,11 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             yield return null;
         }
 
+        //TODO: DialogScene인 경우 Player 초기화 스킵 처리
+
         // 로딩에 걸린 시간
         float elapsed = Time.time - _loadStartTime;
-        Debug.Log($"[{sceneName}] 로딩 완료: {elapsed:F1}초 소요");
+        Debug.Log($"[{_stageInfo[_currentSceneIndex]} / {sceneName}] 로딩 완료: {elapsed:F1}초 소요");
     }
 
     /// <summary>
@@ -225,7 +166,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         // 씬 로딩 완료되었을 때 대기
         _asyncLoad.allowSceneActivation = false;
 
-        // 로딩 진행도가 90% 이상 || 경과시간이 최소보장시간 이상일 때까지 대기
+        // 로딩 진행도가 90% 미만 || 경과시간이 최소보장시간 미만일 때 대기
         while (_asyncLoad.progress < 0.9f || Time.time - _loadStartTime < minTime)
         {
             float loadProgress = Mathf.Clamp01(_asyncLoad.progress / 0.9f);
@@ -235,10 +176,12 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             yield return null;
         }
 
+        //TODO: DialogScene인 경우 Player 초기화 스킵 처리
+
         _asyncLoad.allowSceneActivation = true;
         while (!_asyncLoad.isDone) yield return null;
 
-        Debug.Log($"[{sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
+        Debug.Log($"[{_stageInfo[_currentSceneIndex]} / {sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
     }
     #endregion
 
