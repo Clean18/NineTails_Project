@@ -71,7 +71,9 @@ public class DialogParser : MonoBehaviour
 
     void Start()
     {
-        // dialogName = 입력값
+        // dialogName = 입력값 (추가완료)
+        var sceneManager = SceneChangeManager.Instance;
+        dialogName = sceneManager._stageInfo[sceneManager._currentSceneIndex];
 
         for (int i = 0; i < dialogDatas.Length; i++)
         {
