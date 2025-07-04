@@ -187,12 +187,15 @@ public class DialogParser : MonoBehaviour
         }
         // ----------------------------------------------------------------------------------------------------------------
         // 배경지정
-        for (int i = 0; i < bgSprites.Length; i++)
+        if (charIndex != -1)
         {
-            if (bgSprites[i].name == line.bgImg)
+            for (int i = 0; i < bgSprites.Length; i++)
             {
-                bgImg.sprite = bgSprites[i];
-                Debug.Log(line.bgImg);
+                if (bgSprites[i].name == line.bgImg)
+                {
+                    bgImg.sprite = bgSprites[i];
+                    Debug.Log(line.bgImg);
+                }
             }
         }
         // ----------------------------------------------------------------------------------------------------------------
@@ -220,6 +223,11 @@ public class DialogParser : MonoBehaviour
         }
         else if (charIndex == -1) // 이펙트 분류
         {
+            // 모든 캐릭터 이미지 비활성화
+            for (int i = 0; i < charImgs.Length; i++)
+            {
+                charImgs[i].gameObject.SetActive(false);
+            }
             if (line.charName == "sound") // 사운드 + 이펙트만 재생할 경우
             {
                 // Debug.Log(line.sound);

@@ -673,7 +673,7 @@ MonoBehaviour:
   - ???
   - "\uB0B4\uB808\uC774\uC158"
   nextButton: {fileID: 1909925383}
-  dialogName: Prologue
+  dialogName: Stage3-3_Last
   foxName: "\uAD6C\uBBF8\uD638"
   spacing: 90
   fadeDuration: 0.5

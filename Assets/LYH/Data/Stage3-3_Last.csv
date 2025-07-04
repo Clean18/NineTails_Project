@@ -32,16 +32,5 @@ index,charName,imgName,dialog,animation,location,sound,bgmusic,bg,extra1
 31,???,blackFox1,결국` 온 거야?,,,,stage3_bgm,flowerhill_1,
 32,???,blackFox2,어째서… 또…,,,,stage3_bgm,flowerhill_1,
 33,???,blackFox3,…언니.,,,,,flowerhill_1,
-34,,,,,,,,all_black,화면 전환(블랙 아웃)
-35,,,‘체험판은 여기까지입니다! 플레이해주셔서 감사합니다!’,,,,,end_menu,"크레딧과 함께 종료, 메인 메뉴로 복귀"
-36,,,,,,,,,
-37,,,,,,,,,
-38,,,,,,,,,
-39,,,,,,,,,
-40,,,,,,,,,
-41,,,,,,,,,
-42,,,,,,,,,
-43,,,,,,,,,
-44,,,,,,,,,
-45,,,,,,,,,
-46,,,,,,,,,
+34,background,,,,,,,black,화면 전환(블랙 아웃)
+35,내레이션,blackFox1,‘체험판은 여기까지입니다! 플레이해주셔서 감사합니다!’,,,,,end_menu,"크레딧과 함께 종료, 메인 메뉴로 복귀"
