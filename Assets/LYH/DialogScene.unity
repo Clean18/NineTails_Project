@@ -569,14 +569,19 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 1e4f5ab2b0b7a6b41b87c35c850636df, type: 3}
   - {fileID: 4900000, guid: 8fcfb28b3c4d48349bd5b87aff9ce68d, type: 3}
   - {fileID: 4900000, guid: e3bd307131791174aad4febd19a04923, type: 3}
+  - {fileID: 4900000, guid: b6b65093a210a9a4b9d945de68b508df, type: 3}
+  - {fileID: 4900000, guid: 9faa8c751b4f1fc4cb1fe4a9f56914cf, type: 3}
   - {fileID: 4900000, guid: be4477c45c737ff4ab92c8a3e1f1f2e4, type: 3}
   - {fileID: 4900000, guid: 51a806b04d86a5748a0b913d03d727b3, type: 3}
+  - {fileID: 4900000, guid: 90fd440679622b24ebc944c0b42d8a67, type: 3}
   - {fileID: 4900000, guid: b6668d886e4289843accfa83694c3ba5, type: 3}
   - {fileID: 4900000, guid: 25791561073aa3b4596a44afa453d917, type: 3}
   - {fileID: 4900000, guid: d8761dadf1ef2fb4e997f9649a4f344f, type: 3}
+  - {fileID: 4900000, guid: 39da8c44f8c4a3143be9d497be2c0a00, type: 3}
+  - {fileID: 4900000, guid: 588c546965f68a34cbc9cd602e8ba561, type: 3}
+  - {fileID: 4900000, guid: a8341cb6cc513fd42a9e00b4fc7a3ddd, type: 3}
   - {fileID: 4900000, guid: a847023228e9de544a3c5daf323ca682, type: 3}
   - {fileID: 4900000, guid: d52c237e7fc077742bdfe39dcd6fa2d4, type: 3}
-  - {fileID: 4900000, guid: 39da8c44f8c4a3143be9d497be2c0a00, type: 3}
   dialogData: {fileID: 4900000, guid: b497797a811bb4740928b0415efdbefe, type: 3}
   charNameText: {fileID: 60897171}
   dialogText: {fileID: 1439676008}
