@@ -136,8 +136,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{remaining} 초");
         while (remaining > 0f)
         {

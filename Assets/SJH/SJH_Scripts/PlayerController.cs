@@ -386,7 +386,7 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 공격력 * (1 + 가하는 피해 증가)
     /// </summary>
     /// <returns></returns>
-    public long GetTotalDamage() => (long)(_model.GetAttack() * (1f + _model.GetIncreseDamage()));
+    public long GetTotalDamage() => (long)((_model.GetAttack()  * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
     #endregion
 
     #region Cost 관련 함수
@@ -424,6 +424,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public float GetIncreseDamage(int level) => _model.GetIncreseDamage(level);
+    /// <summary>
+    /// 플레이어 장비의 스킬 쿨타임 감소율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetCalculateCooldown(float defaultCooldown) => _model.GetCalculateCooldown(defaultCooldown);
+    /// <summary>
+    /// 플레이어 장비의 공격력 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetEquipmentAttack() => _model.GetEquipmentAttack();
     #endregion
 
     #region Skill 관련 함수

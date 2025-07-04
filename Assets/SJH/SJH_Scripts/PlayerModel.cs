@@ -52,11 +52,10 @@ public class PlayerModel
 
         Quest = new PlayerQuest();
         Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
+    }
 
-	}
-
-	public void ApplyDamage(long damage)
-	{
+    public void ApplyDamage(long damage)
+    {
         string scene = SceneManager.GetActiveScene().name;
 
         if (scene == "1-3" || scene == "2-3" || scene == "3-3")
@@ -65,26 +64,19 @@ public class PlayerModel
         }
         Data.DecreaseHp(damage);
         if (Data.Hp <= 0)
-		{
+        {
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
         }
-	}
+    }
 
-	public void ApplyHeal(long amount)
-	{
-		Data.HealHp(amount);
-	}
+    public void ApplyHeal(long amount) => Data.HealHp(amount);
+    public void ApplyShield(long amount) => Data.HealShield(amount);
 
-	public void ApplyShield(long amount)
-	{
-		Data.HealShield(amount);
-	}
-
-	public bool GetIsDead() => Data.IsDead;
+    public bool GetIsDead() => Data.IsDead;
 	public long GetPower() => Data.PowerLevel;
-	public long GetAttack() => Data.Attack + (long)(Data.Attack * Equipment.Attack);
+	public long GetAttack() => Data.Attack;
 	public long GetDefense() => Data.Defense;
 	public long GetMaxHp() => Data.MaxHp;
 	public long GetHp() => Data.Hp;
@@ -277,116 +269,46 @@ public class PlayerModel
     #endregion
 
     #region Equipment 관련 함수
+    /// <summary>
+    /// Equipment 클래스 저장용 데이터 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
-	public void TryEnhance()
-	{
-		var player = PlayerController.Instance;
-		// SSR 등급은 무한히 강화가 되는 구조
-		if (Equipment.Grade == "SSR")
-		{
-			if (Cost.Warmth < Equipment.BaseSSRCost && !PlayerController.Instance.IsCheat)
-			{
-				Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
-				return;
-			}
-			Equipment.Level += 1;
-			Equipment.IncreaseDamageLevel += 1;
-			if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, Equipment.BaseSSRCost);
-			Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-			Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-
-			Equipment.BaseSSRCost++;          // 강화에 들어가는 재화가 1개씩 증가
-			return;
-		}
-		long nextUpgradeCost = DataManager.Instance.GetEquipmentUpgradeCost(Equipment.GradeType, Equipment.Level + 1);
-
-		// 다음등급 체크
-		if (nextUpgradeCost == -1)
-		{
-			Debug.Log($"더 이상 강화할 수 없습니다. {Equipment.Grade} / {Equipment.Level}");
-			return;
-		}
-
-		// 재화 체크
-		if (Cost.Warmth < nextUpgradeCost && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log("재화가 부족합니다");
-			return;
-		}
-
-		// 강화 성공
-		// 재화 감소
-		if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextUpgradeCost);
-		// 다음 강화 스탯 할당
-		var nextUpgradeStat = DataManager.Instance.GetEquipmentUpgradeInfo(Equipment.GradeType, Equipment.Level + 1);
-		Equipment.InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
-		Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-		Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-        AchievementManager.Instance?.CheckEnhancementAchievements(Equipment.Level); // 강화 업적 조건 체크
-        UIManager.Instance.MainUI?.PlayerStatUI();
-	}
-	public void TryPromote()
-	{
-		// 레벨 50인지 체크
-		var player = PlayerController.Instance;
-		if (Equipment.Level < 50)
-		{
-			Debug.Log($"레벨이 부족합니다. 현재 레벨 : {Equipment.Level}");
-			return;
-		}
-		if (Equipment.GradeType == GradeType.Rare)
-		{
-			Debug.Log("승급할 수 없는 등급입니다.");
-			return;
-		}
-
-		// 승급 테이블에서 내 장비랑 비교하기
-		var nextData = DataManager.Instance.GetEquipmentPromotionInfo(Equipment.GradeType);
-		if (nextData.CurrentGrade != Equipment.Grade)
-		{
-			Debug.Log("승급할 수 없는 등급입니다.");
-			return;
-		}
-
-		// 승급 재화 체크
-		if (nextData.WarmthCost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log("재화가 부족합니다.");
-			return;
-		}
-
-		// 재화 감소
-		if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
-
-		// 승급 확률 체크
-		float rate = UnityEngine.Random.value;
-		if (rate <= nextData.SuccessRate)
-		{
-			if (nextData.UpgradeGrade == "SSR")
-			{
-				Equipment.InitEquipment("SSR", 1, 1);
-				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-
-			}
-			else
-			{
-				Equipment.InitEquipment(nextData.UpgradeGrade, 1, 0);
-				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-                AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,true);
-            }
-		}
-		else
-		{
-			Debug.Log("승급에 실패했습니다...");
-            AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,false);
-            return;
-		}
-	}
+    /// <summary>
+    /// 장비 강화를 시도하는 함수
+    /// </summary>
+    public void TryEnhance() => Equipment.TryEnhance(Cost.Warmth);
+    /// <summary>
+    /// 장비 승급을 시도하는 함수
+    /// </summary>
+	public void TryPromote() => Equipment?.TryPromote(Cost.Warmth);
+    /// <summary>
+    /// 현재 장비 등급을 GradeType으로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public GradeType GetGradeType() => Equipment.GradeType;
-    public float GetIncreseDamage() => Equipment.GetIncreseDamage();
+    /// <summary>
+    /// 현재 장비의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage() => Equipment.IncreaseDamage;
+    /// <summary>
+    /// level(장비레벨)의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
     public float GetIncreseDamage(int level) => Equipment.GetIncreseDamage(level);
+    /// <summary>
+    /// 현재 장비의 스킬 쿨타임 감소율을 반환하는 함수
+    /// </summary>
+    /// <param name="defaultCooldown"></param>
+    /// <returns></returns>
+    public float GetCalculateCooldown(float defaultCooldown) => Equipment.GetCalculateCooldown(defaultCooldown);
+    /// <summary>
+    /// 현재 장비의 공격력 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetEquipmentAttack() => Equipment.Attack;
     #endregion
 
     #region PlayerSkill 관련 함수

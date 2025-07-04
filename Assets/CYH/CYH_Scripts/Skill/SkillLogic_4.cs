@@ -198,7 +198,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * SkillLevel));
-        long damage = (long)(PlayerController.Instance.GetAttack() * (0.15f + 0.0015f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (0.15f + 0.0015f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
