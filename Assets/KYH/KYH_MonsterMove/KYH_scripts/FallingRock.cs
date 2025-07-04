@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class FallingRock : MonoBehaviour
 {
@@ -16,16 +17,34 @@ public class FallingRock : MonoBehaviour
     [Header("참조 위치")]
     public Transform WarningPoint;                           // 낙하 대상 지점 ( BossMonsterSFM 에서 할당)
 
+    [Header("사운드 설정")]
+    [SerializeField] private AudioClip DropRockSound;                  // 낙석 충돌 사운드
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;           // Audio Mixer의 SFX 그룹
+    private AudioSource audioSource;                                   // 사운드 재생용 AudioSource
+
+
     private Rigidbody2D rb;
     private bool hasDealtDamage = false;        // 데미지 판정이 이미 이루어졌는지 여부확인
     private bool hasLaunched = false;           // 낙하가 시작되었는지의 여부 확인
-    [SerializeField] AudioClip DropRockSound;
+    [SerializeField] Animator DropRockAnimator;
 
     private void Start()
     {
-        AudioSource.PlayClipAtPoint(DropRockSound, transform.position);
+        
         rb = GetComponent<Rigidbody2D>();       // Rigidbody2D 컴포넌트 가져오기
-        rb.gravityScale = 0f;                   // 중력 제거      
+        rb.gravityScale = 0f;                   // 중력 제거
+                                                
+        // AudioSource 생성 및 설정 (Mixer 연결 포함)
+        audioSource = gameObject.AddComponent<AudioSource>();              // 런타임에 오디오 소스 추가
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;                // Mixer 그룹 연결 (SFX 그룹)
+        audioSource.playOnAwake = false;                                  // 자동 재생 방지
+        audioSource.loop = false;
+        
+        // 낙석 소리 재생 (PlayClipAtPoint 대신, Mixer 연동된 AudioSource로 재생)
+        if (DropRockSound != null)
+        {
+            audioSource.PlayOneShot(DropRockSound);
+        }
 
         if (WarningPoint != null)
         {
