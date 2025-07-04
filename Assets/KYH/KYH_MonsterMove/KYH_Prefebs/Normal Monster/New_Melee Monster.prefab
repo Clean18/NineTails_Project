@@ -205,6 +205,9 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
+  _anim: {fileID: 0}
+  MonType: 0
+  sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   AttackPoint: {fileID: 3497390072653564041}
   AttackRadius: 0.7
   AttackDamage: 10

@@ -31,7 +31,7 @@ public class RangedMonsterFSM : BaseMonsterFSM
             MonsterAnimator.Play("ThrowDagger");
 
             // 2. 사운드 재생
-            AudioSource.PlayClipAtPoint(AttackSound, transform.position);
+            PlaySound(AttackSound);
 
             // // 3. 이펙트 생성 (화염, 연기 등)
             // if (AttackEffectPrefab != null && AttackPoint != null)

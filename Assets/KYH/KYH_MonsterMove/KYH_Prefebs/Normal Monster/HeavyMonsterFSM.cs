@@ -29,7 +29,7 @@ public class HeavyMonsterFSM : BaseMonsterFSM
             MonsterAnimator.Play("Attack_Tree");
 
             // 2. 공격 사운드 재생
-            AudioSource.PlayClipAtPoint(AttackSound, transform.position);
+            PlaySound(AttackSound);
 
             //  // 3. 이펙트 생성 (공격 시점에)
             //  if (AttackEffectPrefab != null && AttackPoint != null)
