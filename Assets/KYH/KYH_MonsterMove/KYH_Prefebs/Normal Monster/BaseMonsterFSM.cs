@@ -8,7 +8,7 @@ using UnityEngine.Audio;
 public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 {
     // 몬스터의 상태를 정의하는 열거형
-    protected enum MonsterState { Idle, Move, Attack }
+    protected enum MonsterState { Idle, Move, Attack, Dead }
 
     // 몬스터의 타입을 정의하는 열거형 
 
@@ -65,8 +65,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 매 프레임마다 상태 업데이트
     protected virtual void Update()
     {
-        // 플레이어가 없으면 아무것도 하지 않음
-        if (GameManager.Instance.PlayerController == null) return;
+        // 플레이어가 없거나 이미 죽은 상태면 아무것도 하지 않음
+        if (GameManager.Instance.PlayerController == null || _currentState == MonsterState.Dead) return;
 
         _findTimer += Time.deltaTime;          // 탐색 타이머 증가
         _stateChangeTimer += Time.deltaTime;   // 상태 변경 타이머 증가
@@ -195,7 +195,11 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 사망 처리
     protected virtual void Die()
     {
+        if (_currentState == MonsterState.Dead) return; // 중복 방지
+
         Debug.Log("몬스터 사망");
+
+        _currentState = MonsterState.Dead; // 상태를 Dead로 변경
 
         // 플레이어 보상 지급
         GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
@@ -207,6 +211,61 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         // 오브젝트 비활성화
         // gameObject.SetActive(false);
     }
+
+    // 몬스터가 천천히 투명해지며 사라지는 처리
+    protected IEnumerator FadeOutAndDestroy()
+    {
+        // 이미 실행 중이라면 더 이상 실행되지 않도록 차단
+        if (_isFadingOut) yield break;
+        _isFadingOut = true;
+
+        // 자식 오브젝트 중에서 SpriteRenderer를 가져온다
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+
+        // SpriteRenderer가 없으면 그냥 즉시 삭제
+        if (sr == null)
+        {
+            Destroy(gameObject);
+            yield break;
+        }
+
+        // 총 사라지는 데 걸릴 시간 (1.5초 동안 천천히 사라짐)
+        float duration = 1.5f;
+
+        // 경과 시간 변수
+        float elapsed = 0f;
+
+        // 원래 색상을 저장 (알파 값 포함)
+        Color originalColor = sr.color;
+
+        // 반복문을 통해 시간이 지나면서 알파 값을 점점 낮춘다
+        while (elapsed < duration)
+        {
+            // 프레임 간 경과 시간을 누적
+            elapsed += Time.deltaTime;
+
+            // 현재 시간에 비례해서 알파 값을 줄이기 위한 비율 계산
+            float ratio = elapsed / duration;
+
+            // 알파 값을 직접 계산: 처음엔 1 → 점점 0으로
+            float newAlpha = 1f - ratio;
+
+            // 알파 값을 적용한 새 색상 만들기
+            Color newColor = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
+
+            // SpriteRenderer에 색상 적용
+            sr.color = newColor;
+
+            // 다음 프레임까지 대기
+            yield return null;
+        }
+
+        // 다 사라졌으면 최종적으로 오브젝트 제거
+        Destroy(gameObject);
+    }
+
+    // 코루틴 중복 실행 방지용 플래그 변수
+    private bool _isFadingOut = false;
 
     // 공격 루틴은 자식 클래스에서 반드시 오버라이드 해야 함
     protected abstract IEnumerator AttackRoutine();
