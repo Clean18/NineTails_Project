@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NextSceneButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    // 버튼의 OnClick()에 연결
+    public void OnNextButtonClicked()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SceneChangeManager.Instance.LoadNextScene();
     }
 }
