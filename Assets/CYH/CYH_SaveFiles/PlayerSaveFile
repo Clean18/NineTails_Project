@@ -15,7 +15,7 @@
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
-            "SkillLevel": 100,
+            "SkillLevel": 0,
             "SlotIndex": 0
         },
         {
