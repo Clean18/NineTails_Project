@@ -9,15 +9,17 @@ using UnityEngine.UI;
 public class SkillUI
 {
 	public Image _icon;
+    public TMP_Text _level;
 	public TMP_Text _descText;
 	public TMP_Text _costText;
 	public Button _upgradeButton;
 	public Button _getButton;
 	public Button _active;
 
-    public SkillUI(Image icon, TMP_Text desc, TMP_Text cost, Button upgrade, Button get, Button active)
+    public SkillUI(Image icon, TMP_Text level, TMP_Text desc, TMP_Text cost, Button upgrade, Button get, Button active)
     {
         _icon = icon;
+        _level = level;
         _descText = desc;
         _costText = cost;
         _upgradeButton = upgrade;
@@ -35,13 +37,13 @@ public class SkillPopUp : BaseUI
 	private Dictionary<int, string> skillDescDic = new()
 	{
 		// TODO : 설명들어오면 설명대로 변경
-		[0] = $"0검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 1타 100% > 101% 2타 50% > 50.5%
-		[1] = $"1검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 75% > 75.75%
-		[2] = $"2검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 25% > 25.25% 실드도 똑같음
-		[3] = $"3검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 100% > 101%
-		[4] = $"4검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 15% > 15.15% / 힐 5% > 5.05% / 0.05f + 0.0005f * SkillLevel
-		[5] = $"5검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 12% > 12.12% / 0.12f + 0.0012f * SkillLevel
-		[6] = $"6검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 400% > 404% / 
+		[0] = "전방에 검을 두차례 휘둘러 적에게 <color=#FF0000>{0}%/{1}% -> {2}%/{3}%</color>의 피해를 입힌다.", // 1타 100% > 101% 2타 50% > 50.5%
+		[1] = "검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 75% > 75.75%
+		[2] = "혼령을 소환하여 주변의 적에게 <color=#FF0000>{0}% -> {1}%</color>의 피해를 입히고, 자신은 <color=#00FF00>최대 체력의 {0}% -> {1}%</color>만큼 피해를 흡수할 수 있는 보호막을 얻는다.", // 25% > 25.25% 실드도 똑같음
+		[3] = "혼을 응축하여 주변에 체력이 가장 높은 단일 대상 적에게 <color=#FF0000>{0}%*5 -> {1}%*5</color>의 피해를 입힌다.", // 100% > 101%
+		[4] = "주변에 있는 최대 <color=#FF0000>6마리</color>의 적에게 3초 동안 0.5초마다  <color=#FF0000>{0}% -> {1}%</color>의 피해를 입히고, 1마리 당 자신은 최대 체력의 <color=#00FF00>{2}% -> {3}%</color>를 회복한다.", // 15% > 15.15% / 힐 5% > 5.05% / 0.05f + 0.0005f * SkillLevel
+		[5] = "장난꾸러기 혼령이 날뛰게 하여 필드 위의 적에게 10초동안 0.5초마다 <color=#FF0000>{0}% -> {1}%</color>의 피해를 입힌다. 해당 필드를 생성한 후, 플레이어는 이동이 가능하며, 필드는 해당 위치에 고정된다.", // 12% > 12.12% / 0.12f + 0.0012f * SkillLevel
+		[6] = "모든 혼령의 힘을 검에 모아 전방의 모든 적에게 <color=#FF0000>{0}%*5 -> {1}%*5</color>의 피해를 가한다.\n시전 중 입는 모든 피해를 무시하며, 다른 스킬을 사용할 수 없다.", // 400% > 404% / 
 	};
 	//private Dictionary<int, >
 
@@ -111,13 +113,14 @@ public class SkillPopUp : BaseUI
             string index = i.ToString();
 
             var icon = GetUI<Image>($"Icon{index}");
+            var level = GetUI<TMP_Text>($"Level{index}");
             var desc = GetUI<TMP_Text>($"Desc{index}Text");
             var cost = GetUI<TMP_Text>($"Cost{index}Text");
             var upgrade = GetUI<Button>($"UpgradeBtn{index}");
             var get = GetUI<Button>($"GetBtn{index}");
             var active = GetUI<Button>($"Active{index}");
 
-            var ui = new SkillUI(icon, desc, cost, upgrade, get, active);
+            var ui = new SkillUI(icon, level, desc, cost, upgrade, get, active);
             skillUIList.Add(ui);
         }
     }
@@ -159,6 +162,7 @@ public class SkillPopUp : BaseUI
 				// 스킬컨트롤러에서 기본 정보 받아오기
 				// 아이콘
 				ui._icon.sprite = allSkills[i].SkillData.SkillSprite;
+                ui._level.text = "Lv. 0";
 				// 설명
 				ui._descText.text = allSkills[i].SkillData.Description;
 				// 강화 비용
@@ -172,14 +176,47 @@ public class SkillPopUp : BaseUI
 			{
 				// 아이콘
 				ui._icon.sprite = skillData.SkillData.SkillSprite;
-				// 설명
-				ui._descText.text = string.Format(
-					skillDescDic[i],
-					$"{GetSkillDamage(i, skillData.SkillLevel) * 100:F2}",
-					$"{GetSkillDamage(i, skillData.SkillLevel + 1) * 100:F2}"
-					);
-				// 강화 비용
-				string costText = $"강화 비용\n{(skillData.SkillData.SkillIndex == 6 ? DataManager.Instance.GetUltSkillCost(skillData.SkillLevel) : DataManager.Instance.GetNormalSkillCost(skillData.SkillLevel))}";
+
+                // 스킬 레벨
+                ui._level.text = $"Lv. {skillData.SkillLevel}";
+
+                float cur1 = GetSkillDamage(i, skillData.SkillLevel) * 100;
+                float next1 = GetSkillDamage(i, skillData.SkillLevel + 1) * 100;
+
+                switch (i)
+                {
+                    case 0:
+                        {
+                            float cur2 = cur1 / 2f;
+                            float next2 = next1 / 2f;
+                            ui._descText.text = string.Format(skillDescDic[i],
+                                cur1.ToString("0.##"),
+                                cur2.ToString("0.##"),
+                                next1.ToString("0.##"),
+                                next2.ToString("0.##"));
+                            break;
+                        }
+                    case 4:
+                        {
+                            // (0.05f + 0.0005f * SkillLevel)
+                            float curHeal = 5f + 0.05f * skillData.SkillLevel;
+                            float nextHeal = 5f + 0.05f * (skillData.SkillLevel + 1);
+                            ui._descText.text = string.Format(skillDescDic[i],
+                                cur1.ToString("0.##"),
+                                next1.ToString("0.##"),
+                                curHeal.ToString("0.##"),
+                                nextHeal.ToString("0.##"));
+                        }
+                        break;
+                    default:
+                        ui._descText.text = string.Format(skillDescDic[i],
+                            cur1.ToString("0.##"),
+                            next1.ToString("0.##"));
+                        break;
+                }
+
+                // 강화 비용
+                string costText = $"강화 비용\n{(skillData.SkillData.SkillIndex == 6 ? DataManager.Instance.GetUltSkillCost(skillData.SkillLevel) : DataManager.Instance.GetNormalSkillCost(skillData.SkillLevel))}";
 				ui._costText.text = skillData.SkillLevel == 100 ? "강화 완료" : costText;
 
 				// 습득 버튼 상태 설정

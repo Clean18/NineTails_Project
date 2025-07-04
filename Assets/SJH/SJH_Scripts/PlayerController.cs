@@ -292,6 +292,7 @@ public class PlayerController : MonoBehaviour
         _model.ApplyShield(amount);
         // TODO : view 보호막처리
         // TODO : UI 보호막 증가 처리
+        UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
     }
     #region Data 관련 함수
     /// <summary>
@@ -326,6 +327,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public long GetHp() => _model.GetHp();
+    /// <summary>
+    /// 플레이어의 현재 보호막 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetShieldHp() => _model.GetShieldHp();
     /// <summary>
     /// 플레이어의 실드량을 초기화하는 함수
     /// </summary>

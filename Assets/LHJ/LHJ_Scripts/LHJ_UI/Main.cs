@@ -8,6 +8,7 @@ public class Main : BaseUI, IUI
     [SerializeField] private TextMeshProUGUI attackText;        // 공격력
     [SerializeField] private TextMeshProUGUI defenseText;       // 방어력
     [SerializeField] private Slider _hpSlider;                  // 체력바
+    [SerializeField] private Slider _shieldSlider;              // 실드바
     [SerializeField] private TMP_Text hpText;                   // 체력 / 최대체력
     [SerializeField] private TextMeshProUGUI _warmthText;       // 온기
     [SerializeField] private TextMeshProUGUI _spritenergyText;  // 영기
@@ -71,10 +72,13 @@ public class Main : BaseUI, IUI
         powerText.text = $"전투력 : {player.GetPower()}";
         attackText.text = $"공격력 : {player.GetAttack()}";
         defenseText.text = $"방어력 : {player.GetDefense()}";
-        // TODO : UI 전부 추가하면 지우기
-        if (_hpSlider != null) _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
+
+        _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
         double hpPer = (double)player.GetHp() / player.GetMaxHp() * 100f;
         hpText.text = $"{hpPer:F0}%";
+
+        double shieldPer = (float)player.GetShieldHp() / player.GetMaxHp();
+        _shieldSlider.value = (float)shieldPer;
         // Cost
         _warmthText.text = $"{player.GetWarmth()}";
         _spritenergyText.text = $"{player.GetSpiritEnergy()}";
