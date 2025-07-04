@@ -79,25 +79,24 @@ public class SkillLogic_2 : SkillLogic, ISkill
         if (!PlayerController.Instance.MoveCheck()) return;
 
         // 스킬 사용
-        Debug.Log("스킬_2 사용");
         _isSpinning = true;
         // _projectilePrefab 활성화
         SetProjectileActive(true);
-        Debug.Log("프리팹 활성화");
+        //Debug.Log("프리팹 활성화");
 
         // 보호막 체력 설정
-        //PlayerController.PlayerModel.Data.ShieldHp = (long)(PlayerController.PlayerModel.Data.MaxHp * (0.25f + 0.0025f * _skillLevel));
         PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 매 프레임 원 운동 갱신
         _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
-        Debug.Log("원운동 갱신");
+        //Debug.Log("원운동 갱신");
 
         // 지속시간 체크 시작
         _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
         // 쿨타임 체크 시작
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+        Debug.Log("스킬 2 사용완료");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -174,14 +173,15 @@ public class SkillLogic_2 : SkillLogic, ISkill
     private IEnumerator CooldownCoroutine()
     {
         float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"2번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
-            yield return _cooldownWait;
+            Debug.Log($"2번 스킬 쿨타임 남음: {remaining}초");
+            yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log("2번 스킬 쿨타임 종료");
     }
 
     // 피격 쿨타임

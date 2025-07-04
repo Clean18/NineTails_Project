@@ -1,5 +1,5 @@
 {
-    "_savedTimeString": "2025-07-05T03:23:58.8620268+09:00",
+    "_savedTimeString": "2025-07-05T03:33:28.1858597+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 5,
     "DefenseLevel": 4,
@@ -29,7 +29,7 @@
             "SlotIndex": 2
         },
         {
-            "SkillIndex": 3,
+            "SkillIndex": 6,
             "SkillLevel": 0,
             "SlotIndex": 3
         },
@@ -44,7 +44,7 @@
             "SlotIndex": -1
         },
         {
-            "SkillIndex": 6,
+            "SkillIndex": 3,
             "SkillLevel": 0,
             "SlotIndex": -1
         }

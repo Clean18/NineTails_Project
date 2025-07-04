@@ -137,14 +137,14 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     private IEnumerator CooldownCoroutine()
     {
         float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
-        Debug.Log($"{remaining} 초");
+        //Debug.Log($"기본 공격 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            Debug.Log($"쿨타임 남음: {remaining}초");
+            //Debug.Log($"기본 공격 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        //Debug.Log("기본 공격 쿨타임 종료");
     }
 }

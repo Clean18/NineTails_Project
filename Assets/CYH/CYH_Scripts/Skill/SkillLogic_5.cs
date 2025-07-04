@@ -53,6 +53,7 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker, Transform defender)
     {
+        Debug.Log("스킬 5 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
@@ -69,6 +70,7 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
         OnAttackStart();
         AnimationPlay();
+        Debug.Log("스킬 5 사용완료");
     }
     public void SkillRoutine()
     {
@@ -121,15 +123,15 @@ public class SkillLogic_5 : SkillLogic, ISkill
     private IEnumerator CooldownCoroutine()
     {
         float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"5번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
+            Debug.Log($"5번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        //_isCooldown = false;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log("5번 스킬 쿨타임 종료");
     }
 
     private void OnEnable()

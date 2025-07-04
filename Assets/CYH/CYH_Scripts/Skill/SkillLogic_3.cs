@@ -57,15 +57,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker, Transform defender)
     {
+        Debug.Log("스킬 3 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
         if (!PlayerController.Instance.MoveCheck()) return;
 
-        Debug.Log("스킬3 사용");
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
@@ -77,6 +76,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         OnAttackStart();
         DetectMonster();
         GetHighestHpMonster();
+        Debug.Log("스킬 3 사용완료");
     }
 
     public void SkillRoutine()
@@ -210,15 +210,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
     private IEnumerator CooldownCoroutine()
     {
         float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"3번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
+            Debug.Log($"3번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        //_isCooldown = false;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log("3번 스킬 쿨타임 종료");
     }
     #endregion
 
