@@ -60,11 +60,10 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     protected override void Die()
     {
         base.Die();
-        
 
-
+        StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
         // 오브젝트 비활성화
-        Destroy(gameObject, 1f);
+        // Destroy(gameObject, 1f);
     }
 
     // Unity 편집기에서 공격 범위 확인용 Gizmo 그리기

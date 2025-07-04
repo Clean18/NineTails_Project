@@ -76,9 +76,9 @@ public class RangedMonsterFSM : BaseMonsterFSM
         base.Die();
         MonsterAnimator.Play("Dead_Ranged");
 
-
+        StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
         // 오브젝트 비활성화
-        Destroy(gameObject, 0.5f);
+        // Destroy(gameObject, 0.5f);
     }
 
     private void OnDrawGizmosSelected()

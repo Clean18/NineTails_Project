@@ -276,9 +276,11 @@ public class PlayerController : MonoBehaviour
 	public void TakeHeal(long amount)
 	{
 		_model.ApplyHeal(amount);
-		// TODO : view 힐처리
-		// TODO : UI 체력증가 처리
-	}
+        // TODO : view 힐처리
+        // TODO : UI 체력증가 처리
+
+        UIManager.Instance.ShowDamageText(transform, amount, Color.green);
+    }
 
     /// <summary>
     /// 플레이어가 보호막을 생성하는 함수
@@ -449,8 +451,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="index"></param>
     public void UseSkill(int index) => SkillInput(index);
-
+    /// <summary>
+    /// skillIndex 번째 스킬을 획득하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void AddSkill(int skillIndex) => _model.AddSkill(skillIndex);
+    public void AddSkillSlot(int skillIndex) => _model.AddSkillSlot(skillIndex);
+    public void RemoveSkillSlot(int skillIndex) => _model.RemoveSkillSlot(skillIndex);
     #endregion
 
     #region Achievment, Mission 관련 함수
@@ -543,5 +550,6 @@ public class PlayerController : MonoBehaviour
         _model.Skill.AddSkill(3);
         _model.Skill.AddSkill(4);
         _model.Skill.AddSkill(5);
+        _model.Skill.AddSkill(6);
     }
 }

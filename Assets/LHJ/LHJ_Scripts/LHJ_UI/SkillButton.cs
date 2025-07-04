@@ -18,6 +18,7 @@ public class SkillButton : MonoBehaviour, IUI
     [SerializeField] private Image[] coolTimeImages;
     [SerializeField] private float[] coolTimes;
     [SerializeField] private KeyCode[] triggerKeys;
+    [SerializeField] private Image[] _disableImages;
 
     // 현재 각 스킬별 쿨타임
     [SerializeField] private float[] currentCooltimes;
@@ -62,7 +63,9 @@ public class SkillButton : MonoBehaviour, IUI
                 Debug.Log($"{index} 스킬버튼 클릭");
                 UseSkill(index);
             });
-            coolTimeImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
+            //coolTimeImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
+            _disableImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
+            _disableImages[i].gameObject.SetActive(false);
         }
     }
 
@@ -79,13 +82,16 @@ public class SkillButton : MonoBehaviour, IUI
             if (currentCooltimes[i] > 0)
             {
                 currentCooltimes[i] -= Time.deltaTime;
-                coolTimeImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];  // 쿨타임이미지 fillamount 갱신
+                //coolTimeImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];  // 쿨타임이미지 fillamount 갱신
+                _disableImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];  // 쿨타임이미지 fillamount 갱신
 
                 // 쿨타임이 끝났을때 스킬 활성화
                 if (currentCooltimes[i] <= 0)
                 {
                     skillButtons[i].interactable = true;   // 스킬버튼 클릭 활성화
-                    coolTimeImages[i].fillAmount = 1;      
+                    //coolTimeImages[i].fillAmount = 1;
+                    _disableImages[i].fillAmount = 1;
+                    _disableImages[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -102,6 +108,7 @@ public class SkillButton : MonoBehaviour, IUI
 
         currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
         skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
+        _disableImages[uiIndex].gameObject.SetActive(true);
     }
 
     // 플레이어가 1 ~ 3 입력, AI가 스킬 사용시 쿨타임
@@ -114,6 +121,7 @@ public class SkillButton : MonoBehaviour, IUI
 
         currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
         skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
+        _disableImages[uiIndex].gameObject.SetActive(true);
     }
 
     public void UpdateButtonImage()
@@ -125,10 +133,14 @@ public class SkillButton : MonoBehaviour, IUI
             if (mappingSkills.TryGetValue(triggerKeys[i], out ISkill skill) && skill != null)
             {
                 coolTimeImages[i].sprite = skill.SkillData.SkillSprite;
+                coolTimeImages[i].enabled = true;
+                _disableImages[i].sprite = skill.SkillData.SkillSprite;
+                _disableImages[i].enabled = true;
             }
             else
             {
-                coolTimeImages[i].sprite = null;
+                coolTimeImages[i].enabled = false;
+                _disableImages[i].enabled = false;
             }
         }
     }

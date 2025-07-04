@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -500,6 +502,97 @@ public class PlayerModel
         Skill.AddSkill(skillIndex);
         // 버튼 업데이트
         SkillButton.Instance.UpdateButtonImage();
+    }
+
+    public void AddSkillSlot(int skillIndex)
+    {
+        var mapping = GetMappingSkills();
+        var has = GetHasSkillList();
+        ISkill skill = null;
+
+        // 추가할 스킬이 가지고 있는 스킬인지 체크
+        bool isHas = false;
+        for (int i = 0; i < has.Count; i++)
+        {
+            if (has[i].SkillData.SkillIndex == skillIndex)
+            {
+                skill = has[i];
+                isHas = true;
+                break;
+            }
+        }
+
+        if (skill == null || isHas == false)
+        {
+            Debug.Log("가지고 있지 않은 스킬입니다.");
+            return;
+        }
+
+        if (mapping.ContainsValue(skill))
+        {
+            Debug.Log("이미 등록된 스킬입니다.");
+            return;
+        }
+
+        KeyCode[] keyList = new KeyCode[]
+        {
+            KeyCode.Alpha1,
+            KeyCode.Alpha2, 
+            KeyCode.Alpha3
+        };
+
+        for (int i = 0; i < keyList.Length; i++)
+        {
+            KeyCode key = keyList[i];
+            if (mapping.TryGetValue(key, out ISkill value) && value == null)
+            {
+                // 단축키 등록
+                skill.SlotIndex = i + 1;
+                mapping[key] = skill;
+                // hasSkill에서 삭제
+                has.Remove(skill);
+                Debug.Log($"{skill.SkillData.SkillName} 스킬 {skill.SlotIndex}번 슬롯에 등록");
+                return;
+            }
+        }
+
+        Debug.Log("등록 가능한 슬롯이 없습니다.");
+    }
+
+    public void RemoveSkillSlot(int skillIndex)
+    {
+        var mapping = GetMappingSkills();
+        var has = Skill.HasSkills;
+
+        if (skillIndex < 1 || skillIndex > 6) return;
+
+        ISkill skill = null;
+
+        // 슬롯 삭제
+        foreach (var pair in mapping)
+        {
+            // 단축키에서 스킬인덱스와 같은 스킬 찾기
+            if (pair.Value != null && pair.Value.SkillData.SkillIndex == skillIndex)
+            {
+                skill = pair.Value;
+                mapping[pair.Key] = null;
+                break;
+            }
+        }
+
+        if (skill == null)
+        {
+            Debug.Log($"SkillIndex : {skillIndex} 스킬은 등록된 스킬이 아닙니다.");
+        }
+
+        // 삭제되면 has리스트에 추가
+        if (!has.Contains(skill))
+        {
+            var debug = skill.SlotIndex;
+            Debug.Log($"{skill.SkillData.SkillName} 스킬 {debug}번 슬롯에서 제거");
+            skill.SlotIndex = -1;
+            has.Add(skill);
+        }
     }
     #endregion
 

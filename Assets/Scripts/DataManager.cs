@@ -527,7 +527,7 @@ public class DataManager : Singleton<DataManager>
         string csv = csvData.downloadHandler.text;
         string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-        for (int i = 3; i < lines.Length; i++)
+        for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i];
             string[] cells = line.Split(',');
