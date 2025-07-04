@@ -1,5 +1,5 @@
 {
-    "_savedTimeString": "2025-07-04T16:16:46.2892084+09:00",
+    "_savedTimeString": "2025-07-04T16:58:37.2361368+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 5,
     "DefenseLevel": 4,
@@ -21,7 +21,17 @@
         {
             "SkillIndex": 3,
             "SkillLevel": 0,
-            "SlotIndex": -1
+            "SlotIndex": 1
+        },
+        {
+            "SkillIndex": 4,
+            "SkillLevel": 0,
+            "SlotIndex": 2
+        },
+        {
+            "SkillIndex": 5,
+            "SkillLevel": 0,
+            "SlotIndex": 3
         },
         {
             "SkillIndex": 2,
@@ -30,16 +40,6 @@
         },
         {
             "SkillIndex": 1,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 5,
             "SkillLevel": 0,
             "SlotIndex": -1
         },
