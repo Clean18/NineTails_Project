@@ -230,8 +230,11 @@ public class SkillLogic_4 : SkillLogic, ISkill
             // 0.5초마다 데미지 적용, 플레이어 체력 회복
             foreach (var monster in _randomMonsters)
             {
-                Damage(monster);
-                HealPlayer();
+                if (monster.activeSelf)
+                {
+                    Damage(monster);
+                    HealPlayer();
+                }
             }
 
             //Debug.Log("Damage 적용");

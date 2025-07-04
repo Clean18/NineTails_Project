@@ -60,8 +60,6 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     protected override void Die()
     {
         base.Die();
-        
-
 
         // 오브젝트 비활성화
         Destroy(gameObject, 1f);
