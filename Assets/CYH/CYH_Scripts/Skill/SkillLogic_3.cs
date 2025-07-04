@@ -52,9 +52,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         Debug.Log("스킬3 사용");
 
@@ -76,10 +76,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
-        
+        if (!PlayerController.Instance.MoveCheck()) return;
+
         Debug.Log("스킬3 사용");
 
         // 쿨타임 체크 시작

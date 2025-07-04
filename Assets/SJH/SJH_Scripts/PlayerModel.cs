@@ -117,6 +117,7 @@ public class PlayerModel
 		// Cost
 		gameData.Warmth = cost.Warmth;
 		gameData.SpiritEnergy = cost.SpiritEnergy;
+        gameData.Soul = cost.Soul;
         gameData.GetFirstWarmth = cost.GetFirstWarmth;
         gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
 
@@ -439,7 +440,15 @@ public class PlayerModel
         Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
-    public List<ISkill> GetSkillMappingList() => Skill.SkillMapping.Values.ToList();
+    public List<ISkill> GetSkillMappingList()
+    {
+        var list = new List<ISkill>();
+        foreach (var skill in Skill.SkillMapping.Values)
+        {
+            if (skill != null) list.Add(skill);
+        }
+        return list;
+    }
     public List<ISkill> GetHasSkillList() => Skill.HasSkills;
     public void AddSkill(int skillIndex)
     {
@@ -450,7 +459,7 @@ public class PlayerModel
             Debug.Log("배울 수 없는 스킬입니다.");
             return;
         }
-        var mapping = Skill.SkillMapping.Values.ToList();
+        var mapping = GetSkillMappingList();
         var has = Skill.HasSkills;
         
         foreach (var mappingSkill in mapping)
@@ -482,6 +491,8 @@ public class PlayerModel
 
         // 스킬 추가
         Skill.AddSkill(skillIndex);
+        // 버튼 업데이트
+        SkillButton.Instance.UpdateButtonImage();
     }
     #endregion
 

@@ -122,7 +122,7 @@ public class SkillButton : MonoBehaviour, IUI
 
         for (int i = 0; i < coolTimeImages.Length; i++)
         {
-            if (mappingSkills.TryGetValue(triggerKeys[i], out ISkill skill))
+            if (mappingSkills.TryGetValue(triggerKeys[i], out ISkill skill) && skill != null)
             {
                 coolTimeImages[i].sprite = skill.SkillData.SkillSprite;
             }

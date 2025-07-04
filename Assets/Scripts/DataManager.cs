@@ -486,11 +486,11 @@ public class DataManager : Singleton<DataManager>
             NormalSkillCostTable[skilllevel] = normalCost;
             UltSkillCostTable[skilllevel] = ultCost;
 
-            //Debug.Log("===============");
-            //Debug.Log($"{skilllevel} 레벨");
-            //Debug.Log($"노말 스킬 비용 : {normalCost}");
-            //Debug.Log($"궁극기 비용 : {ultCost}");
-            //Debug.Log("===============");
+            Debug.Log("===============");
+            Debug.Log($"{skilllevel} 레벨");
+            Debug.Log($"노말 스킬 비용 : {normalCost}");
+            Debug.Log($"궁극기 비용 : {ultCost}");
+            Debug.Log("===============");
         }
     }
 
