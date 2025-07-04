@@ -11,6 +11,8 @@ public class HeavyMonsterFSM : BaseMonsterFSM
     [SerializeField] private float AttackDamage = 10f;       // 공격 시 입히는 데미지
     [SerializeField] private LayerMask PlayerLayer;          // 플레이어 판정용 레이어
     [SerializeField] private AudioClip AttackSound;          // 공격 시 재생할 사운드
+    [SerializeField] private AudioClip HitSound;
+    [SerializeField] private AudioClip DeadSound;              // 죽을때 사운드
     [SerializeField] private Animator MonsterAnimator;       // 애니메이터 컴포넌트
 
 
@@ -56,10 +58,19 @@ public class HeavyMonsterFSM : BaseMonsterFSM
         MonsterAnimator.Play("Idle_Tree");
     }
 
+    public override void TakeDamage(long damage)
+    {
+        base.TakeDamage(damage); // 부모의 공통 데미지 처리 로직 호출
+
+        // 피격 사운드 재생
+        PlaySound(HitSound); // BaseMonsterFSM에 정의된 PlaySound(clip)
+    }
+
     protected override void Die()
     {
         base.Die();
         MonsterAnimator.Play("Dead_Tree");
+        PlaySound(DeadSound);
 
         StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
         // 오브젝트 비활성화
