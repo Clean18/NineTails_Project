@@ -16,9 +16,7 @@ MonoBehaviour:
   <Description>k__BackingField: "\uBAA8\uB4E0 \uD63C\uB839\uC758 \uD798\uC744 \uAC80\uC5D0
     \uBAA8\uC544 \uC804\uBC29\uC758 \uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uAC15\uB825\uD55C
     \uACF5\uACA9\uC744 \uAC00\uD55C\uB2E4."
-  <CoolTime>k__BackingField: 5
+  <CoolTime>k__BackingField: 50
   <SkillSprite>k__BackingField: {fileID: 0}
-  <SkillAnimation>k__BackingField: {fileID: 0}
-  <SkillPrefab>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 3
   <SkillIndex>k__BackingField: 6

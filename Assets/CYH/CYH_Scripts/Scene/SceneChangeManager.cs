@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneManager_CYH : Singleton<SceneManager_CYH>
+public class SceneChangeManager : Singleton<SceneChangeManager>
 {
     private AsyncOperation _asyncLoad;
 
@@ -17,19 +17,19 @@ public class SceneManager_CYH : Singleton<SceneManager_CYH>
 
         // 일반씬 -> 로딩씬 -> 목표씬
         if (Input.GetKeyDown(KeyCode.Alpha0))
-            SceneManager_CYH.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene");
+            SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene");
 
         // 일반씬 -> 로딩씬 -> 목표씬 (최소 로드시간 보장)
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            SceneManager_CYH.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene", 5f);
+            SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene", "BattleScene", 5f);
 
         // 씬 -> 씬
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            SceneManager_CYH.Instance.LoadSceneAsync("BattleScene");
+            SceneChangeManager.Instance.LoadSceneAsync("BattleScene");
 
         // 씬 -> 씬
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            SceneManager_CYH.Instance.LoadSceneAsync("BossScene");
+            SceneChangeManager.Instance.LoadSceneAsync("BossScene");
     }
 
     /// <summary>
