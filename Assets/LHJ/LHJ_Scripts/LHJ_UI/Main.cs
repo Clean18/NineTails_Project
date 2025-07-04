@@ -26,7 +26,11 @@ public class Main : BaseUI, IUI
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
-    void OnEnable() => PlayerStatUI();
+    void OnEnable()
+    {
+        PlayerStatUI();
+        UpdateNicknameUI();
+    }
 
     // 플레이어가 초기화될 때 실행
     public void UIInit()
@@ -81,7 +85,10 @@ public class Main : BaseUI, IUI
                 cheatBtn.gameObject.SetActive(false);
             };
         }
-        GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
+        GetEvent("Btn_Achievement").Click += data => // Achievement
+        {
+            UIManager.Instance.ShowPopUp<AchievementPopUp>();
+        };
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
 
@@ -144,7 +151,7 @@ public class Main : BaseUI, IUI
         if (MissionManager.Instance.IsCooldownActive)
         {
             float seconds = MissionManager.Instance.CooldownSeconds;
-            if (retrycoolTimeText != null) retrycoolTimeText.text = $"RetryCoolTime: {Mathf.CeilToInt(seconds)}s";  // 남은 쿨타임 표시
+            if (retrycoolTimeText != null) retrycoolTimeText.text = $"Retry: {Mathf.CeilToInt(seconds)}s";  // 남은 쿨타임 표시
         }
         else
         {

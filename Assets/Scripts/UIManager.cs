@@ -10,7 +10,7 @@ public class UIManager : Singleton<UIManager>
     public Main MainUI;
 
     // 플레이어가 입력한 닉네임 저장 변수
-    public string PlayerName { get; set; } = "";
+    public string PlayerName { get; set; }
 
     public List<IUI> SceneUIList = new();
 
