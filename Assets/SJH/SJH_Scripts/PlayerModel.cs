@@ -53,7 +53,10 @@ public class PlayerModel
         Quest = new PlayerQuest();
         Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
     }
-
+    /// <summary>
+    /// 플레이어가 피해를 입는 함수
+    /// </summary>
+    /// <param name="damage"></param>
     public void ApplyDamage(long damage)
     {
         string scene = SceneManager.GetActiveScene().name;
@@ -70,22 +73,78 @@ public class PlayerModel
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
         }
     }
-
+    /// <summary>
+    /// 플레이어가 회복하는 함수
+    /// </summary>
+    /// <param name="amount"></param>
     public void ApplyHeal(long amount) => Data.HealHp(amount);
+    /// <summary>
+    /// 플레이어가 보호막을 얻는 함수
+    /// </summary>
+    /// <param name="amount"></param>
     public void ApplyShield(long amount) => Data.HealShield(amount);
 
+    /// <summary>
+    /// 플레이어 죽음 상태 반환하는 함수
+    /// <br/> true = 죽음
+    /// <br/> false = 살음
+    /// </summary>
+    /// <returns></returns>
     public bool GetIsDead() => Data.IsDead;
+    /// <summary>
+    /// 플레이어의 전투력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetPower() => Data.PowerLevel;
+    /// <summary>
+    /// 플레이어의 순수 공격력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetAttack() => Data.Attack;
+    /// <summary>
+    /// 플레이어의 방어력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetDefense() => Data.Defense;
+    /// <summary>
+    /// 플레이어의 최대 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetMaxHp() => Data.MaxHp;
+    /// <summary>
+    /// 플레이어의 현재 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetHp() => Data.Hp;
+    /// <summary>
+    /// 플레이어의 보호막 수치를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetShieldHp() => Data.ShieldHp;
+    /// <summary>
+    /// 플레이어의 온정 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetWarmth() => Cost.Warmth;
+    /// <summary>
+    /// 플레이어의 영기 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetSpiritEnergy() => Cost.SpiritEnergy;
+    /// <summary>
+    /// 플레이어의 혼백을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public long GetSoul() => Cost.Soul;
+    /// <summary>
+    /// 플레이어의 보호막을 없애는 함수
+    /// </summary>
 	public void ClearShield() => Data.ShieldHp = 0;
 
+    /// <summary>
+    /// 플레이어 Data, Cost 변화시 플레이어 스탯 UI를 업데이트하는 이벤트를 연결하는 함수
+    /// </summary>
+    /// <param name="playerStatUI"></param>
 	public void ConnectEvent(Action playerStatUI)
 	{
 		Data.OnStatChanged += playerStatUI;
@@ -93,7 +152,7 @@ public class PlayerModel
 	}
 
     /// <summary>
-    /// 플레이어 모든 데이터 반환하는 함수
+    /// 플레이어의 세이브 데이터를 반환하는 함수
     /// </summary>
     /// <returns></returns>
 	public GameData GetGameData()
@@ -164,106 +223,34 @@ public class PlayerModel
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
         else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
-	#endregion
+    #endregion
 
-	#region PlayerData 관련 함수
-	public SavePlayerData GetPlayerData() => Data.SavePlayerData();
-	public void TryAttackLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.AttackLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, Data.AttackLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.AttackLevelup();
-	}
-
-	public void TryDefenseLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.DefenseLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, Data.DefenseLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.DefenseLevelup();
-	}
-
-	public void TryHpLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.HpLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, Data.HpLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.HpLevelup();
-	}
-
-	public void TrySpeedLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.SpeedLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, Data.SpeedLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.SpeedLevelup();
-	}
-
+    #region PlayerData 관련 함수
+    /// <summary>
+    /// PlayerData 클래스 저장용 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public SavePlayerData GetPlayerData() => Data.SavePlayerData();
+    /// <summary>
+    /// 플레이어 공격력 스탯 강화를 시도하는 함수
+    /// </summary>
+	public void TryAttackLevelup() => Data.TryAttackLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 방어력 스탯 강화를 시도하는 함수
+    /// </summary>
+    public void TryDefenseLevelup() => Data.TryDefenseLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 체력 스탯 강화를 시도하는 함수
+    /// </summary>
+    public void TryHpLevelup() => Data.TryHpLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 이동속도 스탯 강화를 시도하는 함수
+    /// </summary>
+	public void TrySpeedLevelup() => Data.TrySpeedLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 이름을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public string GetPlayerName() => Data.PlayerName;
 
     #endregion
@@ -351,7 +338,15 @@ public class PlayerModel
     #endregion
 
     #region Quest 관련 함수
+    /// <summary>
+    /// PlayerQuest 클래스 저장용 업적 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveAchievementData> GetAchievData() => Quest.SaveAchievementData();
+    /// <summary>
+    /// PlayerQuest 클래스 저장용 돌파미션 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveMissionData> GetMissionData() => Quest.SaveMissionData();
     #endregion
 }

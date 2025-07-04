@@ -37,7 +37,8 @@ public class PlayerData
     /// <summary>
     /// 플레이어 전투력 
     /// </summary> 
-    [SerializeField] public long PowerLevel
+    [SerializeField]
+    public long PowerLevel
     { get => (long)((PlayerController.Instance.GetAttack() * (1f + PlayerController.Instance.GetEquipmentAttack()) * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
 
     [field: SerializeField] private int _attackLevel;
@@ -45,63 +46,63 @@ public class PlayerData
     /// 공격력 10 ~ 5,202,220,766,384,660
     /// </summary>
     [field: SerializeField] public long Attack { get; private set; }
-	/// <summary>
-	/// 공격력 레벨 1 ~ 300
-	/// </summary>
-	public int AttackLevel
-	{
-		get => _attackLevel;
-		private set
-		{
+    /// <summary>
+    /// 공격력 레벨 1 ~ 300
+    /// </summary>
+    public int AttackLevel
+    {
+        get => _attackLevel;
+        private set
+        {
             //Debug.Log("공격력 계산");
-			_attackLevel = Mathf.Clamp(value, 1, 300);
-			Attack = GetStat(StatDataType.Attack, _attackLevel);
+            _attackLevel = Mathf.Clamp(value, 1, 300);
+            Attack = GetStat(StatDataType.Attack, _attackLevel);
             OnStatChanged?.Invoke();
             if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
-	}
+    }
 
     [field: SerializeField] private int _defenseLevel;
     /// <summary>
     /// 방어력 (받피감) 12 ~ 1200
     /// </summary>
     [field: SerializeField] public long Defense { get; private set; }
-	/// <summary>
-	/// 방어력 레벨 1 ~ 300
-	/// </summary>
-	public int DefenseLevel
-	{
-		get => _defenseLevel;
-		private set
-		{
+    /// <summary>
+    /// 방어력 레벨 1 ~ 300
+    /// </summary>
+    public int DefenseLevel
+    {
+        get => _defenseLevel;
+        private set
+        {
             //Debug.Log("방어력 계산");
             _defenseLevel = Mathf.Clamp(value, 1, 300);
-			Defense = GetStat(StatDataType.Defense, _defenseLevel);
+            Defense = GetStat(StatDataType.Defense, _defenseLevel);
             OnStatChanged?.Invoke();
             if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
-	}
+    }
 
     [field: SerializeField] private int _hpLevel;
     /// <summary>
     /// 최대 체력 100 ~ 237,910,090,562,588
     /// </summary>
     [field: SerializeField] public long MaxHp { get; private set; }
-	/// <summary>
-	/// 체력 레벨 1 ~ 300
-	/// </summary>
-	public int HpLevel
-	{
-		get => _hpLevel;
-		private set
-		{
+    /// <summary>
+    /// 체력 레벨 1 ~ 300
+    /// </summary>
+    public int HpLevel
+    {
+        get => _hpLevel;
+        private set
+        {
             //Debug.Log("체력 계산");
             _hpLevel = Mathf.Clamp(value, 1, 300);
-			MaxHp = GetStat(StatDataType.Hp, _hpLevel);
+            MaxHp = GetStat(StatDataType.Hp, _hpLevel);
             OnStatChanged?.Invoke();
             if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
-	}
+    }
 
     [SerializeField] private long _hp;
     /// <summary>
@@ -123,21 +124,21 @@ public class PlayerData
     /// 이동 속도 100 ~ 200, 이동속도 / 50 = 유니티 이속
     /// </summary>
     [field: SerializeField] public float Speed { get; private set; }
-	/// <summary>
-	/// 이동 속도 레벨 51레벨까지
-	/// </summary>
-	public int SpeedLevel
-	{
-		get => _speedLevel;
-		private set
-		{
+    /// <summary>
+    /// 이동 속도 레벨 51레벨까지
+    /// </summary>
+    public int SpeedLevel
+    {
+        get => _speedLevel;
+        private set
+        {
             //Debug.Log("스피드 계산");
             _speedLevel = Mathf.Clamp(value, 1, 50);
-			Speed = GetStat(StatDataType.Speed, _speedLevel) / _speedRatio;
+            Speed = GetStat(StatDataType.Speed, _speedLevel) / _speedRatio;
             OnStatChanged?.Invoke();
         }
-	}
-	private const int _speedRatio = 50;
+    }
+    private const int _speedRatio = 50;
 
     [Tooltip("죽음체크, true = 사망")]
     [SerializeField] private bool _isDead;
@@ -169,24 +170,24 @@ public class PlayerData
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
 	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0)
-	{
+    {
         //Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
         // 프로퍼티에서 레벨만으로 각 스탯 계산
         AttackLevel = attackLevel;
-		DefenseLevel = defenseLevel;
-		HpLevel = hpLevel;
+        DefenseLevel = defenseLevel;
+        HpLevel = hpLevel;
         Hp = currentHp;
         SpeedLevel = speedLevel;
         ShieldHp = shieldHp;
-	}
+    }
 
-	public long GetStat(StatDataType statType, int level)
-	{
+    public long GetStat(StatDataType statType, int level)
+    {
         return DataManager.Instance.GetStatData(statType, level);
-	}
+    }
 
-	public void DecreaseHp(long damage)
-	{
+    public void DecreaseHp(long damage)
+    {
         // 체력을 감소하기 전 보호막부터 우선 감소
         long totalDamage = (long)(damage * (float)Defense / (Defense + 300f));
         totalDamage = (1 > totalDamage) ? 1 : totalDamage; // 최소 1
@@ -207,7 +208,7 @@ public class PlayerData
         Hp = Math.Max(0, Hp - totalDamage);
         IsDead = Hp <= 0;
         //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
-	}
+    }
 
     // 체력회복하는 함수
     public void HealHp(long amount)
@@ -271,5 +272,113 @@ public class PlayerData
         data.SpeedLevel = SpeedLevel;
         data.ShieldHp = ShieldHp;
         return data;
+    }
+
+    /// <summary>
+    /// 플레이어 공격력 스탯 강화를 시도하는 함수
+    /// </summary>
+    /// <param name="warmth"></param>
+    public void TryAttackLevelup(long warmth)
+    {
+        // 현재 레벨 체크
+        if (AttackLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, AttackLevel);
+        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        AttackLevelup();
+    }
+    /// <summary>
+    /// 플레이어 방어력 스탯 강화를 시도하는 함수
+    /// </summary>
+    /// <param name="warmth"></param>
+    public void TryDefenseLevelup(long warmth)
+    {
+        // 현재 레벨 체크
+        if (DefenseLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, DefenseLevel);
+        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        DefenseLevelup();
+    }
+    /// <summary>
+    /// 플레이어 체력 스탯 강화를 시도하는 함수
+    /// </summary>
+    public void TryHpLevelup(long warmth)
+    {
+        // 현재 레벨 체크
+        if (HpLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, HpLevel);
+        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        HpLevelup();
+    }
+    /// <summary>
+    /// 플레이어 이동속도 스탯 강화를 시도하는 함수
+    /// </summary>
+    /// <param name="warmth"></param>
+    public void TrySpeedLevelup(long warmth)
+    {
+        // 현재 레벨 체크
+        if (SpeedLevel == 300)
+        {
+            Debug.Log("최대 레벨입니다.");
+            return;
+        }
+
+        // 비용 체크
+        long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, SpeedLevel);
+        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            return;
+        }
+
+        // 비용 감소
+        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+
+        // 레벨업 실행
+        SpeedLevelup();
     }
 }
