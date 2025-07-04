@@ -276,9 +276,11 @@ public class PlayerController : MonoBehaviour
 	public void TakeHeal(long amount)
 	{
 		_model.ApplyHeal(amount);
-		// TODO : view 힐처리
-		// TODO : UI 체력증가 처리
-	}
+        // TODO : view 힐처리
+        // TODO : UI 체력증가 처리
+
+        UIManager.Instance.ShowDamageText(transform, amount, Color.green);
+    }
 
     /// <summary>
     /// 플레이어가 보호막을 생성하는 함수
