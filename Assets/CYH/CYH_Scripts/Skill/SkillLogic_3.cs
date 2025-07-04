@@ -52,9 +52,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        if (!PlayerController.Instance.MoveCheck()) return;
 
         Debug.Log("스킬3 사용");
 
@@ -76,10 +76,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
-        
+        if (!PlayerController.Instance.MoveCheck()) return;
+
         Debug.Log("스킬3 사용");
 
         // 쿨타임 체크 시작
@@ -179,7 +179,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
-        long damage = (long)(PlayerController.Instance.GetAttack() * (1.0f + 0.01f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (1.0f + 0.01f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }

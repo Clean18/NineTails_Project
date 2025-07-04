@@ -102,7 +102,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((100f + SkillLevel) / 100f));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((100f + SkillLevel) / 100f));
 
         if(_slashCount == 1)
         {
