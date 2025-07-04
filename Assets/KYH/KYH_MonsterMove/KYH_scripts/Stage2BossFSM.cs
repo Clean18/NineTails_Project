@@ -45,7 +45,7 @@ public class Stage2BossFSM : BaseBossFSM
 
         // 1. 울부짖는 연출
         BossAnimator.Play("Boss_Roar");
-        AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
+        PlaySound(RoarSound1);
 
         // 2. 경고 범위 표시 (세로 방향)
         GameObject warning = Instantiate(
@@ -61,7 +61,7 @@ public class Stage2BossFSM : BaseBossFSM
         if (DustEffect1 != null)
         {
             GameObject dust1 = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
-            AudioSource.PlayClipAtPoint(LegMoveSound, transform.position);
+            PlaySound(LegMoveSound);
             Destroy(dust1, 2f); // 2초 뒤 삭제
         }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
@@ -72,7 +72,7 @@ public class Stage2BossFSM : BaseBossFSM
         if (DustEffect1 != null)
         {
             GameObject dust2 = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
-            AudioSource.PlayClipAtPoint(LegMoveSound, transform.position);
+            PlaySound(LegMoveSound);
             Destroy(dust2, 2f); // 2초 뒤 삭제
         }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
@@ -101,10 +101,10 @@ public class Stage2BossFSM : BaseBossFSM
         BossAnimator.Play("Giant_LegMove");
 
         // 1. 발 두 번 구르고 울부짖는 연출
-        AudioSource.PlayClipAtPoint(LegMoveSound, transform.position);
-        AudioSource.PlayClipAtPoint(LegMoveSound, transform.position);
+        PlaySound(LegMoveSound);
+        PlaySound(LegMoveSound);
         yield return new WaitForSeconds(1f);
-        AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
+        PlaySound(RoarSound2);
 
         // 2. 경고 범위 표시 (가로 방향)
         GameObject warning = Instantiate(
@@ -125,7 +125,7 @@ public class Stage2BossFSM : BaseBossFSM
         {
             GameObject dust3 = Instantiate(DustEffect2, SwingBonkPoint1.position, Quaternion.identity);
             GameObject dust4 = Instantiate(DustEffect3, SwingBonkPoint2.position, Quaternion.identity);
-            AudioSource.PlayClipAtPoint(SwingBonkSound, transform.position);
+            PlaySound(SwingBonkSound);
 
             Destroy(dust3, 2f);
             Destroy(dust4, 2f);

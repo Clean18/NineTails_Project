@@ -104,7 +104,11 @@ public class PlayerController : MonoBehaviour
 	[Header("치트모드")]
 	public bool IsCheat = false;
 
-	void Start()
+    [Header("무적")]
+    public bool IsImmortal = false;
+
+
+    void Start()
 	{
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
@@ -251,9 +255,18 @@ public class PlayerController : MonoBehaviour
     /// <param name="damage"></param>
     public void TakeDamage(long damage)
 	{
+        if (IsImmortal)
+        {
+            Debug.Log("플레이어는 무적상태입니다.");
+            return;
+        }
+
 		_model.ApplyDamage(damage);
 		// TODO : view 피격처리
 		// TODO : UI 체력감소 처리
+
+        // 대미지 색상 변경
+        UIManager.Instance.ShowDamageText(transform, damage, Color.red);
 	}
 
 	/// <summary>
@@ -263,9 +276,11 @@ public class PlayerController : MonoBehaviour
 	public void TakeHeal(long amount)
 	{
 		_model.ApplyHeal(amount);
-		// TODO : view 힐처리
-		// TODO : UI 체력증가 처리
-	}
+        // TODO : view 힐처리
+        // TODO : UI 체력증가 처리
+
+        UIManager.Instance.ShowDamageText(transform, amount, Color.green);
+    }
 
     /// <summary>
     /// 플레이어가 보호막을 생성하는 함수
@@ -326,6 +341,11 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public long GetSpiritEnergy() => _model.GetSpiritEnergy();
     /// <summary>
+    /// 플레이어의 혼백 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public long GetSoul() => _model.GetSoul();
+    /// <summary>
     /// UI 업데이트 이벤트 연결하는 함수
     /// </summary>
     /// <param name="playerStatUI"></param>
@@ -356,6 +376,11 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 스피드 레벨업 함수
     /// </summary>
     public void TrySpeedLevelup() => _model.TrySpeedLevelup();
+    /// <summary>
+    /// 플레이어 공격력 * (1 + 가하는 피해 증가)
+    /// </summary>
+    /// <returns></returns>
+    public long GetTotalDamage() => (long)(_model.GetAttack() * (1f + _model.GetIncreseDamage()));
     #endregion
 
     #region Cost 관련 함수
@@ -378,6 +403,21 @@ public class PlayerController : MonoBehaviour
     /// 플레이어의 장비 등급업을 실행하는 함수
     /// </summary>
     public void TryPromote() => _model.TryPromote();
+    /// <summary>
+    /// 플레이어의 장비 등급을 GradeType으로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public GradeType GetGradeType() => _model.GetGradeType();
+    /// <summary>
+    /// 플레이어 장비의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage() => _model.GetIncreseDamage();
+    /// <summary>
+    /// 레벨에 따라 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage(int level) => _model.GetIncreseDamage(level);
     #endregion
 
     #region Skill 관련 함수
@@ -392,15 +432,27 @@ public class PlayerController : MonoBehaviour
     /// <param name="skillIndex"></param>
     public void TrySkillLevelUp(int skillIndex) => _model.TrySkillLevelUp(skillIndex);
     /// <summary>
-    /// 단축키에 등록된 스킬들을 반환하는 함수
+    /// 단축키에 등록된 스킬들을 Dictionary<KeyCode, ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => _model.GetMappingSkills();
+    /// <summary>
+    /// 플레이어 단축키에 등록된 스킬들을 List<ISkill> 로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetSkillMappingList() => _model.GetSkillMappingList();
+    /// <summary>
+    /// 플레이어가 보유중이고 단축키에 등록되지 않은 스킬들을 List<ISkill> 로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetHasSkillList() => _model.GetHasSkillList();
     /// <summary>
     /// UI 스킬버튼 클릭으로 스킬 사용하는 함수
     /// </summary>
     /// <param name="index"></param>
     public void UseSkill(int index) => SkillInput(index);
+
+    public void AddSkill(int skillIndex) => _model.AddSkill(skillIndex);
     #endregion
 
     #region Achievment, Mission 관련 함수
@@ -422,6 +474,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 플레이어 애니메이터 전환
     /// </summary>
+    /// <param name="trigger"></param>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
     public void Stop() => _view.Stop();
     public void Move() => _view.Move();
@@ -459,6 +512,9 @@ public class PlayerController : MonoBehaviour
 
     // SkillLogic_5 애니메이션 이벤트 함수
     public void Skill5_SkillRoutine() => (SkillController.SkillList[5] as SkillLogic_5)?.SkillRoutine();
+
+    // SkillLogic_6 애니메이션 이벤트 함수
+    public void Skill6_SkillRoutine() => (SkillController.SkillList[6] as SkillLogic_6)?.SkillRoutine();
 
     #endregion
 

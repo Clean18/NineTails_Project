@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 /// <summary>
@@ -9,6 +10,8 @@ using UnityEngine;
 /// </summary>
 public class Stage1BossFSM : BaseBossFSM
 {
+    
+
     [Header("Pattern1 setting")]
     [SerializeField] private Animator BossAnimator;             // 보스 애니메이터
     [SerializeField] private GameObject AttackEffectPrefab;     // 휘두르기 이펙트 프리팹
@@ -38,7 +41,8 @@ public class Stage1BossFSM : BaseBossFSM
     [SerializeField] private float WarningDistance = 2f;   // 보스로부터 경고 오브젝트까지의 거리
     private List<GameObject> warningRects = new List<GameObject>();
 
-    
+
+
 
     protected override void HandlePattern1()
     {
@@ -53,7 +57,7 @@ public class Stage1BossFSM : BaseBossFSM
 
     private IEnumerator Pattern1Coroutine()
     {
-        AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
+        PlaySound(RoarSound1);
 
         // 1. 고정된 방향으로 설정 (왼쪽)
         Vector2 fixedDirection = Vector2.left;
@@ -74,7 +78,7 @@ public class Stage1BossFSM : BaseBossFSM
 
         // 4. 애니메이션 & 사운드
         BossAnimator.Play("Tiger_Pattern1");
-        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+        PlaySound(SwingSound);
         Debug.Log("패턴1 - 할퀴기 공격 시작");
 
         // 5. 이펙트 생성 (왼쪽 방향)
@@ -157,7 +161,7 @@ public class Stage1BossFSM : BaseBossFSM
     {
         // 1. 보스 애니메이션, 사운드
         BossAnimator.Play("Tiger_Pattern2");
-        AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
+        PlaySound(RoarSound2);
 
 
         // 2. 낙석 위치 랜덤 계산
@@ -215,7 +219,7 @@ public class Stage1BossFSM : BaseBossFSM
         yield return new WaitForSeconds(3f);
 
         // 4. 투사 모션
-        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+        PlaySound(SwingSound);
         yield return new WaitForSeconds(0.4f);
 
         // 5. 3방향 투사체 발사
@@ -225,7 +229,7 @@ public class Stage1BossFSM : BaseBossFSM
             FireSpearGhost(baseAngle, offset);
         }
 
-        AudioSource.PlayClipAtPoint(RoarSound3, transform.position);
+        PlaySound(RoarSound3);
         yield return new WaitForSeconds(1f);
 
         // 6. 경고 제거

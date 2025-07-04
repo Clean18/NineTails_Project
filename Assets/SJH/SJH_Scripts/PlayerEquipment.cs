@@ -153,4 +153,7 @@ public class PlayerEquipment
         equip.IncreaseDamageLevel = IncreaseDamageLevel;
         return equip;
     }
+
+    public float GetIncreseDamage() => IncreaseDamage;
+    public float GetIncreseDamage(int level) => (0.5f + ((level - 1) * 0.2f));
 }
