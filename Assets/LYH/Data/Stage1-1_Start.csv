@@ -1,0 +1,21 @@
+index,charName,imgName,dialog,animation,location,sound,bgmusic,bg,extra1
+1,구미호,fox_normal,이미 숲 전체가 요괴 천지군.,null,right,,stage1_bgm,forest1,
+2,나,,전` 이렇게 많은 요괴를 처음 봐요…,,left,,stage1_bgm,forest1,
+3,구미호,fox_normal,그야 네가 태어나기도 전에 팔마와 요괴의 왕은 없어졌으니까.,,right,,stage1_bgm,forest1,
+4,구미호,fox_normal,뭐` 이젠 아니지만.,,right,,stage1_bgm,forest1,
+5,나,,파` 팔마랑 요괴왕이요?!,,left,,stage1_bgm,forest1,
+6,나,,들어본 적 있어요.,,left,,stage1_bgm,forest1,
+7,나,,한때 조선을 집어삼키려 했던 요마들.,,left,,stage1_bgm,forest1,
+8,나,,하지만 선대 사냥꾼 분들이 고군분투 끝에 처리했다고 하던데… 어째서…,,left,,stage1_bgm,forest1,
+9,구미호,fox_angry,,tremble,,hit_wav,stage1_bgm,forest1,주인공에게 주먹 공격
+10,나,,크헉! 이번엔… 왜?,,left,,stage1_bgm,forest1,
+11,구미호,fox_normal,그냥. 기분이 안 좋아서.,,right,,stage1_bgm,forest1,
+12,나,,(이젠 아예 연습용 대나무 취급이냐…!),,left,,stage1_bgm,forest1,
+13,구미호,fox_normal,어쨌든 네 잘나신 선대들이 일을 못했단 증거지.,,right,,stage1_bgm,forest1,
+14,sound,,스릉,,,draw,battle_bgm,forest1,일반 스탠딩 일러스트에서 검을 쥔 일러스트로 변경
+15,구미호,fox_normal,자` 간다.,,right,,battle_bgm,forest1,
+16,나,,에? 예? 싸운다고요?,,left,,battle_bgm,forest1,
+17,구미호,fox_normal,저 놈들을 해치워야 팔마 놈들에게로 가는 길이 열리겠지,,right,,battle_bgm,forest1,
+18,구미호,fox_normal,너는 그냥 지켜보면서 네 동료가 오는지 지켜보고나 있어.,,right,,battle_bgm,forest1,
+19,내레이션,,그녀는 검을 뽑더니 주저 없이 저 요괴들의 물결에 몸을 맡겼다.,,,,battle_bgm,forest1,
+20,내레이션,,달빛의 번득임 한 번과 함께 그녀의 손의 도가 달을 그려냈다.,,,,battle_bgm,forest1,

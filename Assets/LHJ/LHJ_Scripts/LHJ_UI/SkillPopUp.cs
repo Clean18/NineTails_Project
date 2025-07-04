@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -7,12 +8,22 @@ using UnityEngine.UI;
 [System.Serializable]
 public class SkillUI
 {
-	public Image icon;
-	public TMP_Text descText;
-	public TMP_Text costText;
-	public Button upgradeButton;
-	public Button getButton;
-	public Button Active;
+	public Image _icon;
+	public TMP_Text _descText;
+	public TMP_Text _costText;
+	public Button _upgradeButton;
+	public Button _getButton;
+	public Button _active;
+
+    public SkillUI(Image icon, TMP_Text desc, TMP_Text cost, Button upgrade, Button get, Button active)
+    {
+        _icon = icon;
+        _descText = desc;
+        _costText = cost;
+        _upgradeButton = upgrade;
+        _getButton = get;
+        _active = active;
+    }
 }
 
 public class SkillPopUp : BaseUI
@@ -38,25 +49,49 @@ public class SkillPopUp : BaseUI
 	{
 		GetEvent("Btn_close").Click += data => UIManager.Instance.ClosePopUp(); // BackButton
 
-		// 스킬 강화 버튼 클릭 이벤트 일괄 등록
-		for (int i = 0; i < skillUIList.Count; i++)
+        // 스킬 강화 버튼 클릭 이벤트 일괄 등록
+        for (int i = 0; i < skillUIList.Count; i++)
 		{
 			int skillIndex = i;
-			skillUIList[i].upgradeButton.onClick.AddListener(() =>
+			skillUIList[i]._upgradeButton.onClick.AddListener(() =>
 			{
 				PlayerController.Instance.TrySkillLevelUp(skillIndex);
-				Debug.Log($"스킬 {skillIndex} 강화 버튼 클릭됨");
+				Debug.Log($"스킬 {skillIndex}번 강화 버튼 클릭됨");
 				UpdateSkill();
 			});
-			skillUIList[i].getButton.onClick.AddListener(() =>
+			skillUIList[i]._getButton.onClick.AddListener(() =>
 			{
 				// TODO : 스킬 획득
 				PlayerController.Instance.AddSkill(skillIndex);
-				Debug.Log($"스킬 {skillIndex} 습득 버튼 클릭됨");
+				Debug.Log($"스킬 {skillIndex}번 습득 버튼 클릭됨");
 				UpdateSkill();
 			});
-            // TODO : Active 버튼 기능 추가
-		}
+            skillUIList[i]._active.onClick.AddListener(() =>
+            {
+                // TODO : Active 버튼 기능 추가
+                var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
+                var mapping = PlayerController.Instance.GetMappingSkills();
+
+                // 등록 여부 확인
+                bool isSlot = mapping.Values.Contains(skill);
+
+                if (isSlot)
+                {
+                    Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
+                    PlayerController.Instance.RemoveSkillSlot(skillIndex);
+                }
+                else
+                {
+                    Debug.Log($"스킬 {skillIndex}번 단축창에 등록");
+                    PlayerController.Instance.AddSkillSlot(skillIndex);
+                }
+                // 스킬 팝업 초기화
+                UpdateSkill();
+                // 스킬 단축키 초기화
+                SkillButton.Instance.UIInit();
+            });
+
+        }
 		//GetEvent("Skill0Up").Click += data =>
 		//{
 		//    PlayerController.Instance.TrySkillLevelUp(0);
@@ -67,10 +102,35 @@ public class SkillPopUp : BaseUI
 
 	private void OnEnable() => UpdateSkill();
 
+    void UIListInit()
+    {
+        skillUIList = new();
+
+        for (int i = 0; i < 7; i++)
+        {
+            string index = i.ToString();
+
+            var icon = GetUI<Image>($"Icon{index}");
+            var desc = GetUI<TMP_Text>($"Desc{index}Text");
+            var cost = GetUI<TMP_Text>($"Cost{index}Text");
+            var upgrade = GetUI<Button>($"UpgradeBtn{index}");
+            var get = GetUI<Button>($"GetBtn{index}");
+            var active = GetUI<Button>($"Active{index}");
+
+            var ui = new SkillUI(icon, desc, cost, upgrade, get, active);
+            skillUIList.Add(ui);
+        }
+    }
+
 	public void UpdateSkill()
 	{
 		var skills = PlayerController.Instance.GetSkillData();
 		if (skills == null || skills.Count < 1) return;
+        if (skillUIList.Count == 0)
+        {
+            Debug.Log("UI 리스트가 비어있습니다.");
+            UIListInit();
+        }
 
 		// 리스트 합치기
 		List<ISkill> hasSkills = new();
@@ -98,34 +158,33 @@ public class SkillPopUp : BaseUI
 			{
 				// 스킬컨트롤러에서 기본 정보 받아오기
 				// 아이콘
-				ui.icon.sprite = allSkills[i].SkillData.SkillSprite;
+				ui._icon.sprite = allSkills[i].SkillData.SkillSprite;
 				// 설명
-				ui.descText.text = allSkills[i].SkillData.Description;
+				ui._descText.text = allSkills[i].SkillData.Description;
 				// 강화 비용
-				ui.costText.text = $"강화 비용";
+				ui._costText.text = $"강화 비용";
 
 				// 습득 버튼 상태 설정
-				ui.getButton.gameObject.SetActive(true);
+				ui._getButton.gameObject.SetActive(true);
 			}
 			// 스킬 보유중
 			else
 			{
 				// 아이콘
-				ui.icon.sprite = skillData.SkillData.SkillSprite;
+				ui._icon.sprite = skillData.SkillData.SkillSprite;
 				// 설명
-				ui.descText.text = string.Format(
+				ui._descText.text = string.Format(
 					skillDescDic[i],
 					$"{GetSkillDamage(i, skillData.SkillLevel) * 100:F2}",
 					$"{GetSkillDamage(i, skillData.SkillLevel + 1) * 100:F2}"
 					);
 				// 강화 비용
 				string costText = $"강화 비용\n{(skillData.SkillData.SkillIndex == 6 ? DataManager.Instance.GetUltSkillCost(skillData.SkillLevel) : DataManager.Instance.GetNormalSkillCost(skillData.SkillLevel))}";
-				ui.costText.text = skillData.SkillLevel == 100 ? "강화 완료" : costText;
+				ui._costText.text = skillData.SkillLevel == 100 ? "강화 완료" : costText;
 
 				// 습득 버튼 상태 설정
-				ui.getButton.gameObject.SetActive(false);
+				ui._getButton.gameObject.SetActive(false);
 			}
-
 		}
 	}
 

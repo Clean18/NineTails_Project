@@ -133,12 +133,14 @@ public class SkillButton : MonoBehaviour, IUI
             if (mappingSkills.TryGetValue(triggerKeys[i], out ISkill skill) && skill != null)
             {
                 coolTimeImages[i].sprite = skill.SkillData.SkillSprite;
+                coolTimeImages[i].enabled = true;
                 _disableImages[i].sprite = skill.SkillData.SkillSprite;
+                _disableImages[i].enabled = true;
             }
             else
             {
-                coolTimeImages[i].sprite = null;
-                _disableImages[i].sprite = null;
+                coolTimeImages[i].enabled = false;
+                _disableImages[i].enabled = false;
             }
         }
     }

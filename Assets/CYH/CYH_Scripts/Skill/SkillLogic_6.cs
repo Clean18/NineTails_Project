@@ -34,7 +34,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         Debug.Log("스킬 6 초기화");
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 6;
+        SlotIndex = -1;
     }
 
     //private void Awake()

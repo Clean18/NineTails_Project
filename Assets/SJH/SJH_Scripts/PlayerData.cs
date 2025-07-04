@@ -181,14 +181,6 @@ public class PlayerData
 
 	public long GetStat(StatDataType statType, int level)
 	{
-  //      if (!DataManager.Instance.StatDataTable.TryGetValue(statType, out var levelTable))
-  //      {
-  //          Debug.Log("데이터매니저 StatDic == null");
-  //          return 0;
-  //      }
-		//if (!levelTable.TryGetValue(level, out long statValue)) return 0;
-		//return statValue;
-
         return DataManager.Instance.GetStatData(statType, level);
 	}
 
