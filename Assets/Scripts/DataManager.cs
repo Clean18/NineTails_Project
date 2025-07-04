@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -25,6 +24,16 @@ public enum GradeType
 	Uncommon,   // 진귀
 	Rare,       // 설화
 }
+/// <summary>
+/// 몬스터 종류
+/// </summary>
+public enum MonsterType
+{
+	Melee,  // 근접
+	Ranged, // 원거리
+	Tanker, // 탱커
+}
+
 /// <summary>
 /// 강화 정보 구조체
 /// <br/>* string Grade : 장비 등급
@@ -85,14 +94,14 @@ public struct PromotionInfo
 [System.Serializable]
 public struct MissionInfo
 {
-    public string Id;          // 미션 Id
+	public string Id;          // 미션 Id
 	public string Stage;       // 현재 씬(스테이지)
 	public int TimeLimit;      // 시간제한
 	public int Count;          // 킬 조건
 	public string NextScene;   // 다음 씬
-    public int WarmthReward;   // 온정 보상
-    public int SpritReward;    // 영기 보상
-    public int SkillPoint;     // 스킬 포인트
+	public int WarmthReward;   // 온정 보상
+	public int SpritReward;    // 영기 보상
+	public int SkillPoint;     // 스킬 포인트
 }
 /// <summary>
 /// 업적 정보 구조체
@@ -100,14 +109,34 @@ public struct MissionInfo
 [System.Serializable]
 public struct AchievementInfo
 {
-    public string Type;          // 업적타입
-    public string Id;            // 업적고유 ID
-    public string Name;          // 업적이름
-    public string Scene;         // 스테이지
-    public float Purpose;        // 업적 달성 조건
-    public int WarmthReward;     // 온정보상
-    public int SpritReward;      // 영기보상
-    public string Description;   // 업적 내용
+	public string Type;          // 업적타입
+	public string Id;            // 업적고유 ID
+	public string Name;          // 업적이름
+	public string Scene;         // 스테이지
+	public float Purpose;        // 업적 달성 조건
+	public int WarmthReward;     // 온정보상
+	public int SpritReward;      // 영기보상
+	public string Description;   // 업적 내용
+}
+[System.Serializable]
+public struct MonsterData
+{
+	public MonsterType Type;     // 몬스터 종류
+	public int Level;            // 레벨
+	public int Attack;           // 공격력
+	public int MaxHp;            // 최대 체력
+	public int DropWarmth;       // 드랍 확률 100%
+	public int DropSpiritEnergy; // 드랍 확률 10%
+
+    public MonsterData(MonsterType type, int level, int attack, int maxHp, int dropWarmth, int dropSpiritEnergy)
+    {
+        Type = type;
+        Level = level;
+        Attack = attack;
+        MaxHp = maxHp;
+        DropWarmth = dropWarmth;
+        DropSpiritEnergy = dropSpiritEnergy;
+    }
 }
 #endregion
 
@@ -116,7 +145,7 @@ public struct AchievementInfo
 /// </summary>
 public class DataManager : Singleton<DataManager>
 {
-    public static bool isInit { get; private set; }
+	public static bool isInit { get; private set; }
 
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
@@ -146,42 +175,47 @@ public class DataManager : Singleton<DataManager>
 	/// 스테이지별 미션 정보 테이블
 	/// </summary>
 	public Dictionary<string, MissionInfo> MissionTable = new();
-    /// <summary>
-    /// 일반 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
-    /// </summary>
-    public Dictionary<int, int> NormalSkillCostTable = new();
-    /// <summary>
-    /// 궁극기 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
-    /// </summary>
-    public Dictionary<int, int> UltSkillCostTable = new();
-    /// <summary>
+	/// <summary>
+	/// 일반 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
+	/// </summary>
+	public Dictionary<int, int> NormalSkillCostTable = new();
+	/// <summary>
+	/// 궁극기 스킬 레벨별 영기 비용 ex) Table[레벨] == 비용
+	/// </summary>
+	public Dictionary<int, int> UltSkillCostTable = new();
+	/// <summary>
 	/// 업적 정보 테이블
 	/// </summary>
-    public Dictionary<string, AchievementInfo> AchievementTable = new();
+	public Dictionary<string, AchievementInfo> AchievementTable = new();
+    /// <summary>
+    /// 몬스터 레벨별 스탯 데이터 테이블 ex) Table[몬스터종류][레벨] = 몬스터 데이터
+    /// </summary>
+    public Dictionary<MonsterType, Dictionary<int, MonsterData>> MonsterDataTable = new();
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-        isInit = false;
-    }
-
-    public IEnumerator LoadDatas()
+	protected override void Awake()
 	{
-        if (isInit) yield break;
+		base.Awake();
+
+		isInit = false;
+	}
+
+	public IEnumerator LoadDatas()
+	{
+		if (isInit) yield break;
 
 		yield return StartCoroutine(StatDataInit());
 		yield return StartCoroutine(EquipmentUpgradeCostInit());
 		yield return StartCoroutine(EquipmentDataInit());
 		yield return StartCoroutine(EquipmentUpgradeInit());
 		yield return StartCoroutine(MissionDataInit());
-        yield return StartCoroutine(AchievementDataInit());
-        yield return StartCoroutine(SkillCostInit());
+		yield return StartCoroutine(AchievementDataInit());
+		yield return StartCoroutine(SkillCostInit());
+        yield return StartCoroutine(MonsterDataInit());
 
 		Debug.Log("모든 데이터 테이블 초기화 완료");
-        isInit = true;
+		isInit = true;
 
-    }
+	}
 
 	string Clean(string s) => s.Trim().Trim('"').Replace(",", ""); // " , 제거
 
@@ -195,8 +229,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-            DownloadFailed();
-            yield break;
+			DownloadFailed();
+			yield break;
 		}
 
 		// 딕셔너리 초기화
@@ -241,19 +275,19 @@ public class DataManager : Singleton<DataManager>
 
 			// 성장 비용 저장
 			StatCostTable[StatDataType.Attack][statLevel] = levelupCost;
-            StatCostTable[StatDataType.Hp][statLevel] = levelupCost;
-            StatCostTable[StatDataType.Defense][statLevel] = levelupCost;
-            StatCostTable[StatDataType.Speed][statLevel] = levelupCost;
+			StatCostTable[StatDataType.Hp][statLevel] = levelupCost;
+			StatCostTable[StatDataType.Defense][statLevel] = levelupCost;
+			StatCostTable[StatDataType.Speed][statLevel] = levelupCost;
 
-            //Debug.Log("===============");
-            //Debug.Log($"{statLevel} 레벨");
-            //Debug.Log($"공격력 : {attack}");
-            //Debug.Log($"체력 : {hp}");
-            //Debug.Log($"방어력 : {defense}");
-            //Debug.Log($"비용 : {levelupCost}");
-            //Debug.Log($"스피드 : {speed}");
-            //Debug.Log("===============");
-        }
+			//Debug.Log("===============");
+			//Debug.Log($"{statLevel} 레벨");
+			//Debug.Log($"공격력 : {attack}");
+			//Debug.Log($"체력 : {hp}");
+			//Debug.Log($"방어력 : {defense}");
+			//Debug.Log($"비용 : {levelupCost}");
+			//Debug.Log($"스피드 : {speed}");
+			//Debug.Log("===============");
+		}
 	}
 	IEnumerator EquipmentUpgradeCostInit()
 	{
@@ -285,8 +319,8 @@ public class DataManager : Singleton<DataManager>
 			if (csvData.result != UnityWebRequest.Result.Success)
 			{
 				Debug.Log("CSV 다운로드 실패");
-                DownloadFailed();
-                yield break;
+				DownloadFailed();
+				yield break;
 			}
 
 			string csv = csvData.downloadHandler.text;
@@ -318,8 +352,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-            DownloadFailed();
-            yield break;
+			DownloadFailed();
+			yield break;
 		}
 
 		EquipmentDataTable = new()
@@ -380,8 +414,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-            DownloadFailed();
-            yield break;
+			DownloadFailed();
+			yield break;
 		}
 
 		// 딕셔너리 초기화
@@ -395,63 +429,63 @@ public class DataManager : Singleton<DataManager>
 			string line = lines[i];
 			string[] cells = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
-            string id = Clean(cells[0]);
+			string id = Clean(cells[0]);
 			string stage = Clean(cells[1]);
 			int timeLimit = int.Parse(Clean(cells[2]));
 			int count = int.Parse(Clean(cells[3]));
 			string nextScene = Clean(cells[4]);
-            int warmthReward = int.Parse(Clean(cells[5]));
-            int spritReward = int.Parse(Clean(cells[6]));
-            int skillPoint = int.Parse(Clean(cells[7]));
+			int warmthReward = int.Parse(Clean(cells[5]));
+			int spritReward = int.Parse(Clean(cells[6]));
+			int skillPoint = int.Parse(Clean(cells[7]));
 
-            MissionInfo info = new MissionInfo
-            {
-                Id = id,
-                Stage = stage,
-                TimeLimit = timeLimit,
-                Count = count,
-                NextScene = nextScene,
-                WarmthReward = warmthReward,
-                SpritReward = spritReward,
-                SkillPoint = skillPoint
-            };
-            MissionTable[stage] = info;
-        }
+			MissionInfo info = new MissionInfo
+			{
+				Id = id,
+				Stage = stage,
+				TimeLimit = timeLimit,
+				Count = count,
+				NextScene = nextScene,
+				WarmthReward = warmthReward,
+				SpritReward = spritReward,
+				SkillPoint = skillPoint
+			};
+			MissionTable[stage] = info;
+		}
 	}
-    IEnumerator AchievementDataInit()
-    {
-        string url = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=0";
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
+	IEnumerator AchievementDataInit()
+	{
+		string url = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=0";
+		UnityWebRequest request = UnityWebRequest.Get(url);
+		yield return request.SendWebRequest();
 
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("CSV 다운로드 실패");
-            yield break;
-        }
+		if (request.result != UnityWebRequest.Result.Success)
+		{
+			Debug.Log("CSV 다운로드 실패");
+			yield break;
+		}
 
-        AchievementTable = new();
-        string csv = request.downloadHandler.text;
-        string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+		AchievementTable = new();
+		string csv = request.downloadHandler.text;
+		string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-        for (int i = 1; i < lines.Length; i++)
-        {
-            string[] cells = lines[i].Split(',');
-            AchievementInfo info = new AchievementInfo
-            {
-                Type = Clean(cells[0]),
-                Id = Clean(cells[1]),
-                Name = Clean(cells[2]),
-                Scene = Clean(cells[3]),
-                Purpose = float.Parse(Clean(cells[4])),
-                WarmthReward = int.Parse(Clean(cells[5])),
-                SpritReward = int.Parse(Clean(cells[6])),
-                Description = Clean(cells[7])
-            };
-            AchievementTable[info.Id] = info;
-        }
-    }
-    IEnumerator EquipmentUpgradeInit()
+		for (int i = 1; i < lines.Length; i++)
+		{
+			string[] cells = lines[i].Split(',');
+			AchievementInfo info = new AchievementInfo
+			{
+				Type = Clean(cells[0]),
+				Id = Clean(cells[1]),
+				Name = Clean(cells[2]),
+				Scene = Clean(cells[3]),
+				Purpose = float.Parse(Clean(cells[4])),
+				WarmthReward = int.Parse(Clean(cells[5])),
+				SpritReward = int.Parse(Clean(cells[6])),
+				Description = Clean(cells[7])
+			};
+			AchievementTable[info.Id] = info;
+		}
+	}
+	IEnumerator EquipmentUpgradeInit()
 	{
 		string csvString = "https://docs.google.com/spreadsheets/d/17pNOTI-66c9Q0yRHWgzWHDjiiiZwNyZoFPjT9kQzlh4/gviz/tq?tqx=out:csv&sheet=Promotion";
 		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
@@ -460,8 +494,8 @@ public class DataManager : Singleton<DataManager>
 		if (csvData.result != UnityWebRequest.Result.Success)
 		{
 			Debug.Log("CSV 다운로드 실패");
-            DownloadFailed();
-            yield break;
+			DownloadFailed();
+			yield break;
 		}
 
 		EquipmentUpgradeTable = new()
@@ -505,10 +539,51 @@ public class DataManager : Singleton<DataManager>
 			//Debug.Log($"승급 확률 : {successRate * 100}%");
 		}
 	}
-    IEnumerator SkillCostInit()
+	IEnumerator SkillCostInit()
+	{
+		// CSV 다운로드
+		string csvString = "https://docs.google.com/spreadsheets/d/1DrO4aB5Gmi2taIy4tMzLPItZq4yxLkfufWEaGDU-d4Q/gviz/tq?tqx=out:csv&sheet=SkillUpgrade";
+		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+		yield return csvData.SendWebRequest();
+
+		if (csvData.result != UnityWebRequest.Result.Success)
+		{
+			Debug.Log("CSV 다운로드 실패");
+			DownloadFailed();
+			yield break;
+		}
+
+		// 딕셔너리 초기화
+		NormalSkillCostTable = new();
+
+		UltSkillCostTable = new();
+
+		string csv = csvData.downloadHandler.text;
+		string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+		for (int i = 1; i < lines.Length; i++)
+		{
+			string line = lines[i];
+			string[] cells = line.Split(',');
+
+			int skilllevel = int.Parse(Clean(cells[0]));
+			int normalCost = int.Parse(Clean(cells[1]));
+			int ultCost = int.Parse(Clean(cells[2]));
+
+			NormalSkillCostTable[skilllevel] = normalCost;
+			UltSkillCostTable[skilllevel] = ultCost;
+
+			//Debug.Log("===============");
+			//Debug.Log($"{skilllevel} 레벨");
+			//Debug.Log($"노말 스킬 비용 : {normalCost}");
+			//Debug.Log($"궁극기 비용 : {ultCost}");
+			//Debug.Log("===============");
+		}
+	}
+    IEnumerator MonsterDataInit()
     {
         // CSV 다운로드
-        string csvString = "https://docs.google.com/spreadsheets/d/1DrO4aB5Gmi2taIy4tMzLPItZq4yxLkfufWEaGDU-d4Q/gviz/tq?tqx=out:csv&sheet=SkillUpgrade";
+        string csvString = "https://docs.google.com/spreadsheets/d/1dS1PsY8ndanDCTmP0HtqStSyqbhepLj2/gviz/tq?tqx=out:csv&sheet=Enemy_Stat";
         UnityWebRequest csvData = UnityWebRequest.Get(csvString);
         yield return csvData.SendWebRequest();
 
@@ -520,9 +595,13 @@ public class DataManager : Singleton<DataManager>
         }
 
         // 딕셔너리 초기화
-        NormalSkillCostTable = new();
+        MonsterDataTable = new()
+        {
+            [MonsterType.Melee] = new(),
+            [MonsterType.Tanker] = new(),
+            [MonsterType.Ranged] = new(),
+        };
 
-        UltSkillCostTable = new();
 
         string csv = csvData.downloadHandler.text;
         string[] lines = csv.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -532,26 +611,38 @@ public class DataManager : Singleton<DataManager>
             string line = lines[i];
             string[] cells = line.Split(',');
 
-            int skilllevel = int.Parse(Clean(cells[0]));
-            int normalCost = int.Parse(Clean(cells[1]));
-            int ultCost = int.Parse(Clean(cells[2]));
+            int level = int.Parse(Clean(cells[0]));
 
-            NormalSkillCostTable[skilllevel] = normalCost;
-            UltSkillCostTable[skilllevel] = ultCost;
+            int meleeAttack = int.Parse(Clean(cells[1]));
+            int meleeHp = int.Parse(Clean(cells[4]));
+
+            int tankerAttack = int.Parse(Clean(cells[2]));
+            int tankerHp = int.Parse(Clean(cells[5]));
+
+            int rangedAttack = int.Parse(Clean(cells[3]));
+            int rangedHp = int.Parse(Clean(cells[6]));
+
+            int dropWarmth = int.Parse(Clean(cells[7]));
+            int dropSpirit = int.Parse(Clean(cells[8]));
+
+            MonsterDataTable[MonsterType.Melee][level] = new MonsterData(MonsterType.Melee, level, meleeAttack, meleeHp, dropWarmth, dropSpirit);
+            MonsterDataTable[MonsterType.Tanker][level] = new MonsterData(MonsterType.Tanker, level, tankerAttack, tankerHp, dropWarmth, dropSpirit);
+            MonsterDataTable[MonsterType.Ranged][level] = new MonsterData(MonsterType.Ranged, level, rangedAttack, rangedHp, dropWarmth, dropSpirit);
 
             //Debug.Log("===============");
-            //Debug.Log($"{skilllevel} 레벨");
-            //Debug.Log($"노말 스킬 비용 : {normalCost}");
-            //Debug.Log($"궁극기 비용 : {ultCost}");
+            //Debug.Log($"{MonsterType.Melee} 타입 몬스터 레벨 : {level}");
+            //Debug.Log($"공격력 : {meleeAttack}");
+            //Debug.Log($"체력 : {meleeHp}");
+            //Debug.Log($"드랍 온정 : {dropWarmth}");
+            //Debug.Log($"드랍 영기 : {dropSpirit}");
             //Debug.Log("===============");
         }
     }
-
     void DownloadFailed()
-    {
-        Debug.Log("다운로드 실패");
-        // TODO : 게임종료할지 어떻게할지
-    }
+	{
+		Debug.Log("다운로드 실패");
+		// TODO : 게임종료할지 어떻게할지
+	}
 
 	#region Table Get 함수
 	/// <summary>
@@ -565,7 +656,7 @@ public class DataManager : Singleton<DataManager>
 	/// <br/> ex) Table[스탯타입][레벨] == 성장비용
 	/// <br/> long.MaxValue 로 예외처리
 	/// </summary>
-    public long GetStatCost(StatDataType statType, int level) => StatCostTable.TryGetValue(statType, out var cost) && cost.TryGetValue(level, out long result) ? result : long.MaxValue;
+	public long GetStatCost(StatDataType statType, int level) => StatCostTable.TryGetValue(statType, out var cost) && cost.TryGetValue(level, out long result) ? result : long.MaxValue;
 	/// <summary>
 	/// 장비 등급별 필요한 성장 비용 데이터
 	/// <br/> ex) Table[등급][레벨] == 성장 비용
@@ -581,15 +672,15 @@ public class DataManager : Singleton<DataManager>
 	/// 장비 등급별 각성 비용 ex) Table[등급] == 비용
 	/// </summary>
 	public PromotionInfo GetEquipmentPromotionInfo(GradeType currentGrade) => EquipmentUpgradeTable.TryGetValue(currentGrade, out var result) ? result : new PromotionInfo();
-    /// <summary>
-    /// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
-    /// </summary>
-    /// <returns></returns>
-    public int GetNormalSkillCost(int level) => NormalSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
-    /// <summary>
-    /// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
-    /// </summary>
-    /// <returns></returns>
-    public int GetUltSkillCost(int level) => UltSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
-    #endregion
+	/// <summary>
+	/// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
+	/// </summary>
+	/// <returns></returns>
+	public int GetNormalSkillCost(int level) => NormalSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
+	/// <summary>
+	/// 노말 스킬 레벨별 강화 비용 ex) Table[레벨] == 비용
+	/// </summary>
+	/// <returns></returns>
+	public int GetUltSkillCost(int level) => UltSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
+	#endregion
 }
