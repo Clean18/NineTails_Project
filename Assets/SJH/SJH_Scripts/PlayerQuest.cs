@@ -96,17 +96,12 @@ public class PlayerQuest
 	public List<SaveMissionData> SaveMissionData()
 	{
         // TODO : 미션 아이디랑 체크 필요함
-        var ClearTable = AchievementManager.Instance.AchievedIds;
-        var KillCountTable = AchievementManager.Instance.KillCountDic;
+        var ClearTable = MissionManager.Instance.MissionIds;
         List<SaveMissionData> list = new();
 
         foreach (var clearId in ClearTable)
         {
             list.Add(new SaveMissionData(clearId, true, -1));
-        }
-        foreach (var pair in KillCountTable)
-        {
-            list.Add(new SaveMissionData(pair.Key, false, pair.Value));
         }
 
         return list;

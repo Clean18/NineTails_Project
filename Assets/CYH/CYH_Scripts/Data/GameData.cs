@@ -41,6 +41,8 @@ public partial class GameData
     public long SpiritEnergy = 0;
     // 온정
     public long Warmth = 0;
+    // 혼백
+    public long Soul = 0;
     // 영기 첫 획득
     public bool GetFirstSpiritEnergy = false;
     // 온정 첫 획득

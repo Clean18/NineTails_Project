@@ -1,14 +1,15 @@
 {
-    "_savedTimeString": "2025-07-03T16:27:14.3586424+09:00",
+    "_savedTimeString": "2025-07-04T09:12:10.6002149+09:00",
     "PlayerName": "구미호",
-    "AttackLevel": 3,
-    "DefenseLevel": 2,
-    "HpLevel": 3,
+    "AttackLevel": 5,
+    "DefenseLevel": 4,
+    "HpLevel": 8,
     "CurrentHp": 0,
-    "SpeedLevel": 1,
-    "ShieldHp": 26,
-    "SpiritEnergy": 46047336,
-    "Warmth": 48794388,
+    "SpeedLevel": 2,
+    "ShieldHp": 0,
+    "SpiritEnergy": 50347322,
+    "Warmth": 41984771,
+    "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": false,
     "PlayerSkillList": [
@@ -28,19 +29,14 @@
             "SlotIndex": 2
         },
         {
-            "SkillIndex": 2,
+            "SkillIndex": 6,
             "SkillLevel": 0,
             "SlotIndex": 3
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": -1
         }
     ],
-    "Grade": "R",
-    "Level": 6,
-    "IncreaseDamageLevel": 0,
+    "Grade": "SSR",
+    "Level": 7,
+    "IncreaseDamageLevel": 7,
     "PlayerAchivementList": [
         {
             "Id": "A16",
@@ -129,6 +125,56 @@
         },
         {
             "Id": "A33",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A46",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A47",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A48",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A49",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A50",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A51",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A53",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A43",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A44",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A45",
             "IsClear": true,
             "CurrentCondition": -1
         }

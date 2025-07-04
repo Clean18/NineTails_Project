@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -183,6 +184,8 @@ public class PlayerSkill
             HasSkills.Add(newSkill);
             Debug.Log($"{newSkill.SkillData.SkillName} 스킬 획득");
         }
-
     }
+
+    public List<ISkill> GetSkillMappingList() => SkillMapping.Values.ToList();
+    public List<ISkill> GetHasSkillList() => HasSkills;
 }
