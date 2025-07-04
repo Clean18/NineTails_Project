@@ -576,6 +576,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: d8761dadf1ef2fb4e997f9649a4f344f, type: 3}
   - {fileID: 4900000, guid: a847023228e9de544a3c5daf323ca682, type: 3}
   - {fileID: 4900000, guid: d52c237e7fc077742bdfe39dcd6fa2d4, type: 3}
+  - {fileID: 4900000, guid: 39da8c44f8c4a3143be9d497be2c0a00, type: 3}
   dialogData: {fileID: 4900000, guid: b497797a811bb4740928b0415efdbefe, type: 3}
   charNameText: {fileID: 60897171}
   dialogText: {fileID: 1439676008}
