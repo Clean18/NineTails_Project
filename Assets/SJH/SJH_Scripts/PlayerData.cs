@@ -289,14 +289,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, AttackLevel);
-        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        if (cost > warmth && !PlayerController.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         AttackLevelup();
@@ -316,14 +316,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, DefenseLevel);
-        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        if (cost > warmth && !PlayerController.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         DefenseLevelup();
@@ -342,14 +342,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, HpLevel);
-        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        if (cost > warmth && !PlayerController.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         HpLevelup();
@@ -369,14 +369,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, SpeedLevel);
-        if (cost > warmth && !PlayerController.Instance.IsCheat)
+        if (cost > warmth && !PlayerController.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         SpeedLevelup();

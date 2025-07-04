@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,7 +61,6 @@ public class StatUpPopUp : BaseUI
         long atkCost = DataManager.Instance.GetStatCost(StatDataType.Attack, data.AttackLevel);
         long defCost = DataManager.Instance.GetStatCost(StatDataType.Defense, data.DefenseLevel);
         long spdCost = DataManager.Instance.GetStatCost(StatDataType.Speed, data.SpeedLevel);
-
 
         // 플레이어 닉네임
         _playerName.text = $"닉네임 : {data.PlayerName}";

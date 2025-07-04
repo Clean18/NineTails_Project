@@ -311,14 +311,14 @@ public class PlayerSkill
         }
 
         // 플레이어 재화 체크
-        if (soul < 1 && !PlayerController.Instance.IsCheat)
+        if (soul < 1 && !PlayerController.IsCheat)
         {
             Debug.Log("혼백이 부족합니다.");
             return;
         }
 
         // 재화 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
 
         // 스킬 추가
         AddSkill(skillIndex);

@@ -174,14 +174,14 @@ public class PlayerEquipment
         // SSR 등급은 무한히 강화가 되는 구조
         if (Grade == "SSR")
         {
-            if (warmth < BaseSSRCost && !PlayerController.Instance.IsCheat)
+            if (warmth < BaseSSRCost && !PlayerController.IsCheat)
             {
                 Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
                 return;
             }
             Level += 1;
             IncreaseDamageLevel += 1;
-            if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, BaseSSRCost);
+            if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, BaseSSRCost);
             Debug.Log($"강화 성공! 현재 등급: {Grade}등급, 강화 단계: {Level}강");
             //Debug.Log($"공격력 증가율: {Attack * 100}%" + $"스킬 쿨타임 감소: {CooldownReduction * 100}%" + $"방어력 관통 수치: {ReduceDamage * 100}%" + $"누적 피해 증가: {IncreaseDamage}%");
             Debug.Log($"공격력 증가율: 50%" + $"스킬 쿨타임 감소: 30%" + $"방어력 관통 수치: 30%" + $"누적 피해 증가: {IncreaseDamage}%");
@@ -199,7 +199,7 @@ public class PlayerEquipment
         }
 
         // 재화 체크
-        if (warmth < nextUpgradeCost && !PlayerController.Instance.IsCheat)
+        if (warmth < nextUpgradeCost && !PlayerController.IsCheat)
         {
             Debug.Log("재화가 부족합니다");
             return;
@@ -207,7 +207,7 @@ public class PlayerEquipment
 
         // 강화 성공
         // 재화 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextUpgradeCost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextUpgradeCost);
         // 다음 강화 스탯 할당
         var nextUpgradeStat = DataManager.Instance.GetEquipmentUpgradeInfo(GradeType, Level + 1);
         InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
@@ -243,14 +243,14 @@ public class PlayerEquipment
         }
 
         // 승급 재화 체크
-        if (nextData.WarmthCost > warmth && !PlayerController.Instance.IsCheat)
+        if (nextData.WarmthCost > warmth && !PlayerController.IsCheat)
         {
             Debug.Log("재화가 부족합니다.");
             return;
         }
 
         // 재화 감소
-        if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
+        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
 
         // 승급 확률 체크
         float rate = UnityEngine.Random.value;

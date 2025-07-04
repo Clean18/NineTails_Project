@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,8 +45,17 @@ public class Main : BaseUI, IUI
         };
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
-            Debug.Log("장비 강화 UI 활성화");
-            UIManager.Instance.ShowPopUp<UpgradePopUp>();
+            // 1-3 스테이지 클리어 업적 체크
+            if (AchievementManager.Instance.AchievedIds.Contains("A3"))
+            {
+                Debug.Log("장비 강화 UI 활성화");
+                UIManager.Instance.ShowPopUp<UpgradePopUp>();
+            }
+            else
+            {
+                Debug.Log("1-3 스테이지 클리어 이후 사용가능합니다.");
+                UIManager.Instance.ShowWarningText("1-3 스테이지 클리어 이후 사용가능합니다.");
+            }
         };
         GetEvent("Btn_Option").Click += data => // Setting
         {
@@ -56,8 +66,23 @@ public class Main : BaseUI, IUI
         {
             UIManager.Instance.ShowPopUp<StagePopUp>();
         };
-        PlayerStatUI();
+        // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
+        var cheatBtn = GetEvent("Btn_Cheat");
+        if (PlayerController.IsCheat)
+        {
+            cheatBtn.gameObject.SetActive(false);
+        }
+        else
+        {
+            cheatBtn.Click += data =>
+            {
+                Debug.Log("치트모드 활성화");
+                PlayerController.IsCheat = true;
+                cheatBtn.gameObject.SetActive(false);
+            };
+        }
         GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
+        PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
 
         UpdateNicknameUI();

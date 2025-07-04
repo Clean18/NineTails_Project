@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -216,7 +214,7 @@ public class PlayerModel
 
 	public void SpendCost(CostType costType, long amount)
 	{
-		if (amount == 0 || Cost == null || PlayerController.Instance.IsCheat) return;
+		if (amount == 0 || Cost == null || PlayerController.IsCheat) return;
 
 		// 플레이어 영기 감소
 		if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);

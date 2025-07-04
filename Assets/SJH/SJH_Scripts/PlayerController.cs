@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 	public Vector2 MoveDir; // 플레이어의 이동 방향
 
 	[Header("치트모드")]
-	public bool IsCheat = false;
+	public static bool IsCheat = false;
 
     [Header("무적")]
     public bool IsImmortal = false;
@@ -477,6 +477,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="skillIndex"></param>
     public void AddSkillSlot(int skillIndex) => _model.AddSkillSlot(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void RemoveSkillSlot(int skillIndex) => _model.RemoveSkillSlot(skillIndex);
     #endregion
 
