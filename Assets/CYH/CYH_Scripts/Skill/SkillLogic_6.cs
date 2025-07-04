@@ -37,22 +37,6 @@ public class SkillLogic_6 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
-    //private void Awake()
-    //{
-    //    _playerController = GetComponent<PlayerControllerTypeA_Copy>();
-    //    SkillData = _data;
-
-    //    _animator = GetComponent<Animator>();
-    //}
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha6))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
-
     public void UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -79,12 +63,11 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker, Transform defender)
     {
+        Debug.Log("스킬 6 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
         if (!PlayerController.Instance.MoveCheck()) return;
-
-        Debug.Log("스킬6 사용");
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -96,6 +79,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         OnAttackStart();
         CreateVideo(transform.position);
         DetectMonster();
+        Debug.Log("스킬 5 사용완료");
     }
 
     public void SkillRoutine()
@@ -178,18 +162,19 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 3초 뒤 삭제
         Destroy(effect, 3f);
     }
-    
+
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"6번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
+            Debug.Log($"6번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        //_isCooldown = false;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log("6번 스킬 쿨타임 종료");
     }
 
     private void OnDrawGizmos()

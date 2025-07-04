@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 	public Vector2 MoveDir; // 플레이어의 이동 방향
 
 	[Header("치트모드")]
-	public bool IsCheat = false;
+	public static bool IsCheat = false;
 
     [Header("무적")]
     public bool IsImmortal = false;
@@ -386,7 +386,7 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 공격력 * (1 + 가하는 피해 증가)
     /// </summary>
     /// <returns></returns>
-    public long GetTotalDamage() => (long)(_model.GetAttack() * (1f + _model.GetIncreseDamage()));
+    public long GetTotalDamage() => (long)((_model.GetAttack()  * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
     #endregion
 
     #region Cost 관련 함수
@@ -424,6 +424,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public float GetIncreseDamage(int level) => _model.GetIncreseDamage(level);
+    /// <summary>
+    /// 플레이어 장비의 스킬 쿨타임 감소율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetCalculateCooldown(float defaultCooldown) => _model.GetCalculateCooldown(defaultCooldown);
+    /// <summary>
+    /// 플레이어 장비의 공격력 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetEquipmentAttack() => _model.GetEquipmentAttack();
     #endregion
 
     #region Skill 관련 함수
@@ -461,8 +471,16 @@ public class PlayerController : MonoBehaviour
     /// skillIndex 번째 스킬을 획득하는 함수
     /// </summary>
     /// <param name="skillIndex"></param>
-    public void AddSkill(int skillIndex) => _model.AddSkill(skillIndex);
+    public void LearnSkill(int skillIndex) => _model.LearnSkill(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에 추가를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void AddSkillSlot(int skillIndex) => _model.AddSkillSlot(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void RemoveSkillSlot(int skillIndex) => _model.RemoveSkillSlot(skillIndex);
     #endregion
 

@@ -1,0 +1,27 @@
+{
+    "_savedTimeString": "2025-07-05T04:15:14.5705040+09:00",
+    "PlayerName": "구미호",
+    "AttackLevel": 1,
+    "DefenseLevel": 1,
+    "HpLevel": 1,
+    "CurrentHp": 100,
+    "SpeedLevel": 1,
+    "ShieldHp": 0,
+    "SpiritEnergy": 0,
+    "Warmth": 0,
+    "Soul": 0,
+    "GetFirstSpiritEnergy": false,
+    "GetFirstWarmth": false,
+    "PlayerSkillList": [
+        {
+            "SkillIndex": 0,
+            "SkillLevel": 0,
+            "SlotIndex": 0
+        }
+    ],
+    "Grade": "N",
+    "Level": 1,
+    "IncreaseDamageLevel": 0,
+    "PlayerAchivementList": [],
+    "PlayerMissionList": []
+}

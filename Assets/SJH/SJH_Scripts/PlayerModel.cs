@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -32,17 +30,22 @@ public class PlayerModel
     /// </summary>
     public void InitModel(GameData saveData)
 	{
-		if (saveData == null) return;
+        // TODO : 세이브파일이 없으면 saveData는 null
+        if (saveData == null)
+        {
+            SaveLoadManager.Instance.GameData = InitFirst();
+            return;
+        }
 
-		// 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
-		Data = new PlayerData();
-		Data.InitData(saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
+        // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
+        Data = new PlayerData();
+		Data.InitData(saveData.PlayerName, saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
 
 		// 재화저장도 추가
 		Cost = new PlayerCost();
 		Cost.InitCost(saveData.SpiritEnergy, saveData.Warmth);
 
-		// TODO : 플레이어의 저장된 스킬을 등록
+		// 플레이어의 저장된 스킬을 등록
 		Skill = new PlayerSkill();
 		Skill.InitSkill(saveData.PlayerSkillList);
 
@@ -52,11 +55,38 @@ public class PlayerModel
 
         Quest = new PlayerQuest();
         Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
+    }
+    /// <summary>
+    /// 플레이어 처음 시작했을 때 초기화
+    /// </summary>
+    /// <returns></returns>
+    GameData InitFirst()
+    {
+        GameData data = new GameData();
+        Data = new PlayerData();
+        Data.InitData();
 
-	}
+        Cost = new PlayerCost();
+        Cost.InitCost();
 
-	public void ApplyDamage(long damage)
-	{
+        Skill = new PlayerSkill();
+        Skill.InitSkill();
+
+        Equipment = new PlayerEquipment();
+        Equipment.InitEquipment();
+
+        Quest = new PlayerQuest();
+        Quest.InitQuest();
+
+        return data;
+    }
+
+    /// <summary>
+    /// 플레이어가 피해를 입는 함수
+    /// </summary>
+    /// <param name="damage"></param>
+    public void ApplyDamage(long damage)
+    {
         string scene = SceneManager.GetActiveScene().name;
 
         if (scene == "1-3" || scene == "2-3" || scene == "3-3")
@@ -65,35 +95,84 @@ public class PlayerModel
         }
         Data.DecreaseHp(damage);
         if (Data.Hp <= 0)
-		{
+        {
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
         }
-	}
+    }
+    /// <summary>
+    /// 플레이어가 회복하는 함수
+    /// </summary>
+    /// <param name="amount"></param>
+    public void ApplyHeal(long amount) => Data.HealHp(amount);
+    /// <summary>
+    /// 플레이어가 보호막을 얻는 함수
+    /// </summary>
+    /// <param name="amount"></param>
+    public void ApplyShield(long amount) => Data.HealShield(amount);
 
-	public void ApplyHeal(long amount)
-	{
-		Data.HealHp(amount);
-	}
-
-	public void ApplyShield(long amount)
-	{
-		Data.HealShield(amount);
-	}
-
-	public bool GetIsDead() => Data.IsDead;
+    /// <summary>
+    /// 플레이어 죽음 상태 반환하는 함수
+    /// <br/> true = 죽음
+    /// <br/> false = 살음
+    /// </summary>
+    /// <returns></returns>
+    public bool GetIsDead() => Data.IsDead;
+    /// <summary>
+    /// 플레이어의 전투력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetPower() => Data.PowerLevel;
-	public long GetAttack() => Data.Attack + (long)(Data.Attack * Equipment.Attack);
+    /// <summary>
+    /// 플레이어의 순수 공격력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+	public long GetAttack() => Data.Attack;
+    /// <summary>
+    /// 플레이어의 방어력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetDefense() => Data.Defense;
+    /// <summary>
+    /// 플레이어의 최대 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetMaxHp() => Data.MaxHp;
+    /// <summary>
+    /// 플레이어의 현재 체력을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetHp() => Data.Hp;
+    /// <summary>
+    /// 플레이어의 보호막 수치를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetShieldHp() => Data.ShieldHp;
+    /// <summary>
+    /// 플레이어의 온정 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetWarmth() => Cost.Warmth;
+    /// <summary>
+    /// 플레이어의 영기 보유량을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
 	public long GetSpiritEnergy() => Cost.SpiritEnergy;
+    /// <summary>
+    /// 플레이어의 혼백을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public long GetSoul() => Cost.Soul;
+    /// <summary>
+    /// 플레이어의 보호막을 없애는 함수
+    /// </summary>
 	public void ClearShield() => Data.ShieldHp = 0;
 
+    /// <summary>
+    /// 플레이어 Data, Cost 변화시 플레이어 스탯 UI를 업데이트하는 이벤트를 연결하는 함수
+    /// </summary>
+    /// <param name="playerStatUI"></param>
 	public void ConnectEvent(Action playerStatUI)
 	{
 		Data.OnStatChanged += playerStatUI;
@@ -101,7 +180,7 @@ public class PlayerModel
 	}
 
     /// <summary>
-    /// 플레이어 모든 데이터 반환하는 함수
+    /// 플레이어의 세이브 데이터를 반환하는 함수
     /// </summary>
     /// <returns></returns>
 	public GameData GetGameData()
@@ -111,13 +190,15 @@ public class PlayerModel
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
         List<SaveAchievementData> achievments = Quest.SaveAchievementData();
-        // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
         List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
-		// Data
-		gameData.AttackLevel = data.AttackLevel;
+        // 첫 시작일 때 GameData에 값이 없어서 예외처리
+        if (gameData == null) gameData = new GameData();
+
+        // Data
+        gameData.AttackLevel = data.AttackLevel;
 		gameData.DefenseLevel = data.DefenseLevel;
 		gameData.SpeedLevel = data.SpeedLevel;
 		gameData.HpLevel = data.HpLevel;
@@ -165,440 +246,137 @@ public class PlayerModel
 
 	public void SpendCost(CostType costType, long amount)
 	{
-		if (amount == 0 || Cost == null || PlayerController.Instance.IsCheat) return;
+		if (amount == 0 || Cost == null || PlayerController.IsCheat) return;
 
 		// 플레이어 영기 감소
 		if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
         else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
-	#endregion
+    #endregion
 
-	#region PlayerData 관련 함수
-	public SavePlayerData GetPlayerData() => Data.SavePlayerData();
-	public void TryAttackLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.AttackLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, Data.AttackLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.AttackLevelup();
-	}
-
-	public void TryDefenseLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.DefenseLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, Data.DefenseLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.DefenseLevelup();
-	}
-
-	public void TryHpLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.HpLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, Data.HpLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.HpLevelup();
-	}
-
-	public void TrySpeedLevelup()
-	{
-		// 현재 레벨 체크
-		if (Data.SpeedLevel == 300)
-		{
-			Debug.Log("최대 레벨입니다.");
-			return;
-		}
-
-		// 비용 체크
-		long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, Data.SpeedLevel);
-		if (cost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log($"온기가 부족합니다. {cost} > {Cost.Warmth}");
-			return;
-		}
-
-		// 비용 감소
-		if (!PlayerController.Instance.IsCheat) SpendCost(CostType.Warmth, cost);
-
-		// 레벨업 실행
-		Data.SpeedLevelup();
-	}
-
+    #region PlayerData 관련 함수
+    /// <summary>
+    /// PlayerData 클래스 저장용 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public SavePlayerData GetPlayerData() => Data.SavePlayerData();
+    /// <summary>
+    /// 플레이어 공격력 스탯 강화를 시도하는 함수
+    /// </summary>
+	public void TryAttackLevelup() => Data.TryAttackLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 방어력 스탯 강화를 시도하는 함수
+    /// </summary>
+    public void TryDefenseLevelup() => Data.TryDefenseLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 체력 스탯 강화를 시도하는 함수
+    /// </summary>
+    public void TryHpLevelup() => Data.TryHpLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 이동속도 스탯 강화를 시도하는 함수
+    /// </summary>
+	public void TrySpeedLevelup() => Data.TrySpeedLevelup(Cost.Warmth);
+    /// <summary>
+    /// 플레이어 이름을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public string GetPlayerName() => Data.PlayerName;
 
     #endregion
 
     #region Equipment 관련 함수
+    /// <summary>
+    /// PlayerEquipment 클래스 저장용 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
-	public void TryEnhance()
-	{
-		var player = PlayerController.Instance;
-		// SSR 등급은 무한히 강화가 되는 구조
-		if (Equipment.Grade == "SSR")
-		{
-			if (Cost.Warmth < Equipment.BaseSSRCost && !PlayerController.Instance.IsCheat)
-			{
-				Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
-				return;
-			}
-			Equipment.Level += 1;
-			Equipment.IncreaseDamageLevel += 1;
-			if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, Equipment.BaseSSRCost);
-			Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-			Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-
-			Equipment.BaseSSRCost++;          // 강화에 들어가는 재화가 1개씩 증가
-			return;
-		}
-		long nextUpgradeCost = DataManager.Instance.GetEquipmentUpgradeCost(Equipment.GradeType, Equipment.Level + 1);
-
-		// 다음등급 체크
-		if (nextUpgradeCost == -1)
-		{
-			Debug.Log($"더 이상 강화할 수 없습니다. {Equipment.Grade} / {Equipment.Level}");
-			return;
-		}
-
-		// 재화 체크
-		if (Cost.Warmth < nextUpgradeCost && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log("재화가 부족합니다");
-			return;
-		}
-
-		// 강화 성공
-		// 재화 감소
-		if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextUpgradeCost);
-		// 다음 강화 스탯 할당
-		var nextUpgradeStat = DataManager.Instance.GetEquipmentUpgradeInfo(Equipment.GradeType, Equipment.Level + 1);
-		Equipment.InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
-		Debug.Log($"강화 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-		Debug.Log($"공격력 증가율: {Equipment.Attack * 100}%" + $"스킬 쿨타임 감소: {Equipment.CooldownReduction * 100}%" + $"방어력 관통 수치: {Equipment.ReduceDamage * 100}%" + $"누적 피해 증가: {Equipment.IncreaseDamage}%");
-        AchievementManager.Instance?.CheckEnhancementAchievements(Equipment.Level); // 강화 업적 조건 체크
-        UIManager.Instance.MainUI?.PlayerStatUI();
-	}
-	public void TryPromote()
-	{
-		// 레벨 50인지 체크
-		var player = PlayerController.Instance;
-		if (Equipment.Level < 50)
-		{
-			Debug.Log($"레벨이 부족합니다. 현재 레벨 : {Equipment.Level}");
-			return;
-		}
-		if (Equipment.GradeType == GradeType.Rare)
-		{
-			Debug.Log("승급할 수 없는 등급입니다.");
-			return;
-		}
-
-		// 승급 테이블에서 내 장비랑 비교하기
-		var nextData = DataManager.Instance.GetEquipmentPromotionInfo(Equipment.GradeType);
-		if (nextData.CurrentGrade != Equipment.Grade)
-		{
-			Debug.Log("승급할 수 없는 등급입니다.");
-			return;
-		}
-
-		// 승급 재화 체크
-		if (nextData.WarmthCost > Cost.Warmth && !PlayerController.Instance.IsCheat)
-		{
-			Debug.Log("재화가 부족합니다.");
-			return;
-		}
-
-		// 재화 감소
-		if (!PlayerController.Instance.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
-
-		// 승급 확률 체크
-		float rate = UnityEngine.Random.value;
-		if (rate <= nextData.SuccessRate)
-		{
-			if (nextData.UpgradeGrade == "SSR")
-			{
-				Equipment.InitEquipment("SSR", 1, 1);
-				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-
-			}
-			else
-			{
-				Equipment.InitEquipment(nextData.UpgradeGrade, 1, 0);
-				Debug.Log($"승급 성공! 현재 등급: {Equipment.Grade}등급, 강화 단계: {Equipment.Level}강");
-				Debug.Log($"공격력 증가율: {Equipment.Attack * 100}% 쿨타임 감소: {Equipment.CooldownReduction * 100}% 방어력 관통 수치: {Equipment.ReduceDamage * 100}% 누적 피해 증가: {Equipment.IncreaseDamage}%");
-                AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,true);
-            }
-		}
-		else
-		{
-			Debug.Log("승급에 실패했습니다...");
-            AchievementManager.Instance?.CheckPromotionAchievements(nextData.CurrentGrade, nextData.UpgradeGrade,false);
-            return;
-		}
-	}
+    /// <summary>
+    /// 장비 강화를 시도하는 함수
+    /// </summary>
+    public void TryEnhance() => Equipment.TryEnhance(Cost.Warmth);
+    /// <summary>
+    /// 장비 승급을 시도하는 함수
+    /// </summary>
+	public void TryPromote() => Equipment?.TryPromote(Cost.Warmth);
+    /// <summary>
+    /// 현재 장비 등급을 GradeType으로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public GradeType GetGradeType() => Equipment.GradeType;
-    public float GetIncreseDamage() => Equipment.GetIncreseDamage();
+    /// <summary>
+    /// 현재 장비의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetIncreseDamage() => Equipment.IncreaseDamage;
+    /// <summary>
+    /// level(장비레벨)의 가하는 피해 증가율을 반환하는 함수
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
     public float GetIncreseDamage(int level) => Equipment.GetIncreseDamage(level);
+    /// <summary>
+    /// 현재 장비의 스킬 쿨타임 감소율을 반환하는 함수
+    /// </summary>
+    /// <param name="defaultCooldown"></param>
+    /// <returns></returns>
+    public float GetCalculateCooldown(float defaultCooldown) => Equipment.GetCalculateCooldown(defaultCooldown);
+    /// <summary>
+    /// 현재 장비의 공격력 증가율을 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetEquipmentAttack() => Equipment.Attack;
     #endregion
 
     #region PlayerSkill 관련 함수
+    /// <summary>
+    /// PlayerSkill 클래스 저장용 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveSkillData> GetSkillData() => Skill.SavePlayerSkill();
-    public void TrySkillLevelUp(int skillIndex)
-    {
-        var player = PlayerController.Instance;
-        var skill = player.SkillController.SkillList[skillIndex];
-        if (skill == null)
-        {
-            Debug.Log("스킬이 없습니다.");
-            return;
-        }
-        // 레벨 체크
-        if (skill.SkillLevel >= 100)
-        {
-            Debug.Log("스킬 레벨을 더 이상 올릴 수 없습니다.");
-            return;
-        }
-        // 재화 체크
-        // TODO : 스킬이 노말인지 궁극기인지 구분해야함
-        bool isUlt = skill.SkillData.SkillIndex == 6;
-
-        if (isUlt) // 궁극기 강화
-        {
-            var ultCost = DataManager.Instance.GetUltSkillCost(skill.SkillLevel);
-            if (ultCost == int.MaxValue)
-            {
-                Debug.Log("스킬을 강화할 수 없습니다.");
-                return;
-            }
-            // 노말체크
-            if (player.GetSpiritEnergy() < ultCost)
-            {
-                Debug.Log("영기가 부족합니다.");
-                return;
-            }
-            // 재화 감소
-            player.SpendCost(CostType.SpiritEnergy, ultCost);
-        }
-        else // 노말 강화
-        {
-            var normalCost = DataManager.Instance.GetNormalSkillCost(skill.SkillLevel);
-            if (normalCost == int.MaxValue)
-            {
-                Debug.Log("스킬을 강화할 수 없습니다.");
-                return;
-            }
-            if (player.GetSpiritEnergy() < normalCost)
-            {
-                Debug.Log("영기가 부족합니다.");
-                return;
-            }
-            player.SpendCost(CostType.SpiritEnergy, normalCost);
-        }
-        /*
-         * 플레이어의 스킬 보유 여부를 체크안한다면
-         * UI창에서는 가지고 있는 스킬만 활성화하는 방식
-         */
-        skill.SkillLevel += 1;
-        Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
-    }
+    /// <summary>
+    /// skillIndex 스킬 레벨업을 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void TrySkillLevelUp(int skillIndex) => Skill.TrySkillLevelUp(skillIndex);
+    /// <summary>
+    /// 스킬 단축창을 Dictionary로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
-    public List<ISkill> GetSkillMappingList()
-    {
-        var list = new List<ISkill>();
-        foreach (var skill in Skill.SkillMapping.Values)
-        {
-            if (skill != null) list.Add(skill);
-        }
-        return list;
-    }
+    /// <summary>
+    /// 스킬 단축창에 등록되어 있는 스킬을 List로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetSkillMappingList() => Skill.GetSkillMappingList();
     public List<ISkill> GetHasSkillList() => Skill.HasSkills;
-    public void AddSkill(int skillIndex)
-    {
-        // 중복 체크
-        var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
-        if (skill == null)
-        {
-            Debug.Log("배울 수 없는 스킬입니다.");
-            return;
-        }
-        var mapping = GetSkillMappingList();
-        var has = Skill.HasSkills;
-        
-        foreach (var mappingSkill in mapping)
-        {
-            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
-            {
-                Debug.Log("이미 배운 스킬입니다.");
-                return;
-            }
-        }
-        foreach (var mappingSkill in has)
-        {
-            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
-            {
-                Debug.Log("이미 배운 스킬입니다.");
-                return;
-            }
-        }
-
-        // 플레이어 재화 체크
-        if (Cost.Soul < 1 && !PlayerController.Instance.IsCheat)
-        {
-            Debug.Log("혼백이 부족합니다.");
-            return;
-        }
-
-        // 재화 감소
-        if (!PlayerController.Instance.IsCheat) Cost.DecreaseSoul(1);
-
-        // 스킬 추가
-        Skill.AddSkill(skillIndex);
-        // 버튼 업데이트
-        SkillButton.Instance.UpdateButtonImage();
-    }
-
-    public void AddSkillSlot(int skillIndex)
-    {
-        var mapping = GetMappingSkills();
-        var has = GetHasSkillList();
-        ISkill skill = null;
-
-        // 추가할 스킬이 가지고 있는 스킬인지 체크
-        bool isHas = false;
-        for (int i = 0; i < has.Count; i++)
-        {
-            if (has[i].SkillData.SkillIndex == skillIndex)
-            {
-                skill = has[i];
-                isHas = true;
-                break;
-            }
-        }
-
-        if (skill == null || isHas == false)
-        {
-            Debug.Log("가지고 있지 않은 스킬입니다.");
-            return;
-        }
-
-        if (mapping.ContainsValue(skill))
-        {
-            Debug.Log("이미 등록된 스킬입니다.");
-            return;
-        }
-
-        KeyCode[] keyList = new KeyCode[]
-        {
-            KeyCode.Alpha1,
-            KeyCode.Alpha2, 
-            KeyCode.Alpha3
-        };
-
-        for (int i = 0; i < keyList.Length; i++)
-        {
-            KeyCode key = keyList[i];
-            if (mapping.TryGetValue(key, out ISkill value) && value == null)
-            {
-                // 단축키 등록
-                skill.SlotIndex = i + 1;
-                mapping[key] = skill;
-                // hasSkill에서 삭제
-                has.Remove(skill);
-                Debug.Log($"{skill.SkillData.SkillName} 스킬 {skill.SlotIndex}번 슬롯에 등록");
-                return;
-            }
-        }
-
-        Debug.Log("등록 가능한 슬롯이 없습니다.");
-    }
-
-    public void RemoveSkillSlot(int skillIndex)
-    {
-        var mapping = GetMappingSkills();
-        var has = Skill.HasSkills;
-
-        if (skillIndex < 1 || skillIndex > 6) return;
-
-        ISkill skill = null;
-
-        // 슬롯 삭제
-        foreach (var pair in mapping)
-        {
-            // 단축키에서 스킬인덱스와 같은 스킬 찾기
-            if (pair.Value != null && pair.Value.SkillData.SkillIndex == skillIndex)
-            {
-                skill = pair.Value;
-                mapping[pair.Key] = null;
-                break;
-            }
-        }
-
-        if (skill == null)
-        {
-            Debug.Log($"SkillIndex : {skillIndex} 스킬은 등록된 스킬이 아닙니다.");
-        }
-
-        // 삭제되면 has리스트에 추가
-        if (!has.Contains(skill))
-        {
-            var debug = skill.SlotIndex;
-            Debug.Log($"{skill.SkillData.SkillName} 스킬 {debug}번 슬롯에서 제거");
-            skill.SlotIndex = -1;
-            has.Add(skill);
-        }
-    }
+    /// <summary>
+    /// skillIndex 번째 스킬을 획득하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void LearnSkill(int skillIndex) => Skill.LearnSkill(skillIndex, Cost.Soul);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에 추가를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void AddSkillSlot(int skillIndex) => Skill.AddSkillSlot(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void RemoveSkillSlot(int skillIndex) => Skill.RemoveSkillSlot(skillIndex);
     #endregion
 
     #region Quest 관련 함수
+    /// <summary>
+    /// PlayerQuest 클래스 저장용 업적 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveAchievementData> GetAchievData() => Quest.SaveAchievementData();
+    /// <summary>
+    /// PlayerQuest 클래스 저장용 돌파미션 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveMissionData> GetMissionData() => Quest.SaveMissionData();
     #endregion
 }

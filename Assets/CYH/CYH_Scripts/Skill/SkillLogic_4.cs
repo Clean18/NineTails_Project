@@ -71,15 +71,13 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker, Transform defender)
     {
+        Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
         if (!PlayerController.Instance.MoveCheck()) return;
 
-        Debug.Log("스킬4 사용");
-
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
@@ -90,6 +88,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
         OnAttackStart();
         AnimationPlay();
         DetectMonster();
+
+        Debug.Log("스킬 4 사용완료");
     }
 
     // 애니메이션 종료 시 호출 (애니메이션 이벤트)
@@ -198,7 +198,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * SkillLevel));
-        long damage = (long)(PlayerController.Instance.GetAttack() * (0.15f + 0.0015f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (0.15f + 0.0015f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
@@ -261,17 +261,16 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"4번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
+            Debug.Log($"4번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
-        //_isCooldown = false;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log("4번 스킬 쿨타임 종료");
     }
 
     private void OnDrawGizmos()

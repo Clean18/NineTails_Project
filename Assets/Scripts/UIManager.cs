@@ -15,6 +15,7 @@ public class UIManager : Singleton<UIManager>
     public List<IUI> SceneUIList = new();
 
     [SerializeField] private GameObject damageTextPrefab;
+    [SerializeField] private GameObject _warningTextPrefab;
 
     private PopUpCanvas popUpCanvas;
     public PopUpCanvas PopUpCanvas
@@ -56,7 +57,7 @@ public class UIManager : Singleton<UIManager>
         if (damageTextPrefab.Equals(null)) return;
 
         var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
-        go.GetComponent<DamageText>()?.Init($"{damage}");
+        go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}");
     }
 
     public void ShowDamageText(Transform spawnPos, long damage, Color color)
@@ -64,6 +65,14 @@ public class UIManager : Singleton<UIManager>
         if (damageTextPrefab.Equals(null)) return;
 
         var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
-        go.GetComponent<DamageText>()?.Init($"{damage}", color);
+        go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}", color);
+    }
+
+    public void ShowWarningText(string text)
+    {
+        if (_warningTextPrefab.Equals(null)) return;
+
+        var go = Instantiate(_warningTextPrefab);
+        go.GetComponent<DamageText>()?.InitWarningMessage($"{text}");
     }
 }

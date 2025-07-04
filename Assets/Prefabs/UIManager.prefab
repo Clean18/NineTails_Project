@@ -48,3 +48,4 @@ MonoBehaviour:
   GameUI: {fileID: 0}
   MainUI: {fileID: 0}
   damageTextPrefab: {fileID: 6080588013198760713, guid: a94389db9e8d1e443a735fc6c89bbf63, type: 3}
+  _warningTextPrefab: {fileID: 2880421283623280768, guid: c9b210ed527b54742a06d27f990aa642, type: 3}
