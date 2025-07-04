@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 // 몬스터 공통 FSM (Finite State Machine) 부모 클래스
 // 근접/원거리 몬스터 모두 이 클래스를 상속하여 상태 관리 로직을 공통 처리
@@ -37,6 +38,23 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] protected Animator _anim;
     [SerializeField] protected MonsterType MonType;
+
+    [SerializeField] protected AudioMixerGroup sfxMixerGroup;
+    protected AudioSource sfxAudioSource;
+
+    protected virtual void Awake()
+    {
+        sfxAudioSource = gameObject.AddComponent<AudioSource>();
+        sfxAudioSource.outputAudioMixerGroup = sfxMixerGroup;
+        sfxAudioSource.playOnAwake = false;
+        sfxAudioSource.loop = false;
+    }
+
+    protected void PlaySound(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null || sfxAudioSource == null) return;
+        sfxAudioSource.PlayOneShot(clip, volume);
+    }
 
     // 초기화
     protected virtual void Start()

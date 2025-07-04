@@ -372,7 +372,6 @@ public class DataManager : Singleton<DataManager>
 	}
 	IEnumerator MissionDataInit()
 	{
-        yield break;
 		// CSV 다운로드
 		string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
 		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
@@ -540,17 +539,18 @@ public class DataManager : Singleton<DataManager>
             NormalSkillCostTable[skilllevel] = normalCost;
             UltSkillCostTable[skilllevel] = ultCost;
 
-            //Debug.Log("===============");
-            //Debug.Log($"{skilllevel} 레벨");
-            //Debug.Log($"노말 스킬 비용 : {normalCost}");
-            //Debug.Log($"궁극기 비용 : {ultCost}");
-            //Debug.Log("===============");
+            Debug.Log("===============");
+            Debug.Log($"{skilllevel} 레벨");
+            Debug.Log($"노말 스킬 비용 : {normalCost}");
+            Debug.Log($"궁극기 비용 : {ultCost}");
+            Debug.Log("===============");
         }
     }
 
     void DownloadFailed()
     {
-
+        Debug.Log("다운로드 실패");
+        // TODO : 게임종료할지 어떻게할지
     }
 
 	#region Table Get 함수

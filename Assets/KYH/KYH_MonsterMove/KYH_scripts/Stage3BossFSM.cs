@@ -88,11 +88,11 @@ public class Stage3BossFSM : BaseBossFSM
         // 2. 경고 제거 및 애니메이션+사운드 재생
         Destroy(warning);
         // BossAnimator.Play("Boss_WingOpen");
-        AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
+        PlaySound(RoarSound1);
 
         // 3. 회오리 이펙트 생성
         GameObject whirlwind = Instantiate(WhirlwindEffect, Pattern1Origin.position, Quaternion.identity);
-        AudioSource.PlayClipAtPoint(CycloneSound, transform.position);
+        PlaySound(CycloneSound);
         // 4. 지속 시간 동안 일정 간격으로 데미지
         int hitCount = Mathf.FloorToInt(Pattern1Duration / Pattern1HitInterval);
         for (int i = 0; i < hitCount; i++)
@@ -135,7 +135,7 @@ public class Stage3BossFSM : BaseBossFSM
         // 2. 경고 대기 후 연출
         yield return new WaitForSeconds(Pattern2Delay);
         // BossAnimator.Play("Boss_WingOpen");
-        AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
+        PlaySound(RoarSound2);
 
         // 3. 깃털 생성
         for (int i = 0; i < positions.Count; i++)
@@ -178,13 +178,13 @@ public class Stage3BossFSM : BaseBossFSM
 
         hasChargedHit = false;
         isCharging = false;
-        AudioSource.PlayClipAtPoint(RoarSound3, transform.position);
+        PlaySound(RoarSound3);
         // 1. 경고 프리팹 생성
         GameObject warning = Instantiate(WarningRectPrefab, transform.position, Quaternion.identity);
 
         // 2. 대기 후 애니메이션, 사운드
         yield return new WaitForSeconds(ChargeDelay);
-        AudioSource.PlayClipAtPoint(ChargeSound, transform.position);
+        PlaySound(ChargeSound);
         GameObject aura = Instantiate(AuraEffect, transform.position, Quaternion.identity);
 
         // 3. 부드럽게 돌진 시작 위치로 이동

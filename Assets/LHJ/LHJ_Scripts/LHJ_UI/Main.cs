@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +11,7 @@ public class Main : BaseUI, IUI
     [SerializeField] private TMP_Text hpText;                   // 체력 / 최대체력
     [SerializeField] private TextMeshProUGUI _warmthText;       // 온기
     [SerializeField] private TextMeshProUGUI _spritenergyText;  // 영기
+    [SerializeField] private TMP_Text _soulText;                // 혼백
     [SerializeField] private TextMeshProUGUI timeText;          // 미션 시간
     [SerializeField] private TextMeshProUGUI retrycoolTimeText; // 미션 재도전 남은시간
     private void Start()
@@ -28,19 +27,33 @@ public class Main : BaseUI, IUI
     public void UIInit()
     {
         Debug.LogWarning("Main 초기화");
-        GetEvent("Btn_Stat").Click += data => UIManager.Instance.ShowPopUp<StatusPopUp>(); // Stats
-        GetEvent("Btn_Skill").Click += data => UIManager.Instance.ShowPopUp<SkillPopUp>(); // Skill
-        GetEvent("Btn_Weapon").Click += data => UIManager.Instance.ShowPopUp<UpgradePopUp>(); //Equipment
-        GetEvent("Btn_Option").Click += data => UIManager.Instance.ShowPopUp<SettingPopUp>(); // Setting
-        var mission = GetEvent("Mission");
-        if (mission != null)
+        // 여기서 버튼들 팝업 활성화
+        GetEvent("Btn_Stat").Click += data => // Stats
         {
-            mission.Click += data => {
-                if (MissionManager.Instance.IsCooldownActive)
-                    return;
-                UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-            };
-        }
+            Debug.Log("스탯 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
+        };
+        GetEvent("Btn_Skill").Click += data => // Skill
+        {
+            Debug.Log("스킬 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<SkillPopUp>();
+        };
+        GetEvent("Btn_Weapon").Click += data => //Equipment
+        {
+            Debug.Log("장비 강화 UI 활성화");
+            UIManager.Instance.ShowPopUp<UpgradePopUp>();
+        };
+        GetEvent("Btn_Option").Click += data => // Setting
+        {
+            Debug.Log("옵션 UI 활성화");
+            UIManager.Instance.ShowPopUp<SettingPopUp>();
+        };
+        //GetEvent("Mission").Click += data => // Mission
+        //{
+        //    if (MissionManager.Instance.IsCooldownActive)
+        //        return;
+        //    UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+        //};
         PlayerStatUI();
         GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
@@ -52,15 +65,19 @@ public class Main : BaseUI, IUI
         var player = PlayerController.Instance;
         if (player == null) return;
         // Data
-        powerText.text = $"Power : {player.GetPower()}";
-        attackText.text = $"Attack : {player.GetAttack()}";
-        defenseText.text = $"Defense : {player.GetDefense()}";
+        powerText.text = $"전투력 : {player.GetPower()}";
+        attackText.text = $"공격력 : {player.GetAttack()}";
+        defenseText.text = $"방어력 : {player.GetDefense()}";
         // TODO : UI 전부 추가하면 지우기
         if (_hpSlider != null) _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
-        hpText.text = $"{player.GetHp()}/{player.GetMaxHp()}";
+        double hpPer = (double)player.GetHp() / player.GetMaxHp() * 100f;
+        hpText.text = $"{hpPer:F0}%";
         // Cost
-        _warmthText.text = $"W: {player.GetWarmth()}";
-        _spritenergyText.text = $"S: {player.GetSpiritEnergy()}";
+        _warmthText.text = $"{player.GetWarmth()}";
+        _spritenergyText.text = $"{player.GetSpiritEnergy()}";
+        // 플레이어 스킬이 7개가 아니면 활성화
+        _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.GetSkillData().Count != 7);
+        _soulText.text = $"{player.GetSoul()}";
     }
     private void Update()
     {

@@ -30,7 +30,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
             MonsterAnimator.Play("Melee_Attack");
 
             // 2. 공격 사운드 재생
-            AudioSource.PlayClipAtPoint(AttackSound, transform.position);
+            PlaySound(AttackSound);
 
           //  // 3. 이펙트 생성 (공격 시점에)
           //  if (AttackEffectPrefab != null && AttackPoint != null)
@@ -60,7 +60,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     protected override void Die()
     {
         base.Die();
-        MonsterAnimator.Play("Die");
+        
 
 
         // 오브젝트 비활성화
