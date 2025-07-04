@@ -576,7 +576,6 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 90fd440679622b24ebc944c0b42d8a67, type: 3}
   - {fileID: 4900000, guid: b6668d886e4289843accfa83694c3ba5, type: 3}
   - {fileID: 4900000, guid: 25791561073aa3b4596a44afa453d917, type: 3}
-  - {fileID: 4900000, guid: d8761dadf1ef2fb4e997f9649a4f344f, type: 3}
   - {fileID: 4900000, guid: 39da8c44f8c4a3143be9d497be2c0a00, type: 3}
   - {fileID: 4900000, guid: 588c546965f68a34cbc9cd602e8ba561, type: 3}
   - {fileID: 4900000, guid: a8341cb6cc513fd42a9e00b4fc7a3ddd, type: 3}
@@ -673,7 +672,7 @@ MonoBehaviour:
   - ???
   - "\uB0B4\uB808\uC774\uC158"
   nextButton: {fileID: 1909925383}
-  dialogName: Stage3-3_Last
+  dialogName: Stage1-3_Last
   foxName: "\uAD6C\uBBF8\uD638"
   spacing: 90
   fadeDuration: 0.5
