@@ -30,6 +30,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -45,6 +50,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -60,6 +70,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -75,6 +90,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -90,6 +110,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -105,6 +130,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -120,6 +150,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }
@@ -135,6 +170,11 @@ public class StagePopUp : BaseUI
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
+                if (MissionManager.Instance.IsCooldownActive)
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
                 popUp.SetScene(sceneName);
             }

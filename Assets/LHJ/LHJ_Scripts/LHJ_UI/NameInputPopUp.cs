@@ -18,8 +18,10 @@ public class NameInputPopUp : BaseUI
             {
                 // Ui매니저에 플레이어 이름 저장
                 UIManager.Instance.PlayerName = name;
-                UIManager.Instance.MainUI.UpdateNicknameUI(); // Main 닉네임 텍스트 UI갱신
-
+                if (UIManager.Instance.MainUI != null)
+                {
+                    UIManager.Instance.MainUI.UpdateNicknameUI();
+                }
                 UIManager.Instance.ClosePopUp(); // 현재 팝업 닫기
                 UIManager.Instance.ShowPopUp<CompletePopUp>(); // 클리어 팝업 열기
             }
