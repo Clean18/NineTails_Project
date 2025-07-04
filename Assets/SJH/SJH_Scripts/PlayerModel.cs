@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
@@ -53,8 +55,14 @@ public class PlayerModel
 
 	public void ApplyDamage(long damage)
 	{
-		Data.DecreaseHp(damage);
-		if (Data.Hp <= 0)
+        string scene = SceneManager.GetActiveScene().name;
+
+        if (scene == "1-3" || scene == "2-3" || scene == "3-3")
+        {
+            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+        }
+        Data.DecreaseHp(damage);
+        if (Data.Hp <= 0)
 		{
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
@@ -80,6 +88,7 @@ public class PlayerModel
 	public long GetHp() => Data.Hp;
 	public long GetWarmth() => Cost.Warmth;
 	public long GetSpiritEnergy() => Cost.SpiritEnergy;
+    public long GetSoul() => Cost.Soul;
 	public void ClearShield() => Data.ShieldHp = 0;
 
 	public void ConnectEvent(Action playerStatUI)
@@ -100,7 +109,7 @@ public class PlayerModel
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
         List<SaveAchievementData> achievments = Quest.SaveAchievementData();
         // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
-        //List<SaveMissionData> missions = Quest.SaveMissionData();
+        List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -115,6 +124,7 @@ public class PlayerModel
 		// Cost
 		gameData.Warmth = cost.Warmth;
 		gameData.SpiritEnergy = cost.SpiritEnergy;
+        gameData.Soul = cost.Soul;
         gameData.GetFirstWarmth = cost.GetFirstWarmth;
         gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
 
@@ -128,7 +138,7 @@ public class PlayerModel
 
         // Quest
         gameData.PlayerAchivementList = achievments;
-        //gameData.PlayerMissionList = missions;
+        gameData.PlayerMissionList = missions;
 
 		return gameData;
 	}
@@ -371,6 +381,9 @@ public class PlayerModel
             return;
 		}
 	}
+    public GradeType GetGradeType() => Equipment.GradeType;
+    public float GetIncreseDamage() => Equipment.GetIncreseDamage();
+    public float GetIncreseDamage(int level) => Equipment.GetIncreseDamage(level);
     #endregion
 
     #region PlayerSkill 관련 함수
@@ -434,6 +447,60 @@ public class PlayerModel
         Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
     }
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
+    public List<ISkill> GetSkillMappingList()
+    {
+        var list = new List<ISkill>();
+        foreach (var skill in Skill.SkillMapping.Values)
+        {
+            if (skill != null) list.Add(skill);
+        }
+        return list;
+    }
+    public List<ISkill> GetHasSkillList() => Skill.HasSkills;
+    public void AddSkill(int skillIndex)
+    {
+        // 중복 체크
+        var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
+        if (skill == null)
+        {
+            Debug.Log("배울 수 없는 스킬입니다.");
+            return;
+        }
+        var mapping = GetSkillMappingList();
+        var has = Skill.HasSkills;
+        
+        foreach (var mappingSkill in mapping)
+        {
+            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+            {
+                Debug.Log("이미 배운 스킬입니다.");
+                return;
+            }
+        }
+        foreach (var mappingSkill in has)
+        {
+            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+            {
+                Debug.Log("이미 배운 스킬입니다.");
+                return;
+            }
+        }
+
+        // 플레이어 재화 체크
+        if (Cost.Soul < 1 && !PlayerController.Instance.IsCheat)
+        {
+            Debug.Log("혼백이 부족합니다.");
+            return;
+        }
+
+        // 재화 감소
+        if (!PlayerController.Instance.IsCheat) Cost.DecreaseSoul(1);
+
+        // 스킬 추가
+        Skill.AddSkill(skillIndex);
+        // 버튼 업데이트
+        SkillButton.Instance.UpdateButtonImage();
+    }
     #endregion
 
     #region Quest 관련 함수

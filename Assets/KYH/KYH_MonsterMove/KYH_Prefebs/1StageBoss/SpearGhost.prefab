@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamagePercent: 0.2
   LifeTime: 5
+  SpearGhostSound: {fileID: 8300000, guid: c7824efa8f7e91a4c93e45e1fc2c7992, type: 3}
 --- !u!50 &303783098945277447
 Rigidbody2D:
   serializedVersion: 4

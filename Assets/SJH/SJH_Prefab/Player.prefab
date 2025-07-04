@@ -85,7 +85,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 23, y: 20.484375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -184,6 +184,8 @@ MonoBehaviour:
       _spiritEnergy: 0
       _warmth: 0
       _soul: 0
+      GetFirstWarmth: 0
+      GetFirstSpiritEnergy: 0
     Equipment:
       _grade: 0
       _level: 0
@@ -328,6 +330,7 @@ MonoBehaviour:
   - {fileID: 1575395230341757593, guid: a2bf73001addb0246a10619d8f5fd15d, type: 3}
   - {fileID: 5990876499532869789, guid: 499e360ce79c1ce49b9771d231d4e370, type: 3}
   - {fileID: 5624062577994399364, guid: 78be92e0e2b873a44ab62b172b0082d0, type: 3}
+  - {fileID: 7784449254640425555, guid: 4b733fc469985b647bb12675c48eb502, type: 3}
 --- !u!1 &4774744751119802566
 GameObject:
   m_ObjectHideFlags: 0

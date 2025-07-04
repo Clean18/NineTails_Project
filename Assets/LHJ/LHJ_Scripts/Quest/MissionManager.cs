@@ -13,7 +13,7 @@ public class MissionManager : Singleton<MissionManager>
     private int killCount;                  // 킬 횟수
     private bool isRunning;                 // 미션 실행 여부
 
-    public HashSet<string> missionIds = new();  // 미션 중복 방지
+    public HashSet<string> MissionIds = new();  // 미션 중복 방지
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
@@ -29,7 +29,7 @@ public class MissionManager : Singleton<MissionManager>
             return;
         }
         // 클리어 미션이면 재실행하지않음
-        if (missionIds.Contains(currentMission.Id))
+        if (MissionIds.Contains(currentMission.Id))
         {
             return;
         }
@@ -60,7 +60,7 @@ public class MissionManager : Singleton<MissionManager>
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
-            missionIds.Add(currentMission.Id);  // 미션 클리어 
+            MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
             UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
         }

@@ -20,6 +20,14 @@ public class DamageText : MonoBehaviour
         StartCoroutine(DamageTextRoutine());
 	}
 
+    public void Init(string dmgText, Color color)
+    {
+        text.text = dmgText;
+        text.color = color;
+        transform.position += Vector3.up * offset;
+        StartCoroutine(DamageTextRoutine());
+    }
+
 
     IEnumerator DamageTextRoutine()
     {
@@ -37,5 +45,4 @@ public class DamageText : MonoBehaviour
 
         Destroy(gameObject);
     }
-
 }
