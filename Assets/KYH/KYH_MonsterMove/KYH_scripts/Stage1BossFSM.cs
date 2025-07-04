@@ -10,8 +10,7 @@ using UnityEngine.Audio;
 /// </summary>
 public class Stage1BossFSM : BaseBossFSM
 {
-    [Header("Audio Mixer Group")]
-    [SerializeField] private AudioMixerGroup sfxMixerGroup;  // SFX 볼륨 제어용
+    
 
     [Header("Pattern1 setting")]
     [SerializeField] private Animator BossAnimator;             // 보스 애니메이터
@@ -43,18 +42,6 @@ public class Stage1BossFSM : BaseBossFSM
     private List<GameObject> warningRects = new List<GameObject>();
 
 
-    private void PlaySound(AudioClip clip, float volume = 1f)
-    {
-        if (clip == null || sfxMixerGroup == null) return;
-
-        GameObject temp = new GameObject("SFX_Temp");
-        AudioSource source = temp.AddComponent<AudioSource>();
-        source.clip = clip;
-        source.outputAudioMixerGroup = sfxMixerGroup;  // 믹서 그룹 지정
-        source.volume = volume;
-        source.Play();
-        Destroy(temp, clip.length);
-    }
 
 
     protected override void HandlePattern1()
