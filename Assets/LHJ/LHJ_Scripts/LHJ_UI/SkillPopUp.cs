@@ -76,7 +76,7 @@ public class SkillPopUp : BaseUI
 			skillUIList[i]._getButton.onClick.AddListener(() =>
 			{
 				// TODO : 스킬 획득
-				PlayerController.Instance.AddSkill(skillIndex);
+				PlayerController.Instance.LearnSkill(skillIndex);
 				Debug.Log($"스킬 {skillIndex}번 습득 버튼 클릭됨");
 				UpdateSkill();
 			});

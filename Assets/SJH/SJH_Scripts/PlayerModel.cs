@@ -270,7 +270,7 @@ public class PlayerModel
 
     #region Equipment 관련 함수
     /// <summary>
-    /// Equipment 클래스 저장용 데이터 반환하는 함수
+    /// PlayerEquipment 클래스 저장용 데이터를 반환하는 함수
     /// </summary>
     /// <returns></returns>
     public SaveEquipmentData GetEquipmentData() => Equipment.SavePlayerEquipment();
@@ -312,211 +312,42 @@ public class PlayerModel
     #endregion
 
     #region PlayerSkill 관련 함수
+    /// <summary>
+    /// PlayerSkill 클래스 저장용 데이터를 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public List<SaveSkillData> GetSkillData() => Skill.SavePlayerSkill();
-    public void TrySkillLevelUp(int skillIndex)
-    {
-        var player = PlayerController.Instance;
-        var skill = player.SkillController.SkillList[skillIndex];
-        if (skill == null)
-        {
-            Debug.Log("스킬이 없습니다.");
-            return;
-        }
-        // 레벨 체크
-        if (skill.SkillLevel >= 100)
-        {
-            Debug.Log("스킬 레벨을 더 이상 올릴 수 없습니다.");
-            return;
-        }
-        // 재화 체크
-        // TODO : 스킬이 노말인지 궁극기인지 구분해야함
-        bool isUlt = skill.SkillData.SkillIndex == 6;
-
-        if (isUlt) // 궁극기 강화
-        {
-            var ultCost = DataManager.Instance.GetUltSkillCost(skill.SkillLevel);
-            if (ultCost == int.MaxValue)
-            {
-                Debug.Log("스킬을 강화할 수 없습니다.");
-                return;
-            }
-            // 노말체크
-            if (player.GetSpiritEnergy() < ultCost)
-            {
-                Debug.Log("영기가 부족합니다.");
-                return;
-            }
-            // 재화 감소
-            player.SpendCost(CostType.SpiritEnergy, ultCost);
-        }
-        else // 노말 강화
-        {
-            var normalCost = DataManager.Instance.GetNormalSkillCost(skill.SkillLevel);
-            if (normalCost == int.MaxValue)
-            {
-                Debug.Log("스킬을 강화할 수 없습니다.");
-                return;
-            }
-            if (player.GetSpiritEnergy() < normalCost)
-            {
-                Debug.Log("영기가 부족합니다.");
-                return;
-            }
-            player.SpendCost(CostType.SpiritEnergy, normalCost);
-        }
-        /*
-         * 플레이어의 스킬 보유 여부를 체크안한다면
-         * UI창에서는 가지고 있는 스킬만 활성화하는 방식
-         */
-        skill.SkillLevel += 1;
-        Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
-    }
+    /// <summary>
+    /// skillIndex 스킬 레벨업을 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void TrySkillLevelUp(int skillIndex) => Skill.TrySkillLevelUp(skillIndex);
+    /// <summary>
+    /// 스킬 단축창을 Dictionary로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
-    public List<ISkill> GetSkillMappingList()
-    {
-        var list = new List<ISkill>();
-        foreach (var skill in Skill.SkillMapping.Values)
-        {
-            if (skill != null) list.Add(skill);
-        }
-        return list;
-    }
+    /// <summary>
+    /// 스킬 단축창에 등록되어 있는 스킬을 List로 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public List<ISkill> GetSkillMappingList() => Skill.GetSkillMappingList();
     public List<ISkill> GetHasSkillList() => Skill.HasSkills;
-    public void AddSkill(int skillIndex)
-    {
-        // 중복 체크
-        var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
-        if (skill == null)
-        {
-            Debug.Log("배울 수 없는 스킬입니다.");
-            return;
-        }
-        var mapping = GetSkillMappingList();
-        var has = Skill.HasSkills;
-        
-        foreach (var mappingSkill in mapping)
-        {
-            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
-            {
-                Debug.Log("이미 배운 스킬입니다.");
-                return;
-            }
-        }
-        foreach (var mappingSkill in has)
-        {
-            if (mappingSkill.SkillData.SkillIndex == skill.SkillData.SkillIndex)
-            {
-                Debug.Log("이미 배운 스킬입니다.");
-                return;
-            }
-        }
-
-        // 플레이어 재화 체크
-        if (Cost.Soul < 1 && !PlayerController.Instance.IsCheat)
-        {
-            Debug.Log("혼백이 부족합니다.");
-            return;
-        }
-
-        // 재화 감소
-        if (!PlayerController.Instance.IsCheat) Cost.DecreaseSoul(1);
-
-        // 스킬 추가
-        Skill.AddSkill(skillIndex);
-        // 버튼 업데이트
-        SkillButton.Instance.UpdateButtonImage();
-    }
-
-    public void AddSkillSlot(int skillIndex)
-    {
-        var mapping = GetMappingSkills();
-        var has = GetHasSkillList();
-        ISkill skill = null;
-
-        // 추가할 스킬이 가지고 있는 스킬인지 체크
-        bool isHas = false;
-        for (int i = 0; i < has.Count; i++)
-        {
-            if (has[i].SkillData.SkillIndex == skillIndex)
-            {
-                skill = has[i];
-                isHas = true;
-                break;
-            }
-        }
-
-        if (skill == null || isHas == false)
-        {
-            Debug.Log("가지고 있지 않은 스킬입니다.");
-            return;
-        }
-
-        if (mapping.ContainsValue(skill))
-        {
-            Debug.Log("이미 등록된 스킬입니다.");
-            return;
-        }
-
-        KeyCode[] keyList = new KeyCode[]
-        {
-            KeyCode.Alpha1,
-            KeyCode.Alpha2, 
-            KeyCode.Alpha3
-        };
-
-        for (int i = 0; i < keyList.Length; i++)
-        {
-            KeyCode key = keyList[i];
-            if (mapping.TryGetValue(key, out ISkill value) && value == null)
-            {
-                // 단축키 등록
-                skill.SlotIndex = i + 1;
-                mapping[key] = skill;
-                // hasSkill에서 삭제
-                has.Remove(skill);
-                Debug.Log($"{skill.SkillData.SkillName} 스킬 {skill.SlotIndex}번 슬롯에 등록");
-                return;
-            }
-        }
-
-        Debug.Log("등록 가능한 슬롯이 없습니다.");
-    }
-
-    public void RemoveSkillSlot(int skillIndex)
-    {
-        var mapping = GetMappingSkills();
-        var has = Skill.HasSkills;
-
-        if (skillIndex < 1 || skillIndex > 6) return;
-
-        ISkill skill = null;
-
-        // 슬롯 삭제
-        foreach (var pair in mapping)
-        {
-            // 단축키에서 스킬인덱스와 같은 스킬 찾기
-            if (pair.Value != null && pair.Value.SkillData.SkillIndex == skillIndex)
-            {
-                skill = pair.Value;
-                mapping[pair.Key] = null;
-                break;
-            }
-        }
-
-        if (skill == null)
-        {
-            Debug.Log($"SkillIndex : {skillIndex} 스킬은 등록된 스킬이 아닙니다.");
-        }
-
-        // 삭제되면 has리스트에 추가
-        if (!has.Contains(skill))
-        {
-            var debug = skill.SlotIndex;
-            Debug.Log($"{skill.SkillData.SkillName} 스킬 {debug}번 슬롯에서 제거");
-            skill.SlotIndex = -1;
-            has.Add(skill);
-        }
-    }
+    /// <summary>
+    /// skillIndex 번째 스킬을 획득하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void LearnSkill(int skillIndex) => Skill.LearnSkill(skillIndex, Cost.Soul);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에 추가를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void AddSkillSlot(int skillIndex) => Skill.AddSkillSlot(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
+    public void RemoveSkillSlot(int skillIndex) => Skill.RemoveSkillSlot(skillIndex);
     #endregion
 
     #region Quest 관련 함수

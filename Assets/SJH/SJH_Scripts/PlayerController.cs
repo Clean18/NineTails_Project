@@ -471,7 +471,11 @@ public class PlayerController : MonoBehaviour
     /// skillIndex 번째 스킬을 획득하는 함수
     /// </summary>
     /// <param name="skillIndex"></param>
-    public void AddSkill(int skillIndex) => _model.AddSkill(skillIndex);
+    public void LearnSkill(int skillIndex) => _model.LearnSkill(skillIndex);
+    /// <summary>
+    /// skillIndex 번째 스킬을 단축창에 추가를 시도하는 함수
+    /// </summary>
+    /// <param name="skillIndex"></param>
     public void AddSkillSlot(int skillIndex) => _model.AddSkillSlot(skillIndex);
     public void RemoveSkillSlot(int skillIndex) => _model.RemoveSkillSlot(skillIndex);
     #endregion
