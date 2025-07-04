@@ -247,21 +247,24 @@ MonoBehaviour:
   CurrentHealth: 0
   DamageReduceRate: 0
   IdleTime: 3
+  sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}
   BossAnimator: {fileID: 7577438767268800427}
   WarningLineVertical: {fileID: 9209678113999117585, guid: d874238c6b0601341becdf7596fbc7e0, type: 3}
   WarningOrigin1: {fileID: 226505084774499942}
   DustEffect1: {fileID: 8536767884723880176, guid: 2ae28178dadda184cadf179556339e97, type: 3}
-  RoarSound1: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound1: {fileID: 8300000, guid: c50e71db561f3dc48a094211106c3af4, type: 3}
   Pattern1Delay: 3
   Pattern1BoxSize: {x: 9, y: 12}
   DustEffect1SpawnRight: {fileID: 1743992433580517759}
   DustEffect1SpawnLeft: {fileID: 8364971859131105924}
+  LegMoveSound: {fileID: 8300000, guid: 2bca70511ebd0894aa019023532f0915, type: 3}
   WarningLineHorizontal: {fileID: 8229893166727560076, guid: 372e49a067608a24fb9732a59760f641, type: 3}
   WarningOrigin2: {fileID: 5782947173301495112}
   DustEffect2: {fileID: 1073636071260426840, guid: df0b014db2269fb4c88ad6e1d10ba025, type: 3}
   DustEffect3: {fileID: 6152101880899247167, guid: 1a6222726f90415429f2094769af3c10, type: 3}
   RoarSound2: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  SwingBonkSound: {fileID: 8300000, guid: f35e795b02f3e204b9e5b59a326651a0, type: 3}
   Pattern2Delay: 5
   Pattern2BoxSize: {x: 11, y: 7}
   SwingBonkPoint1: {fileID: 265232001713993468}

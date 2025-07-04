@@ -19,6 +19,7 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private Vector2 Pattern1BoxSize = new Vector2(2f, 6f);
     [SerializeField] private Transform DustEffect1SpawnRight;
     [SerializeField] private Transform DustEffect1SpawnLeft;
+    [SerializeField] private AudioClip LegMoveSound;
 
     [Header("Pattern2 설정 - 방망이 수평 강타 (1회, 60% 피해)")]
     [SerializeField] private GameObject WarningLineHorizontal;
@@ -26,6 +27,7 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private GameObject DustEffect2;
     [SerializeField] private GameObject DustEffect3;
     [SerializeField] private AudioClip RoarSound2;
+    [SerializeField] private AudioClip SwingBonkSound;
     [SerializeField] private float Pattern2Delay = 3f;
     [SerializeField] private Vector2 Pattern2BoxSize = new Vector2(6f, 2f);
     [SerializeField] private Transform SwingBonkPoint1;
@@ -43,7 +45,7 @@ public class Stage2BossFSM : BaseBossFSM
 
         // 1. 울부짖는 연출
         BossAnimator.Play("Boss_Roar");
-        AudioSource.PlayClipAtPoint(RoarSound1, transform.position);
+        PlaySound(RoarSound1);
 
         // 2. 경고 범위 표시 (세로 방향)
         GameObject warning = Instantiate(
@@ -59,6 +61,7 @@ public class Stage2BossFSM : BaseBossFSM
         if (DustEffect1 != null)
         {
             GameObject dust1 = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
+            PlaySound(LegMoveSound);
             Destroy(dust1, 2f); // 2초 뒤 삭제
         }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
@@ -69,6 +72,7 @@ public class Stage2BossFSM : BaseBossFSM
         if (DustEffect1 != null)
         {
             GameObject dust2 = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
+            PlaySound(LegMoveSound);
             Destroy(dust2, 2f); // 2초 뒤 삭제
         }
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
@@ -94,9 +98,13 @@ public class Stage2BossFSM : BaseBossFSM
     {
         Debug.Log("Stage2 패턴2 - 방망이 수평 강타 시작");
 
+        BossAnimator.Play("Giant_LegMove");
+
         // 1. 발 두 번 구르고 울부짖는 연출
-        
-        AudioSource.PlayClipAtPoint(RoarSound2, transform.position);
+        PlaySound(LegMoveSound);
+        PlaySound(LegMoveSound);
+        yield return new WaitForSeconds(1f);
+        PlaySound(RoarSound2);
 
         // 2. 경고 범위 표시 (가로 방향)
         GameObject warning = Instantiate(
@@ -117,6 +125,7 @@ public class Stage2BossFSM : BaseBossFSM
         {
             GameObject dust3 = Instantiate(DustEffect2, SwingBonkPoint1.position, Quaternion.identity);
             GameObject dust4 = Instantiate(DustEffect3, SwingBonkPoint2.position, Quaternion.identity);
+            PlaySound(SwingBonkSound);
 
             Destroy(dust3, 2f);
             Destroy(dust4, 2f);

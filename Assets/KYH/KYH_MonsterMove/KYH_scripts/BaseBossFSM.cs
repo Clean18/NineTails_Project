@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 /// <summary>
@@ -34,11 +35,23 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     [SerializeField] protected float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 (다음 패턴 전환까지 딜레이)
     protected float IdleTimer;                             // Idle 상태에서 누적된 시간
 
+    [Header("Audio")]
+    [SerializeField] protected AudioMixerGroup sfxMixerGroup;
+    protected AudioSource sfxAudioSource;
+
     [SerializeField] protected Transform PlayerTransform;  // 플레이어 트랜스폼
 
     protected Coroutine BossPatternRoutine;                // 현재 실행 중인 패턴 코루틴 참조
     protected virtual int PatternCount => 3;
     protected Vector3 originalPosition;                               // 초기 위치 저장
+
+    protected virtual void Awake()
+    {
+        sfxAudioSource = gameObject.AddComponent<AudioSource>();
+        sfxAudioSource.outputAudioMixerGroup = sfxMixerGroup;
+        sfxAudioSource.playOnAwake = false;
+        sfxAudioSource.loop = false;
+    }
     // 시작 시 상태 초기화
     protected virtual void Start()
     {
@@ -165,5 +178,11 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
             CurrentHealth = 0;
             TransitionToState(BossState.Dead);
         }
+    }
+
+    protected void PlaySound(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null || sfxAudioSource == null) return;
+        sfxAudioSource.PlayOneShot(clip, volume);
     }
 }

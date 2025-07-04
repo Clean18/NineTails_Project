@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
@@ -54,8 +55,14 @@ public class PlayerModel
 
 	public void ApplyDamage(long damage)
 	{
-		Data.DecreaseHp(damage);
-		if (Data.Hp <= 0)
+        string scene = SceneManager.GetActiveScene().name;
+
+        if (scene == "1-3" || scene == "2-3" || scene == "3-3")
+        {
+            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+        }
+        Data.DecreaseHp(damage);
+        if (Data.Hp <= 0)
 		{
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");

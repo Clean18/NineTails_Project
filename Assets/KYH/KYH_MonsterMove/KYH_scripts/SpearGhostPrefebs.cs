@@ -7,9 +7,11 @@ public class SpearGhostPrefebs : MonoBehaviour
 {
     [SerializeField] private float DamagePercent = 0.2f;
     [SerializeField] private float LifeTime = 5f;
+    [SerializeField] AudioClip SpearGhostSound;
 
     private void Start()
     {
+        AudioSource.PlayClipAtPoint(SpearGhostSound, transform.position);   
         Destroy(gameObject, LifeTime);
     }
 

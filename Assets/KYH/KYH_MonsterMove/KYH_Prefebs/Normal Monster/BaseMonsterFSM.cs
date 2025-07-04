@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 // 몬스터 공통 FSM (Finite State Machine) 부모 클래스
 // 근접/원거리 몬스터 모두 이 클래스를 상속하여 상태 관리 로직을 공통 처리
@@ -9,10 +10,13 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 몬스터의 상태를 정의하는 열거형
     protected enum MonsterState { Idle, Move, Attack }
 
+    // 몬스터의 타입을 정의하는 열거형 
+
+    protected enum MonsterType { Melee, Ranged, Heavy }
+
     [Header("Monster Status")]
     [SerializeField] protected float MoveSpeed = 2f;            // 이동 속도
-    [SerializeField] protected float DetectRange = 5f;          // 플레이어 탐지 범위
-    [SerializeField] protected float AttackRange = 1.5f;        // 공격 사거리 (공통)
+    public float AttackRange = 1.5f;        // 공격 사거리 (공통)
     [SerializeField] protected float AttackCooldown = 2f;       // 공격 쿨타임 (공통)
     [SerializeField] protected float MaxHp = 10f;               // 최대 체력
     [SerializeField] protected float DamageReduceRate = 0f;     // 데미지 감소율 (퍼센트)
@@ -34,6 +38,23 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] protected Animator _anim;
     [SerializeField] protected MonsterType MonType;
+
+    [SerializeField] protected AudioMixerGroup sfxMixerGroup;
+    protected AudioSource sfxAudioSource;
+
+    protected virtual void Awake()
+    {
+        sfxAudioSource = gameObject.AddComponent<AudioSource>();
+        sfxAudioSource.outputAudioMixerGroup = sfxMixerGroup;
+        sfxAudioSource.playOnAwake = false;
+        sfxAudioSource.loop = false;
+    }
+
+    protected void PlaySound(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null || sfxAudioSource == null) return;
+        sfxAudioSource.PlayOneShot(clip, volume);
+    }
 
     // 초기화
     protected virtual void Start()
@@ -73,20 +94,18 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
             switch (_currentState)
             {
                 case MonsterState.Idle:
-                    if (dist < DetectRange)
-                        ChangeState(MonsterState.Move); // 탐지범위 안이면 이동
+                    if (targetPlayer != null)
+                        ChangeState(MonsterState.Move); // 타겟 있으면 무조건 이동
                     break;
 
                 case MonsterState.Move:
                     if (dist < AttackRange)
                         ChangeState(MonsterState.Attack); // 사거리 안이면 공격
-                    else if (dist >= DetectRange)
-                        ChangeState(MonsterState.Idle); // 다시 멀어지면 대기
                     break;
 
                 case MonsterState.Attack:
                     if (dist > AttackRange)
-                        ChangeState(MonsterState.Move); // 공격 범위 벗어나면 다시 이동
+                        ChangeState(MonsterState.Move); // 사거리 벗어나면 다시 이동
                     break;
             }
         }
@@ -110,14 +129,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         }
     }
 
-    public enum MonsterType
-    {
-        Melee,
-        Range,
-        Tank,
-    }
     // 플레이어에게 이동
-    protected void MoveToPlayer()
+    protected virtual void MoveToPlayer()
     {
         if (targetPlayer == null) return;
         Vector2 dir = (targetPlayer.position - transform.position).normalized;
@@ -192,7 +205,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         MissionManager.Instance.AddKill();
 
         // 오브젝트 비활성화
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 
     // 공격 루틴은 자식 클래스에서 반드시 오버라이드 해야 함

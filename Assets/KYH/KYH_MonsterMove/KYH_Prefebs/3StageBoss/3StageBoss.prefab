@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5302198693414457420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.7, y: -0.06, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -135,10 +135,12 @@ MonoBehaviour:
   CurrentHealth: 0
   DamageReduceRate: 0
   IdleTime: 3
+  sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}
   WarningCirclePrefab: {fileID: 4009488767628743915, guid: 158347338ee333d40a9c328760dc7f98, type: 3}
-  WhirlwindEffect: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  RoarSound1: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  WhirlwindEffect: {fileID: 7622797204963500680, guid: cbae91d6e8c358747b29051fdb82909a, type: 3}
+  RoarSound1: {fileID: 8300000, guid: 872054574556689478ff17775c3091fc, type: 3}
+  CycloneSound: {fileID: 8300000, guid: 0fd58a40a9ab2e540a6497745f0d41df, type: 3}
   Pattern1Duration: 3
   Pattern1HitInterval: 0.5
   Pattern1DamagePercent: 5
@@ -146,8 +148,7 @@ MonoBehaviour:
   Pattern1Origin: {fileID: 7236268419808362022}
   FeatherProjectilePrefab: {fileID: 3510348135383430409, guid: 9f995bf7c0702f643af73e035b26911a, type: 3}
   WarningFeatherSpotPrefab: {fileID: 5189788415599195678, guid: 355d0ac260d388c439aa713cdfed337f, type: 3}
-  FeatherEffectPrefab: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  RoarSound2: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound2: {fileID: 8300000, guid: af3b3f34a1d9cfd4191c7282769f3bfd, type: 3}
   Pattern2Delay: 2
   Pattern2DamagePercent: 5
   FeatherCount: 6
@@ -156,13 +157,14 @@ MonoBehaviour:
   Pattern2Center: {fileID: 8300456024747162924}
   WarningRectPrefab: {fileID: 1660686088289365442, guid: b4eda7e859ba6754583aa4bb4a3d64c8, type: 3}
   AuraEffect: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  ChargeSound: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound3: {fileID: 8300000, guid: c4c0973513e7f3b428fd7cd1e0c0617a, type: 3}
+  ChargeSound: {fileID: 8300000, guid: 562b3b975c1d574419cad47d5595173e, type: 3}
   ChargeDelay: 3
   Pattern3DamagePercent: 70
   ChargeForce: 20
   ChargeStartPos: {fileID: 901650526432405170}
   ChargeEndPos: {fileID: 1317349505045386407}
-  BossAnimator: {fileID: 0}
+  BossAnimator: {fileID: -6634828117489559820}
   BossRigidbody: {fileID: 1268472704501020521}
   ChargeCollider: {fileID: 8819723863059629524}
 --- !u!95 &-6634828117489559820
@@ -341,7 +343,7 @@ Transform:
   m_GameObject: {fileID: 6842502208882439182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0, z: 0}
+  m_LocalPosition: {x: -15.18, y: -1.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
