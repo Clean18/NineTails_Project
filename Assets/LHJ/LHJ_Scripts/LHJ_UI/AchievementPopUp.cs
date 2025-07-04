@@ -18,7 +18,7 @@ public class AchievementPopUp : BaseUI
 
     // 업적 그룹을 인스펙터에서 설정
     [SerializeField] private List<AchievementGroupUI> achievementGroups;
-    private void Start()
+    private void OnEnable()
     {
         foreach (var group in achievementGroups)
         {
