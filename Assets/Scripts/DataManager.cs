@@ -682,5 +682,6 @@ public class DataManager : Singleton<DataManager>
 	/// </summary>
 	/// <returns></returns>
 	public int GetUltSkillCost(int level) => UltSkillCostTable.TryGetValue(level, out int result) ? result : int.MaxValue;
+    public MonsterData GetMonsterData(MonsterType type, int level) => MonsterDataTable.TryGetValue(type, out var data) && data.TryGetValue(level, out var result) ? result : new MonsterData(type, level, 5000, 5000, 10, 10);
 	#endregion
 }

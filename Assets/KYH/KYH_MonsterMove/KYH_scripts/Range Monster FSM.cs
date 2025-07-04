@@ -28,7 +28,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private Transform AttackPoint;             // 공격 기준 위치
     [SerializeField] private GameObject ProjectilePrefabs;      // 투사체 프리팹
     [SerializeField] private float ProjectileSpeed = 8f;        // 투사체 속도
-    [SerializeField] private float AttackDamage = 10f;          // 공격 데미지
+    [SerializeField] private int AttackDamage = 10;          // 공격 데미지
     [SerializeField] private AudioClip AttackSound;             // 공격 사운드
     [SerializeField] private Animator MonsterAnimator;          // 애니메이터
 

@@ -9,7 +9,6 @@ public class MeleeMonsterFSM : BaseMonsterFSM
    // [SerializeField] private GameObject AttackEffectPrefab;  // 공격 시 생성할 이펙트 프리팹
     [SerializeField] private Transform AttackPoint;          // 공격 중심 위치 (예: 손, 발)
     [SerializeField] private float AttackRadius = 1f;        // 원형 공격 범위 반지름
-    [SerializeField] private float AttackDamage = 10f;       // 공격 시 입히는 데미지
     [SerializeField] private LayerMask PlayerLayer;          // 플레이어 판정용 레이어
     [SerializeField] private AudioClip AttackSound;          // 공격 시 재생할 사운드
     [SerializeField] private AudioClip HitSound;
@@ -20,7 +19,8 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     protected override void MoveToPlayer()
     {
         base.MoveToPlayer();
-        MonsterAnimator.Play("Melee_Move");
+        //MonsterAnimator.Play("Melee_Move");
+        MonsterAnimator.Play("Melee_Walk");
     }
     // 부모 클래스에서 정의된 추상 메서드 → 근접 공격 루틴 구현
     protected override IEnumerator AttackRoutine()
@@ -56,7 +56,8 @@ public class MeleeMonsterFSM : BaseMonsterFSM
         // 상태 변경으로 루프 종료되면 코루틴 정리
         attackRoutine = null;
 
-        MonsterAnimator.Play("Melee_Move");
+        //MonsterAnimator.Play("Melee_Move");
+        MonsterAnimator.Play("Melee_Walk");
     }
 
     public override void TakeDamage(long damage)
@@ -71,7 +72,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     {
         base.Die();
         PlaySound(DeadSound);
-
+        MonsterAnimator.Play("Melee_Die");
         StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
         // 오브젝트 비활성화
         // Destroy(gameObject, 1f);

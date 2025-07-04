@@ -12,7 +12,6 @@ public class RangedMonsterFSM : BaseMonsterFSM
     [SerializeField] private Transform AttackPoint;            // 투사체가 생성될 위치
     [SerializeField] private GameObject ProjectilePrefab;      // 발사할 투사체 프리팹
     [SerializeField] private float ProjectileSpeed = 8f;       // 투사체 속도
-    [SerializeField] private float AttackDamage = 10f;         // 투사체 데미지
     [SerializeField] private AudioClip AttackSound;            // 공격 사운드
     [SerializeField] private AudioClip HitSound;               // 피격 사운드
     [SerializeField] private AudioClip DeadSound;              // 죽을때 사운드
@@ -22,7 +21,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
     protected override void MoveToPlayer()
     {
         base.MoveToPlayer();
-        MonsterAnimator.Play("Walk_Ranged");
+        //MonsterAnimator.Play("Walk_Ranged");
+        MonsterAnimator.Play("Ranged_Walk");
     }
     // BaseMonsterFSM의 추상 공격 루틴 구현 (원거리 투사체 방식)
     protected override IEnumerator AttackRoutine()
@@ -31,7 +31,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
         while (_currentState == MonsterState.Attack)
         {
             // 1. 애니메이션 실행
-            MonsterAnimator.Play("ThrowDagger");
+            //MonsterAnimator.Play("ThrowDagger");
+            MonsterAnimator.Play("Ranged_Attack");
 
             // 2. 사운드 재생
             PlaySound(AttackSound);
@@ -72,7 +73,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
         // 상태가 Attack에서 벗어나면 코루틴 정리
         attackRoutine = null;
 
-        MonsterAnimator.Play("Idle_Ranged");
+        //MonsterAnimator.Play("Idle_Ranged");
+        MonsterAnimator.Play("Ranged_Idle");
     }
 
     public override void TakeDamage(long damage)
@@ -85,7 +87,8 @@ public class RangedMonsterFSM : BaseMonsterFSM
     protected override void Die()
     {
         base.Die();
-        MonsterAnimator.Play("Dead_Ranged");
+        //MonsterAnimator.Play("Dead_Ranged");
+        MonsterAnimator.Play("Ranged_Die");
         PlaySound(DeadSound);
 
         StartCoroutine(FadeOutAndDestroy()); // 천천히 사라짐
