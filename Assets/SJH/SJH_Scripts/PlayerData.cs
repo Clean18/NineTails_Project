@@ -169,16 +169,31 @@ public class PlayerData
     /// <param name="hpLevel"></param>
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
-	public void InitData(int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0)
+	public void InitData(string name = "구미호", int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0)
     {
         //Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
         // 프로퍼티에서 레벨만으로 각 스탯 계산
+        PlayerName = name;
         AttackLevel = attackLevel;
         DefenseLevel = defenseLevel;
         HpLevel = hpLevel;
         Hp = currentHp;
         SpeedLevel = speedLevel;
         ShieldHp = shieldHp;
+    }
+
+    // 플레이어데이터 세이브 구조체
+    public SavePlayerData SavePlayerData()
+    {
+        var data = new SavePlayerData();
+        data.PlayerName = PlayerName;
+        data.AttackLevel = AttackLevel;
+        data.DefenseLevel = DefenseLevel;
+        data.HpLevel = HpLevel;
+        data.CurrentHp = Hp;
+        data.SpeedLevel = SpeedLevel;
+        data.ShieldHp = ShieldHp;
+        return data;
     }
 
     public long GetStat(StatDataType statType, int level)
@@ -258,20 +273,6 @@ public class PlayerData
     {
         PlayerName = name;
         Debug.Log($"플레이어 이름 변경 : {PlayerName}");
-    }
-
-    // 플레이어데이터 세이브 구조체
-    public SavePlayerData SavePlayerData()
-    {
-        var data = new SavePlayerData();
-        data.PlayerName = PlayerName;
-        data.AttackLevel = AttackLevel;
-        data.DefenseLevel = DefenseLevel;
-        data.HpLevel = HpLevel;
-        data.CurrentHp = Hp;
-        data.SpeedLevel = SpeedLevel;
-        data.ShieldHp = ShieldHp;
-        return data;
     }
 
     /// <summary>

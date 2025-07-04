@@ -37,40 +37,47 @@ public struct SaveMissionData
 [System.Serializable]
 public class PlayerQuest
 {
-	public void InitQuest(List<SaveAchievementData> saveAchive, List<SaveMissionData> saveMission)
+	public void InitQuest(List<SaveAchievementData> saveAchive = null, List<SaveMissionData> saveMission = null)
 	{
         if (AchievementManager.Instance == null) return;
 
-        // TODO : 업적매니저 HashSet에 IsClear가 true면 추가
-        // False고 0 이상이면 KillCountDic에 추가
         var ClearTable = AchievementManager.Instance.AchievedIds;
         var KillCountTable = AchievementManager.Instance.KillCountDic;
-        foreach (var achiev in saveAchive)
+
+        if (saveAchive != null)
         {
-            // 클리어 했으면 ClearTable에 추가
-            if (achiev.IsClear)
+            // TODO : 업적매니저 HashSet에 IsClear가 true면 추가
+            // False고 0 이상이면 KillCountDic에 추가
+            foreach (var achiev in saveAchive)
             {
-                ClearTable.Add(achiev.Id);
-            }
-            // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
-            else if (!achiev.IsClear && achiev.CurrentCondition > -1)
-            {
-                KillCountTable.Add(achiev.Id, achiev.CurrentCondition);
+                // 클리어 했으면 ClearTable에 추가
+                if (achiev.IsClear)
+                {
+                    ClearTable.Add(achiev.Id);
+                }
+                // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
+                else if (!achiev.IsClear && achiev.CurrentCondition > -1)
+                {
+                    KillCountTable.Add(achiev.Id, achiev.CurrentCondition);
+                }
             }
         }
         Debug.Log("업적 초기화 완료");
 
-        foreach (var mission in saveMission)
+        if (saveMission != null)
         {
-            // 클리어 했으면 ClearTable에 추가
-            if (mission.IsClear)
+            foreach (var mission in saveMission)
             {
-                ClearTable.Add(mission.Id);
-            }
-            // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
-            else if (!mission.IsClear && mission.CurrentCondition > -1)
-            {
-                KillCountTable.Add(mission.Id, mission.CurrentCondition);
+                // 클리어 했으면 ClearTable에 추가
+                if (mission.IsClear)
+                {
+                    ClearTable.Add(mission.Id);
+                }
+                // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
+                else if (!mission.IsClear && mission.CurrentCondition > -1)
+                {
+                    KillCountTable.Add(mission.Id, mission.CurrentCondition);
+                }
             }
         }
         Debug.Log("미션 초기화 완료");

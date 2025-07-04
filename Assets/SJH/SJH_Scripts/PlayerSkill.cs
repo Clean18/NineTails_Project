@@ -45,9 +45,9 @@ public class PlayerSkill
 		{ 3, KeyCode.Alpha3 }
 	};
 
-    [SerializeField] private List<SaveSkillData> skillList;
+    [SerializeField] private List<SaveSkillData> skillList; // 직렬화용
 
-	public void InitSkill(List<SaveSkillData> skillDatas)
+	public void InitSkill(List<SaveSkillData> skillDatas = null)
 	{
 		_controller = PlayerController.Instance.SkillController;
 
@@ -61,9 +61,12 @@ public class PlayerSkill
             [KeyCode.Alpha2] = null,
             [KeyCode.Alpha3] = null,
         };
+        
+        // 첫 시작
+        if (skillDatas == null) return;
 
         // 단축키 초기화
-		foreach (var data in skillDatas)
+        foreach (var data in skillDatas)
 		{
 			if (data.SkillIndex < 0) continue;
 

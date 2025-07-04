@@ -30,17 +30,22 @@ public class PlayerModel
     /// </summary>
     public void InitModel(GameData saveData)
 	{
-		if (saveData == null) return;
+        // TODO : 세이브파일이 없으면 saveData는 null
+        if (saveData == null)
+        {
+            SaveLoadManager.Instance.GameData = InitFirst();
+            return;
+        }
 
-		// 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
-		Data = new PlayerData();
-		Data.InitData(saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
+        // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
+        Data = new PlayerData();
+		Data.InitData(saveData.PlayerName, saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
 
 		// 재화저장도 추가
 		Cost = new PlayerCost();
 		Cost.InitCost(saveData.SpiritEnergy, saveData.Warmth);
 
-		// TODO : 플레이어의 저장된 스킬을 등록
+		// 플레이어의 저장된 스킬을 등록
 		Skill = new PlayerSkill();
 		Skill.InitSkill(saveData.PlayerSkillList);
 
@@ -51,6 +56,31 @@ public class PlayerModel
         Quest = new PlayerQuest();
         Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
     }
+    /// <summary>
+    /// 플레이어 처음 시작했을 때 초기화
+    /// </summary>
+    /// <returns></returns>
+    GameData InitFirst()
+    {
+        GameData data = new GameData();
+        Data = new PlayerData();
+        Data.InitData();
+
+        Cost = new PlayerCost();
+        Cost.InitCost();
+
+        Skill = new PlayerSkill();
+        Skill.InitSkill();
+
+        Equipment = new PlayerEquipment();
+        Equipment.InitEquipment();
+
+        Quest = new PlayerQuest();
+        Quest.InitQuest();
+
+        return data;
+    }
+
     /// <summary>
     /// 플레이어가 피해를 입는 함수
     /// </summary>
@@ -160,13 +190,15 @@ public class PlayerModel
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
         List<SaveAchievementData> achievments = Quest.SaveAchievementData();
-        // TODO : 미션 아이디랑, 퍼블릭 테이블 완성되면 주석해제
         List<SaveMissionData> missions = Quest.SaveMissionData();
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
-		// Data
-		gameData.AttackLevel = data.AttackLevel;
+        // 첫 시작일 때 GameData에 값이 없어서 예외처리
+        if (gameData == null) gameData = new GameData();
+
+        // Data
+        gameData.AttackLevel = data.AttackLevel;
 		gameData.DefenseLevel = data.DefenseLevel;
 		gameData.SpeedLevel = data.SpeedLevel;
 		gameData.HpLevel = data.HpLevel;
