@@ -18,12 +18,10 @@ public class MissionManager : Singleton<MissionManager>
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
     // 미션을 실행하는 함수
-    public void StartMission()
+    public void StartMission(string sceneName)
     {
-        string stage = SceneManager.GetActiveScene().name;
-
         // 미션 정보 가져오기
-        if (!DataManager.Instance.MissionTable.TryGetValue(stage, out currentMission))
+        if (!DataManager.Instance.MissionTable.TryGetValue(sceneName, out currentMission))
         {
             Debug.Log("해당 스테이지 미션 정보 없음");
             return;
@@ -121,5 +119,9 @@ public class MissionManager : Singleton<MissionManager>
     private void Reward(MissionInfo mission)
     {
         Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
+    }
+    public bool IsCleared(string missionId)
+    {
+        return MissionIds.Contains(missionId);
     }
 }

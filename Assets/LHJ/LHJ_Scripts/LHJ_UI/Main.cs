@@ -19,6 +19,7 @@ public class Main : BaseUI, IUI
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
+        UIInit();
     }
 
     void OnEnable() => PlayerStatUI();
@@ -48,12 +49,10 @@ public class Main : BaseUI, IUI
             Debug.Log("옵션 UI 활성화");
             UIManager.Instance.ShowPopUp<SettingPopUp>();
         };
-        //GetEvent("Mission").Click += data => // Mission
-        //{
-        //    if (MissionManager.Instance.IsCooldownActive)
-        //        return;
-        //    UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-        //};
+        GetEvent("Btn_Stage").Click += data => // Mission
+        {
+            UIManager.Instance.ShowPopUp<StagePopUp>();
+        };
         PlayerStatUI();
         GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
