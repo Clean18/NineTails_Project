@@ -23,8 +23,6 @@ public class Main : BaseUI, IUI
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
-        UIInit();
-        UpdateNicknameUI();
     }
 
     void OnEnable() => PlayerStatUI();
@@ -61,6 +59,8 @@ public class Main : BaseUI, IUI
         PlayerStatUI();
         GetEvent("Btn_Achievement").Click += data => UIManager.Instance.ShowPopUp<AchievementPopUp>(); // Achievement
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
+
+        UpdateNicknameUI();
     }
 
     // 메인에 플레이어 스탯 정보UI
@@ -91,7 +91,7 @@ public class Main : BaseUI, IUI
     public void UpdateNicknameUI()
     {
         // 현재 플레이어 이름값
-        string playerName = UIManager.Instance.PlayerName;
+        string playerName = PlayerController.Instance.GetPlayerName();
         if (string.IsNullOrEmpty(playerName))
         {
             txt_Nickname.text = "구미호";

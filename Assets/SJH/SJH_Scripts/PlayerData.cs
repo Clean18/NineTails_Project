@@ -30,7 +30,7 @@ public class PlayerData
         set
         {
             _playerName = value;
-            // TODO : UI 변경 이벤트
+            OnStatChanged?.Invoke();
         }
     }
 
