@@ -56,7 +56,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         Debug.Log("스킬 2 초기화");
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 2;
+        SlotIndex = -1;
     }
 
     //private void Update()

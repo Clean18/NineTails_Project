@@ -22,7 +22,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _hitBox.enabled = false;
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 1;
+        SlotIndex = -1;
     }
 
     public void UseSkill(Transform attacker)

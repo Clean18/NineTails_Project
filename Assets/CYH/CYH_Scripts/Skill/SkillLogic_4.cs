@@ -36,7 +36,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Debug.Log("스킬 4 초기화");
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 4;
+        SlotIndex = -1;
     }
 
     //private void Update()
@@ -115,6 +115,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()
