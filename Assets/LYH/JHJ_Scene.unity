@@ -5840,7 +5840,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCCB4\uB825 : (\uD604\uC7AC \uCCB4\uB825 -> \uB2E4\uC74C \uCCB4\uB825)"
+  m_text: "\uCCB4\uB825 : (300 -> \uB2E4\uC74C \uCCB4\uB825)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 29aa87505a903ef4bb82f8a686d9b996, type: 2}
   m_sharedMaterial: {fileID: 2811865436668119664, guid: 29aa87505a903ef4bb82f8a686d9b996, type: 2}
@@ -6661,7 +6661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &462439564
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8303,8 +8303,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11183,7 +11183,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 70, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &693842863
@@ -12838,7 +12838,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: 25}
+  m_AnchoredPosition: {x: -50, y: 15}
   m_SizeDelta: {x: 280, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &763442910
@@ -15668,8 +15668,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -18377,7 +18377,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD63C\uB839\uC744\uC18C\uD658\uD558\uC5EC \uC8FC\uBCC0\uC758 \uC801\uC5D0\uAC8C
+  m_text: "\uD63C\uB839\uC744 \uC18C\uD658\uD558\uC5EC \uC8FC\uBCC0\uC758 \uC801\uC5D0\uAC8C
     <color=#FF0000>25% -> 26%</color>\uC758 \uD53C\uD574\uB97C \uC785\uD788\uACE0,
     \uC790\uC2E0\uC740 <color=#00FF00>\uCD5C\uB300 \uCCB4\uB825\uC758 25% -> 26%</color>\uB9CC\uD07C
     \uD53C\uD574\uB97C \uD761\uC218\uD560 \uC218 \uC788\uB294 \uBCF4\uD638\uB9C9\uC744
@@ -31226,7 +31226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: -25}
+  m_AnchoredPosition: {x: -50, y: -15}
   m_SizeDelta: {x: 280, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1831727690
@@ -32667,7 +32667,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uAC80\uC5D0 \uD63C\uB839\uC758 \uD798\uC744 \uB2F4\uC544 \uC8FC\uBCC0\uC758
-    \uC801\uC5D0\uAC8C <color=#FF0000>75% -> 76% </color>\uC758 \uD53C\uD574\uB97C
+    \uC801\uC5D0\uAC8C <color=#FF0000>75% -> 76%</color>\uC758 \uD53C\uD574\uB97C
     \uC785\uD78C\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 29aa87505a903ef4bb82f8a686d9b996, type: 2}
