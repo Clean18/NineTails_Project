@@ -12,15 +12,16 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     // 몬스터의 타입을 정의하는 열거형 
 
-    protected enum MonsterType { Melee, Ranged, Heavy }
-
     [Header("Monster Status")]
     [SerializeField] protected float MoveSpeed = 2f;            // 이동 속도
-    public float AttackRange = 1.5f;        // 공격 사거리 (공통)
+    public float AttackRange = 1.5f;                            // 공격 사거리 (공통)
     [SerializeField] protected float AttackCooldown = 2f;       // 공격 쿨타임 (공통)
     [SerializeField] protected float MaxHp = 10f;               // 최대 체력
     [SerializeField] protected float DamageReduceRate = 0f;     // 데미지 감소율 (퍼센트)
     public float CurrentHp;                                     // 현재 체력
+    [SerializeField] protected int AttackDamage;
+    [SerializeField] protected MonsterType Type;
+    [SerializeField] private int Level;
 
     [Header("FSM Control")]
     [SerializeField] protected float FindInterval = 1f;         // 플레이어 탐색 주기 (초)
@@ -36,11 +37,12 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     protected Transform targetPlayer;                           // 타겟팅된 플레이어
     protected Coroutine attackRoutine;                          // 공격 루틴 저장
 
-    [SerializeField] protected Animator _anim;
     [SerializeField] protected MonsterType MonType;
 
     [SerializeField] protected AudioMixerGroup sfxMixerGroup;
     protected AudioSource sfxAudioSource;
+
+    [SerializeField] protected SpriteRenderer _sprite;
 
     protected virtual void Awake()
     {
@@ -48,6 +50,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         sfxAudioSource.outputAudioMixerGroup = sfxMixerGroup;
         sfxAudioSource.playOnAwake = false;
         sfxAudioSource.loop = false;
+
+        _sprite = GetComponent<SpriteRenderer>();
     }
 
     protected void PlaySound(AudioClip clip, float volume = 1f)
@@ -57,9 +61,13 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     }
 
     // 초기화
-    protected virtual void Start()
+    protected virtual void OnEnable()
     {
+        // 초기화
         CurrentHp = MaxHp; // 현재 체력을 최대체력으로 초기화
+        _currentState = MonsterState.Idle;
+        // 알파값 초기화
+        _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 255);
     }
 
     // 매 프레임마다 상태 업데이트
@@ -143,7 +151,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     {
         if (targetPlayer == null) return;
         Vector3 dir = targetPlayer.position - transform.position;
-
+        Debug.Log("방향전환");
         if (dir.x != 0)
         {
             Vector3 scale = transform.localScale;
@@ -183,6 +191,10 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 피격 처리 (데미지 감소 적용)
     public virtual void TakeDamage(long damage)
     {
+        if (CurrentHp <= 0)
+        {
+            return;
+        }
         long finalDamage = (long)(damage * (1f - DamageReduceRate / 100f));
         CurrentHp -= finalDamage;
 
@@ -202,8 +214,10 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         _currentState = MonsterState.Dead; // 상태를 Dead로 변경
 
         // 플레이어 보상 지급
+        // 100%
         GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
-        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        // 10%
+        if (Random.Range(0, 100) < 10) GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
 
         // 미션 처리
         MissionManager.Instance.AddKill();
@@ -225,7 +239,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         // SpriteRenderer가 없으면 그냥 즉시 삭제
         if (sr == null)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
             yield break;
         }
 
@@ -261,7 +276,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         }
 
         // 다 사라졌으면 최종적으로 오브젝트 제거
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        
+        gameObject.SetActive(false);
     }
 
     // 코루틴 중복 실행 방지용 플래그 변수
@@ -269,4 +286,15 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     // 공격 루틴은 자식 클래스에서 반드시 오버라이드 해야 함
     protected abstract IEnumerator AttackRoutine();
+
+    public void MonsterDataInit(MonsterData data)
+    {
+        Type = data.Type;
+        AttackDamage = data.Attack;
+        Level = data.Level;
+        MaxHp = data.MaxHp;
+        CurrentHp = MaxHp;
+        warmthAmount = data.DropWarmth;
+        spiritEnergyAmount = data.DropSpiritEnergy;
+    }
 }

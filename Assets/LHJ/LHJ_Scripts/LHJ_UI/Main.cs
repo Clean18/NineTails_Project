@@ -26,11 +26,11 @@ public class Main : BaseUI, IUI
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
-    void OnEnable()
-    {
-        PlayerStatUI();
-        UpdateNicknameUI();
-    }
+    //void OnEnable()
+    //{
+    //    PlayerStatUI();
+    //    UpdateNicknameUI();
+    //}
 
     // 플레이어가 초기화될 때 실행
     public void UIInit()
