@@ -90,11 +90,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public void OnAttackStart()
     {
         _isSkillUsed = true;
+
+        PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()

@@ -91,6 +91,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public void OnAttackStart()
     {
         _isSkillUsed = true;
+        PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
@@ -98,6 +99,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 무적 해제
         PlayerController.Instance.IsImmortal = false;
         _isSkillUsed = false;
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()
