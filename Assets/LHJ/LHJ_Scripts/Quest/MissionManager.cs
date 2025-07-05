@@ -26,10 +26,10 @@ public class MissionManager : Singleton<MissionManager>
             return;
         }
         // 클리어 미션이면 재실행하지않음
-        if (MissionIds.Contains(currentMission.Id))
-        {
-            return;
-        }
+        //if (MissionIds.Contains(currentMission.Id))
+        //{
+        //    return;
+        //}
         // 초기값 설정
         timer = currentMission.TimeLimit;
         killCount = 0;
@@ -59,8 +59,9 @@ public class MissionManager : Singleton<MissionManager>
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
             MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
-            if (currentMission.Id == "M1") // M1미션일때
+            if (currentMission.Id == "M9999") // M1미션일때
             {
+                Time.timeScale = 0;
                 Debug.Log("닉네임 팝업창 생성");
                 UIManager.Instance.ShowPopUp<NameInputPopUp>(); // 닉네임 팝업창 생성
             }

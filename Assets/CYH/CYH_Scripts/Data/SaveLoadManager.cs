@@ -198,6 +198,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     void OnApplicationQuit()
     {
+        Debug.Log("게임 종료");
         PlayerSave();
     }
 

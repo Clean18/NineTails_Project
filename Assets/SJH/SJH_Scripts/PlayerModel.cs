@@ -90,13 +90,15 @@ public class PlayerModel
     {
         string scene = SceneManager.GetActiveScene().name;
 
-        if (scene == "1-3" || scene == "2-3" || scene == "3-3")
+        if (scene == "Stage1-3_Battle" || scene == "Stage2-3_Battle" || scene == "Stage3-3_Battle")
         {
             Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+            // TODO : 업적 실패 처리
         }
         Data.DecreaseHp(damage);
-        if (Data.Hp <= 0)
+        if (Data.Hp <= 0 && !PlayerController.Instance.IsImmortal)
         {
+            PlayerController.Instance.IsImmortal = true;
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트

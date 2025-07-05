@@ -90,11 +90,14 @@ public class PlayerCost
 
     public void InitCost(long spiritEnergy = 0, long warmth = 0, long soul = 0, bool getFirstWarmth = false, bool getFirstSpiritEnergy = false)
     {
+        // 첫 획득을 먼저 지정해줘야 반복안됨
+        GetFirstWarmth = getFirstWarmth;
+        GetFirstSpiritEnergy = getFirstSpiritEnergy;
+
+        // 재화 할당
         SpiritEnergy = spiritEnergy;
         Warmth = warmth;
         Soul = soul;
-        GetFirstWarmth = getFirstWarmth;
-        GetFirstSpiritEnergy = getFirstSpiritEnergy;
     }
 
     public void IncreaseSpiritEnergy(long amount)
