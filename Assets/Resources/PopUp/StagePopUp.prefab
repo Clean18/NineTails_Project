@@ -1396,6 +1396,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e24510d9608452449fe4d18dc59eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneNames:
+  - Stage1-1Copy
+  - Stage1-2Test
+  - Stage1-3
+  - Stage2-1
+  - Stage2-2
+  - Stage2-3
+  - Stage3-1
+  - Stage3-2
+  - Stage3-3
 --- !u!1 &6209603835314441508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2077,7 +2087,7 @@ GameObject:
   - component: {fileID: 4654438907897654039}
   - component: {fileID: 2065322555927135288}
   m_Layer: 5
-  m_Name: Btn_Stage31 (2)
+  m_Name: Btn_Stage33
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2465,7 +2475,7 @@ GameObject:
   - component: {fileID: 8049470612535934510}
   - component: {fileID: 8142619128672122931}
   m_Layer: 5
-  m_Name: Btn_Stage31 (1)
+  m_Name: Btn_Stage32
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
