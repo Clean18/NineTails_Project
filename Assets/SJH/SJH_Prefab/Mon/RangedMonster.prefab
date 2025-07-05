@@ -79,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 8
-  m_Sprite: {fileID: -1192322075, guid: 2c08dddaae3e91546b164009385f7a0b, type: 3}
+  m_Sprite: {fileID: 1568838938, guid: 2c08dddaae3e91546b164009385f7a0b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 0.58, y: 0.58}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -170,6 +170,9 @@ MonoBehaviour:
   MaxHp: 10
   DamageReduceRate: 0
   CurrentHp: 0
+  AttackDamage: 10
+  Type: 1
+  Level: 0
   FindInterval: 1
   StateChangeCooldown: 1
   warmthAmount: 0
@@ -180,7 +183,6 @@ MonoBehaviour:
   AttackPoint: {fileID: 4222920270497025575}
   ProjectilePrefab: {fileID: 971121944272405935, guid: a0a6a8ea2ec99e84188126013a156d20, type: 3}
   ProjectileSpeed: 8
-  AttackDamage: 10
   AttackSound: {fileID: 8300000, guid: a471f02d8b50c5e4ab9897bc393500be, type: 3}
   HitSound: {fileID: 8300000, guid: de369f444c96d8d4ca7ce58318d326ff, type: 3}
   DeadSound: {fileID: 8300000, guid: 894dab87c9a794540a78b6b8b60d06a3, type: 3}
