@@ -61,11 +61,13 @@ public class MissionManager : Singleton<MissionManager>
             Reward(currentMission); // 미션 보상
             if (currentMission.Id == "M1") // M1미션일때
             {
+                Debug.Log("닉네임 팝업창 생성");
                 UIManager.Instance.ShowPopUp<NameInputPopUp>(); // 닉네임 팝업창 생성
             }
             else
             {
                 // 그 외 미션은 일반 클리어 팝업
+                Debug.Log("돌파미션 클리어 팝업창 생성");
                 UIManager.Instance.ShowPopUp<CompletePopUp>();  // 미션 성공 팝업창 생성
             }
         }
@@ -125,6 +127,7 @@ public class MissionManager : Singleton<MissionManager>
     // 미션 보상
     private void Reward(MissionInfo mission)
     {
+        // TODO : 보상 추가
         Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
     }
     public bool IsCleared(string missionId)

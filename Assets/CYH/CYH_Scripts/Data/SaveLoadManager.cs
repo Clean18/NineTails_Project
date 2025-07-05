@@ -110,7 +110,6 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
         string json = JsonUtility.ToJson(GameData, true);
         File.WriteAllText($"{DataPath}", json);
-        Debug.Log("SaveData");
         Debug.Log($"마지막 저장 시간: {GameData.SavedTime}");
     }
 
@@ -204,7 +203,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     public void PlayerSave()
     {
-        GameManager.Instance.PlayerController?.SaveData();
+        GameManager.Instance.Player?.SaveData();
         SaveData();
     }
 }

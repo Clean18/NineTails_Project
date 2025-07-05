@@ -1,5 +1,5 @@
 {
-    "_savedTimeString": "2025-07-05T19:35:24.8720571+09:00",
+    "_savedTimeString": "2025-07-06T03:47:42.6514982+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 1,
     "DefenseLevel": 1,
@@ -7,46 +7,17 @@
     "CurrentHp": 0,
     "SpeedLevel": 1,
     "ShieldHp": 0,
+    "SceneIndex": 5,
     "SpiritEnergy": 0,
-    "Warmth": 11552,
+    "Warmth": 1269,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
-    "GetFirstWarmth": false,
+    "GetFirstWarmth": true,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
             "SkillLevel": 0,
             "SlotIndex": 0
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": 1
-        },
-        {
-            "SkillIndex": 2,
-            "SkillLevel": 0,
-            "SlotIndex": 2
-        },
-        {
-            "SkillIndex": 3,
-            "SkillLevel": 0,
-            "SlotIndex": 3
-        },
-        {
-            "SkillIndex": 6,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 1,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 5,
-            "SkillLevel": 0,
-            "SlotIndex": -1
         }
     ],
     "Grade": "N",
@@ -54,22 +25,7 @@
     "IncreaseDamageLevel": 0,
     "PlayerAchivementList": [
         {
-            "Id": "A43",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A44",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
             "Id": "A16",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A45",
             "IsClear": true,
             "CurrentCondition": -1
         },
@@ -84,20 +40,31 @@
             "CurrentCondition": -1
         },
         {
-            "Id": "A19",
+            "Id": "A43",
             "IsClear": true,
             "CurrentCondition": -1
         },
         {
-            "Id": "A20",
+            "Id": "A44",
             "IsClear": true,
             "CurrentCondition": -1
         },
         {
-            "Id": "A21",
+            "Id": "A45",
             "IsClear": true,
             "CurrentCondition": -1
         }
     ],
-    "PlayerMissionList": []
+    "PlayerMissionList": [
+        {
+            "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ]
 }

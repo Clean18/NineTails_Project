@@ -75,8 +75,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
 
     IEnumerator BossInit()
     {
-        yield return new WaitUntil(() => GameManager.Instance.PlayerController != null);
-        PlayerTransform = GameManager.Instance.PlayerController.transform;
+        yield return new WaitUntil(() => GameManager.Instance.Player != null);
+        PlayerTransform = GameManager.Instance.Player.transform;
 
         CurrentHealth = MaxHealth;              // 보스 체력 초기화
         TransitionToState(BossState.Intro);     // Intro 상태로 시작
@@ -478,8 +478,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     private void DestroySelf()
     {
         Debug.Log("보스 오브젝트 제거됨");
-        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
-        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         AchievementManager.Instance.CheckBossAchievements(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);  // 보스 관련 업적 체크
         Destroy(gameObject);
     }

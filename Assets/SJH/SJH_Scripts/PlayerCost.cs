@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public struct SavePlayerCost
@@ -32,10 +33,13 @@ public class PlayerCost
         get => _spiritEnergy;
         set
         {
-            if (!GetFirstSpiritEnergy)
+            if (!GetFirstSpiritEnergy && value > 0)
             {
                 GetFirstSpiritEnergy = true;
+                _spiritEnergy = value;
                 Debug.Log("첫 영기 획득");
+                PlayerController.Instance.SaveData();
+                return;
             }
 
             _spiritEnergy = value;
@@ -53,10 +57,15 @@ public class PlayerCost
         get => _warmth;
         set
         {
-            if (!GetFirstWarmth)
+            if (!GetFirstWarmth && value > 0)
             {
                 GetFirstWarmth = true;
-                Debug.Log("첫 온정 획득");
+                _warmth = value;
+                Debug.Log($"첫 온정 획득 : {GetFirstWarmth}");
+                // TODO : Stage 1-1 Middle 다이얼로그로 이동 5번씬
+                PlayerController.Instance.SetPlayerSceneIndex(5); // 여기서 세이브도 함
+                SceneChangeManager.Instance.LoadNextScene(5);
+                return;
             }
             _warmth = value;
             OnCostChanged?.Invoke();
@@ -132,6 +141,7 @@ public class PlayerCost
         cost.Soul = Soul;
         cost.GetFirstWarmth = GetFirstWarmth;
         cost.GetFirstSpiritEnergy = GetFirstSpiritEnergy;
+
         return cost;
     }
 }

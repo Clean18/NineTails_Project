@@ -145,7 +145,7 @@ public struct MonsterData
 /// </summary>
 public class DataManager : Singleton<DataManager>
 {
-	public static bool isInit { get; private set; }
+	public static bool IsDataInit { get; private set; }
 
 	/// <summary>
 	/// 플레이어 스탯의 레벨별 수치 데이터
@@ -196,12 +196,12 @@ public class DataManager : Singleton<DataManager>
 	{
 		base.Awake();
 
-		isInit = false;
+		IsDataInit = false;
 	}
 
 	public IEnumerator LoadDatas()
 	{
-		if (isInit) yield break;
+		if (IsDataInit) yield break;
 
 		yield return StartCoroutine(StatDataInit());
 		yield return StartCoroutine(EquipmentUpgradeCostInit());
@@ -213,7 +213,7 @@ public class DataManager : Singleton<DataManager>
         yield return StartCoroutine(MonsterDataInit());
 
 		Debug.Log("모든 데이터 테이블 초기화 완료");
-		isInit = true;
+		IsDataInit = true;
 
 	}
 

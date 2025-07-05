@@ -55,6 +55,7 @@ public class AchievementPopUp : BaseUI
         group.rewardButton.onClick.RemoveAllListeners();
         group.rewardButton.onClick.AddListener(() =>
         {
+            Debug.Log("보상획득 클릭");
             if (!AchievementManager.Instance.IsAchieved(info.Id)) return;
 
             AchievementManager.Instance.Reward(info);

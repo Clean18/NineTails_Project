@@ -46,7 +46,7 @@ public class HeavyMonsterFSM : BaseMonsterFSM
             if (hit != null)
             {
                 // 실제론 플레이어마다 다르게 처리해야 하지만 단일 플레이어 전제하에 아래로 단순화
-                GameManager.Instance.PlayerController.TakeDamage((long)AttackDamage);
+                GameManager.Instance.Player.TakeDamage((long)AttackDamage);
             }
 
             // 5. 공격 쿨타임 대기 후 다시 루프
@@ -87,6 +87,23 @@ public class HeavyMonsterFSM : BaseMonsterFSM
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
+        }
+    }
+    protected override void ChangeState(MonsterState newState)
+    {
+        base.ChangeState(newState);
+        // 상태가 변경됐을 때 공격 실행
+        MonsterAttackStart();
+    }
+    public override void MonsterAttackStart()
+    {
+        if (_currentState == MonsterState.Attack/* && attackRoutine == null*/)
+        {
+            Debug.Log("탱커 몬스터 공격 실행");
+            //attackRoutine = StartCoroutine(AttackRoutine());
+            // 애니메이션 이벤트 함수에서 공격 실행
+            MonsterAnimator.Play("Tanker_Attack");
+            // 애니메이션 이벤트 함수에는 AttackRoutine 등록
         }
     }
 }

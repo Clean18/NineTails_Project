@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-	public GameObject[] MonsterPrefabs;
-	private List<List<GameObject>> monsterPool = new();
+    [Tooltip("프리팹 순서는\nMelee > Ranged > Tanker\n고정입니다.")]
+    public GameObject[] MonsterPrefabs;
+	[SerializeField] private List<List<GameObject>> monsterPool = new();
 
+    [Tooltip("생성할 몬스터들의 위치들")]
 	public List<Transform> SpawnPoints;
+    [Tooltip("몬스터 생성 딜레이")]
 	public float SpawnDelay;
 
 	private Coroutine SpawnRoutine;
 
+    /// <summary>
+    /// 몬스터 종류별로 생성할 마리수
+    /// </summary>
     private const int _spawnCount = 20;
 
+    [Tooltip("생성할 몬스터의 레벨")]
     [SerializeField] private int _spawnLevel;
 
 	void Awake()

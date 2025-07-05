@@ -21,7 +21,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     public float CurrentHp;                                     // 현재 체력
     [SerializeField] protected int AttackDamage;
     [SerializeField] protected MonsterType Type;
-    [SerializeField] private int Level;
+    [SerializeField] protected int Level;
 
     [Header("FSM Control")]
     [SerializeField] protected float FindInterval = 1f;         // 플레이어 탐색 주기 (초)
@@ -33,11 +33,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] protected long warmthAmount;               // 온기 보상량
     [SerializeField] protected long spiritEnergyAmount;         // 정기 보상량
 
-    protected MonsterState _currentState = MonsterState.Idle;   // 현재 FSM 상태
+    [SerializeField] protected MonsterState _currentState = MonsterState.Idle;   // 현재 FSM 상태
     protected Transform targetPlayer;                           // 타겟팅된 플레이어
     protected Coroutine attackRoutine;                          // 공격 루틴 저장
-
-    [SerializeField] protected MonsterType MonType;
 
     [SerializeField] protected AudioMixerGroup sfxMixerGroup;
     protected AudioSource sfxAudioSource;
@@ -65,6 +63,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     {
         // 초기화
         CurrentHp = MaxHp; // 현재 체력을 최대체력으로 초기화
+        _isFadingOut = false;
         _currentState = MonsterState.Idle;
         // 알파값 초기화
         _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 255);
@@ -74,7 +73,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     protected virtual void Update()
     {
         // 플레이어가 없거나 이미 죽은 상태면 아무것도 하지 않음
-        if (GameManager.Instance.PlayerController == null || _currentState == MonsterState.Dead) return;
+        if (GameManager.Instance.Player == null || _currentState == MonsterState.Dead) return;
 
         _findTimer += Time.deltaTime;          // 탐색 타이머 증가
         _stateChangeTimer += Time.deltaTime;   // 상태 변경 타이머 증가
@@ -151,7 +150,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     {
         if (targetPlayer == null) return;
         Vector3 dir = targetPlayer.position - transform.position;
-        Debug.Log("방향전환");
+        //Debug.Log("방향전환");
         if (dir.x != 0)
         {
             Vector3 scale = transform.localScale;
@@ -176,16 +175,16 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         _stateChangeTimer = 0f; // 상태 변경 쿨타임 리셋
 
         // 새 상태가 공격이면 공격 루틴 시작
-        if (newState == MonsterState.Attack && attackRoutine == null)
-        {
-            attackRoutine = StartCoroutine(AttackRoutine());
-        }
+        //if (newState == MonsterState.Attack && attackRoutine == null)
+        //{
+        //    attackRoutine = StartCoroutine(AttackRoutine());
+        //}
     }
 
     // 가장 가까운 플레이어 탐색 (여기선 단일 플레이어 고정)
     protected virtual void FindClosestPlayer()
     {
-        targetPlayer = GameManager.Instance.PlayerController?.transform;
+        targetPlayer = GameManager.Instance.Player?.transform;
     }
 
     // 피격 처리 (데미지 감소 적용)
@@ -215,9 +214,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
         // 플레이어 보상 지급
         // 100%
-        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
         // 10%
-        if (Random.Range(0, 100) < 10) GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        if (Random.Range(0, 100) < 10) GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
 
         // 미션 처리
         MissionManager.Instance.AddKill();
@@ -297,4 +296,6 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         warmthAmount = data.DropWarmth;
         spiritEnergyAmount = data.DropSpiritEnergy;
     }
+
+    public abstract void MonsterAttackStart();
 }
