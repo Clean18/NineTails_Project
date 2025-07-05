@@ -201,15 +201,18 @@ MonoBehaviour:
   MaxHp: 10
   DamageReduceRate: 0
   CurrentHp: 0
+  AttackDamage: 10
+  Type: 0
+  Level: 0
   FindInterval: 1
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
   MonType: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
+  _sprite: {fileID: 0}
   AttackPoint: {fileID: 3497390072653564041}
   AttackRadius: 0.7
-  AttackDamage: 10
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 256
