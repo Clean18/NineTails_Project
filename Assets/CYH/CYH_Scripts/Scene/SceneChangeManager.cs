@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +30,21 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     private void Start()
     {
         // GameStart 씬 로드
-        LoadSceneAsync(_gameSceneDict[_stageInfo[0]]);
+        //LoadSceneAsync(_gameSceneDict[_stageInfo[0]]);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log($"입력한 키 : {Input.inputString}");
+            SceneChangeManager.Instance.LoadSceneAsync("DialogScene");
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Debug.Log($"입력한 키 : {Input.inputString}");
+            SceneChangeManager.Instance.LoadSceneAsync("Stage1-1_CYH_Prototype");
+        }
     }
 
     /// <summary>
