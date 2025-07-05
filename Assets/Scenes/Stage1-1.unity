@@ -9695,9 +9695,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MonsterPrefabs:
-  - {fileID: 4768633557166485032, guid: 85becf4e3ff3d2b4692ad96ba8da3d72, type: 3}
-  - {fileID: 9192469335144126249, guid: da8d228e2293eb747a87c3ad409ba648, type: 3}
-  - {fileID: 8230545816023516291, guid: 6ae0cfa7ec6740f4cbf18436a5219289, type: 3}
+  - {fileID: 462291156523245831, guid: 2f3be9aae67100a4c8f266a9a08518d9, type: 3}
+  - {fileID: 2588384446282473732, guid: 1bab64309565da048b8431dd3e6f7f7f, type: 3}
+  - {fileID: 5722814494859109534, guid: 7a940da0788b28741ab2b7c31360d7b3, type: 3}
   SpawnPoints:
   - {fileID: 1167763820}
   - {fileID: 1594411391}
@@ -30477,7 +30477,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588384446282473732, guid: 1bab64309565da048b8431dd3e6f7f7f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8110915681910785474, guid: 1bab64309565da048b8431dd3e6f7f7f, type: 3}
       propertyPath: m_Size.x
@@ -30567,7 +30567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 462291156523245831, guid: 2f3be9aae67100a4c8f266a9a08518d9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1628750670296342679, guid: 2f3be9aae67100a4c8f266a9a08518d9, type: 3}
       propertyPath: m_Size.x
@@ -30684,7 +30684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5722814494859109534, guid: 7a940da0788b28741ab2b7c31360d7b3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
