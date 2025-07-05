@@ -128,6 +128,7 @@ public class MissionManager : Singleton<MissionManager>
     // 미션 보상
     private void Reward(MissionInfo mission)
     {
+        // TODO : 보상 추가
         Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
     }
     public bool IsCleared(string missionId)

@@ -73,7 +73,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     protected virtual void Update()
     {
         // 플레이어가 없거나 이미 죽은 상태면 아무것도 하지 않음
-        if (GameManager.Instance.PlayerController == null || _currentState == MonsterState.Dead) return;
+        if (GameManager.Instance.Player == null || _currentState == MonsterState.Dead) return;
 
         _findTimer += Time.deltaTime;          // 탐색 타이머 증가
         _stateChangeTimer += Time.deltaTime;   // 상태 변경 타이머 증가
@@ -184,7 +184,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 가장 가까운 플레이어 탐색 (여기선 단일 플레이어 고정)
     protected virtual void FindClosestPlayer()
     {
-        targetPlayer = GameManager.Instance.PlayerController?.transform;
+        targetPlayer = GameManager.Instance.Player?.transform;
     }
 
     // 피격 처리 (데미지 감소 적용)
@@ -214,9 +214,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
         // 플레이어 보상 지급
         // 100%
-        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
         // 10%
-        if (Random.Range(0, 100) < 10) GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        if (Random.Range(0, 100) < 10) GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
 
         // 미션 처리
         MissionManager.Instance.AddKill();

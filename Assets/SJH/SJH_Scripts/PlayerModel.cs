@@ -39,11 +39,11 @@ public class PlayerModel
 
         // 생성자에서 캐릭터스탯, 재화, 스킬, 장비 등 인스턴스화
         Data = new PlayerData();
-		Data.InitData(saveData.PlayerName, saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp);
+		Data.InitData(saveData.PlayerName, saveData.AttackLevel, saveData.DefenseLevel, saveData.HpLevel, saveData.CurrentHp, saveData.SpeedLevel, saveData.ShieldHp, saveData.SceneIndex);
 
 		// 재화저장도 추가
 		Cost = new PlayerCost();
-		Cost.InitCost(saveData.SpiritEnergy, saveData.Warmth);
+		Cost.InitCost(saveData.SpiritEnergy, saveData.Warmth, saveData.Soul, saveData.GetFirstWarmth, saveData.GetFirstSpiritEnergy);
 
 		// 플레이어의 저장된 스킬을 등록
 		Skill = new PlayerSkill();
@@ -53,6 +53,7 @@ public class PlayerModel
 		Equipment = new PlayerEquipment();
 		Equipment.InitEquipment(saveData.Grade, saveData.Level, saveData.IncreaseDamageLevel);
 
+        // 플레이어 업적, 돌파미션
         Quest = new PlayerQuest();
         Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
     }
@@ -178,6 +179,8 @@ public class PlayerModel
 		Data.OnStatChanged += playerStatUI;
 		Cost.OnCostChanged += playerStatUI;
 	}
+    public int GetPlayerSceneIndex() => Data.SceneIndex;
+    public void SetPlayerSceneIndex(int index) => Data.SceneIndex = index;
 
     /// <summary>
     /// 플레이어의 세이브 데이터를 반환하는 함수
@@ -185,6 +188,8 @@ public class PlayerModel
     /// <returns></returns>
 	public GameData GetGameData()
 	{
+        if (Data == null || Cost == null || Equipment == null || Skill == null || Quest == null) return default(GameData);
+
 		SavePlayerData data = Data.SavePlayerData();
 		SavePlayerCost cost = Cost.SavePlayerCost();
 		SaveEquipmentData equip = Equipment.SavePlayerEquipment();
@@ -205,6 +210,7 @@ public class PlayerModel
 		gameData.HpLevel = data.HpLevel;
 		gameData.CurrentHp = data.CurrentHp;
 		gameData.ShieldHp = data.ShieldHp;
+        gameData.SceneIndex = data.SceneIndex;
 
 		// Cost
 		gameData.Warmth = cost.Warmth;
@@ -212,6 +218,8 @@ public class PlayerModel
         gameData.Soul = cost.Soul;
         gameData.GetFirstWarmth = cost.GetFirstWarmth;
         gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
+
+        Debug.Log($"{gameData.GetFirstWarmth} / {gameData.GetFirstSpiritEnergy}");
 
         // Skill
         gameData.PlayerSkillList = skills;

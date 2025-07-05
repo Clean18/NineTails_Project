@@ -46,7 +46,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
             if (hit != null)
             {
                 // 실제론 플레이어마다 다르게 처리해야 하지만 단일 플레이어 전제하에 아래로 단순화
-                GameManager.Instance.PlayerController.TakeDamage((long)AttackDamage);
+                GameManager.Instance.Player.TakeDamage((long)AttackDamage);
             }
 
             // 5. 공격 쿨타임 대기 후 다시 루프

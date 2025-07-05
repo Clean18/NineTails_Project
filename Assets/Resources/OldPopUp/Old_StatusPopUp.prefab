@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 8204628793806626620}
   - component: {fileID: 7893007407559986207}
   m_Layer: 5
-  m_Name: StatusPopUp
+  m_Name: Old_StatusPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

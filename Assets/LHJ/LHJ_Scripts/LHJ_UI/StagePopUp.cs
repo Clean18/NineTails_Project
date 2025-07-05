@@ -25,7 +25,6 @@ public class StagePopUp : BaseUI
             }
             else    // 클리어 상태인경우
             {
-                // TODO : 현재 씬과 비교해서 같은 씬이면 return
                 if (SceneManager.GetActiveScene().name == sceneName)
                 {
                     Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");

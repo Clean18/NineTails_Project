@@ -64,7 +64,7 @@ public enum CostType
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-	public static PlayerController Instance => GameManager.Instance.PlayerController;
+	public static PlayerController Instance => GameManager.Instance.Player;
 
 	[Tooltip("플레이어 데이터 로드 여부")]
 	[SerializeField ]private bool _isInit = false;
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator PlayerInitRoutine()
     {
         // 게임매니저에 자기자신 참조
-        GameManager.Instance.PlayerController = this;
+        GameManager.Instance.Player = this;
 
         // 모델, 뷰, AI, 스킬컨트롤러 초기화
         _model = new PlayerModel();
@@ -393,7 +393,12 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 공격력 * (1 + 가하는 피해 증가)
     /// </summary>
     /// <returns></returns>
-    public long GetTotalDamage() => (long)((_model.GetAttack()  * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
+    public long GetTotalDamage() => (long)((_model.GetAttack() * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
+    public int GetPlayerSceneIndex() => _model.GetPlayerSceneIndex();
+    public void SetPlayerSceneIndex(int index)
+    {
+        _model.SetPlayerSceneIndex(index);
+    }
     #endregion
 
     #region Cost 관련 함수

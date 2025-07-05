@@ -50,10 +50,10 @@ public class GameUI : SceneUI, IUI
 
 	public void OnControlModeBtn()
 	{
-		if (GameManager.Instance.PlayerController == null) return;
+		if (GameManager.Instance.Player == null) return;
 
 		// 플레이어 모드 전환
-		var player = GameManager.Instance.PlayerController;
+		var player = GameManager.Instance.Player;
 
 		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 

@@ -563,25 +563,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogDatas:
   - {fileID: 4900000, guid: eadb0f75404b91240b831c3256f0635c, type: 3}
-  - {fileID: 4900000, guid: 3f74a2a261530674e98bc726952496eb, type: 3}
-  - {fileID: 4900000, guid: fd9df3adc68bbf74c90c098ff60b17ad, type: 3}
   - {fileID: 4900000, guid: b497797a811bb4740928b0415efdbefe, type: 3}
+  - {fileID: 4900000, guid: fd9df3adc68bbf74c90c098ff60b17ad, type: 3}
+  - {fileID: 4900000, guid: 3f74a2a261530674e98bc726952496eb, type: 3}
   - {fileID: 4900000, guid: 1e4f5ab2b0b7a6b41b87c35c850636df, type: 3}
-  - {fileID: 4900000, guid: 8fcfb28b3c4d48349bd5b87aff9ce68d, type: 3}
   - {fileID: 4900000, guid: e3bd307131791174aad4febd19a04923, type: 3}
-  - {fileID: 4900000, guid: b6b65093a210a9a4b9d945de68b508df, type: 3}
-  - {fileID: 4900000, guid: 9faa8c751b4f1fc4cb1fe4a9f56914cf, type: 3}
+  - {fileID: 4900000, guid: 8fcfb28b3c4d48349bd5b87aff9ce68d, type: 3}
   - {fileID: 4900000, guid: be4477c45c737ff4ab92c8a3e1f1f2e4, type: 3}
+  - {fileID: 4900000, guid: 9faa8c751b4f1fc4cb1fe4a9f56914cf, type: 3}
+  - {fileID: 4900000, guid: b6b65093a210a9a4b9d945de68b508df, type: 3}
   - {fileID: 4900000, guid: 51a806b04d86a5748a0b913d03d727b3, type: 3}
-  - {fileID: 4900000, guid: 90fd440679622b24ebc944c0b42d8a67, type: 3}
   - {fileID: 4900000, guid: b6668d886e4289843accfa83694c3ba5, type: 3}
-  - {fileID: 4900000, guid: 25791561073aa3b4596a44afa453d917, type: 3}
+  - {fileID: 4900000, guid: 90fd440679622b24ebc944c0b42d8a67, type: 3}
   - {fileID: 4900000, guid: 39da8c44f8c4a3143be9d497be2c0a00, type: 3}
-  - {fileID: 4900000, guid: 588c546965f68a34cbc9cd602e8ba561, type: 3}
+  - {fileID: 4900000, guid: 25791561073aa3b4596a44afa453d917, type: 3}
   - {fileID: 4900000, guid: a8341cb6cc513fd42a9e00b4fc7a3ddd, type: 3}
-  - {fileID: 4900000, guid: a847023228e9de544a3c5daf323ca682, type: 3}
+  - {fileID: 4900000, guid: 588c546965f68a34cbc9cd602e8ba561, type: 3}
   - {fileID: 4900000, guid: d52c237e7fc077742bdfe39dcd6fa2d4, type: 3}
-  dialogData: {fileID: 4900000, guid: b497797a811bb4740928b0415efdbefe, type: 3}
+  - {fileID: 4900000, guid: a847023228e9de544a3c5daf323ca682, type: 3}
+  dialogData: {fileID: 0}
   charNameText: {fileID: 60897171}
   dialogText: {fileID: 1439676008}
   dialogUI: {fileID: 1507156198}
@@ -673,7 +673,6 @@ MonoBehaviour:
   - "\uB0B4\uB808\uC774\uC158"
   nextButton: {fileID: 1909925383}
   dialogName: Stage1-3_Last
-  foxName: "\uAD6C\uBBF8\uD638"
   spacing: 90
   fadeDuration: 0.5
 --- !u!4 &313111314
@@ -2313,13 +2312,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 313111313}
+        m_TargetAssemblyTypeName: DialogParser, Assembly-CSharp
+        m_MethodName: NextScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

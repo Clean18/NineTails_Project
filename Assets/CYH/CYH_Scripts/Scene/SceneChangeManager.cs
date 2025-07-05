@@ -13,11 +13,45 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     private float _loadStartTime;                           // 로딩 시작 시각 
     private float _minLoadingTime;                          // 최소 로드 시간
     private string _targetSceneName;                        // 로드할 씬
+    // 현재 씬 번호
+    [SerializeField] private int _currentSceneIndex;
+    public int CurrentSceneIndex
+    {
+        get => _currentSceneIndex;
+        set
+        {
+            //Debug.Log($"현재 씬 인덱스{_currentSceneIndex} = {value}");
+            _currentSceneIndex = Mathf.Clamp(value, 2, _stageInfo.Count);
+        }
+    }
+    [SerializeField] private int _nextSceneIndex;
+    public int NextSceneIndex
+    {
+        get => _nextSceneIndex;
+        set
+        {
+            Debug.Log($"다음 씬 인덱스{_nextSceneIndex} = {value}");
+            _nextSceneIndex = Mathf.Clamp(value, 3, _stageInfo.Count); ;
+        }
+    }
+    
+    /// <summary>
+    /// 스테이지 리스트, 딕셔너리 Key값
+    /// </summary>
+    [SerializeField] public List<string> _stageInfo;
+    /// <summary>
+    /// 딕셔너리 Value값
+    /// </summary>
+    [SerializeField] public List<string> GameSceneValues;
+    // 스테이지 정보 딕셔너리
+    private Dictionary<string, string> _gameSceneDict;
 
-    public int _currentSceneIndex = 0;                      // 현재 씬 번호                     
-    public List<string> _stageInfo;                         // 스테이지 리스트
-    private Dictionary<string, string> _gameSceneDict;      // 스테이지 정보 딕셔너리
-
+    /// <summary>
+    /// 현재 씬 정보가 스토리 씬의 몇번째 index인지 반환하는 함수
+    /// <br/> Key가 있으면 플레이어 오브젝트 비활성화, 없으면 활성화
+    /// <br/> ex) Table[SceneName] == DataParser Index
+    /// </summary>
+    private Dictionary<string, int> _dialogSceneDic;
 
     protected override void Awake()
     {
@@ -25,6 +59,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
 
         _gameSceneDict = LoadCsvToDictionary("Csvs/GameScenes");
         _stageInfo = LoadCsvToList("Csvs/StageInfo");
+        GameSceneValues = _gameSceneDict.Values.ToList();
     }
 
     private void Start()
@@ -55,15 +90,36 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     public void LoadNextScene()
     {
         // 다음 인덱스 계산
-        int nextIndex = _currentSceneIndex + 1;
+        int nextIndex = PlayerController.Instance.GetPlayerSceneIndex() + 1;
 
         // 유효 범위 체크
         if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
             // 씬 정보로 씬 이름 가져오기
             string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
-            LoadSceneAsync(nextScene);
-            _currentSceneIndex = nextIndex;
+            PlayerController.Instance.SetPlayerSceneIndex(nextIndex);
+
+            LoadSceneAsync(nextScene); // 사용중
+        }
+        else
+        {
+            Debug.LogWarning("더 이상 로드할 씬 없음");
+        }
+    }
+
+    public void LoadPrevScene()
+    {
+        // 다음 인덱스 계산
+        int nextIndex = PlayerController.Instance.GetPlayerSceneIndex() - 1;
+
+        // 유효 범위 체크
+        if (_stageInfo != null && nextIndex < _stageInfo.Count)
+        {
+            // 씬 정보로 씬 이름 가져오기
+            string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
+            PlayerController.Instance.SetPlayerSceneIndex(nextIndex);
+
+            LoadSceneAsync(nextScene); // 사용중
         }
         else
         {
@@ -79,7 +135,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         // stageInfo 씬 로드
         LoadSceneAsync(_gameSceneDict[stageInfo]);
         // 현재 씬 번호 -> 이동할 씬 번호로 변경                     
-        _currentSceneIndex = _stageInfo.IndexOf(stageInfo);
+        CurrentSceneIndex = _stageInfo.IndexOf(stageInfo);
     }
 
     /// <summary>
@@ -91,7 +147,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         if (_asyncLoad != null && !_asyncLoad.isDone)
             return;
 
-        StartCoroutine(LoadSceneCoroutine(sceneName));
+        StartCoroutine(LoadSceneCoroutine(sceneName)); // 사용중
     }
 
     /// <summary>
@@ -116,10 +172,78 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
 
         _targetSceneName = targetSceneName;
         _minLoadingTime = minLoadingTime;
-        StartCoroutine(LoadTwoSceneCoroutineWithMinTime());
+        StartCoroutine(LoadTwoSceneCoroutineWithMinTime(loadingSceneName));
+    }
+
+    public void LoadFirstScene()
+    {
+        StartCoroutine(LoadFirstSceneRoutine());
+    }
+
+    /// <summary>
+    /// 현재 씬의 다음 씬 로드 (스테이지 인덱스(=순서))
+    /// </summary>
+    public void LoadNextScene(int sceneIndex)
+    {
+        // 다음 인덱스 계산
+        if (sceneIndex <= 2) sceneIndex = 2;
+        int nextIndex = sceneIndex + 1;
+
+        // 유효 범위 체크
+        if (_stageInfo != null && nextIndex < _stageInfo.Count)
+        {
+            // 씬 정보로 씬 이름 가져오기
+            string nextScene = _gameSceneDict[_stageInfo[sceneIndex]];
+            if (nextScene == "GameStart" || nextScene == "Loading" || nextScene == "GameStartScene" || nextScene == "LoadingScene_v1")
+            {
+                Debug.Log("게임시작씬 or 로딩씬 index라 프롤로그 씬으로 변경");
+                sceneIndex = 2;
+                nextIndex = 3;
+                nextScene = _gameSceneDict[_stageInfo[sceneIndex]];
+            }
+            Debug.Log($"현재 씬 : {sceneIndex}");
+            CurrentSceneIndex = sceneIndex;
+            LoadSceneAsync(nextScene);
+            NextSceneIndex = nextIndex;
+        }
+        else
+        {
+            Debug.LogWarning("더 이상 로드할 씬 없음");
+        }
     }
 
     #region Coroutine
+
+    /// <summary>
+    /// 데이터매니저 초기화 > 플레이어 초기화 > 씬이동 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator LoadFirstSceneRoutine()
+    {
+        // TODO : 일단은 로딩씬으로 이동 후
+        Debug.LogWarning("게임 시작 로딩씬으로 이동");
+
+        yield return StartCoroutine(LoadSceneCoroutine(_gameSceneDict["Loading"]));
+
+        // 데이터매니저 csv 파싱 후
+        if (!DataManager.IsDataInit)
+        {
+            // 데이터 매니저 초기화
+            Debug.LogWarning("데이터매니저 초기화 중...");
+            yield return StartCoroutine(DataManager.Instance.LoadDatas());
+            Debug.LogWarning("데이터매니저 초기화 완료");
+        }
+
+        // 플레이어 초기화 후 비활성화
+        GameManager.Instance.PlayerInit();
+
+        Debug.LogWarning("플레이어 초기화 중...");
+        yield return StartCoroutine(PlayerController.Instance.PlayerInitRoutine());
+        Debug.LogWarning("플레이어 초기화 완료");
+
+        // 인덱스로 씬 변경
+        LoadNextScene(PlayerController.Instance.GetPlayerSceneIndex());
+    }
 
     /// <summary>
     /// 일반 -> 로딩씬 -> 목표씬 순차 코루틴
@@ -135,10 +259,10 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     /// <summary>
     /// 일반 -> 로딩씬 -> 목표씬 순차 코루틴 (최소 로드시간 보장)
     /// </summary>
-    private IEnumerator LoadTwoSceneCoroutineWithMinTime()
+    private IEnumerator LoadTwoSceneCoroutineWithMinTime(string loadingSceneName)
     {
         // 로딩씬 바로 로드
-        yield return StartCoroutine(LoadSceneCoroutine("LoadingScene"));
+        yield return StartCoroutine(LoadSceneCoroutine(loadingSceneName)); // LoadingScene
         // 목표씬은 최소 로드시간 보장 후 로드
         yield return StartCoroutine(LoadingLoadSceneCoroutine(_targetSceneName, _minLoadingTime));
     }
@@ -169,9 +293,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
 
         // 로딩에 걸린 시간
         float elapsed = Time.time - _loadStartTime;
-        Debug.Log($"[{_stageInfo[_currentSceneIndex]} / {sceneName}] 로딩 완료: {elapsed:F1}초 소요");
-
-        Debug.Log($"_currentSceneIndex : {_currentSceneIndex}");
+        Debug.Log($"[{sceneName}] 로딩 완료: {elapsed:F1}초 소요");
 
         // 씬 로딩 완료되었을 때 바로 로드
         _asyncLoad.allowSceneActivation = true;
@@ -203,7 +325,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         _asyncLoad.allowSceneActivation = true;
         while (!_asyncLoad.isDone) yield return null;
 
-        Debug.Log($"[{_stageInfo[_currentSceneIndex]} / {sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
+        Debug.Log($"[{_stageInfo[CurrentSceneIndex]} / {sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
     }
     #endregion
 

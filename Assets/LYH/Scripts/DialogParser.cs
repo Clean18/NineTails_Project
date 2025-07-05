@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using JetBrains.Annotations;
-using System.Runtime.CompilerServices;
 using System;
-using Unity.VisualScripting;
 
 // 데이터 구조 정의
 [System.Serializable]
@@ -72,9 +69,8 @@ public class DialogParser : MonoBehaviour
     void Start()
     {
         // dialogName = 입력값 (추가완료)
-        var sceneManager = SceneChangeManager.Instance;
-        dialogName = sceneManager._stageInfo[sceneManager._currentSceneIndex];
-        Debug.Log($"dialogName : {dialogName} / _currentSceneIndex : {sceneManager._currentSceneIndex}");
+        dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.GetPlayerSceneIndex()];
+        Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.GetPlayerSceneIndex()}");
 
         for (int i = 0; i < dialogDatas.Length; i++)
         {
@@ -332,8 +328,19 @@ public class DialogParser : MonoBehaviour
         {
             Debug.Log("모든 대사 종료");
             Debug.Log("다음 씬으로 전환");
+            int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
+            if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
+            else SceneChangeManager.Instance.LoadNextScene();
         }
     }
+
+    public void NextScene()
+    {
+        int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
+        if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
+        else SceneChangeManager.Instance.LoadNextScene();
+    }
+
     public void PreviousLine()
     {
         if (currentIndex > 0)

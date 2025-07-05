@@ -204,7 +204,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     public void PlayerSave()
     {
-        GameManager.Instance.PlayerController?.SaveData();
+        GameManager.Instance.Player?.SaveData();
         SaveData();
     }
 }

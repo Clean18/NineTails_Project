@@ -1,98 +1,29 @@
 {
-    "_savedTimeString": "2025-07-05T19:34:37.8850956+09:00",
-    "PlayerName": "미호",
-    "AttackLevel": 24,
+    "_savedTimeString": "2025-07-06T03:41:26.2940374+09:00",
+    "PlayerName": "구미호",
+    "AttackLevel": 1,
     "DefenseLevel": 1,
-    "HpLevel": 7,
-    "CurrentHp": 23,
+    "HpLevel": 1,
+    "CurrentHp": 39,
     "SpeedLevel": 1,
-    "ShieldHp": 27,
-    "SpiritEnergy": 2000,
-    "Warmth": 5251,
+    "ShieldHp": 0,
+    "SceneIndex": 5,
+    "SpiritEnergy": 0,
+    "Warmth": 720,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
-    "GetFirstWarmth": false,
+    "GetFirstWarmth": true,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
             "SkillLevel": 0,
             "SlotIndex": 0
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": 1
-        },
-        {
-            "SkillIndex": 2,
-            "SkillLevel": 0,
-            "SlotIndex": 2
-        },
-        {
-            "SkillIndex": 3,
-            "SkillLevel": 0,
-            "SlotIndex": 3
-        },
-        {
-            "SkillIndex": 5,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 6,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 1,
-            "SkillLevel": 0,
-            "SlotIndex": -1
         }
     ],
     "Grade": "N",
     "Level": 1,
     "IncreaseDamageLevel": 0,
     "PlayerAchivementList": [
-        {
-            "Id": "A46",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A47",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A48",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A49",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A50",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A52",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A51",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A53",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
         {
             "Id": "A16",
             "IsClear": true,
@@ -102,68 +33,7 @@
             "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1
-        },
-        {
-            "Id": "A18",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A19",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A43",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A44",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A45",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A25",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A26",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A27",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A28",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A20",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A21",
-            "IsClear": true,
-            "CurrentCondition": -1
         }
     ],
-    "PlayerMissionList": [
-        {
-            "Id": "M1",
-            "IsClear": true,
-            "CurrentCondition": -1
-        }
-    ]
+    "PlayerMissionList": []
 }

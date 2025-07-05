@@ -35,6 +35,8 @@ public partial class GameData
     public int SpeedLevel = 1;
     // 보호막 체력
     public long ShieldHp = 0;
+    // 플레이어 마지막 씬의 인덱스
+    public int SceneIndex = 2;
 
     [Header("PlayerCost")]
     // 영기
