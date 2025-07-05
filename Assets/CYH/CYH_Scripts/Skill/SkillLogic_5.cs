@@ -72,6 +72,7 @@ public class SkillLogic_5 : SkillLogic, ISkill
         AnimationPlay();
         Debug.Log("스킬 5 사용완료");
     }
+
     public void SkillRoutine()
     {
         CreateField(transform.position);
@@ -81,11 +82,15 @@ public class SkillLogic_5 : SkillLogic, ISkill
     public void OnAttackStart()
     {
         _isSkillUsed = true;
+
+        PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
+
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()

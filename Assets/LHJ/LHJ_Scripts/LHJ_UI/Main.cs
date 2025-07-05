@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Main : BaseUI, IUI
@@ -16,7 +17,9 @@ public class Main : BaseUI, IUI
     [SerializeField] private TextMeshProUGUI timeText;          // 미션 시간
     [SerializeField] private TextMeshProUGUI retrycoolTimeText; // 미션 재도전 남은시간
 
-    [SerializeField] private TMP_Text txt_Nickname;  // 닉네임 텍스트
+    [SerializeField] private TMP_Text txt_Nickname;             // 닉네임 텍스트
+    [SerializeField] private TextMeshProUGUI killCountText;     // 처치 수 / 목표 수
+    [SerializeField] private Slider missionTimeSlider;          // 시간 슬라이드
 
     private void Start()
     {
@@ -140,10 +143,19 @@ public class Main : BaseUI, IUI
         {
             float time = MissionManager.Instance.GetRemainingTime();
             timeText.text = $"Time : {Mathf.CeilToInt(time)}s";  // 초 단위로 표시
+
+            int currentKill = MissionManager.Instance.killCount;
+            int goal = DataManager.Instance.MissionTable[SceneManager.GetActiveScene().name].Count;
+            killCountText.text = $"{currentKill} / {goal}";  // 처치 수 / 목표 수
+            float total = DataManager.Instance.MissionTable[SceneManager.GetActiveScene().name].TimeLimit;
+            missionTimeSlider.value = time / total;         // 제한시간감소 / 미션시간
+            missionTimeSlider.gameObject.SetActive(true);
         }
         else
         {
             timeText.text = "";         // 미션 진행중이 아닐때 텍스트 초기화
+            killCountText.text = "";
+            missionTimeSlider.gameObject.SetActive(false);
         }
 
         // 쿨타임 진행중일때 재도전 남은 시간 표시

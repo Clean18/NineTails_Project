@@ -728,6 +728,112 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1561548078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1561548081}
+  - component: {fileID: 1561548080}
+  - component: {fileID: 1561548079}
+  m_Layer: 0
+  m_Name: Skill_1_Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &1561548079
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561548078}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 60a516daca262fb4181a6349ebafa38d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &1561548080
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561548078}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 30
+  m_Sprite: {fileID: 1332749961, guid: 16d68f390f78b3b47a6484d1a4c901be, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.64, y: 0.64}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1561548081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561548078}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: -0.8249163, w: 0.565255}
+  m_LocalPosition: {x: -0.689, y: 3.33, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -111.16}
 --- !u!1 &1657523834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,24 +1188,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isInit: 0
-  PlayerModel:
+  _model:
     Data:
+      _playerName: 
       _attackLevel: 0
       <Attack>k__BackingField: 0
       _defenseLevel: 0
       <Defense>k__BackingField: 0
       _hpLevel: 0
       <MaxHp>k__BackingField: 0
-      <Hp>k__BackingField: 0
+      _hp: 0
       _speedLevel: 0
       <Speed>k__BackingField: 0
-      IncreaseDamage: 0
-      IncreaseDamageLevel: 0
       _isDead: 0
-      ShieldHp: 0
-  PlayerView: {fileID: 0}
-  PlayerAI:
+      _shieldHp: 0
+    Cost:
+      _spiritEnergy: 0
+      _warmth: 0
+      _soul: 0
+      GetFirstWarmth: 0
+      GetFirstSpiritEnergy: 0
+    Skill:
+      skillList: []
+    Equipment:
+      _grade: 0
+      _level: 0
+      _attack: 0
+      _cooldownReduction: 0
+      _reduceDamage: 0
+      _warmthCost: 0
+      WarmthCost: 0
+      IncreaseDamage: 0
+      _increaseDamageLevel: 0
+      _baseSSRCost: 0
+      BaseSSRCost: 0
+  _view: {fileID: 0}
+  _ai:
     TargetMonster: {fileID: 0}
+    _targetSkillName: 
+  SkillController: {fileID: 0}
   _mode: 0
   CurrentState: 1
   SearchDistance: 8
@@ -1109,6 +1236,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
+  IsImmortal: 0
 --- !u!212 &1051408956766459252
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1225,11 +1353,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21413a6c049b7734c8fd92d9c0c21c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 6cea0e09a7f8e484d9d88e32a9498a2d, type: 2}
-  _playerController: {fileID: 0}
-  _hitBox: {fileID: 6169749376982270442}
-  _skillLevel: 0
+  _animator: {fileID: 0}
   _hitMonsters: []
+  _isSkillUsed: 0
+  _hitBoxPrefab: {fileID: 0}
+  _hitBox: {fileID: 6169749376982270442}
+  <SkillData>k__BackingField: {fileID: 0}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
+  <SlotIndex>k__BackingField: 0
 --- !u!4 &1809103416382726668
 Transform:
   m_ObjectHideFlags: 0
@@ -1947,6 +2079,7 @@ MonoBehaviour:
   _sprite: {fileID: 0}
   _anim: {fileID: 0}
   _spriteSize: 0.2
+  canMove: 0
 --- !u!4 &7314325167654610341
 Transform:
   m_ObjectHideFlags: 0
@@ -2090,7 +2223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7862023553575976316, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8153223802303168114, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
       propertyPath: m_LocalScale.x
@@ -2106,11 +2239,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8153223802303168114, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.05
       objectReference: {fileID: 0}
     - target: {fileID: 8153223802303168114, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 7.9
       objectReference: {fileID: 0}
     - target: {fileID: 8153223802303168114, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2281,6 +2414,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   attackSpeed: 15
+  maxHp: 0
+  hp: 0
   rigid: {fileID: 0}
   moveInput: {x: 0, y: 0}
   effectPrefab: {fileID: 1440692181422280772, guid: 5a392d72ec7fc9b4c80ab1e0c05657af, type: 3}
@@ -2319,16 +2454,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f2df55f95429f458f8ffece2fd3363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: ce7b313c794676941af9526a8547f2e7, type: 2}
-  _playerController: {fileID: 8834188468784387696}
+  _animator: {fileID: 0}
+  _hitMonsters: []
+  _isSkillUsed: 0
   _projectilePrefab: {fileID: 1873357373014254779, guid: f32a813fa53bdee4c97b097228d88237, type: 3}
   _objCount: 5
   _radius: 3
   _objSpeed: 180
   _centerOffset: {x: -0.29, y: 1.72, z: 0}
   _spinDuration: 7
-  _skillLevel: 0
-  _hitMonsters: []
+  _isSpinning: 0
+  <SkillData>k__BackingField: {fileID: 0}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
+  <SlotIndex>k__BackingField: 0
 --- !u!20 &8994819570074998775
 Camera:
   m_ObjectHideFlags: 0
@@ -2392,12 +2531,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c238eadf819680f4d84412605ca3eb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 70e0a46da949b0a40a638c43a38e0296, type: 2}
-  _playerController: {fileID: 0}
-  _hitBox: {fileID: 4139639658695224470}
-  _skillLevel: 0
-  _slashCount: 0
+  _animator: {fileID: 0}
   _hitMonsters: []
+  _isSkillUsed: 0
+  _hitBoxPrefab: {fileID: 0}
+  _hitBox: {fileID: 4139639658695224470}
+  _slashCount: 0
+  <SkillData>k__BackingField: {fileID: 0}
+  <IsCooldown>k__BackingField: 0
+  <SkillLevel>k__BackingField: 0
+  <SlotIndex>k__BackingField: 0
 --- !u!4 &9212419557231626190
 Transform:
   m_ObjectHideFlags: 0
@@ -2425,3 +2568,4 @@ SceneRoots:
   - {fileID: 7613547319140957043}
   - {fileID: 7314325167654610341}
   - {fileID: 1453615246}
+  - {fileID: 1561548081}
