@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,27 +11,38 @@ public class StagePopUp : BaseUI
             string missionId = "M1";               // 미션 아이디
             string sceneName = sceneNames[0];      // 해당 미션 씬 인덱서
 
-            if (!MissionManager.Instance.IsCleared(missionId))      // 클리어 된 상태가 아니라면
+            //if (!MissionManager.Instance.IsCleared(missionId))      // 클리어 된 상태가 아니라면
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)       // 쿨타임이 돌때 미션 진행불가
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();  // 미션 팝업창 생성
+            //    popUp.SetScene(sceneName);      // 씬 이름 전달
+            //}
+            //else    // 클리어 상태인경우
+            //{
+            //    if (SceneManager.GetActiveScene().name == sceneName)
+            //    {
+            //        Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
+            //    }
+            //    else
+            //    {
+            //        SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //    }
+            //}
+            if (MissionManager.Instance.IsCooldownActive)       // 쿨타임이 돌때 미션 진행불가
             {
-                if (MissionManager.Instance.IsCooldownActive)       // 쿨타임이 돌때 미션 진행불가
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();  // 미션 팝업창 생성
-                popUp.SetScene(sceneName);      // 씬 이름 전달
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
             }
-            else    // 클리어 상태인경우
+            if (SceneManager.GetActiveScene().name != sceneName)
             {
-                if (SceneManager.GetActiveScene().name == sceneName)
-                {
-                    Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
-                }
-                else
-                {
-                    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-                }
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();  // 미션 팝업창 생성
+            popUp.SetScene(sceneName);      // 씬 이름 전달
         };
 
         GetEvent("Btn_Stage12").Click += data =>

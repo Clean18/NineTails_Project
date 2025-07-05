@@ -54,6 +54,7 @@ public class GameManager : Singleton<GameManager>
 
         Debug.LogWarning("플레이어 초기화 중...");
         yield return StartCoroutine(Player.PlayerInitRoutine());
+        Player.IsImmortal = false;
         Debug.LogWarning("플레이어 초기화 완료");
 
         // TODO : 씬에 따라 플레이어 활성화 비활성화
