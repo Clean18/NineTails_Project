@@ -1,14 +1,14 @@
 {
-    "_savedTimeString": "2025-07-05T17:15:44.1883445+09:00",
+    "_savedTimeString": "2025-07-05T18:07:52.2265029+09:00",
     "PlayerName": "미호",
     "AttackLevel": 24,
     "DefenseLevel": 1,
     "HpLevel": 7,
-    "CurrentHp": 55,
+    "CurrentHp": 0,
     "SpeedLevel": 1,
     "ShieldHp": 0,
     "SpiritEnergy": 0,
-    "Warmth": 1626,
+    "Warmth": 3516,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -105,6 +105,26 @@
         },
         {
             "Id": "A18",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A43",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A44",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A45",
             "IsClear": true,
             "CurrentCondition": -1
         }

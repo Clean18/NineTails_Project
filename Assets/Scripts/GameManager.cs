@@ -47,7 +47,7 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator SceneInitRoutine()
     {
-        if (!DataManager.isInit)
+        if (!DataManager.IsDataInit)
         {
             // 데이터 매니저 초기화
             Debug.LogWarning("데이터매니저 초기화 중...");

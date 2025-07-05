@@ -26,7 +26,14 @@ public class StagePopUp : BaseUI
             else    // 클리어 상태인경우
             {
                 // TODO : 현재 씬과 비교해서 같은 씬이면 return
-                SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
+                if (SceneManager.GetActiveScene().name == sceneName)
+                {
+                    Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
+                }
+                else
+                {
+                    SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
+                }
             }
         };
 
@@ -36,13 +43,6 @@ public class StagePopUp : BaseUI
             string sceneName = sceneNames[1];
             if (!MissionManager.Instance.IsCleared("M1"))
             {
-                UIManager.Instance.ShowWarningText("1-1 스테이지 클리어 이후 사용가능합니다.");
-                return;
-            }
-
-            if (!MissionManager.Instance.IsCleared("M1"))
-            {
-                // TODO : 이전 미션 클리어 안했으면 경고문 출력
                 UIManager.Instance.ShowWarningText("1-1 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
@@ -59,7 +59,15 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                // TODO : 현재 씬과 비교해서 같은 씬이면 return
+                if (SceneManager.GetActiveScene().name == sceneName)
+                {
+                    Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
+                }
+                else
+                {
+                    SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
+                }
             }
         };
         GetEvent("Btn_Stage13").Click += data =>

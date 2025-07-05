@@ -26,5 +26,6 @@ public class NameInputPopUp : BaseUI
                 UIManager.Instance.ShowPopUp<CompletePopUp>(); // 클리어 팝업 열기
             }
         };
+        GetEvent("Btn_N").Click += data => UIManager.Instance.ClosePopUp();
     }
 }
