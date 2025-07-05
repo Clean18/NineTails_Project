@@ -48,7 +48,8 @@ public class AchievementPopUp : BaseUI
         // 업적 이름과 설명 UI 표시
         group.nameText.text = info.Name;
         group.descriptionText.text = info.Description;
-        group.rewardButton.gameObject.SetActive(true);
+        bool isAchieved = AchievementManager.Instance.IsAchieved(info.Id);  
+        group.rewardButton.gameObject.SetActive(isAchieved); // 업적 클리어시 버튼 활성화
 
         // 보상 버튼 클릭시 초기화 후 재등록
         group.rewardButton.onClick.RemoveAllListeners();
