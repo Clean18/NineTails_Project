@@ -505,9 +505,24 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="trigger"></param>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
+    /// <summary>
+    /// 플레이어 강제 스탑
+    /// </summary>
     public void Stop() => _view.Stop();
+    /// <summary>
+    /// 플레이어 강제 스탑 해제
+    /// </summary>
     public void Move() => _view.Move();
+    /// <summary>
+    /// 플레이어 AI용 스탑
+    /// </summary>
     public void AIStop() => _view.AIStop();
+    /// <summary>
+    /// 플레이어의 강제이동 상태 체크
+    /// <br/> true = 이동 가능
+    /// <br/> false = 이동 불가능
+    /// </summary>
+    /// <returns></returns>
     public bool MoveCheck() => _view.GetMoveCheck();
     #endregion
 

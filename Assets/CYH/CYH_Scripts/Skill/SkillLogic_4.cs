@@ -49,24 +49,32 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void UseSkill(Transform attacker)
     {
+        Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        // 플레이어 강제 정지상태면 return
         if (!PlayerController.Instance.MoveCheck()) return;
 
-        Debug.Log("스킬4 사용");
-
-        // 쿨타임 체크 시작
-        IsCooldown = true;
-        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
-
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
         _randomMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 4 공격할 대상이 없습니다.");
+            return;
+        }
+
+        // 쿨타임 체크 시작
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         OnAttackStart();
         AnimationPlay();
-        DetectMonster();
+        //DetectMonster();
+
+        Debug.Log("스킬 4 사용완료");
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -75,19 +83,26 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown) return;
         Debug.Log($"IsCooldown: {IsCooldown}");
+        // 플레이어 강제 정지상태면 return
         if (!PlayerController.Instance.MoveCheck()) return;
 
-        // 쿨타임 체크 시작
-        IsCooldown = true;
-        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
-
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
         _randomMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 4 공격할 대상이 없습니다.");
+            return;
+        }
+
+        // 쿨타임 체크 시작
+        PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         OnAttackStart();
         AnimationPlay();
-        DetectMonster();
+        //DetectMonster();
 
         Debug.Log("스킬 4 사용완료");
     }
@@ -101,6 +116,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         // 3초 동안 0.5초마다 데미지 + 이펙트 flipX 토글
         if (_randomMonsters.Count > 0) PlayerController.Instance.StartCoroutine(TimedDamageCoroutine());
+
         OnAttackEnd();
     }
 
@@ -110,12 +126,14 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         // 플레이어 이동 비활성화
         PlayerController.Instance.Stop();
+        Debug.Log($"플레이어 강제 정지 : {PlayerController.Instance.MoveCheck()}");
     }
 
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
         PlayerController.Instance.Move();
+        Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.MoveCheck()}");
     }
 
     public void AnimationPlay()
