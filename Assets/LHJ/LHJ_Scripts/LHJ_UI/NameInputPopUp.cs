@@ -9,19 +9,19 @@ public class NameInputPopUp : BaseUI
 
     private void Start()
     {
+        Debug.Log("이름 생성 팝업 활성화");
         GetEvent("Btn_Confirm").Click += data =>
         {
             string name = inputField.text.Trim();
-
+            Debug.Log($"플레이어 이름 : [{name}]");
             // 입력값이 비어있지 않을때
             if (!string.IsNullOrEmpty(name))
             {
-                // Ui매니저에 플레이어 이름 저장
-                UIManager.Instance.PlayerName = name;
-                if (UIManager.Instance.MainUI != null)
-                {
-                    UIManager.Instance.MainUI.UpdateNicknameUI();
-                }
+                // 플레이어 이름 지정
+                Debug.Log($"플레이어 이름 : [{name}] 으로 결정");
+                PlayerController.Instance.SetPlayerName(name);
+                // TODO : 플레이어 정보 세이브
+                PlayerController.Instance.SaveData();
                 UIManager.Instance.ClosePopUp(); // 현재 팝업 닫기
                 UIManager.Instance.ShowPopUp<CompletePopUp>(); // 클리어 팝업 열기
             }

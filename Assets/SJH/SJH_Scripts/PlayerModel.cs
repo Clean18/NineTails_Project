@@ -198,6 +198,7 @@ public class PlayerModel
         if (gameData == null) gameData = new GameData();
 
         // Data
+        gameData.PlayerName = data.PlayerName;
         gameData.AttackLevel = data.AttackLevel;
 		gameData.DefenseLevel = data.DefenseLevel;
 		gameData.SpeedLevel = data.SpeedLevel;
@@ -282,6 +283,12 @@ public class PlayerModel
     /// </summary>
     /// <returns></returns>
     public string GetPlayerName() => Data.PlayerName;
+    /// <summary>
+    /// 플레이어의 이름을 지정하는 함수
+    /// </summary>
+    /// <param name="newName"></param>
+    /// <returns></returns>
+    public string SetPlayerName(string newName) => Data.PlayerName = newName;
 
     #endregion
 

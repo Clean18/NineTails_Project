@@ -229,6 +229,8 @@ public class PlayerController : MonoBehaviour
         // 세이브로드매니저에서 데이터 받아오기
         _model.InitModel(SaveLoadManager.Instance.GameData);
 
+        yield return UIManager.Instance.MainUI != null;
+
         // UI 초기화
         if (UIManager.Instance.SceneUIList.Count > 0)
         {
@@ -361,6 +363,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public string GetPlayerName() => _model.GetPlayerName();
+    /// <summary>
+    /// 플레이어의 이름을 지정하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public string SetPlayerName(string newName) => _model.SetPlayerName(newName);
     /// <summary>
     /// 플레이어 스탯을 반환하는 함수
     /// </summary>

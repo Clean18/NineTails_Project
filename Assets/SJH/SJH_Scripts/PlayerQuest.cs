@@ -41,8 +41,8 @@ public class PlayerQuest
 	{
         if (AchievementManager.Instance == null) return;
 
-        var ClearTable = AchievementManager.Instance.AchievedIds;
-        var KillCountTable = AchievementManager.Instance.KillCountDic;
+        var achievClearTable = AchievementManager.Instance.AchievedIds;
+        var achievKillCountTable = AchievementManager.Instance.KillCountDic;
 
         if (saveAchive != null)
         {
@@ -53,17 +53,18 @@ public class PlayerQuest
                 // 클리어 했으면 ClearTable에 추가
                 if (achiev.IsClear)
                 {
-                    ClearTable.Add(achiev.Id);
+                    achievClearTable.Add(achiev.Id);
                 }
                 // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
                 else if (!achiev.IsClear && achiev.CurrentCondition > -1)
                 {
-                    KillCountTable.Add(achiev.Id, achiev.CurrentCondition);
+                    achievKillCountTable.Add(achiev.Id, achiev.CurrentCondition);
                 }
             }
         }
         Debug.Log("업적 초기화 완료");
 
+        var missionClearTable = MissionManager.Instance.MissionIds;
         if (saveMission != null)
         {
             foreach (var mission in saveMission)
@@ -71,12 +72,7 @@ public class PlayerQuest
                 // 클리어 했으면 ClearTable에 추가
                 if (mission.IsClear)
                 {
-                    ClearTable.Add(mission.Id);
-                }
-                // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
-                else if (!mission.IsClear && mission.CurrentCondition > -1)
-                {
-                    KillCountTable.Add(mission.Id, mission.CurrentCondition);
+                    missionClearTable.Add(mission.Id);
                 }
             }
         }
@@ -111,7 +107,7 @@ public class PlayerQuest
         {
             list.Add(new SaveMissionData(clearId, true, -1));
         }
-
+        Debug.Log($"저장 : 클리어한 미션 개수 : {ClearTable.Count}");
         return list;
 	}
 }

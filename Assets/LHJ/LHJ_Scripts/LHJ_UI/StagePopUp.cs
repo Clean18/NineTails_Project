@@ -24,6 +24,7 @@ public class StagePopUp : BaseUI
             }
             else    // 클리어 상태인경우
             {
+                // TODO : 현재 씬과 비교해서 같은 씬이면 return
                 SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
             }
         };
@@ -32,6 +33,13 @@ public class StagePopUp : BaseUI
         {
             string missionId = "M2";
             string sceneName = "Stage1-2Test";
+
+            if (!MissionManager.Instance.IsCleared("M1"))
+            {
+                // TODO : 이전 미션 클리어 안했으면 경고문 출력
+                UIManager.Instance.ShowWarningText("1-1 스테이지 클리어 이후 사용가능합니다.");
+                return;
+            }
 
             if (!MissionManager.Instance.IsCleared(missionId))
             {
