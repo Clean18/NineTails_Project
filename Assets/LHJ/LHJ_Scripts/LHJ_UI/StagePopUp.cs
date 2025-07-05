@@ -9,11 +9,16 @@ public class StagePopUp : BaseUI
     {
         GetEvent("Btn_Stage11").Click += data =>
         {
-            string missionId = "M1";
-            string sceneName = "Stage1-1Test";
+            string missionId = "M1";                // 미션 아이디
+            string sceneName = "Stage1-1Copy";      // 해당 미션 씬 이름
 
             if (!MissionManager.Instance.IsCleared(missionId))      // 클리어 된 상태가 아니라면
             {
+                if (MissionManager.Instance.IsCooldownActive)       // 쿨타임이 돌때 미션 진행불가
+                {
+                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                    return;
+                }
                 var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();  // 미션 팝업창 생성
                 popUp.SetScene(sceneName);      // 씬 이름 전달
             }
@@ -25,7 +30,7 @@ public class StagePopUp : BaseUI
 
         GetEvent("Btn_Stage12").Click += data =>
         {
-            string missionId = "M3";
+            string missionId = "M2";
             string sceneName = "Stage1-2Test";
 
             if (!MissionManager.Instance.IsCleared(missionId))
