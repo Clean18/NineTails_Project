@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using JetBrains.Annotations;
-using System.Runtime.CompilerServices;
 using System;
-using Unity.VisualScripting;
 
 // 데이터 구조 정의
 [System.Serializable]
@@ -60,7 +57,7 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private Button nextButton;
 
     [SerializeField] private string dialogName;
-    [SerializeField] private string foxName; // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
+    [SerializeField] private string foxName => PlayerController.Instance.GetPlayerName(); // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
     [SerializeField] private int spacing;
     [SerializeField] private float fadeDuration = 0.5f;
 
@@ -72,8 +69,8 @@ public class DialogParser : MonoBehaviour
     void Start()
     {
         // dialogName = 입력값 (추가완료)
-        var sceneManager = SceneChangeManager.Instance;
-        dialogName = sceneManager._stageInfo[sceneManager._currentSceneIndex];
+        dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.GetPlayerSceneIndex()];
+        Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.GetPlayerSceneIndex()}");
 
         for (int i = 0; i < dialogDatas.Length; i++)
         {
@@ -331,8 +328,19 @@ public class DialogParser : MonoBehaviour
         {
             Debug.Log("모든 대사 종료");
             Debug.Log("다음 씬으로 전환");
+            int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
+            if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
+            else SceneChangeManager.Instance.LoadNextScene();
         }
     }
+
+    public void NextScene()
+    {
+        int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
+        if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
+        else SceneChangeManager.Instance.LoadNextScene();
+    }
+
     public void PreviousLine()
     {
         if (currentIndex > 0)

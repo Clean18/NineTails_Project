@@ -1397,8 +1397,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneNames:
-  - Stage1-1Copy
-  - Stage1-2Test
+  - Stage1-1_Battle
+  - Stage1-2_Battle
   - Stage1-3
   - Stage2-1
   - Stage2-2

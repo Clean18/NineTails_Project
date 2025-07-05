@@ -64,7 +64,7 @@ public enum CostType
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-	public static PlayerController Instance => GameManager.Instance.PlayerController;
+	public static PlayerController Instance => GameManager.Instance.Player;
 
 	[Tooltip("플레이어 데이터 로드 여부")]
 	[SerializeField ]private bool _isInit = false;
@@ -112,8 +112,8 @@ public class PlayerController : MonoBehaviour
 	{
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
-		Mode = ControlMode.Auto;
-        //Mode = ControlMode.Manual;
+		//Mode = ControlMode.Auto;
+        Mode = ControlMode.Manual;
     }
 
 	void Update()
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator PlayerInitRoutine()
     {
         // 게임매니저에 자기자신 참조
-        GameManager.Instance.PlayerController = this;
+        GameManager.Instance.Player = this;
 
         // 모델, 뷰, AI, 스킬컨트롤러 초기화
         _model = new PlayerModel();
@@ -228,6 +228,8 @@ public class PlayerController : MonoBehaviour
 
         // 세이브로드매니저에서 데이터 받아오기
         _model.InitModel(SaveLoadManager.Instance.GameData);
+
+        yield return UIManager.Instance.MainUI != null;
 
         // UI 초기화
         if (UIManager.Instance.SceneUIList.Count > 0)
@@ -362,6 +364,11 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public string GetPlayerName() => _model.GetPlayerName();
     /// <summary>
+    /// 플레이어의 이름을 지정하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public string SetPlayerName(string newName) => _model.SetPlayerName(newName);
+    /// <summary>
     /// 플레이어 스탯을 반환하는 함수
     /// </summary>
     /// <returns></returns>
@@ -386,7 +393,12 @@ public class PlayerController : MonoBehaviour
     /// 플레이어 공격력 * (1 + 가하는 피해 증가)
     /// </summary>
     /// <returns></returns>
-    public long GetTotalDamage() => (long)((_model.GetAttack()  * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
+    public long GetTotalDamage() => (long)((_model.GetAttack() * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
+    public int GetPlayerSceneIndex() => _model.GetPlayerSceneIndex();
+    public void SetPlayerSceneIndex(int index)
+    {
+        _model.SetPlayerSceneIndex(index);
+    }
     #endregion
 
     #region Cost 관련 함수
@@ -505,9 +517,24 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="trigger"></param>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
+    /// <summary>
+    /// 플레이어 강제 스탑
+    /// </summary>
     public void Stop() => _view.Stop();
+    /// <summary>
+    /// 플레이어 강제 스탑 해제
+    /// </summary>
     public void Move() => _view.Move();
+    /// <summary>
+    /// 플레이어 AI용 스탑
+    /// </summary>
     public void AIStop() => _view.AIStop();
+    /// <summary>
+    /// 플레이어의 강제이동 상태 체크
+    /// <br/> true = 이동 가능
+    /// <br/> false = 이동 불가능
+    /// </summary>
+    /// <returns></returns>
     public bool MoveCheck() => _view.GetMoveCheck();
     #endregion
 

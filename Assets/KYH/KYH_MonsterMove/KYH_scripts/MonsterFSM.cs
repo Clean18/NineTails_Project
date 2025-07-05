@@ -48,7 +48,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     private void Update()
     {
         // 추가
-        if (GameManager.Instance.PlayerController == null) return;
+        if (GameManager.Instance.Player == null) return;
 
         _findTimer += Time.deltaTime;
         StateChangeTimer += Time.deltaTime;     // 상태전환 쿨타임의 타이머 증가
@@ -136,7 +136,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
         //}
 
         //targetPlayer = closest;
-        targetPlayer = GameManager.Instance.PlayerController.transform;
+        targetPlayer = GameManager.Instance.Player.transform;
     }
 
     /// <summary>
@@ -217,7 +217,7 @@ public class MonsterFSM : MonoBehaviour, IDamagable
             foreach (var hit in hits)
             {
                 //Game.Data.PlayerData player = hit.GetComponent<Game.Data.PlayerData>();
-                var player = GameManager.Instance.PlayerController;
+                var player = GameManager.Instance.Player;
                 if (player != null)
                 {
                     player.TakeDamage((long)AttackDamage);
@@ -254,8 +254,8 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     {
         Debug.Log("몬스터 사망함");
         // TODO : 플레이어 재화 증가
-        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
-        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         MissionManager.Instance.AddKill(); // 돌파미션 킬 체크
         string stageId = SceneManager.GetActiveScene().name;    // 현재 씬이름을 스테이지Id로 사용
         AchievementManager.Instance?.KillCount(stageId);        // 해당 씬 킬 업적 체크

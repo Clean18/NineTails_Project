@@ -63,8 +63,8 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     // 게임 매니저에서 플레이어 트랜스폼이 준비되었을 때까지 대기 후 초기화
     protected IEnumerator BossInit()
     {
-        yield return new WaitUntil(() => GameManager.Instance?.PlayerController != null);
-        PlayerTransform = GameManager.Instance.PlayerController.transform;
+        yield return new WaitUntil(() => GameManager.Instance?.Player != null);
+        PlayerTransform = GameManager.Instance.Player.transform;
 
         CurrentHealth = MaxHealth;              // 보스 체력 초기화
         TransitionToState(BossState.Intro);     // Intro 상태로 시작
