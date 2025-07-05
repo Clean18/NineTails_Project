@@ -1,17 +1,17 @@
 {
-    "_savedTimeString": "2025-07-05T18:07:52.2265029+09:00",
+    "_savedTimeString": "2025-07-05T19:34:37.8850956+09:00",
     "PlayerName": "미호",
     "AttackLevel": 24,
     "DefenseLevel": 1,
     "HpLevel": 7,
-    "CurrentHp": 0,
+    "CurrentHp": 23,
     "SpeedLevel": 1,
-    "ShieldHp": 0,
-    "SpiritEnergy": 0,
-    "Warmth": 3516,
+    "ShieldHp": 27,
+    "SpiritEnergy": 2000,
+    "Warmth": 5251,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
-    "GetFirstWarmth": true,
+    "GetFirstWarmth": false,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
@@ -19,7 +19,7 @@
             "SlotIndex": 0
         },
         {
-            "SkillIndex": 1,
+            "SkillIndex": 4,
             "SkillLevel": 0,
             "SlotIndex": 1
         },
@@ -34,17 +34,17 @@
             "SlotIndex": 3
         },
         {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
             "SkillIndex": 5,
             "SkillLevel": 0,
             "SlotIndex": -1
         },
         {
             "SkillIndex": 6,
+            "SkillLevel": 0,
+            "SlotIndex": -1
+        },
+        {
+            "SkillIndex": 1,
             "SkillLevel": 0,
             "SlotIndex": -1
         }
@@ -125,6 +125,31 @@
         },
         {
             "Id": "A45",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A25",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A26",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A27",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A28",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A20",
             "IsClear": true,
             "CurrentCondition": -1
         }

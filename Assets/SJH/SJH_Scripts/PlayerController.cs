@@ -112,8 +112,8 @@ public class PlayerController : MonoBehaviour
 	{
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
-		Mode = ControlMode.Auto;
-        //Mode = ControlMode.Manual;
+		//Mode = ControlMode.Auto;
+        Mode = ControlMode.Manual;
     }
 
 	void Update()

@@ -39,11 +39,13 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         {
             Debug.Log($"입력한 키 : {Input.inputString}");
             SceneChangeManager.Instance.LoadSceneAsync("DialogScene");
+            //SceneChangeManager.Instance.LoadSceneAsync("Stage1-3");
         }
         if (Input.GetKeyDown(KeyCode.O))
         {
             Debug.Log($"입력한 키 : {Input.inputString}");
-            SceneChangeManager.Instance.LoadSceneAsync("Stage1-1_CYH_Prototype");
+            //SceneChangeManager.Instance.LoadSceneAsync("Stage1-1_CYH_Prototype");
+            SceneChangeManager.Instance.LoadSceneAsync("Stage1-3");
         }
     }
 
@@ -150,8 +152,8 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         _loadStartTime = Time.time;
         _asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 
-        // 씬 로딩 완료되었을 때 바로 로드
-        _asyncLoad.allowSceneActivation = true;
+        //// 씬 로딩 완료되었을 때 바로 로드
+        //_asyncLoad.allowSceneActivation = true;
 
         // 로딩 진행 중
         while (!_asyncLoad.isDone)
@@ -168,6 +170,11 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         // 로딩에 걸린 시간
         float elapsed = Time.time - _loadStartTime;
         Debug.Log($"[{_stageInfo[_currentSceneIndex]} / {sceneName}] 로딩 완료: {elapsed:F1}초 소요");
+
+        Debug.Log($"_currentSceneIndex : {_currentSceneIndex}");
+
+        // 씬 로딩 완료되었을 때 바로 로드
+        _asyncLoad.allowSceneActivation = true;
     }
 
     /// <summary>
