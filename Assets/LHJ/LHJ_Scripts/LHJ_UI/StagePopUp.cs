@@ -31,7 +31,7 @@ public class StagePopUp : BaseUI
                 }
                 else
                 {
-                    SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
+                    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
                 }
             }
         };
@@ -65,7 +65,7 @@ public class StagePopUp : BaseUI
                 }
                 else
                 {
-                    SceneManager.LoadScene(sceneName);  // 바로 해당씬으로 이동
+                    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
                 }
             }
         };
@@ -91,7 +91,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage21").Click += data =>
@@ -116,7 +116,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage22").Click += data =>
@@ -141,7 +141,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage23").Click += data =>
@@ -166,7 +166,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage31").Click += data =>
@@ -191,7 +191,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage32").Click += data =>
@@ -216,7 +216,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_Stage33").Click += data =>
@@ -241,7 +241,7 @@ public class StagePopUp : BaseUI
             }
             else
             {
-                SceneManager.LoadScene(sceneName);
+                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             }
         };
         GetEvent("Btn_close").Click += data => UIManager.Instance.ClosePopUp();
