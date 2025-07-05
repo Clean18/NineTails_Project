@@ -21,6 +21,10 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private Transform DustEffect1SpawnLeft;
     [SerializeField] private AudioClip LegMoveSound;
 
+    [Header("다리 트랜스폼")]
+    [SerializeField] private Transform RightLeg;
+    [SerializeField] private Transform LeftLeg;
+
     [Header("Pattern2 설정 - 방망이 수평 강타 (1회, 60% 피해)")]
     [SerializeField] private GameObject WarningLineHorizontal;
     [SerializeField] private Transform WarningOrigin2;
@@ -32,6 +36,9 @@ public class Stage2BossFSM : BaseBossFSM
     [SerializeField] private Vector2 Pattern2BoxSize = new Vector2(6f, 2f);
     [SerializeField] private Transform SwingBonkPoint1;
     [SerializeField] private Transform SwingBonkPoint2;
+
+    [Header("방망이 기준 트랜스폼")]
+    [SerializeField] private Transform LongMenArm;
 
     protected override void HandlePattern1()
     {
@@ -113,14 +120,20 @@ public class Stage2BossFSM : BaseBossFSM
         // Stage2 보스는 패턴3 없음
     }
 
+    // pattern1 - 오른발 구르기
     public void OnRightFootStomp()
     {
         if (DustEffect1 != null && DustEffect1SpawnRight != null)
         {
-            GameObject dust = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity);
+            GameObject dust = Instantiate(DustEffect1, DustEffect1SpawnRight.position, Quaternion.identity, transform);
+
+            if (RightLeg != null)
+                dust.transform.localScale = RightLeg.localScale;
+
             PlaySound(LegMoveSound);
             Destroy(dust, 2f);
         }
+
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
     }
 
@@ -129,10 +142,15 @@ public class Stage2BossFSM : BaseBossFSM
     {
         if (DustEffect1 != null && DustEffect1SpawnLeft != null)
         {
-            GameObject dust = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity);
+            GameObject dust = Instantiate(DustEffect1, DustEffect1SpawnLeft.position, Quaternion.identity, transform);
+
+            if (LeftLeg != null)
+                dust.transform.localScale = LeftLeg.localScale;
+
             PlaySound(LegMoveSound);
             Destroy(dust, 2f);
         }
+
         DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
     }
 
