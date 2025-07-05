@@ -275,18 +275,15 @@ public class Stage3BossFSM : BaseBossFSM
     /// </summary>
     private void DealDamageInCircle(Vector2 center, float radius, float percent)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(center, radius);
+        Collider2D hit = Physics2D.OverlapCircle(center, radius, LayerMask.GetMask("Player"));
 
-        foreach (var hit in hits)
+        if (hit != null && hit.CompareTag("Player"))
         {
-            if (hit.CompareTag("Player"))
+            var player = hit.GetComponent<Game.Data.PlayerData>();
+            if (player != null)
             {
-                var player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
-                {
-                    player.TakeDamageByPercent(percent / 100f);
-                    Debug.Log($"[Stage3BossFSM] 플레이어 {hit.name}에게 {percent}% 데미지");
-                }
+                player.TakeDamageByPercent(percent / 100f);
+                Debug.Log($"[Stage3BossFSM] 플레이어 {hit.name}에게 {percent}% 데미지");
             }
         }
     }

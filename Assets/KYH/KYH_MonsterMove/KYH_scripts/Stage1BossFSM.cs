@@ -59,11 +59,8 @@ public class Stage1BossFSM : BaseBossFSM
     {
         PlaySound(RoarSound1);
 
-        // 1. 고정된 방향으로 설정 (왼쪽)
-        Vector2 fixedDirection = Vector2.left;
+        // 1. 경고 생성 (왼쪽 고정 방향)
         float fixedAngle = 135f;
-
-        // 2. 경고 프리팹 인스턴스화 (왼쪽 방향)
         if (WarningRangeIndicator != null)
         {
             CurrentWarningIndicator = Instantiate(
@@ -73,43 +70,44 @@ public class Stage1BossFSM : BaseBossFSM
             );
         }
 
-        // 3. 경고 후 대기
+        // 2. 경고 대기
         yield return new WaitForSeconds(3f);
 
-        // 4. 애니메이션 & 사운드
+        // 3. 애니메이션 실행 → 이펙트, 데미지는 애니메이션 이벤트에서
         BossAnimator.Play("Tiger_Pattern1");
         PlaySound(SwingSound);
-        Debug.Log("패턴1 - 할퀴기 공격 시작");
 
-        // 5. 이펙트 생성 (왼쪽 방향)
+        // 4. 유지 시간 대기
+        yield return new WaitForSeconds(Pattern1EffectDuration);
+
+        // 5. 경고 제거
+        if (CurrentWarningIndicator != null)
+            Destroy(CurrentWarningIndicator);
+
+        // 6. Idle 복귀
+        BossAnimator.Play("Tiger_Idle_ani");
+        TransitionToState(BossState.Idle);
+        BossPatternRoutine = null;
+    }
+
+    // Pattern1 공격 처리 - 애니메이션 이벤트에서 호출됨
+    public void OnTigerSwipeAttack()
+    {
+        Debug.Log("애니메이션 이벤트 - OnTigerSwipeAttack 호출됨");
+
+        // 이펙트 생성 (왼쪽 방향 기준)
         if (AttackEffectPrefab != null)
         {
-            // 왼쪽 방향 벡터
             Vector3 direction = Vector3.left;
-
-            // 생성 위치: AttackOrigin 위치에서 왼쪽으로 1단위 거리 이동
-            float spawnOffset = 5f; // 거리 조절 (값을 늘리면 더 멀리)
+            float spawnOffset = 5f;
             Vector3 spawnPos = AttackOrigin.position + direction * spawnOffset;
 
             GameObject fx = Instantiate(AttackEffectPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
             Destroy(fx, Pattern1EffectDuration);
         }
 
-        // 6. 부채꼴 범위 내 데미지 판정
-        DealDamageInCone(fixedDirection);
-
-        // 7. 이펙트 유지 시간 대기
-        yield return new WaitForSeconds(Pattern1EffectDuration);
-
-        // 8. 경고 제거
-        if (CurrentWarningIndicator != null)
-            Destroy(CurrentWarningIndicator);
-
-        // 9. 상태 복귀
-        TransitionToState(BossState.Idle);
-        BossPatternRoutine = null;
-
-        BossAnimator.Play("Tiger_Idle_ani");
+        // 데미지 판정
+        DealDamageInCone(Vector2.left);
     }
 
     /// <summary>
@@ -119,29 +117,21 @@ public class Stage1BossFSM : BaseBossFSM
     /// <param name="forwardDirection">공격의 기준 방향 (보통 플레이어 방향)</param>
     private void DealDamageInCone(Vector2 forwardDirection)
     {
-        // 1. 중심 위치(AttackOrigin.position)를 기준으로 원형 범위 내에 있는 모든 Collider2D를 가져온다.
-        Collider2D[] hits = Physics2D.OverlapCircleAll(AttackOrigin.position, AttackRange);
+        Collider2D hit = Physics2D.OverlapCircle(AttackOrigin.position, AttackRange, LayerMask.GetMask("Player"));
 
-        foreach (var hit in hits)
+        if (hit != null && hit.CompareTag("Player"))
         {
-            // 2. 태그가 "Player"인 대상만 공격 대상으로 고려
-            if (!hit.CompareTag("Player")) continue;
-
-            // 3. 대상까지의 방향 벡터 계산
-            Vector2 dirToTarget = (hit.transform.position - AttackOrigin.position).normalized;
-
-            // 4. 공격 방향(forwardDirection)과 대상 방향(dirToTarget) 사이의 각도 계산
+            // 방향 벡터 계산
+            Vector2 dirToTarget = ((Vector2)hit.transform.position - (Vector2)AttackOrigin.position).normalized;
             float angle = Vector2.Angle(forwardDirection, dirToTarget);
 
-            // 5. 부채꼴 범위 안에 있을 경우에만
             if (angle <= AttackAngle / 2f)
             {
-                // 6. PlayerData 스크립트가 붙어 있다면 데미지 처리
                 var player = hit.GetComponent<Game.Data.PlayerData>();
                 if (player != null)
                 {
                     Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
-                    player.TakeDamageByPercent(0.4f); // 체력의 40%를 데미지로 줌
+                    player.TakeDamageByPercent(0.4f); // 40% 데미지
                 }
             }
         }
