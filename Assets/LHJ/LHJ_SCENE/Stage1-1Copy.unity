@@ -4429,7 +4429,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 5, y: 0}
+  m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &291134450
@@ -8633,7 +8633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.8666667, a: 1}
+  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -16944,7 +16944,8 @@ MonoBehaviour:
   timeText: {fileID: 1563179337}
   retrycoolTimeText: {fileID: 1796644688}
   txt_Nickname: {fileID: 2089186113}
-  killCountText: {fileID: 0}
+  killCountText: {fileID: 1121037270}
+  missionTimeSlider: {fileID: 1676557824}
 --- !u!1 &1304602922
 GameObject:
   m_ObjectHideFlags: 0
@@ -18239,7 +18240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
+  m_Color: {r: 1, g: 0, b: 0.8666667, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -21604,6 +21605,7 @@ MonoBehaviour:
   retrycoolTimeText: {fileID: 1604760717}
   txt_Nickname: {fileID: 0}
   killCountText: {fileID: 0}
+  missionTimeSlider: {fileID: 0}
 --- !u!1 &1617508341
 GameObject:
   m_ObjectHideFlags: 0
@@ -22759,7 +22761,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1857767271}
   m_FillRect: {fileID: 1382512440}
   m_HandleRect: {fileID: 1857767270}
-  m_Direction: 1
+  m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0

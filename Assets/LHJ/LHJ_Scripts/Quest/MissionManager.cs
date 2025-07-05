@@ -10,9 +10,8 @@ public class MissionManager : Singleton<MissionManager>
 {
     private MissionInfo currentMission;     // 현재 진행 미션
     private float timer;                    // 남은 시간
-    public int killCount;                  // 킬 횟수
+    public int killCount;                   // 킬 횟수
     private bool isRunning;                 // 미션 실행 여부
-
     public HashSet<string> MissionIds = new();  // 미션 중복 방지
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
