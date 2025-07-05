@@ -44,6 +44,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     [SerializeField] protected SpriteRenderer _sprite;
 
+    // HpBar 추가
+    [SerializeField] private MonsterHpBar hpBar;
+
     protected virtual void Awake()
     {
         sfxAudioSource = gameObject.AddComponent<AudioSource>();
@@ -52,6 +55,11 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         sfxAudioSource.loop = false;
 
         _sprite = GetComponent<SpriteRenderer>();
+
+        // HpBar 추가
+        hpBar = GetComponentInChildren<MonsterHpBar>();
+        if (hpBar != null)
+            hpBar.SetHealth(CurrentHp, MaxHp);
     }
 
     protected void PlaySound(AudioClip clip, float volume = 1f)
@@ -200,6 +208,10 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
         Debug.Log($"[공통] 받은 피해: {finalDamage}, 남은 체력: {CurrentHp}");
         UIManager.Instance.ShowDamageText(transform, damage); // 데미지 텍스트 출력
+
+        //HpBar 추가
+        if (hpBar != null)
+            hpBar.SetHealth(CurrentHp, MaxHp);
 
         if (CurrentHp <= 0) Die();
     }
