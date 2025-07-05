@@ -152,6 +152,11 @@
             "Id": "A20",
             "IsClear": true,
             "CurrentCondition": -1
+        },
+        {
+            "Id": "A21",
+            "IsClear": true,
+            "CurrentCondition": -1
         }
     ],
     "PlayerMissionList": [
