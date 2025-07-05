@@ -30,7 +30,6 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         get => _nextSceneIndex;
         set
         {
-            Debug.Log($"다음 씬 인덱스{_nextSceneIndex} = {value}");
             _nextSceneIndex = Mathf.Clamp(value, 3, _stageInfo.Count); ;
         }
     }
@@ -316,16 +315,15 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             float loadProgress = Mathf.Clamp01(_asyncLoad.progress / 0.9f);
             float progressPercent = loadProgress * 100f;
             float elapsed = Time.time - _loadStartTime;
-            Debug.Log($"[최소 로드 시간 보장] [{sceneName}] 로딩 진행도: {progressPercent:F0}%, 소요 시간: {elapsed:F1}/{minTime:F1}초");
+            //Debug.Log($"[최소 로드 시간 보장] [{sceneName}] 로딩 진행도: {progressPercent:F0}%, 소요 시간: {elapsed:F1}/{minTime:F1}초");
             yield return null;
         }
 
         //TODO: DialogScene인 경우 Player 초기화 스킵 처리
 
+        Debug.Log($"[{sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
         _asyncLoad.allowSceneActivation = true;
         while (!_asyncLoad.isDone) yield return null;
-
-        Debug.Log($"[{_stageInfo[CurrentSceneIndex]} / {sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
     }
     #endregion
 

@@ -219,8 +219,6 @@ public class PlayerModel
         gameData.GetFirstWarmth = cost.GetFirstWarmth;
         gameData.GetFirstSpiritEnergy = cost.GetFirstSpiritEnergy;
 
-        Debug.Log($"{gameData.GetFirstWarmth} / {gameData.GetFirstSpiritEnergy}");
-
         // Skill
         gameData.PlayerSkillList = skills;
 
