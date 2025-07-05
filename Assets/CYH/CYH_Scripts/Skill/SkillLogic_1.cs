@@ -76,12 +76,18 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // OnTrigger 플래그
         _isSkillUsed = false;
+
+        // 플레이어 움직임 활성화
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()
     {
         if (!_hitBox.enabled) return;
         else PlayerController.Instance.SetTrigger("UseSkill_1");
+
+        // 플레이어 움직임 비활성화
+        PlayerController.Instance.Stop();
     }
 
     protected override void Damage()
