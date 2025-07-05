@@ -109,12 +109,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -669143300, guid: 232f3983f1e628241b129412e44102cf, type: 3}
+  m_Sprite: {fileID: -1286003388, guid: 232f3983f1e628241b129412e44102cf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.96, y: 0.96}
+  m_Size: {x: 1.3611112, y: 1.6944444}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -183,8 +183,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.4, y: 6.4}
-    newSize: {x: 0.96, y: 0.96}
+    oldSize: {x: 1.3611112, y: 1.6944444}
+    newSize: {x: 1.3611112, y: 1.6944444}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -231,6 +231,9 @@ MonoBehaviour:
   MaxHp: 10
   DamageReduceRate: 30
   CurrentHp: 0
+  AttackDamage: 10
+  Type: 2
+  Level: 0
   FindInterval: 1
   StateChangeCooldown: 1
   warmthAmount: 0
@@ -240,7 +243,6 @@ MonoBehaviour:
   _sprite: {fileID: 0}
   AttackPoint: {fileID: 5669510611927272354}
   AttackRadius: 1
-  AttackDamage: 10
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 256
