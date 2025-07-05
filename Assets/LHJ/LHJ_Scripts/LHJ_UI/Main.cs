@@ -50,7 +50,7 @@ public class Main : BaseUI, IUI
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
             // 1-3 스테이지 클리어 업적 체크
-            if (AchievementManager.Instance.AchievedIds.Contains("A3"))
+            if (AchievementManager.Instance.AchievedIds.Contains("A3") || PlayerController.IsCheat)
             {
                 Debug.Log("장비 강화 UI 활성화");
                 UIManager.Instance.ShowPopUp<UpgradePopUp>();

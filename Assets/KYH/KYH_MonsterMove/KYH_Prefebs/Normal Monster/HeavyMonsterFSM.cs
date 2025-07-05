@@ -89,5 +89,22 @@ public class HeavyMonsterFSM : BaseMonsterFSM
             Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
         }
     }
+    protected override void ChangeState(MonsterState newState)
+    {
+        base.ChangeState(newState);
+        // 상태가 변경됐을 때 공격 실행
+        MonsterAttackStart();
+    }
+    public override void MonsterAttackStart()
+    {
+        if (_currentState == MonsterState.Attack/* && attackRoutine == null*/)
+        {
+            Debug.Log("탱커 몬스터 공격 실행");
+            //attackRoutine = StartCoroutine(AttackRoutine());
+            // 애니메이션 이벤트 함수에서 공격 실행
+            MonsterAnimator.Play("Tanker_Attack");
+            // 애니메이션 이벤트 함수에는 AttackRoutine 등록
+        }
+    }
 }
 
