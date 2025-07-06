@@ -305,4 +305,9 @@ public class Stage3BossFSM : BaseBossFSM
             Gizmos.DrawWireCube(center, size);
         }
     }
+
+    protected override IEnumerator DeadRoutine()
+    {
+        throw new System.NotImplementedException();
+    }
 }
