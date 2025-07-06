@@ -47,7 +47,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         Debug.Log("스킬6 사용");
 
         // 무적 시작
-        PlayerController.Instance.IsImmortal = true;
+        PlayerController.IsImmortal = true;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -97,7 +97,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public void OnAttackEnd()
     {
         // 무적 해제
-        PlayerController.Instance.IsImmortal = false;
+        PlayerController.IsImmortal = false;
         _isSkillUsed = false;
         PlayerController.Instance.Move();
     }

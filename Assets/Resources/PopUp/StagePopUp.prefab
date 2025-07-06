@@ -1400,12 +1400,12 @@ MonoBehaviour:
   - Stage1-1_Battle
   - Stage1-2_Battle
   - Stage1-3_Battle
-  - Stage2-1
-  - Stage2-2
-  - Stage2-3
-  - Stage3-1
-  - Stage3-2
-  - Stage3-3
+  - Stage2-1_Battle
+  - Stage2-2_Battle
+  - Stage2-3_Battle
+  - Stage3-1_Battle
+  - Stage3-2_Battle
+  - Stage3-3_Battle
 --- !u!1 &6209603835314441508
 GameObject:
   m_ObjectHideFlags: 0

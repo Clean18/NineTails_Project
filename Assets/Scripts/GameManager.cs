@@ -29,8 +29,8 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.SceneUIList.Clear();
 
         // 플레이어 생성
-        //if (DataManager.IsDataInit) StartCoroutine(SceneInitRoutine());
-        StartCoroutine(SceneInitRoutine());
+        if (DataManager.IsDataInit) StartCoroutine(SceneInitRoutine());
+        //StartCoroutine(SceneInitRoutine());
 
         if (Player != null && !Player.Equals(null))
         {
@@ -41,20 +41,20 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator SceneInitRoutine()
     {
-        // 주석 해제하기
-        if (!DataManager.IsDataInit)
-        {
-            // 데이터 매니저 초기화
-            Debug.LogWarning("데이터매니저 초기화 중...");
-            yield return StartCoroutine(DataManager.Instance.LoadDatas());
-            Debug.LogWarning("데이터매니저 초기화 완료");
-        }
+        // 주석하기
+        //if (!DataManager.IsDataInit)
+        //{
+        //    // 데이터 매니저 초기화
+        //    Debug.LogWarning("데이터매니저 초기화 중...");
+        //    yield return StartCoroutine(DataManager.Instance.LoadDatas());
+        //    Debug.LogWarning("데이터매니저 초기화 완료");
+        //}
 
         if (PlayerController.Instance == null) PlayerInit();
 
         Debug.LogWarning("플레이어 초기화 중...");
         yield return StartCoroutine(Player.PlayerInitRoutine());
-        Player.IsImmortal = false;
+        PlayerController.IsImmortal = false;
         Debug.LogWarning("플레이어 초기화 완료");
 
         // TODO : 씬에 따라 플레이어 활성화 비활성화

@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-07-06T21:50:20.2807373+09:00",
+    "_savedTimeString": "2025-07-06T22:27:19.1335992+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 1,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 0,
+    "CurrentHp": 76,
     "SpeedLevel": 1,
     "ShieldHp": 0,
     "SceneIndex": 8,
     "SpiritEnergy": 0,
-    "Warmth": 1539,
+    "Warmth": 451,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -18,36 +18,6 @@
             "SkillIndex": 0,
             "SkillLevel": 0,
             "SlotIndex": 0
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": 1
-        },
-        {
-            "SkillIndex": 5,
-            "SkillLevel": 0,
-            "SlotIndex": 2
-        },
-        {
-            "SkillIndex": 6,
-            "SkillLevel": 0,
-            "SlotIndex": 3
-        },
-        {
-            "SkillIndex": 1,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 2,
-            "SkillLevel": 0,
-            "SlotIndex": -1
-        },
-        {
-            "SkillIndex": 3,
-            "SkillLevel": 0,
-            "SlotIndex": -1
         }
     ],
     "Grade": "N",
@@ -63,36 +33,16 @@
             "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1
-        },
-        {
-            "Id": "A18",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A43",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A44",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A45",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A19",
-            "IsClear": true,
-            "CurrentCondition": -1
         }
     ],
     "PlayerMissionList": [
         {
             "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
             "IsClear": true,
             "CurrentCondition": -1
         }

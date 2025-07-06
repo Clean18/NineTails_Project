@@ -239,7 +239,7 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
-  MonType: 0
+  _currentState: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
@@ -324,7 +324,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
