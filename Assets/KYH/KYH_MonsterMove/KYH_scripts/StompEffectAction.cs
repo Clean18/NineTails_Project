@@ -9,7 +9,5 @@ public class StompEffectAction : MonoBehaviour
     private void Start()
     {
         StompAnimator.Play("Stomp_Ani");
-
-        
     }
 }

@@ -83,6 +83,8 @@ public class Main : BaseUI, IUI
             cheatBtn.Click += data =>
             {
                 Debug.Log("치트모드 활성화");
+                // TODO : 삭제하기
+                PlayerController.Instance.IsImmortal = true;
                 PlayerController.IsCheat = true;
                 cheatBtn.gameObject.SetActive(false);
             };

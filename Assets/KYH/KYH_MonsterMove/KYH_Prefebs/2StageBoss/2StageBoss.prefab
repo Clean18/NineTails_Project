@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8364971859131105924}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: StompEffectpositionLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 226505084774499942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WarningPettern1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,9 +76,9 @@ GameObject:
   - component: {fileID: 795294176049581249}
   - component: {fileID: 192895534083032659}
   - component: {fileID: 7577438767268800427}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 2StageBoss
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -191,7 +191,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 2.6041484, y: 0.15400887}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -202,7 +202,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 0.0001}
+  m_Size: {x: 8.50443, y: 12.284643}
   m_EdgeRadius: 0
 --- !u!50 &795294176049581249
 Rigidbody2D:
@@ -212,7 +212,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042960709677487614}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -230,7 +230,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!114 &192895534083032659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,9 +246,13 @@ MonoBehaviour:
   MaxHealth: 1000
   CurrentHealth: 0
   DamageReduceRate: 0
+  CurrentState: 0
   IdleTime: 3
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   BossAnimator: {fileID: 7577438767268800427}
   WarningLineVertical: {fileID: 9209678113999117585, guid: d874238c6b0601341becdf7596fbc7e0, type: 3}
   WarningOrigin1: {fileID: 226505084774499942}
@@ -303,7 +307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2368451936396184099}
   - component: {fileID: 3787512559415627391}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Leftleg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5782947173301495112}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WarningPettern2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +421,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2454889665533256319}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5337579617014391428}
   - component: {fileID: 143661409450629853}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rightleg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -533,7 +537,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5063297288242612471}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -565,7 +569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2616877424119103672}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SwingBonkPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1743992433580517759}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: StompEffectpositionRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 265232001713993468}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SwingBonkPoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +662,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 805035404555863323}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -742,8 +746,16 @@ PrefabInstance:
       value: LongMen_Arm
       objectReference: {fileID: 0}
     - target: {fileID: 2033349606413282222, guid: f2febebf262aa2f4e949e13eb026bc4d, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033349606413282222, guid: f2febebf262aa2f4e949e13eb026bc4d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614260223088371865, guid: f2febebf262aa2f4e949e13eb026bc4d, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

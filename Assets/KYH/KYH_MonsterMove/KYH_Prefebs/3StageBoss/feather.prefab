@@ -110,6 +110,9 @@ MonoBehaviour:
   DamagePercent: 0.05
   DamageRadius: 1.5
   TargetTag: Player
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   StopThreshold: 0.2
   DropForce: 15
   WarningPoint: {fileID: 2257777858500371809, guid: 355d0ac260d388c439aa713cdfed337f, type: 3}
@@ -153,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 11
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
