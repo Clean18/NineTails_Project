@@ -75,11 +75,12 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _hitBoxSize: {x: 1, y: 1}
-  _boxOffset: {x: 0, y: 0}
+  _hitBoxSize: {x: 15, y: 4}
+  _boxOffset: {x: -8.04, y: 1.05}
   _monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  _effectOffset: {x: 0, y: 3}
   _damageInterval: 0.1
   _damageCount: 5
   _videoPrefab: {fileID: 2081190918094020834, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}

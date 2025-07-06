@@ -2033,127 +2033,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141847438}
   m_CullTransparentMesh: 1
---- !u!1001 &1208086590
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2081190918094020834, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_Name
-      value: Skill_6_Video
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3095916674101428581, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899184591449026296, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
 --- !u!1 &1275536507
 GameObject:
   m_ObjectHideFlags: 0
@@ -3811,6 +3690,7 @@ MonoBehaviour:
       <Speed>k__BackingField: 0
       _isDead: 0
       _shieldHp: 0
+      _sceneIndex: 0
     Cost:
       _spiritEnergy: 0
       _warmth: 0
@@ -3845,7 +3725,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
-  IsImmortal: 0
 --- !u!212 &1051408956766459252
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3966,7 +3845,10 @@ MonoBehaviour:
   _hitMonsters: []
   _isSkillUsed: 0
   _hitBoxPrefab: {fileID: 0}
+  _skillEffectPrefab: {fileID: 0}
   _hitBox: {fileID: 6169749376982270442}
+  _skillEffect: {fileID: 0}
+  _effectSpawnPos: {x: 0, y: 0, z: 0}
   <SkillData>k__BackingField: {fileID: 0}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
@@ -5364,19 +5246,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2874512801222223151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4f2df55f95429f458f8ffece2fd3363, type: 3}
+  m_Script: {fileID: 11500000, guid: a75d32a466c6a1941801a9971f1c1476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _projectilePrefab: {fileID: 0}
-  _objCount: 3
-  _radius: 3
-  _objSpeed: 140
-  _centerOffset: {x: -0.18, y: 1.34, z: 0}
-  _spinDuration: 7
-  _isSpinning: 0
+  _hitBoxSize: {x: 6.86, y: 1.21}
+  _boxOffset: {x: -4.06, y: 0.39}
+  _monsterLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _damageInterval: 0.1
+  _damageCount: 5
+  _videoPrefab: {fileID: 0}
+  _effectPrefab: {fileID: 0}
+  _videoPlayer: {fileID: 0}
   <SkillData>k__BackingField: {fileID: 0}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
@@ -5490,4 +5375,3 @@ SceneRoots:
   - {fileID: 900807781}
   - {fileID: 1275536513}
   - {fileID: 147708423}
-  - {fileID: 1208086590}
