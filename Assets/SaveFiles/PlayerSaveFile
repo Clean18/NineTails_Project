@@ -4,7 +4,7 @@
     "AttackLevel": 1,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 0,
+    "CurrentHp": 76,
     "SpeedLevel": 1,
     "ShieldHp": 0,
     "SceneIndex": 8,
@@ -33,36 +33,16 @@
             "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1
-        },
-        {
-            "Id": "A18",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A43",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A44",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A45",
-            "IsClear": true,
-            "CurrentCondition": -1
-        },
-        {
-            "Id": "A19",
-            "IsClear": true,
-            "CurrentCondition": -1
         }
     ],
     "PlayerMissionList": [
         {
             "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
             "IsClear": true,
             "CurrentCondition": -1
         }

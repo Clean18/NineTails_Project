@@ -173,16 +173,12 @@ public class Stage2BossFSM : BaseBossFSM
     /// </summary>
     private void DealBoxDamage(Vector2 center, Vector2 size, float damagePercent)
     {
-        Collider2D hit = Physics2D.OverlapBox(center, size, 0f, LayerMask.GetMask("Player"));
+        Collider2D hit = Physics2D.OverlapBox(center, size, 0f, _playerLayer);
 
-        if (hit != null && hit.CompareTag("Player"))
+        if (hit != null)
         {
-            var player = hit.GetComponent<Game.Data.PlayerData>();
-            if (player != null)
-            {
-                player.TakeDamageByPercent(damagePercent);
-                Debug.Log($"Stage2 - 플레이어 {hit.name}에게 {damagePercent * 100f}% 데미지");
-            }
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * damagePercent));
+            Debug.Log($"Stage2 - 플레이어 {hit.name}에게 {damagePercent * 100f}% 데미지");
         }
     }
 
@@ -221,7 +217,26 @@ public class Stage2BossFSM : BaseBossFSM
 
     protected override IEnumerator DeadRoutine()
     {
-        throw new System.NotImplementedException();
+        yield return null;
+
+        float timer = 0f;
+        float duration = 3f;
+        Color startColor = _sprite.color;
+
+        while (timer < duration)
+        {
+            float t = timer / duration;
+
+            Color newColor = startColor;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            _sprite.color = newColor;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     protected override int PatternCount => 2;

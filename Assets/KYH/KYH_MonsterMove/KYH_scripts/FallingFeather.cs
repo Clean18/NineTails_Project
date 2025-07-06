@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class FallingFeather : MonoBehaviour
@@ -10,6 +11,7 @@ public class FallingFeather : MonoBehaviour
     [SerializeField] private float DamagePercent = 0.05f;
     [SerializeField] private float DamageRadius = 1.5f;
     [SerializeField] private string TargetTag = "Player";
+    [SerializeField] private LayerMask PlayerLayer;
 
     [Header("떨어지는 조건")]
     [SerializeField] private float StopThreshold = 0.2f;
@@ -40,14 +42,14 @@ public class FallingFeather : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log("픽스 업데이트 들어옴");
+        //Debug.Log("픽스 업데이트 들어옴");
 
         if (!hasLaunched || hasDealtDamage || WarningPoint == null) return;
 
         float featherY = transform.position.y;
         float warningY = WarningPoint.position.y;
         float delta = featherY - warningY;
-        Debug.Log("픽스 업데이트 진행중");
+        //Debug.Log("픽스 업데이트 진행중");
         if (Mathf.Abs(delta) <= StopThreshold)
         {
             rb.velocity = Vector2.zero;
@@ -60,29 +62,22 @@ public class FallingFeather : MonoBehaviour
 
             if (WarningPoint != null)
             {
-                Debug.Log("경고위치 표기 지우기 시도함");
+                //Debug.Log("경고위치 표기 지우기 시도함");
                 Destroy(WarningPoint.gameObject, 1.5f);
             }
 
-                Destroy(gameObject, 1.5f);
+            Destroy(gameObject, 1.5f);
         }
     }
 
     private void DealDamage()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, DamageRadius);
+        Collider2D hits = Physics2D.OverlapCircle(transform.position, DamageRadius, PlayerLayer);
 
-        foreach (var hit in hits)
+        if (hits != null)
         {
-            if (hit.CompareTag(TargetTag))
-            {
-                var player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
-                {
-                    player.TakeDamageByPercent(DamagePercent);
-                    Debug.Log($"[FallingFeather] 플레이어 {hit.name}에게 {DamagePercent * 100}% 데미지");
-                }
-            }
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * DamagePercent));
+            Debug.Log($"[FallingFeather] 플레이어에게 {DamagePercent * 100}% 데미지");
         }
     }
 }

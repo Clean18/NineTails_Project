@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
 	public static bool IsCheat = false;
 
     [Header("무적")]
-    public bool IsImmortal = false;
+    public static bool IsImmortal = false;
 
 
     void Start()

@@ -117,8 +117,6 @@ public class Stage1BossFSM : BaseBossFSM
     {
         Collider2D hit = Physics2D.OverlapCircle(AttackOrigin.position, AttackRange, _playerLayer);
 
-        Debug.Log(hit.name);
-
         if (hit != null)
         {
             // 방향 벡터 계산

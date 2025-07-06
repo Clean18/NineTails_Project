@@ -83,6 +83,8 @@ public class Main : BaseUI, IUI
             cheatBtn.Click += data =>
             {
                 Debug.Log("치트모드 활성화");
+                // TODO : 삭제하기
+                PlayerController.IsImmortal = true;
                 PlayerController.IsCheat = true;
                 cheatBtn.gameObject.SetActive(false);
             };
@@ -91,6 +93,23 @@ public class Main : BaseUI, IUI
         {
             UIManager.Instance.ShowPopUp<AchievementPopUp>();
         };
+        GetEvent("Btn_Auto").Click += data =>
+        {
+            if (GameManager.Instance.Player == null) return;
+
+            // TODO : 보스방이면 오토 사용 불가
+
+            // 플레이어 모드 전환
+            var player = GameManager.Instance.Player;
+
+            player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
+
+            player.AIInit();
+
+            // 플레이어 velocity 초기화
+            player.AIStop();
+        };
+
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
 

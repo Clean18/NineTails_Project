@@ -180,12 +180,15 @@ MonoBehaviour:
       <Speed>k__BackingField: 0
       _isDead: 0
       _shieldHp: 0
+      _sceneIndex: 0
     Cost:
       _spiritEnergy: 0
       _warmth: 0
       _soul: 0
       GetFirstWarmth: 0
       GetFirstSpiritEnergy: 0
+    Skill:
+      skillList: []
     Equipment:
       _grade: 0
       _level: 0
@@ -212,7 +215,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
-  IsCheat: 0
+  IsImmortal: 0
 --- !u!114 &7294450255420677462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +265,7 @@ GameObject:
   - component: {fileID: 6010217831475455854}
   - component: {fileID: 357788760780186251}
   - component: {fileID: 7042815455512976306}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: SkillController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
