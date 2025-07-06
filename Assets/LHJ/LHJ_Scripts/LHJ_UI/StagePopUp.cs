@@ -130,21 +130,28 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("1-3 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
+            if (MissionManager.Instance.IsCooldownActive)
+            {
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
+            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
 
-            if (!MissionManager.Instance.IsCleared(missionId))
-            {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
-            }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_Stage22").Click += data =>
         {
@@ -155,21 +162,27 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("2-1 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
-
-            if (!MissionManager.Instance.IsCleared(missionId))
+            if (MissionManager.Instance.IsCooldownActive)
             {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
             }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_Stage23").Click += data =>
         {
@@ -180,21 +193,28 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("2-2 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
+            if (MissionManager.Instance.IsCooldownActive)
+            {
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
+            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
 
-            if (!MissionManager.Instance.IsCleared(missionId))
-            {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
-            }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_Stage31").Click += data =>
         {
@@ -205,21 +225,28 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("2-3 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
+            if (MissionManager.Instance.IsCooldownActive)
+            {
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
+            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
 
-            if (!MissionManager.Instance.IsCleared(missionId))
-            {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
-            }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_Stage32").Click += data =>
         {
@@ -230,21 +257,28 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("3-1 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
+            if (MissionManager.Instance.IsCooldownActive)
+            {
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
+            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
 
-            if (!MissionManager.Instance.IsCleared(missionId))
-            {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
-            }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_Stage33").Click += data =>
         {
@@ -255,21 +289,27 @@ public class StagePopUp : BaseUI
                 UIManager.Instance.ShowWarningText("3-2 스테이지 클리어 이후 사용가능합니다.");
                 return;
             }
-
-            if (!MissionManager.Instance.IsCleared(missionId))
+            if (MissionManager.Instance.IsCooldownActive)
             {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
             }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
         };
         GetEvent("Btn_close").Click += data => UIManager.Instance.ClosePopUp();
     }
