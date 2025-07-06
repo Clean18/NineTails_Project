@@ -11,6 +11,9 @@ public class GameManager : Singleton<GameManager>
     public PlayerController Player;
 	public Spawner Spawner;
 
+    public static bool IsCheat = false;
+    public static bool IsImmortal = false;
+
     void OnEnable()
     {
         // 씬 로딩 후 자동 호출될 메서드 등록
@@ -54,7 +57,6 @@ public class GameManager : Singleton<GameManager>
 
         Debug.LogWarning("플레이어 초기화 중...");
         yield return StartCoroutine(Player.PlayerInitRoutine());
-        PlayerController.IsImmortal = false;
         Debug.LogWarning("플레이어 초기화 완료");
 
         // TODO : 씬에 따라 플레이어 활성화 비활성화

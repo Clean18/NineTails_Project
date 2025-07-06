@@ -96,9 +96,9 @@ public class PlayerModel
             // TODO : 업적 실패 처리
         }
         Data.DecreaseHp(damage);
-        if (Data.Hp <= 0 && !PlayerController.IsImmortal)
+        if (Data.Hp <= 0 && !GameManager.IsImmortal)
         {
-            PlayerController.IsImmortal = true;
+            GameManager.IsImmortal = true;
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
@@ -260,7 +260,7 @@ public class PlayerModel
 
 	public void SpendCost(CostType costType, long amount)
 	{
-		if (amount == 0 || Cost == null || PlayerController.IsCheat) return;
+		if (amount == 0 || Cost == null || GameManager.IsCheat) return;
 
 		// 플레이어 영기 감소
 		if (costType == CostType.Warmth) Cost.DecreaseWarmth(amount);

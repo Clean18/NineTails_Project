@@ -52,14 +52,13 @@ public class Main : BaseUI, IUI
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
             // 1-3 스테이지 클리어 업적 체크
-            if (AchievementManager.Instance.AchievedIds.Contains("A3") || PlayerController.IsCheat)
+            if (AchievementManager.Instance.AchievedIds.Contains("A3") || GameManager.IsCheat)
             {
                 Debug.Log("장비 강화 UI 활성화");
                 UIManager.Instance.ShowPopUp<UpgradePopUp>();
             }
             else
             {
-                Debug.Log("1-3 스테이지 클리어 이후 사용가능합니다.");
                 UIManager.Instance.ShowWarningText("1-3 스테이지 클리어 이후 사용가능합니다.");
             }
         };
@@ -74,7 +73,7 @@ public class Main : BaseUI, IUI
         };
         // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
         var cheatBtn = GetEvent("Btn_Cheat");
-        if (PlayerController.IsCheat)
+        if (GameManager.IsCheat)
         {
             cheatBtn.gameObject.SetActive(false);
         }
@@ -84,8 +83,8 @@ public class Main : BaseUI, IUI
             {
                 Debug.Log("치트모드 활성화");
                 // TODO : 삭제하기
-                PlayerController.IsImmortal = true;
-                PlayerController.IsCheat = true;
+                GameManager.IsImmortal = true;
+                GameManager.IsCheat = true;
                 cheatBtn.gameObject.SetActive(false);
             };
         }

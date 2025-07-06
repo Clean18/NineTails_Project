@@ -101,13 +101,6 @@ public class PlayerController : MonoBehaviour
 	[Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
 	public Vector2 MoveDir; // 플레이어의 이동 방향
 
-	[Header("치트모드")]
-	public static bool IsCheat = false;
-
-    [Header("무적")]
-    public static bool IsImmortal = false;
-
-
     void Start()
 	{
 		// 시작은 자동모드
@@ -257,7 +250,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="damage"></param>
     public void TakeDamage(long damage)
 	{
-        if (IsImmortal)
+        if (GameManager.IsImmortal)
         {
             Debug.Log($"{damage}의 대미지를 입었지만 무적입니다.");
             return;

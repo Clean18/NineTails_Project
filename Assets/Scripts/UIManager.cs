@@ -9,6 +9,8 @@ public class UIManager : Singleton<UIManager>
     public GameUI GameUI;
     public Main MainUI;
 
+    public static bool IsFloatingText = true;
+
     // 플레이어가 입력한 닉네임 저장 변수
     public string PlayerName { get; set; }
 
@@ -54,7 +56,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowDamageText(Transform spawnPos, long damage)
     {
-        if (damageTextPrefab.Equals(null)) return;
+        if (damageTextPrefab.Equals(null) || !IsFloatingText) return;
 
         var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
         go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}");
@@ -62,7 +64,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowDamageText(Transform spawnPos, long damage, Color color)
     {
-        if (damageTextPrefab.Equals(null)) return;
+        if (damageTextPrefab.Equals(null) || !IsFloatingText) return;
 
         var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
         go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}", color);
@@ -70,7 +72,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowWarningText(string text)
     {
-        if (_warningTextPrefab.Equals(null)) return;
+        if (_warningTextPrefab.Equals(null) || !IsFloatingText) return;
 
         var go = Instantiate(_warningTextPrefab);
         go.GetComponent<DamageText>()?.InitWarningMessage($"{text}");
