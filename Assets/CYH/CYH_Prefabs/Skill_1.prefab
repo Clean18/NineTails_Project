@@ -48,7 +48,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _hitBoxPrefab: {fileID: 0}
+  _hitBoxPrefab: {fileID: 7862023553575976316, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
   _skillEffectPrefab: {fileID: 5096628393568396358, guid: 72849574f55fe3c40b12e648c3bc26df, type: 3}
   _hitBox: {fileID: 0}
   _skillEffect: {fileID: 0}

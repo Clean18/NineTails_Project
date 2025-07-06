@@ -224,6 +224,15 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             CurrentSceneIndex = sceneIndex;
             LoadSceneAsync(nextScene);
             NextSceneIndex = nextIndex;
+
+            // 플레이어 비활성화 (CYH)
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1")
+            {
+                PlayerController player = FindObjectOfType<PlayerController>();
+                player.gameObject.SetActive(false);
+                Debug.Log(player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
+            }
         }
         else
         {
@@ -308,8 +317,6 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             yield return null;
         }
 
-        //TODO: DialogScene인 경우 Player 초기화 스킵 처리
-
         // 로딩에 걸린 시간
         float elapsed = Time.time - _loadStartTime;
         Debug.Log($"[{sceneName}] 로딩 완료: {elapsed:F1}초 소요");
@@ -338,8 +345,6 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             //Debug.Log($"[최소 로드 시간 보장] [{sceneName}] 로딩 진행도: {progressPercent:F0}%, 소요 시간: {elapsed:F1}/{minTime:F1}초");
             yield return null;
         }
-
-        //TODO: DialogScene인 경우 Player 초기화 스킵 처리
 
         Debug.Log($"[{sceneName}] 로딩 완료(최소 {minTime:F1}초 보장) 총 소요 시간: {(Time.time - _loadStartTime):F1}초");
         _asyncLoad.allowSceneActivation = true;

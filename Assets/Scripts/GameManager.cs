@@ -58,6 +58,14 @@ public class GameManager : Singleton<GameManager>
         Debug.LogWarning("플레이어 초기화 완료");
 
         // TODO : 씬에 따라 플레이어 활성화 비활성화
+        //플레이어 비활성화(CYH)
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1")
+        {
+            PlayerController player = FindObjectOfType<PlayerController>();
+            player.gameObject.SetActive(false);
+            Debug.Log(player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
+        }
 
         Debug.LogWarning("씬 전환 초기화 완료");
     }
