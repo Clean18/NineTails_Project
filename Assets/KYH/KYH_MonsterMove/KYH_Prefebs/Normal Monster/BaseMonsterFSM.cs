@@ -75,6 +75,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         _currentState = MonsterState.Idle;
         // 알파값 초기화
         _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 255);
+        // 체력바 초기화
+        hpBar.SetHealth(CurrentHp, MaxHp);
     }
 
     // 매 프레임마다 상태 업데이트
@@ -208,7 +210,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         Debug.Log($"[공통] 받은 피해: {finalDamage}, 남은 체력: {CurrentHp}");
         UIManager.Instance.ShowDamageText(transform, damage); // 데미지 텍스트 출력
 
-        //HpBar 추가
+        //체력바 추가
         if (hpBar != null)
             hpBar.SetHealth(CurrentHp, MaxHp);
 

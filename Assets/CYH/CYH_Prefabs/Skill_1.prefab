@@ -45,12 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21413a6c049b7734c8fd92d9c0c21c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillLevel: 0
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
-  _hitBoxPrefab: {fileID: 7862023553575976316, guid: ebcc805d406376046bb3ef68782c91af, type: 3}
+  _hitBoxPrefab: {fileID: 0}
+  _skillEffectPrefab: {fileID: 5096628393568396358, guid: 72849574f55fe3c40b12e648c3bc26df, type: 3}
   _hitBox: {fileID: 0}
+  _skillEffect: {fileID: 0}
+  _effectSpawnPos: {x: 0, y: 12.22765, z: 0}
   <SkillData>k__BackingField: {fileID: 11400000, guid: 6cea0e09a7f8e484d9d88e32a9498a2d, type: 2}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
