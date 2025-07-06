@@ -542,11 +542,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageRespawn:
   - Stage1-1Copy
-  - Stage1-2Test
-  - Stage1-3
-  - Stage2-1
-  - Stage2-2
+  - Stage1-2_Battle
+  - Stage1-3_Battle
+  - Stage2-1_Battle
+  - Stage2-2_Battle
+  - Stage2-3_Battle
+  - Stage3-1_Battle
+  - Stage3-2_Battle
+  - Stage3-3_Battle
+  bossStage:
+  - Stage1-3_Battle
   - Stage2-3
-  - Stage3-1
-  - Stage3-2
   - Stage3-3
+  descText: {fileID: 7420541939685153984}
