@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (_isInit == false)
 		{
-			//Debug.Log("초기화가 아직 안됐음");
+			Debug.Log("초기화가 아직 안됐음");
 			return;
 		}
 

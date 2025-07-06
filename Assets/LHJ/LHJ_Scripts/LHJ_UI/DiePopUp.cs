@@ -38,6 +38,8 @@ public class DiePopUp : BaseUI
     private IEnumerator CurrentStage()
     {
         yield return new WaitForSeconds(10f);
+        // 플레이어 풀피로 회복
+        //PlayerController.Instance.TakeHeal(PlayerController.Instance.GetMaxHp());
         SceneChangeManager.Instance.LoadCurrentScene();
     }
     private IEnumerator SpecialPreviousStage()
@@ -48,7 +50,8 @@ public class DiePopUp : BaseUI
         int index = System.Array.IndexOf(stageRespawn, currentScene);   // 현재 씬 인덱스
         int previousIndex = Mathf.Max(0, index - 1);                    // 이전 인덱스
         string previousScene = stageRespawn[previousIndex];            // 이전 씬 이름
-
+        // 플레이어 풀피로 회복
+        //PlayerController.Instance.TakeHeal(PlayerController.Instance.GetMaxHp());
         SceneManager.LoadScene(previousScene);                         // 씬 이동
     }
 }
