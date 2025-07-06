@@ -15,10 +15,12 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 				// Resources.Load 를 사용하면 Resources 폴더에서 프리팹 상태로 사용가능
 				_instance = FindObjectOfType<T>();
 				if (_instance == null)
-				{
-					var obj = new GameObject(typeof(T).Name);
-					_instance = obj.AddComponent<T>();
-				}
+                {
+                    var obj = new GameObject(typeof(T).Name);
+                    _instance = obj.AddComponent<T>();
+                    //T prefab = Resources.Load<T>($"ManagerPrefabs/{typeof(T).Name}");
+                    //_instance = Instantiate(prefab);
+                }
 				DontDestroyOnLoad(_instance.gameObject);
 			}
 			return _instance;

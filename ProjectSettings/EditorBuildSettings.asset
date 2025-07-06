@@ -6,21 +6,36 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
-    guid: 1a5102e9b0e6bca429bee1679b40c39c
+    path: Assets/Scenes/GameStartScene.unity
+    guid: d481682565a6e394391de82744f5cac6
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene_v1.unity
+    guid: e7716a27c8a3edd499d421f907ed0cf6
   - enabled: 1
     path: Assets/Scenes/Stage1-1.unity
     guid: 172d877c424fbb64cbbec4b56b4a088d
   - enabled: 1
     path: Assets/Scenes/Stage1-3.unity
-    guid: a046d29b573603541b9be5f605323105
+    guid: 6b2a7ec63ead44942a8f59444812a4da
   - enabled: 1
     path: Assets/LHJ/LHJ_SCENE/Stage1-1Copy.unity
     guid: 75eb3ed59e56cc141842c585ccc27c7e
   - enabled: 1
     path: Assets/LHJ/LHJ_SCENE/Stage1-2Test.unity
-    guid: 02272db8d05ff9345a6af71bff2b0cee
+    guid: d90077a149446e3429c08ebffef5edf6
   - enabled: 1
     path: Assets/LHJ/LHJ_SCENE/TestScene.unity
-    guid: 4667213940e04d646bcbc9f861220426
+    guid: 58ad88c87620500439d6f15c8be2a60d
+  - enabled: 1
+    path: Assets/Scenes/DialogScene.unity
+    guid: 9927dfeffeee95847aae2a2da137dceb
+  - enabled: 1
+    path: Assets/Scenes/Stage1-1_Battle.unity
+    guid: 698757a1500499647bd97033f68135f9
+  - enabled: 1
+    path: Assets/Scenes/Stage1-2_Battle.unity
+    guid: cd572eedf4f16154ea6215394653886f
+  - enabled: 1
+    path: Assets/Scenes/Stage1-3_Battle.unity
+    guid: b0987020f4fe12c40a90c4d3329584ad
   m_configObjects: {}

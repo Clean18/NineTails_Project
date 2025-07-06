@@ -23,7 +23,7 @@ public class MonsterProjectile : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
-            var player = GameManager.Instance.PlayerController;
+            var player = GameManager.Instance.Player;
             if (player != null)
             {
                 //player.TakeDamage(damage);
@@ -45,7 +45,7 @@ public class MonsterProjectile : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
-            var player = GameManager.Instance.PlayerController;
+            var player = GameManager.Instance.Player;
             if (player != null)
             {
                 //player.TakeDamage(damage);

@@ -10,6 +10,7 @@ public struct SavePlayerData
     public long CurrentHp;
     public int SpeedLevel;
     public long ShieldHp;
+    public int SceneIndex;
 }
 
 /// <summary>
@@ -161,6 +162,19 @@ public class PlayerData
         }
     }
 
+    [SerializeField] private int _sceneIndex;
+    public int SceneIndex
+    {
+        get => _sceneIndex;
+        set
+        {
+            // 씬 인덱스 바뀔 때마다 세이브
+            _sceneIndex = value;
+            if (PlayerController.Instance != null && PlayerController.Instance.IsInit) PlayerController.Instance.SaveData();
+            Debug.Log($"세이브한 씬 인덱스 : {_sceneIndex} <= {value}");
+        }
+    }
+
     /// <summary>
     /// 불러온 플레이어의 데이터를 초기화하는 함수
     /// </summary>
@@ -169,7 +183,7 @@ public class PlayerData
     /// <param name="hpLevel"></param>
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
-	public void InitData(string name = "구미호", int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0)
+	public void InitData(string name = "구미호", int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0, int sceneIndex = 0)
     {
         //Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
         // 프로퍼티에서 레벨만으로 각 스탯 계산
@@ -180,6 +194,7 @@ public class PlayerData
         Hp = currentHp;
         SpeedLevel = speedLevel;
         ShieldHp = shieldHp;
+        SceneIndex = sceneIndex;
     }
 
     // 플레이어데이터 세이브 구조체
@@ -193,6 +208,7 @@ public class PlayerData
         data.CurrentHp = Hp;
         data.SpeedLevel = SpeedLevel;
         data.ShieldHp = ShieldHp;
+        data.SceneIndex = SceneIndex;
         return data;
     }
 

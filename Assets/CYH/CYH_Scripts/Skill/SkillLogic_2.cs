@@ -19,7 +19,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     [Header("스킬 지속 시간")]
     [SerializeField] private float _spinDuration = 7f;
 
-    private GameObject[] _projectile;
+    private GameObject[] _projectiles;
     private float _degree;
     //private bool _isCooldown;
     public bool _isSpinning;
@@ -42,12 +42,12 @@ public class SkillLogic_2 : SkillLogic, ISkill
         _cooldownWait = new WaitForSeconds(1f);
         _centerOffset = new Vector3(-0.18f, 1.34f, 0);
 
-        _projectile = new GameObject[_objCount];
+        _projectiles = new GameObject[_objCount];
         for (int i = 0; i < _objCount; i++)
         {
-            _projectile[i] = Instantiate(_projectilePrefab, transform);
+            _projectiles[i] = Instantiate(_projectilePrefab, transform);
             // _projectilePrefab 비활성화
-            _projectile[i].SetActive(false);
+            _projectiles[i].SetActive(false);
         }
     }
 
@@ -79,16 +79,16 @@ public class SkillLogic_2 : SkillLogic, ISkill
         if (!PlayerController.Instance.MoveCheck()) return;
 
         // 스킬 사용
-        _isSpinning = true;
+        //_isSpinning = true;
         // _projectilePrefab 활성화
-        SetProjectileActive(true);
+        //SetProjectileActive(true);
         //Debug.Log("프리팹 활성화");
 
         // 보호막 체력 설정
         PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 매 프레임 원 운동 갱신
-        _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
+        //_spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
         //Debug.Log("원운동 갱신");
 
         // 지속시간 체크 시작
@@ -107,12 +107,12 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
         // 스킬 사용
         Debug.Log("스킬_2 사용");
-        _isSpinning = true;
+        //_isSpinning = true;
         // _projectilePrefab 활성화
-        SetProjectileActive(true);
+        //SetProjectileActive(true);
 
         // 매 프레임 원 운동 갱신
-        _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
+        //_spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
 
         // 지속시간 체크 시작
         _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
@@ -120,7 +120,43 @@ public class SkillLogic_2 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        AnimationPlay();
+        OnAttackStart();
     }
+
+    public void SkillRoutine()
+    {
+        _isSpinning = true;
+        // _projectilePrefab 활성화
+        SetProjectileActive(true);
+
+        // 매 프레임 원 운동 갱신
+        _spinRoutine = PlayerController.Instance.StartCoroutine(SpinCoroutine());
+
+        OnAttackEnd();
+    }
+
+    public void AnimationPlay()
+    {
+        PlayerController.Instance.SetTrigger("UseSkill_2");
+    }
+
+    public void OnAttackStart()
+    {
+        _isSkillUsed = true;
+
+        // 플레이어 이동 비활성화
+        PlayerController.Instance.Stop();
+    }
+
+    public void OnAttackEnd()
+    {
+        _isSkillUsed = false;
+        PlayerController.Instance.Move();
+    }
+
+   
 
     // 원 운동 로직
     private void UpdateProjectiles()
@@ -137,7 +173,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
                 Mathf.Cos(rad) * _radius,
                 0f
             );
-            _projectile[i].transform.position = center + offset;
+            _projectiles[i].transform.position = center + offset;
         }
     }
 
@@ -207,8 +243,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
     // _projectilePrefab 활성화/비활성화
     private void SetProjectileActive(bool isActive)
     {
-        foreach (var t in _projectile)
-            t.SetActive(isActive);
+        foreach (var p in _projectiles)
+            p.SetActive(isActive);
     }
 
     // _projectilePrefab와 충돌한 monster를 리스트에 추가 후 피격
