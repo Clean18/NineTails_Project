@@ -1,0 +1,50 @@
+{
+    "_savedTimeString": "2025-07-06T23:29:40.0035628+09:00",
+    "PlayerName": "구미호",
+    "AttackLevel": 1,
+    "DefenseLevel": 1,
+    "HpLevel": 1,
+    "CurrentHp": 76,
+    "SpeedLevel": 1,
+    "ShieldHp": 0,
+    "SceneIndex": 8,
+    "SpiritEnergy": 0,
+    "Warmth": 1719,
+    "Soul": 0,
+    "GetFirstSpiritEnergy": false,
+    "GetFirstWarmth": true,
+    "PlayerSkillList": [
+        {
+            "SkillIndex": 0,
+            "SkillLevel": 0,
+            "SlotIndex": 0
+        }
+    ],
+    "Grade": "N",
+    "Level": 1,
+    "IncreaseDamageLevel": 0,
+    "PlayerAchivementList": [
+        {
+            "Id": "A16",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A17",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ],
+    "PlayerMissionList": [
+        {
+            "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ]
+}
