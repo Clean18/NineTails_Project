@@ -126,6 +126,26 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         }
     }
 
+    public void LoadCurrentScene()
+    {
+        // 다음 인덱스 계산
+        int nextIndex = PlayerController.Instance.GetPlayerSceneIndex();
+
+        // 유효 범위 체크
+        if (_stageInfo != null && nextIndex < _stageInfo.Count)
+        {
+            // 씬 정보로 씬 이름 가져오기
+            string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
+            PlayerController.Instance.SetPlayerSceneIndex(nextIndex);
+
+            LoadSceneAsync(nextScene); // 사용중
+        }
+        else
+        {
+            Debug.LogWarning("더 이상 로드할 씬 없음");
+        }
+    }
+
     /// <summary>
     /// 다른 씬 로드 (스테이지 정보 ex.Stage1-1_Start)
     /// </summary>

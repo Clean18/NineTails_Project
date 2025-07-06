@@ -20,8 +20,8 @@ public class NameInputPopUp : BaseUI
                 // 플레이어 이름 지정
                 Debug.Log($"플레이어 이름 : [{name}] 으로 결정");
                 PlayerController.Instance.SetPlayerName(name);
-                // TODO : 플레이어 정보 세이브
                 PlayerController.Instance.SaveData();
+                Time.timeScale = 1;
                 UIManager.Instance.ClosePopUp(); // 현재 팝업 닫기
                 UIManager.Instance.ShowPopUp<CompletePopUp>(); // 클리어 팝업 열기
             }
@@ -29,6 +29,7 @@ public class NameInputPopUp : BaseUI
         GetEvent("Btn_N").Click += data =>
         {
             PlayerController.Instance.SaveData();
+            Time.timeScale = 1;
             UIManager.Instance.ClosePopUp();
             UIManager.Instance.ShowPopUp<CompletePopUp>(); // 클리어 팝업 열기
         };

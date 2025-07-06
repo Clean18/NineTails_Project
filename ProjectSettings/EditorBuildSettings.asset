@@ -22,7 +22,7 @@ EditorBuildSettings:
     guid: 75eb3ed59e56cc141842c585ccc27c7e
   - enabled: 1
     path: Assets/LHJ/LHJ_SCENE/Stage1-2Test.unity
-    guid: 02272db8d05ff9345a6af71bff2b0cee
+    guid: d90077a149446e3429c08ebffef5edf6
   - enabled: 1
     path: Assets/LHJ/LHJ_SCENE/TestScene.unity
     guid: 58ad88c87620500439d6f15c8be2a60d
@@ -34,8 +34,8 @@ EditorBuildSettings:
     guid: 698757a1500499647bd97033f68135f9
   - enabled: 1
     path: Assets/Scenes/Stage1-2_Battle.unity
-    guid: 97b541ef6ac12c94cae61da547ae5088
+    guid: cd572eedf4f16154ea6215394653886f
   - enabled: 1
     path: Assets/Scenes/Stage1-3_Battle.unity
-    guid: 5a5a12f733bea294591efb3b1f6d9242
+    guid: b0987020f4fe12c40a90c4d3329584ad
   m_configObjects: {}

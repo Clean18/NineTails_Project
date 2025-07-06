@@ -170,8 +170,8 @@ public class PlayerData
         {
             // 씬 인덱스 바뀔 때마다 세이브
             _sceneIndex = value;
-            Debug.Log($"PlayerSceneIndex : {_sceneIndex} <= {value}");
             if (PlayerController.Instance != null && PlayerController.Instance.IsInit) PlayerController.Instance.SaveData();
+            Debug.Log($"세이브한 씬 인덱스 : {_sceneIndex} <= {value}");
         }
     }
 
