@@ -36,7 +36,6 @@ public class SkillPopUp : BaseUI
 	/// </summary>
 	private Dictionary<int, string> skillDescDic = new()
 	{
-        // TODO : 설명들어오면 설명대로 변경
 		[0] = "전방에 검을 두차례 휘둘러 적에게 <color=#FF0000>{0}%/{1}% -> {2}%/{3}%</color>의 피해를 입힌다.", // 1타 100% > 101% 2타 50% > 50.5%
 		[1] = "검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 75% > 75.75%
 		[2] = "혼령을 소환하여 주변의 적에게 <color=#FF0000>{0}% -> {1}%</color>의 피해를 입히고, 자신은 <color=#00FF00>최대 체력의 {0}% -> {1}%</color>만큼 피해를 흡수할 수 있는 보호막을 얻는다.", // 25% > 25.25% 실드도 똑같음
@@ -82,7 +81,6 @@ public class SkillPopUp : BaseUI
 			});
 			skillUIList[i]._active.onClick.AddListener(() =>
 			{
-				// TODO : Active 버튼 기능 추가
 				var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
 				var mapping = PlayerController.Instance.GetMappingSkills();
 
@@ -111,14 +109,7 @@ public class SkillPopUp : BaseUI
 				// 스킬 단축키 초기화
 				SkillButton.Instance.UIInit();
 			});
-
 		}
-		//GetEvent("Skill0Up").Click += data =>
-		//{
-		//    PlayerController.Instance.TrySkillLevelUp(0);
-		//    Debug.Log("스킬0 강화 버튼");
-		//    UpdateSkill();
-		//};
 	}
 
 	private void OnEnable() => UpdateSkill();

@@ -96,7 +96,9 @@ public class Main : BaseUI, IUI
         {
             if (GameManager.Instance.Player == null) return;
 
-            // TODO : 보스방이면 오토 사용 불가
+            // 보스방이면 오토 사용 불가
+            string curSceneName = SceneManager.GetActiveScene().name;
+            if (curSceneName == "Stage1-3_Battle" || curSceneName == "Stage2-3_Battle" || curSceneName == "Stage3-3_Battle") return;
 
             // 플레이어 모드 전환
             var player = GameManager.Instance.Player;

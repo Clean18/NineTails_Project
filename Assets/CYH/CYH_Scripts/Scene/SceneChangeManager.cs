@@ -248,7 +248,6 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     /// <returns></returns>
     IEnumerator LoadFirstSceneRoutine()
     {
-        // TODO : 일단은 로딩씬으로 이동 후
         Debug.LogWarning("게임 시작 로딩씬으로 이동");
 
         yield return StartCoroutine(LoadSceneCoroutine(_gameSceneDict["Loading"]));
