@@ -1,11 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_1 : SkillLogic, ISkill
 {
     [SerializeField] private GameObject _hitBoxPrefab;
+    [SerializeField] private GameObject _skillEffectPrefab;
+
     [SerializeField] private CircleCollider2D _hitBox;
+    [SerializeField] private GameObject _skillEffect;
+    [SerializeField] private Vector3 _effectSpawnPos;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
@@ -23,6 +26,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         IsCooldown = false;
         SkillLevel = 0;
         SlotIndex = -1;
+        _effectSpawnPos = new Vector3(0, 12.22765f, 0);
     }
 
     public void UseSkill(Transform attacker)
@@ -54,6 +58,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
+
         EnableHitbox();
         AnimationPlay();
     }
@@ -88,6 +93,19 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // 플레이어 움직임 비활성화
         PlayerController.Instance.Stop();
+    }
+
+    public void CreateEffect()
+    {
+        Debug.Log("CreateEffect");
+        GameObject effect = Instantiate(_skillEffectPrefab, transform);
+        _skillEffect = effect;
+        effect.transform.localPosition = _effectSpawnPos;
+    }
+
+    public void DestroyEffect()
+    {
+        Destroy(_skillEffect);
     }
 
     protected override void Damage()
