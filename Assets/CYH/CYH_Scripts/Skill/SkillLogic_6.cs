@@ -9,10 +9,13 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     [Header("데미지 범위")]
     [SerializeField] private Vector2 _hitBoxSize = new Vector2(1, 1);
-    
+
     [Header("데미지 범위 오프셋")]
     [SerializeField] private Vector2 _boxOffset = new Vector2(0, 0);
     [SerializeField] private LayerMask _monsterLayer;
+
+    [Header("이펙트 생성 오프셋")]
+    [SerializeField] private Vector2 _effectOffset = new Vector2(0, 3);
 
     [Header("데미지 코루틴")]
     [SerializeField] private float _damageInterval = 0.1f;
@@ -124,14 +127,24 @@ public class SkillLogic_6 : SkillLogic, ISkill
     // 피격 몬스터 감지
     private void DetectMonster()
     {
-        float offsetX = _boxOffset.x * Mathf.Sign(transform.localScale.x);
+        float offsetX = Mathf.Abs(_boxOffset.x) * GetPlayerScaleX();
+
         Vector2 center = (Vector2)transform.position + new Vector2(offsetX, _boxOffset.y);
 
         Collider2D[] monsters = Physics2D.OverlapBoxAll(center, _hitBoxSize, 0f, _monsterLayer);
+
+        _hitMonsters.Clear();
+
         foreach (var monster in monsters)
         {
             _hitMonsters.Add(monster.gameObject);
         }
+    }
+
+    private float GetPlayerScaleX()
+    {
+        PlayerController player = PlayerController.Instance;
+        return Mathf.Sign(player.transform.localScale.x);
     }
 
     // 데미지 적용
@@ -159,8 +172,16 @@ public class SkillLogic_6 : SkillLogic, ISkill
         yield return new WaitForSeconds(delay);
         // 애니메이션 플레이
         AnimationPlay();
+
         // 스킬 이펙트 프리팹 생성
-        GameObject effect = Instantiate(_effectPrefab, transform.position, Quaternion.identity);
+        Vector2 skillPos = (Vector2)PlayerController.Instance.transform.position + _effectOffset;
+        GameObject effect = Instantiate(_effectPrefab, skillPos, Quaternion.identity);
+
+        // 플레이어가 바라보는 방향에 맞게 이펙트 좌우반전
+        Vector3 effectScale = effect.transform.localScale;
+        effectScale.x *= -1 * GetPlayerScaleX();
+        effect.transform.localScale = effectScale;
+        
         // 3초 뒤 삭제
         Destroy(effect, 3f);
     }
@@ -179,13 +200,12 @@ public class SkillLogic_6 : SkillLogic, ISkill
         Debug.Log("6번 스킬 쿨타임 종료");
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        float offsetX = _boxOffset.x * Mathf.Sign(transform.localScale.x);
-        Vector3 center = transform.position + new Vector3(offsetX, _boxOffset.y, 0f);
-        Vector3 boxSize = new Vector3(_hitBoxSize.x, _hitBoxSize.y, 0.01f);
-
-        Gizmos.DrawWireCube(center, boxSize);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    float sign = Mathf.Sign(GetPlayerScaleX());
+    //    float offsetX = Mathf.Abs(_boxOffset.x) * sign;
+    //    Vector2 center = (Vector2)transform.position + new Vector2(offsetX, _boxOffset.y);
+    //    Gizmos.DrawWireCube(center, _hitBoxSize);
+    //}
 }

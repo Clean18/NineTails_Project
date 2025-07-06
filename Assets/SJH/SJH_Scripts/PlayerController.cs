@@ -556,7 +556,7 @@ public class PlayerController : MonoBehaviour
     public void Skill1_DestroyEffect() => (SkillController.SkillList[1] as SkillLogic_1)?.DestroyEffect();
 
     // SkillLogic_2 애니메이션 이벤트 함수
-    public void Skill2_SkillRoutine() => (SkillController.SkillList[1] as SkillLogic_2)?.SkillRoutine();
+    public void Skill2_SkillRoutine() => (SkillController.SkillList[2] as SkillLogic_2)?.SkillRoutine();
 
     // SkillLogic_3 애니메이션 이벤트 함수
     public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();

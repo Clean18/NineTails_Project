@@ -13,7 +13,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     [Header("원 궤도 설정")]
     [SerializeField] private float _radius = 3f;
-    [SerializeField] private float _objSpeed = 140f;
+    [SerializeField] private float _objSpeed = 70f;
     [SerializeField] private Vector3 _centerOffset = new Vector3(-0.18f, 1.34f, 0);
 
     [Header("스킬 지속 시간")]
@@ -61,7 +61,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     //private void Update()
     //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha5))
+    //    if (Input.GetKeyDown(KeyCode.Alpha2))
     //    {
     //        UseSkill(transform);
     //    }
@@ -97,6 +97,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
         Debug.Log("스킬 2 사용완료");
+
+        AnimationPlay();
+        OnAttackStart();
     }
 
     public void UseSkill(Transform attacker, Transform defender)
@@ -155,8 +158,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
         _isSkillUsed = false;
         PlayerController.Instance.Move();
     }
-
-   
 
     // 원 운동 로직
     private void UpdateProjectiles()

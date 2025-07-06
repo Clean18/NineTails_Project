@@ -344,7 +344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8907089833944361431, guid: ebf209dd092de8c4792396fa9ea6a868, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4822434362291127091, guid: ebf209dd092de8c4792396fa9ea6a868, type: 3}
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
-  MonType: 0
+  _currentState: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
@@ -1971,6 +1971,7 @@ MonoBehaviour:
       <Speed>k__BackingField: 0
       _isDead: 0
       _shieldHp: 0
+      _sceneIndex: 0
     Cost:
       _spiritEnergy: 0
       _warmth: 0
@@ -2005,7 +2006,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
-  IsImmortal: 0
 --- !u!212 &1051408956766459252
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2126,7 +2126,10 @@ MonoBehaviour:
   _hitMonsters: []
   _isSkillUsed: 0
   _hitBoxPrefab: {fileID: 0}
+  _skillEffectPrefab: {fileID: 0}
   _hitBox: {fileID: 6169749376982270442}
+  _skillEffect: {fileID: 0}
+  _effectSpawnPos: {x: 0, y: 0, z: 0}
   <SkillData>k__BackingField: {fileID: 0}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
@@ -2429,7 +2432,6 @@ GameObject:
   - component: {fileID: 8834188468784387697}
   - component: {fileID: 8834188468784387696}
   - component: {fileID: 8834188468784387699}
-  - component: {fileID: 8834188468784387700}
   m_Layer: 0
   m_Name: PlayerA
   m_TagString: Untagged
@@ -2791,7 +2793,7 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
-  MonType: 0
+  _currentState: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
@@ -3269,7 +3271,7 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
-  MonType: 0
+  _currentState: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
@@ -4042,7 +4044,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2874512801222223151}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4f2df55f95429f458f8ffece2fd3363, type: 3}
   m_Name: 
@@ -4057,28 +4059,6 @@ MonoBehaviour:
   _centerOffset: {x: -0.29, y: 1.72, z: 0}
   _spinDuration: 7
   _isSpinning: 0
-  <SkillData>k__BackingField: {fileID: 0}
-  <IsCooldown>k__BackingField: 0
-  <SkillLevel>k__BackingField: 0
-  <SlotIndex>k__BackingField: 0
---- !u!114 &8834188468784387700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2874512801222223151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c238eadf819680f4d84412605ca3eb66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 8834188468784387697}
-  _hitMonsters: []
-  _isSkillUsed: 0
-  _hitBoxPrefab: {fileID: 0}
-  _hitBox: {fileID: 1749462101}
-  _slashCount: 0
   <SkillData>k__BackingField: {fileID: 0}
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0

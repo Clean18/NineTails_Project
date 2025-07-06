@@ -8,6 +8,7 @@ public class UIManager : Singleton<UIManager>
     public StartUI StartUI;
     public GameUI GameUI;
     public Main MainUI;
+    public BossMainUI BossMainUI;
 
     public static bool IsFloatingText = true;
 

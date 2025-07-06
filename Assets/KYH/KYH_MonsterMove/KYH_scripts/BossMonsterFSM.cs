@@ -480,7 +480,6 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
         Debug.Log("보스 오브젝트 제거됨");
         GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
         GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
-        AchievementManager.Instance.CheckBossAchievements(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);  // 보스 관련 업적 체크
         Destroy(gameObject);
     }
 

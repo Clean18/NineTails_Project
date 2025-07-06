@@ -155,7 +155,7 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
             isDeadHandled = true;
             Debug.Log("보스 사망 연출 시작");
             MissionManager.Instance.AddKill();
-            AchievementManager.Instance.CheckBossAchievements(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            AchievementManager.Instance.CheckBossAchievements(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name); // 업적 조건 체크
             //Invoke(nameof(DestroySelf), 3f); // 3초 후 제거
             StartCoroutine(DeadRoutine());
         }
