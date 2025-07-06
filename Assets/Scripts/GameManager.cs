@@ -28,27 +28,27 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("씬 로드");
         UIManager.Instance.SceneUIList.Clear();
 
-        // 데이터매니저 초기화 되어있으면 == 스타트씬 이후
         // 플레이어 생성
-        if (DataManager.IsDataInit) StartCoroutine(SceneInitRoutine());
+        //if (DataManager.IsDataInit) StartCoroutine(SceneInitRoutine());
+        StartCoroutine(SceneInitRoutine());
 
         if (Player != null && !Player.Equals(null))
         {
             Debug.Log("씬로드 데이터 세이브");
             PlayerController.Instance.SaveData();
         }
-        //StartCoroutine(SceneInitRoutine());
     }
 
     IEnumerator SceneInitRoutine()
     {
-        //if (!DataManager.IsDataInit)
-        //{
-        //    // 데이터 매니저 초기화
-        //    Debug.LogWarning("데이터매니저 초기화 중...");
-        //    yield return StartCoroutine(DataManager.Instance.LoadDatas());
-        //    Debug.LogWarning("데이터매니저 초기화 완료");
-        //}
+        // 주석 해제하기
+        if (!DataManager.IsDataInit)
+        {
+            // 데이터 매니저 초기화
+            Debug.LogWarning("데이터매니저 초기화 중...");
+            yield return StartCoroutine(DataManager.Instance.LoadDatas());
+            Debug.LogWarning("데이터매니저 초기화 완료");
+        }
 
         if (PlayerController.Instance == null) PlayerInit();
 

@@ -219,6 +219,11 @@ public class Stage2BossFSM : BaseBossFSM
         }
     }
 
+    protected override IEnumerator DeadRoutine()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override int PatternCount => 2;
 }
 

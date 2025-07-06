@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (IsImmortal)
         {
-            Debug.Log("플레이어는 무적상태입니다.");
+            Debug.Log($"{damage}의 대미지를 입었지만 무적입니다.");
             return;
         }
 
