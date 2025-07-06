@@ -54,6 +54,18 @@ public class RangedMonsterFSM : BaseMonsterFSM
                 // 4-2. 투사체 생성
                 GameObject projectile = Instantiate(ProjectilePrefab, AttackPoint.position, Quaternion.identity);
 
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                projectile.transform.rotation = Quaternion.Euler(0, 0, angle + 180f);  // Z축 회전
+
+                // 3. 좌우 방향에 따라 Y축 반전
+                if (dir.x < 0f)  
+                {
+                    projectile.transform.localScale = new Vector3(1f, 1f, 1f);
+                }
+                else  
+                {
+                    projectile.transform.localScale = new Vector3(1f, -1f, 1f);
+                }
                 // 4-3. 물리 적용 (속도 방향 설정)
                 Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
                 rb?.AddForce(dir * ProjectileSpeed, ForceMode2D.Impulse);

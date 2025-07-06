@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 5245747574280411335}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.8, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -202,7 +202,7 @@ SpriteRenderer:
   m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &3510824589940172000
@@ -285,16 +285,19 @@ MonoBehaviour:
   MaxHp: 10
   DamageReduceRate: 0
   CurrentHp: 0
+  AttackDamage: 10
+  Type: 0
+  Level: 0
   FindInterval: 1
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
   MonType: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
+  _sprite: {fileID: 0}
   AttackPoint: {fileID: 4679346679482885323}
   ProjectilePrefab: {fileID: 971121944272405935, guid: a0a6a8ea2ec99e84188126013a156d20, type: 3}
   ProjectileSpeed: 8
-  AttackDamage: 10
   AttackSound: {fileID: 8300000, guid: a471f02d8b50c5e4ab9897bc393500be, type: 3}
   HitSound: {fileID: 8300000, guid: de369f444c96d8d4ca7ce58318d326ff, type: 3}
   DeadSound: {fileID: 8300000, guid: 894dab87c9a794540a78b6b8b60d06a3, type: 3}
