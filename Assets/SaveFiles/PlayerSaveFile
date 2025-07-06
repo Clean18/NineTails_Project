@@ -1,5 +1,5 @@
 {
-    "_savedTimeString": "2025-07-06T12:33:15.1728322+09:00",
+    "_savedTimeString": "2025-07-06T17:18:06.4840141+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 1,
     "DefenseLevel": 1,
@@ -8,10 +8,10 @@
     "SpeedLevel": 1,
     "ShieldHp": 0,
     "SpiritEnergy": 0,
-    "Warmth": 12632,
+    "Warmth": 12812,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
-    "GetFirstWarmth": true,
+    "GetFirstWarmth": false,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,

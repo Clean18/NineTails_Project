@@ -27,66 +27,46 @@ public class RangedMonsterFSM : BaseMonsterFSM
     // BaseMonsterFSM의 추상 공격 루틴 구현 (원거리 투사체 방식)
     protected override IEnumerator AttackRoutine()
     {
-        // 공격 상태일 때 반복
         while (_currentState == MonsterState.Attack)
         {
-            // 1. 애니메이션 실행
-            //MonsterAnimator.Play("ThrowDagger");
             MonsterAnimator.Play("Ranged_Attack");
 
-            // 2. 사운드 재생
-            PlaySound(AttackSound);
-
-            // // 3. 이펙트 생성 (화염, 연기 등)
-            // if (AttackEffectPrefab != null && AttackPoint != null)
-            // {
-            //     GameObject fx = Instantiate(AttackEffectPrefab, AttackPoint.position, Quaternion.identity);
-            //     Destroy(fx, 1f); // 이펙트 1초 뒤 자동 제거
-            // }
-            Debug.Log("투사체 제작 해야함");
-            // 4. 투사체 생성 및 방향/속도 적용
-            if (ProjectilePrefab != null && AttackPoint != null && targetPlayer != null)
-            {
-                Debug.Log("투사체 생성됨");
-                // 4-1. 방향 계산 (플레이어 방향)
-                Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
-
-                // 4-2. 투사체 생성
-                GameObject projectile = Instantiate(ProjectilePrefab, AttackPoint.position, Quaternion.identity);
-
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                projectile.transform.rotation = Quaternion.Euler(0, 0, angle + 180f);  // Z축 회전
-
-                // 3. 좌우 방향에 따라 Y축 반전
-                if (dir.x < 0f)  
-                {
-                    projectile.transform.localScale = new Vector3(1f, 1f, 1f);
-                }
-                else  
-                {
-                    projectile.transform.localScale = new Vector3(1f, -1f, 1f);
-                }
-                // 4-3. 물리 적용 (속도 방향 설정)
-                Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-                rb?.AddForce(dir * ProjectileSpeed, ForceMode2D.Impulse);
-
-                // 4-4. 데미지 설정 (MonsterProjectile 스크립트가 있어야 함)
-                MonsterProjectile mp = projectile.GetComponent<MonsterProjectile>();
-                if (mp != null)
-                {
-                    mp.SetDamage(AttackDamage);
-                }
-            }
-
-            // 5. 공격 쿨타임 후 반복
             yield return new WaitForSeconds(AttackCooldown);
         }
 
-        // 상태가 Attack에서 벗어나면 코루틴 정리
         attackRoutine = null;
-
-        //MonsterAnimator.Play("Idle_Ranged");
         MonsterAnimator.Play("Ranged_Idle");
+    }
+
+    // 애니메이션 이벤트로 호출됨
+    public void FireProjectile()
+    {
+        if (ProjectilePrefab != null && AttackPoint != null && targetPlayer != null)
+        {
+            PlaySound(AttackSound);
+
+            Vector2 dir = (targetPlayer.position - AttackPoint.position).normalized;
+
+            GameObject projectile = Instantiate(ProjectilePrefab, AttackPoint.position, Quaternion.identity);
+
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            projectile.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
+
+            // 좌우에 따라 Y축 뒤집기
+            if (dir.x < 0f)
+                projectile.transform.localScale = new Vector3(1f, 1f, 1f);
+            else
+                projectile.transform.localScale = new Vector3(1f, -1f, 1f);
+
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            rb?.AddForce(dir * ProjectileSpeed, ForceMode2D.Impulse);
+
+            MonsterProjectile mp = projectile.GetComponent<MonsterProjectile>();
+            if (mp != null)
+            {
+                mp.SetDamage(AttackDamage);
+            }
+        }
     }
 
     public override void TakeDamage(long damage)
