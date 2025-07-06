@@ -107,6 +107,12 @@ public class MissionManager : Singleton<MissionManager>
             isRunning = false;
         }
     }
+    public void DeathFailMission()
+    {
+        isRunning = false;
+        Debug.Log("[MissionManager] 미션 실패 (플레이어 사망)");
+        StartCoroutine(CooldownRoutine());
+    }
     // 미션 진행중 확인 여부
     public bool IsRunning()
     {
