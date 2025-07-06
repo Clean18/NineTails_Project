@@ -178,7 +178,7 @@ MonoBehaviour:
   StateChangeCooldown: 1
   warmthAmount: 0
   spiritEnergyAmount: 0
-  MonType: 0
+  _currentState: 0
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
@@ -335,6 +335,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3101463520575729549}
     m_Modifications:
+    - target: {fileID: 313514078052546662, guid: a2645ad037b567e439644f1c3cdbfb1b, type: 3}
+      propertyPath: m_SortingOrder
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4941244354622691497, guid: a2645ad037b567e439644f1c3cdbfb1b, type: 3}
       propertyPath: m_Name
       value: HpBar

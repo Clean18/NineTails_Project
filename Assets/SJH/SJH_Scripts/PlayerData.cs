@@ -183,7 +183,7 @@ public class PlayerData
     /// <param name="hpLevel"></param>
     /// <param name="speedLevel"></param>
     /// <param name="increaseDamageLevel"></param>
-	public void InitData(string name = "구미호", int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0, int sceneIndex = 0)
+	public void InitData(string name = "구미호", int attackLevel = 1, int defenseLevel = 1, int hpLevel = 1, long currentHp = 100, int speedLevel = 1, long shieldHp = 0, int sceneIndex = 2)
     {
         //Debug.Log($"InitData 호출 : ATK {attackLevel}, DEF {defenseLevel}, HP {hpLevel}, SPD {speedLevel}");
         // 프로퍼티에서 레벨만으로 각 스탯 계산
