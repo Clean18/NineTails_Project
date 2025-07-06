@@ -36,6 +36,8 @@ public class DialogParser : MonoBehaviour
 
     [SerializeField] private RectTransform logBoxSize;
 
+    [SerializeField] private TMP_InputField changeNameUI;
+
     [SerializeField] private TextMeshProUGUI playerDialogBox;
     [SerializeField] private TextMeshProUGUI logText;
 
@@ -57,7 +59,8 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private Button nextButton;
 
     [SerializeField] private string dialogName;
-    [SerializeField] private string foxName => PlayerController.Instance.GetPlayerName(); // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
+    // foxName 입력값 저장해놓는 변수 -> TODO SetPlayerName(foxNameInput) 해줄 필요가 있습니다.
+    [SerializeField] private string foxName; // => PlayerController.Instance.GetPlayerName(); // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
     [SerializeField] private int spacing;
     [SerializeField] private float fadeDuration = 0.5f;
 
@@ -66,8 +69,15 @@ public class DialogParser : MonoBehaviour
     private int charIndex = 0;
     private bool isNextClicked = false;
 
+    
+    public string foxNameInput;
+
     void Start()
     {
+        // ----------------------------#############################
+        // 플레이어 이름 입력받기
+        foxName = PlayerController.Instance.GetPlayerName();
+
         // dialogName = 입력값 (추가완료)
         dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.GetPlayerSceneIndex()];
         Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.GetPlayerSceneIndex()}");
@@ -80,6 +90,7 @@ public class DialogParser : MonoBehaviour
             }
         }
         nextButton.onClick.AddListener(() => isNextClicked = true);
+        changeNameUI.onEndEdit.AddListener(changeFoxName);
         LoadDialog();
         ShowLine(0);
     }
@@ -102,9 +113,9 @@ public class DialogParser : MonoBehaviour
             DialogLine line = new DialogLine
             {
                 index = int.Parse(values[0]),
-                charName = values[1].Replace("구미호", foxName),
+                charName = values[1],
                 imgName = values[2],
-                dialog = values[3].Replace("`", ",").Replace("구미호", foxName), // ` 를 ,로 변환
+                dialog = values[3].Replace("`", ","), // ` 를 ,로 변환
                 animation = values[4],
                 location = values[5],
                 sound = values[6],
@@ -156,6 +167,10 @@ public class DialogParser : MonoBehaviour
         else if (charIndex == 12)
         {
             charIndex = 4;
+        }
+        else if (charIndex == 13)
+        {
+            charIndex = 5;
         }
         else
         {
@@ -210,7 +225,7 @@ public class DialogParser : MonoBehaviour
             playerDialog.SetActive(true);
             dialogUI.SetActive(false);
             // line 입력 (대사 / 사운드)
-            playerDialogBox.text = line.dialog;
+            playerDialogBox.text = line.dialog.Replace("foxName", foxName);
             for (int i = 0; i < sounds.Length; i++)
             {
                 if (sounds[i].name == line.sound && line.sound != "")
@@ -247,7 +262,20 @@ public class DialogParser : MonoBehaviour
             playerDialog.SetActive(false);
             dialogUI.SetActive(true);
             charNameText.text = "";
-            dialogText.text = line.dialog;
+            dialogText.text = line.dialog.Replace("foxName", foxName);
+        }
+        else if (charIndex == 5) // 이름 지어주기
+        {
+            // 모든 캐릭터 이미지 비활성화
+            for (int i = 0; i < charImgs.Length; i++)
+            {
+                charImgs[i].gameObject.SetActive(false);
+            }
+            // UI 모두 가리고
+            playerDialog.SetActive(false);
+            dialogUI.SetActive(false);
+            // 여우 이름 입력받는 UI 실행
+            changeNameUI.gameObject.SetActive(true);
         }
         else // 주인공 이외의 캐릭터 대사가 나올 경우 (이미지 표시 & 대사 & 이름 변경)
         {
@@ -261,8 +289,8 @@ public class DialogParser : MonoBehaviour
             dialogUI.SetActive(true);
 
             // line 입력 (이름 / 대사 / 이미지 / 위치 / 애니메이션 / 사운드)
-            charNameText.text = line.charName;
-            dialogText.text = line.dialog;
+            charNameText.text = line.charName.Replace("foxName", foxName);
+            dialogText.text = line.dialog.Replace("foxName", foxName);
             // 이미지 지정
             for (int i = 0; i < charSprites.Length; i++)
             {
@@ -353,6 +381,20 @@ public class DialogParser : MonoBehaviour
             Debug.Log("첫 대사 출력 완료");
         }
     }
+    public void changeFoxName(string name)
+    {
+        foxName = name;
+        Debug.Log(name);
+
+        // ----------------------------#############################
+        // 플레이어 이름값 저장
+        PlayerController.Instance.SetPlayerName(foxName);
+
+        // UI 끄고 다음 대사 출력
+        changeNameUI.gameObject.SetActive(false);
+        NextLine();
+    }
+
     void SetLocation(string location, int imgNum)
     {
         if (location == "left")
@@ -395,9 +437,13 @@ public class DialogParser : MonoBehaviour
         }
         Debug.Log($"사운드명: {name}");
         soundPlayer.Play();
-        effect.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        effect.gameObject.SetActive(false);
+
+        if (imgName != "")
+        {
+            effect.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            effect.gameObject.SetActive(false);
+        }
     }
     private IEnumerator startBackground(string bgName, string nextBgName)
     {
@@ -471,6 +517,7 @@ public class DialogParser : MonoBehaviour
             yield return null;
         }
         blackTransition.gameObject.SetActive(false);
+        isNextClicked = false;
         NextLine();
     }
 
