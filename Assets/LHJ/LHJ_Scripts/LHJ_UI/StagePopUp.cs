@@ -55,28 +55,39 @@ public class StagePopUp : BaseUI
                 return;
             }
 
-            if (!MissionManager.Instance.IsCleared(missionId))
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            if (MissionManager.Instance.IsCooldownActive)
             {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
             }
-            else
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
+            if (SceneManager.GetActiveScene().name == sceneName)
             {
-                // TODO : 현재 씬과 비교해서 같은 씬이면 return
-                if (SceneManager.GetActiveScene().name == sceneName)
-                {
-                    Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
-                }
-                else
-                {
-                    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-                }
+                Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
             }
+            //else
+            //{
+            //    // TODO : 현재 씬과 비교해서 같은 씬이면 return
+            //    if (SceneManager.GetActiveScene().name == sceneName)
+            //    {
+            //        Debug.Log("현재 씬이 이동할 씬과 같은 씬입니다.");
+            //    }
+            //    else
+            //    {
+            //        SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //    }
+            //}
         };
         GetEvent("Btn_Stage13").Click += data =>
         {
@@ -88,20 +99,27 @@ public class StagePopUp : BaseUI
                 return;
             }
 
-            if (!MissionManager.Instance.IsCleared(missionId))
+            //if (!MissionManager.Instance.IsCleared(missionId))
+            //{
+            //    if (MissionManager.Instance.IsCooldownActive)
+            //    {
+            //        Debug.Log("쿨타임 중 - 미션 재도전 불가");
+            //        return;
+            //    }
+            //    var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            //    popUp.SetScene(sceneName);
+            //}
+            //else
+            //{
+            //    SceneChangeManager.Instance.LoadSceneAsync(sceneName);
+            //}
+            if (MissionManager.Instance.IsCooldownActive)
             {
-                if (MissionManager.Instance.IsCooldownActive)
-                {
-                    Debug.Log("쿨타임 중 - 미션 재도전 불가");
-                    return;
-                }
-                var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
-                popUp.SetScene(sceneName);
+                Debug.Log("쿨타임 중 - 미션 재도전 불가");
+                return;
             }
-            else
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
         };
         GetEvent("Btn_Stage21").Click += data =>
         {
