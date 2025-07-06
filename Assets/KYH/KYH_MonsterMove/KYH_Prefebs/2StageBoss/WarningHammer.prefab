@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5328059433253491520}
   - component: {fileID: 494792730019743731}
+  - component: {fileID: 8238728562079666218}
   m_Layer: 0
   m_Name: WarningHammer
   m_TagString: Untagged
@@ -84,3 +85,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8238728562079666218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8229893166727560076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18904430e2414d44b92fc7709f6eaee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

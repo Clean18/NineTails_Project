@@ -58,7 +58,7 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
         _sprite = GetComponent<SpriteRenderer>();
     }
     // 시작 시 상태 초기화
-    protected virtual void Start()
+    protected virtual void OnEnable()
     {
         CurrentState = BossState.Null;
         StartCoroutine(BossInit());
