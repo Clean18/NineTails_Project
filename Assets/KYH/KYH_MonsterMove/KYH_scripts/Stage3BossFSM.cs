@@ -15,7 +15,7 @@ public class Stage3BossFSM : BaseBossFSM
     [SerializeField] private AudioClip CycloneSound;
     [SerializeField] private float Pattern1Duration = 3f;           // 회오리 공격 지속 시간
     [SerializeField] private float Pattern1HitInterval = 0.5f;      // 회오리 데미지 판정 간격
-    [SerializeField] private float Pattern1DamagePercent = 5f;      // 회오리 1회 데미지 비율(%)
+    [SerializeField] private float Pattern1DamagePercent = 0.05f;      // 회오리 1회 데미지 비율(%)
     [SerializeField] private float Pattern1Range = 3f;              // 회오리 공격 범위 (원형 범위)
     [SerializeField] private Transform Pattern1Origin;              // 회오리 중심 위치 (보스 중심 또는 지정 지점)
 
@@ -25,7 +25,7 @@ public class Stage3BossFSM : BaseBossFSM
   //  [SerializeField] private GameObject FeatherEffectPrefab;                    // 깃털 이펙트 프리팹
     [SerializeField] private AudioClip RoarSound2;                              // 깃털 공격 전 사운드
     [SerializeField] private float Pattern2Delay = 2f;                          // 경고 후 깃털 낙하까지 대기 시간
-    [SerializeField] private float Pattern2DamagePercent = 5f;                  // 낙하한 깃털 데미지 비율(%)
+    [SerializeField] private float Pattern2DamagePercent = 0.05f;                  // 낙하한 깃털 데미지 비율(%)
     [SerializeField] private int FeatherCount = 6;                              // 깃털 낙하 수
     [SerializeField] private float FeatherDamageRadius = 1.5f;                  // 깃털 공격의 데미지 판정 원의 반지름
     [SerializeField] private Vector2 Pattern2BoxSize = new Vector2(6f, 4f);     // (너비, 높이)
@@ -37,7 +37,7 @@ public class Stage3BossFSM : BaseBossFSM
     [SerializeField] private AudioClip RoarSound3;
     [SerializeField] private AudioClip ChargeSound;                 // 돌진 사운드
     [SerializeField] private float ChargeDelay = 3f;                // 돌진 전 대기 시간
-    [SerializeField] private float Pattern3DamagePercent = 70f;     // 돌진 충돌 시 데미지 비율(%)
+    [SerializeField] private float Pattern3DamagePercent = 0.7f;     // 돌진 충돌 시 데미지 비율(%)
     [SerializeField] private float ChargeForce = 20f;               // 보스 돌진 속도 (AddForce 계수)
     [SerializeField] private Transform ChargeStartPos;              // 돌진 시작 위치
     [SerializeField] private Transform ChargeEndPos;                // 돌진 도착 위치
@@ -180,7 +180,7 @@ public class Stage3BossFSM : BaseBossFSM
         isCharging = false;
         PlaySound(RoarSound3);
         // 1. 경고 프리팹 생성
-        GameObject warning = Instantiate(WarningRectPrefab, transform.position, Quaternion.identity);
+        GameObject warning = Instantiate(WarningRectPrefab);
 
         // 2. 대기 후 애니메이션, 사운드
         yield return new WaitForSeconds(ChargeDelay);
@@ -189,10 +189,12 @@ public class Stage3BossFSM : BaseBossFSM
 
         // 3. 부드럽게 돌진 시작 위치로 이동
         float t1 = 0f;
-        float preChargeDuration = 1f;
+        float preChargeDuration = 2f;
         Vector3 from1 = transform.position;
         Vector3 to1 = ChargeStartPos.position;
+        Vector3 chargeEndPos = ChargeEndPos.position;
 
+        Debug.Log("박치기 : 시작 위치로");
         while (t1 < preChargeDuration)
         {
             t1 += Time.deltaTime;
@@ -201,23 +203,30 @@ public class Stage3BossFSM : BaseBossFSM
         }
 
         // 4. 돌진 시작
+        Debug.Log("박치기 : 돌진 시작");
         BossAnimator.Play("Bird_BodyAttack");
-        Vector2 dir = (ChargeEndPos.position - ChargeStartPos.position).normalized;
+        Vector2 dir = (chargeEndPos - to1).normalized;
 
         isCharging = true;
-        ChargeCollider.enabled = true;
+        //ChargeCollider.enabled = true;
         BossRigidbody.velocity = dir * ChargeForce;
 
-        yield return new WaitForSeconds(1f); // 돌진 지속
+        //yield return new WaitForSeconds(1f); // 돌진 지속
+        while (Vector3.Distance(transform.position, chargeEndPos) > 0.1f)
+        {
+            yield return null;
+        }
 
         // 5. 돌진 종료
+        Debug.Log("박치기 : 돌진 종료");
         BossRigidbody.velocity = Vector2.zero;
-        ChargeCollider.enabled = false;
+        //ChargeCollider.enabled = false;
         isCharging = false;
 
         // 6. 사라지는 연출 (Sprite만 꺼서 물리 영향 방지)
-        GetComponent<SpriteRenderer>().enabled = false;
+        _sprite.enabled = false;
         GetComponentInChildren<Collider2D>().enabled = false;
+        
 
         Destroy(warning);
         Destroy(aura);
@@ -227,13 +236,13 @@ public class Stage3BossFSM : BaseBossFSM
         BossAnimator.Play("Bird_Idle_2");
 
         // 7. 위에서 천천히 내려오는 연출
-        Vector3 reappearStartPos = originalPosition + new Vector3(0f, 6f, 0f);
+        Vector3 reappearStartPos = originalPosition + new Vector3(0f, 10f, 0f);
         transform.position = reappearStartPos;
 
-        GetComponent<SpriteRenderer>().enabled = true;
+        _sprite.enabled = true;
         GetComponentInChildren<Collider2D>().enabled = true;
 
-        BossRigidbody.isKinematic = true; // Lerp용
+        //BossRigidbody.isKinematic = true; // Lerp용
         float t2 = 0f;
         float fallDuration = 1.5f;
 
@@ -244,7 +253,7 @@ public class Stage3BossFSM : BaseBossFSM
             yield return null;
         }
 
-        BossRigidbody.isKinematic = false;
+        //BossRigidbody.isKinematic = false;
 
         // 8. 상태 전환
         TransitionToState(BossState.Idle);
@@ -255,16 +264,34 @@ public class Stage3BossFSM : BaseBossFSM
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isCharging || hasChargedHit) return;
+        if (!isCharging || hasChargedHit)
+        {
+            Debug.Log("헤드부트");
+            return;
+        }
+
 
         if (other.CompareTag("Player"))
         {
-            var player = other.GetComponent<Game.Data.PlayerData>();
-            if (player != null)
-            {
-                player.TakeDamageByPercent(Pattern3DamagePercent / 100f);
-                Debug.Log($"[Stage3BossFSM] 돌진으로 플레이어 {other.name}에게 {Pattern3DamagePercent}% 피해");
-            }
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * Pattern3DamagePercent));
+            Debug.Log($"[Stage3BossFSM] 돌진으로 플레이어에게 {Pattern3DamagePercent * 100}% 피해");
+
+            hasChargedHit = true;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!isCharging || hasChargedHit)
+        {
+            Debug.Log("헤드부트");
+            return;
+        }
+
+        if (collision.collider.CompareTag("Player"))
+        {
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * Pattern3DamagePercent));
+            Debug.Log($"[Stage3BossFSM] 돌진으로 플레이어에게 {Pattern3DamagePercent * 100}% 피해");
 
             hasChargedHit = true;
         }
@@ -273,18 +300,14 @@ public class Stage3BossFSM : BaseBossFSM
     /// <summary>
     /// 지정된 위치의 원형 범위 내에 있는 플레이어에게 퍼센트 데미지를 준다
     /// </summary>
-    private void DealDamageInCircle(Vector2 center, float radius, float percent)
+    private void DealDamageInCircle(Vector2 center, float radius, float damagePercent)
     {
-        Collider2D hit = Physics2D.OverlapCircle(center, radius, LayerMask.GetMask("Player"));
+        Collider2D hit = Physics2D.OverlapCircle(center, radius, _playerLayer);
 
-        if (hit != null && hit.CompareTag("Player"))
+        if (hit != null)
         {
-            var player = hit.GetComponent<Game.Data.PlayerData>();
-            if (player != null)
-            {
-                player.TakeDamageByPercent(percent / 100f);
-                Debug.Log($"[Stage3BossFSM] 플레이어 {hit.name}에게 {percent}% 데미지");
-            }
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * damagePercent));
+            Debug.Log($"[Stage3BossFSM] 플레이어에게 {damagePercent * 100}% 데미지");
         }
     }
 
@@ -308,6 +331,25 @@ public class Stage3BossFSM : BaseBossFSM
 
     protected override IEnumerator DeadRoutine()
     {
-        throw new System.NotImplementedException();
+        yield return null;
+
+        float timer = 0f;
+        float duration = 3f;
+        Color startColor = _sprite.color;
+
+        while (timer < duration)
+        {
+            float t = timer / duration;
+
+            Color newColor = startColor;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            _sprite.color = newColor;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
