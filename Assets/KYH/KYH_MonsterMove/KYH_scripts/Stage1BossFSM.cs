@@ -10,8 +10,6 @@ using UnityEngine.Audio;
 /// </summary>
 public class Stage1BossFSM : BaseBossFSM
 {
-    
-
     [Header("Pattern1 setting")]
     [SerializeField] private Animator BossAnimator;             // 보스 애니메이터
     [SerializeField] private GameObject AttackEffectPrefab;     // 휘두르기 이펙트 프리팹
@@ -34,11 +32,11 @@ public class Stage1BossFSM : BaseBossFSM
     [SerializeField] private float DropRadius = 3f;             // 플레이어 위치 기준 낙석 출현 범위
 
     [Header("Pattern3 Setting")]
-    [SerializeField] private GameObject SpearGhostPrefebs;   // 창귀 투사체 프리팹
+    [SerializeField] private GameObject SpearGhostPrefebs;      // 창귀 투사체 프리팹
     [SerializeField] private float SpearSpeed = 10f;            // 투사체 속도
-    [SerializeField] private AudioClip RoarSound3;         // 포효 사운드
-    [SerializeField] private GameObject WarningRectPrefab; // 경고용 직사각형 오브젝트
-    [SerializeField] private float WarningDistance = 2f;   // 보스로부터 경고 오브젝트까지의 거리
+    [SerializeField] private AudioClip RoarSound3;              // 포효 사운드
+    [SerializeField] private GameObject WarningRectPrefab;      // 경고용 직사각형 오브젝트
+    [SerializeField] private float WarningDistance = 2f;        // 보스로부터 경고 오브젝트까지의 거리
     private List<GameObject> warningRects = new List<GameObject>();
 
 
@@ -103,7 +101,7 @@ public class Stage1BossFSM : BaseBossFSM
             Vector3 spawnPos = AttackOrigin.position + direction * spawnOffset;
 
             GameObject fx = Instantiate(AttackEffectPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
-            Destroy(fx, Pattern1EffectDuration);
+            // Boss1Effect에서 활성화시 자동으로 삭제
         }
 
         // 데미지 판정
@@ -117,9 +115,11 @@ public class Stage1BossFSM : BaseBossFSM
     /// <param name="forwardDirection">공격의 기준 방향 (보통 플레이어 방향)</param>
     private void DealDamageInCone(Vector2 forwardDirection)
     {
-        Collider2D hit = Physics2D.OverlapCircle(AttackOrigin.position, AttackRange, LayerMask.GetMask("Player"));
+        Collider2D hit = Physics2D.OverlapCircle(AttackOrigin.position, AttackRange, _playerLayer);
 
-        if (hit != null && hit.CompareTag("Player"))
+        Debug.Log(hit.name);
+
+        if (hit != null)
         {
             // 방향 벡터 계산
             Vector2 dirToTarget = ((Vector2)hit.transform.position - (Vector2)AttackOrigin.position).normalized;
@@ -127,12 +127,8 @@ public class Stage1BossFSM : BaseBossFSM
 
             if (angle <= AttackAngle / 2f)
             {
-                var player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
-                {
-                    Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
-                    player.TakeDamageByPercent(0.4f); // 40% 데미지
-                }
+                PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * 0.4f));
+                Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
             }
         }
     }
@@ -327,5 +323,29 @@ public class Stage1BossFSM : BaseBossFSM
     {
         float rad = angle * Mathf.Deg2Rad;
         return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0f);
+    }
+
+    protected override IEnumerator DeadRoutine()
+    {
+        yield return null;
+
+        float timer = 0f;
+        float duration = 3f;
+        Color startColor = _sprite.color;
+
+        while (timer < duration)
+        {
+            float t = timer / duration;
+
+            Color newColor = startColor;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            _sprite.color = newColor;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
