@@ -29,14 +29,6 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _effectSpawnPos = new Vector3(0, 12.22765f, 0);
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            UseSkill(transform);
-        }
-    }
-
     public bool UseSkill(Transform attacker)
     {
         Debug.Log("스킬 1 UseSkill");
@@ -104,6 +96,14 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // 플레이어 움직임 비활성화
         PlayerController.Instance.Stop();
+
+        // 1초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 1f);
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     public void CreateEffect()

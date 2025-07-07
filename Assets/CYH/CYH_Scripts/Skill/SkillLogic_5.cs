@@ -94,6 +94,14 @@ public class SkillLogic_5 : SkillLogic, ISkill
     {
         //_animator.SetTrigger("UseSkill_5");
         PlayerController.Instance.SetTrigger("UseSkill_5");
+
+        // 1초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 1f);
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     // Field 생성
