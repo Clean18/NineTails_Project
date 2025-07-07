@@ -8,11 +8,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MissionManager : Singleton<MissionManager>
 {
-    private MissionInfo currentMission;     // 현재 진행 미션
-    private float timer;                    // 남은 시간
-    public int killCount;                   // 킬 횟수
-    private bool isRunning;                 // 미션 실행 여부
-    public HashSet<string> MissionIds = new();  // 미션 중복 방지
+    [SerializeField] private MissionInfo currentMission;     // 현재 진행 미션
+    [SerializeField] private float timer;                    // 남은 시간
+    public int killCount;                                    // 킬 횟수
+    [SerializeField] private bool isRunning;                 // 미션 실행 여부
+    public HashSet<string> MissionIds = new();               // 미션 중복 방지
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
@@ -58,7 +58,7 @@ public class MissionManager : Singleton<MissionManager>
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
             // 이미 클리어한 돌파미션은 보상 지급 X
-            MissionIds.Add(currentMission.Id);  // 미션 클리어 
+            //MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
             if (currentMission.Id == "M9999") // M1미션일때
             {
@@ -81,10 +81,29 @@ public class MissionManager : Singleton<MissionManager>
         }
     }
     // 미션 실패 쿨타임
-    IEnumerator CooldownRoutine()
+    public IEnumerator CooldownRoutine()
     {
         IsCooldownActive = true;    
         CooldownSeconds = 600f;     // 쿨타임 시간 설정
+
+        while (CooldownSeconds > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            CooldownSeconds--;      // 남은 쿨타임 감소
+        }
+
+        IsCooldownActive = false;
+    }
+
+    /// <summary>
+    /// 플레이어 데이터 로드 시 쿨타임을 감소할 코루틴
+    /// </summary>
+    /// <param name="cooldownSeconds"></param>
+    /// <returns></returns>
+    public IEnumerator CooldownRoutine(float cooldownSeconds)
+    {
+        IsCooldownActive = true;
+        CooldownSeconds = cooldownSeconds;     // 쿨타임 시간 설정
 
         while (CooldownSeconds > 0)
         {
@@ -138,6 +157,7 @@ public class MissionManager : Singleton<MissionManager>
         // 보상 추가
         if (!IsCleared(mission.Id))
         {
+            MissionIds.Add(mission.Id);
             Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
             PlayerController.Instance.AddCost(CostType.Warmth, mission.WarmthReward);
             PlayerController.Instance.AddCost(CostType.SpiritEnergy, mission.SpritReward);

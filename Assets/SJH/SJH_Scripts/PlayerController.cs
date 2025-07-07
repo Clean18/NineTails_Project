@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour
 	{
 		// 시작은 자동모드
 		CurrentState = AIState.Search;
-		//Mode = ControlMode.Auto;
-        Mode = ControlMode.Manual;
+		Mode = ControlMode.Auto;
+        //Mode = ControlMode.Manual;
     }
 
 	void Update()
@@ -418,6 +418,16 @@ public class PlayerController : MonoBehaviour
     public long GetCost(CostType costType) => _model.GetCost(costType);
 	public void AddCost(CostType costType, long amount) => _model.AddCost(costType, amount);
 	public void SpendCost(CostType costType, long amount) => _model.SpendCost(costType, amount);
+    /// <summary>
+    /// 온정 첫 획득 씬 클리어 여부
+    /// </summary>
+    /// <returns></returns>
+    public bool GetFirstWarmth() => _model.GetFirstWarmth();
+    /// <summary>
+    /// 영기 첫 획득 씬 클리어 여부
+    /// </summary>
+    /// <returns></returns>
+    public bool GetFirstSpiritEnergy() => _model.GetFirstSpiritEnergy();
     #endregion
 
     #region Equipment 관련 함수

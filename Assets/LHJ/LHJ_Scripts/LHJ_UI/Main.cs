@@ -52,8 +52,7 @@ public class Main : BaseUI, IUI
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
             // 1-3 스테이지 클리어 업적 체크
-            if ((AchievementManager.Instance.AchievedIds.ContainsKey("A3") && AchievementManager.Instance.AchievedIds["A3"]) ||  GameManager.IsCheat)
-
+            if ((AchievementManager.Instance.AchievedIds.ContainsKey("A3") && AchievementManager.Instance.AchievedIds["A3"]) || GameManager.IsCheat)
             {
                 Debug.Log("장비 강화 UI 활성화");
                 UIManager.Instance.ShowPopUp<UpgradePopUp>();
@@ -73,6 +72,7 @@ public class Main : BaseUI, IUI
             UIManager.Instance.ShowPopUp<StagePopUp>();
         };
         // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
+        // TODO : 치트 팝업 띄우기
         var cheatBtn = GetEvent("Btn_Cheat");
         if (GameManager.IsCheat)
         {

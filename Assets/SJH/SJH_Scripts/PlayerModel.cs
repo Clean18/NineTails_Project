@@ -54,7 +54,7 @@ public class PlayerModel
 
         // 플레이어 업적, 돌파미션
         Quest = new PlayerQuest();
-        Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList);
+        Quest.InitQuest(saveData.PlayerAchivementList, saveData.PlayerMissionList, saveData.MissionCooldown);
     }
     /// <summary>
     /// 플레이어 처음 시작했을 때 초기화
@@ -180,6 +180,7 @@ public class PlayerModel
 		List<SaveSkillData> skills = Skill.SavePlayerSkill();
         List<SaveAchievementData> achievments = Quest.SaveAchievementData();
         List<SaveMissionData> missions = Quest.SaveMissionData();
+        float missionCooldown = MissionManager.Instance.CooldownSeconds;
 
 		GameData gameData = SaveLoadManager.Instance.GameData;
 
@@ -214,8 +215,9 @@ public class PlayerModel
         // Quest
         gameData.PlayerAchivementList = achievments;
         gameData.PlayerMissionList = missions;
+        gameData.MissionCooldown = missionCooldown;
 
-		return gameData;
+        return gameData;
 	}
 
 	#region Cost 관련 함수
@@ -244,6 +246,8 @@ public class PlayerModel
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
         else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
+    public bool GetFirstWarmth() => Cost.GetFirstWarmth;
+    public bool GetFirstSpiritEnergy() => Cost.GetFirstSpiritEnergy;
     #endregion
 
     #region PlayerData 관련 함수

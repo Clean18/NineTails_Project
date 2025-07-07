@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forRef: {fileID: 0}
+  _damageText: {fileID: 7933515902517494023}
 --- !u!114 &3027075998734557620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -950,7 +951,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB370\uBBF8\uC9C0 \uD14D\uC2A4\uD2B8"
+  m_text: "\uB370\uBBF8\uC9C0 \uD14D\uC2A4\uD2B8 : On"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 29aa87505a903ef4bb82f8a686d9b996, type: 2}
   m_sharedMaterial: {fileID: 2811865436668119664, guid: 29aa87505a903ef4bb82f8a686d9b996, type: 2}
