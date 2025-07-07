@@ -116,6 +116,19 @@ public class PlayerData
         {
             var amount = Math.Clamp(value, 0, MaxHp);
             _hp = amount;
+
+            // 죽음 상태 처리
+            if (_hp <= 0 && !_isDead)
+            {
+                _isDead = true;
+                Debug.Log("플레이어 사망처리");
+            }
+            else if (_hp > 0 && _isDead)
+            {
+                _isDead = false;
+                Debug.Log("플레이어 살아있음");
+            }
+
             OnStatChanged?.Invoke();
         }
     }
@@ -237,8 +250,6 @@ public class PlayerData
             }
         }
         Hp = Math.Max(0, Hp - totalDamage);
-        IsDead = Hp <= 0;
-        //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
     }
 
     // 체력회복하는 함수
@@ -306,14 +317,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Attack, AttackLevel);
-        if (cost > warmth && !PlayerController.IsCheat)
+        if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         AttackLevelup();
@@ -333,14 +344,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Defense, DefenseLevel);
-        if (cost > warmth && !PlayerController.IsCheat)
+        if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         DefenseLevelup();
@@ -359,14 +370,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Hp, HpLevel);
-        if (cost > warmth && !PlayerController.IsCheat)
+        if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         HpLevelup();
@@ -386,14 +397,14 @@ public class PlayerData
 
         // 비용 체크
         long cost = DataManager.Instance.GetStatCost(StatDataType.Speed, SpeedLevel);
-        if (cost > warmth && !PlayerController.IsCheat)
+        if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
             return;
         }
 
         // 비용 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         SpeedLevelup();

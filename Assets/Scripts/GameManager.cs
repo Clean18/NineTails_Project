@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +9,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject PlayerPrefab;
     public PlayerController Player;
 	public Spawner Spawner;
+
+    public static bool IsCheat = false;
+    public static bool IsImmortal = false;
 
     void OnEnable()
     {
@@ -54,17 +56,24 @@ public class GameManager : Singleton<GameManager>
 
         Debug.LogWarning("플레이어 초기화 중...");
         yield return StartCoroutine(Player.PlayerInitRoutine());
-        PlayerController.IsImmortal = false;
         Debug.LogWarning("플레이어 초기화 완료");
 
-        // TODO : 씬에 따라 플레이어 활성화 비활성화
+        // 플레이어 사망상태면 풀피로 회복
+        if (Player.GetHp() <= 0 || Player.GetIsDead())
+        {
+            Player.TakeHeal(Player.GetMaxHp());
+        }
+
+        // 씬 이동될 때 치트모드가 아니면 무적 해제
+        if (!IsCheat) IsImmortal = false;
+
+        // TODO : 씬에 따라 플레이어 활성화 비활성화 > 나중에 크레딧씬 추가되면 추가필요
         //플레이어 비활성화(CYH)
         string currentSceneName = SceneManager.GetActiveScene().name;
         if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1")
         {
-            PlayerController player = FindObjectOfType<PlayerController>();
-            player.gameObject.SetActive(false);
-            Debug.Log(player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
+            Player.gameObject.SetActive(false);
+            Debug.Log(Player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
         }
 
         Debug.LogWarning("씬 전환 초기화 완료");
@@ -77,11 +86,5 @@ public class GameManager : Singleton<GameManager>
         Player = player;
     }
 
-    public void OnStartBtn()
-    {
-        Debug.Log("게임시작 버튼 클릭 > 씬 전환");
-        //SceneChangeManager.Instance.LoadSceneWithLoading("Loading", "Stage1-1_Battle", 5f);
-
-        SceneChangeManager.Instance.LoadFirstScene();
-    }
+    public void OnStartBtn() => SceneChangeManager.Instance.LoadFirstScene();
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +49,6 @@ public partial class GameData
     // 온정 첫 획득
     public bool GetFirstWarmth = false;
 
-    // TODO : PlayerSkill
     [Header("PlayerSkill")]
     public List<SaveSkillData> PlayerSkillList = new()
     {

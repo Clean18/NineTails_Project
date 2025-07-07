@@ -215,7 +215,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
-  IsImmortal: 0
 --- !u!114 &7294450255420677462
 MonoBehaviour:
   m_ObjectHideFlags: 0

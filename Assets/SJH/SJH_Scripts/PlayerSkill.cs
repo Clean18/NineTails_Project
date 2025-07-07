@@ -1,23 +1,25 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [System.Serializable]
 public struct SaveSkillData
 {
     /// <summary>
-    /// 스킬 번호
+    /// 스킬 번호 Index
     /// </summary>
 	public int SkillIndex;
     /// <summary>
-    /// 스킬 레벨
+    /// 스킬 레벨 0 ~ 100
     /// </summary>
 	public int SkillLevel;
     /// <summary>
-    /// 슬롯 번호
+    /// 단축키 슬롯 번호 (0 : 기본공격, 1 ~ 3 : 단축키, -1 : 미등록)
     /// </summary>
 	public int SlotIndex;
+    /// <summary>
+    /// 스킬 남은 쿨타임 (0 : 사용가능)
+    /// </summary>
+    public float SkillCooldown;
 }
 
 [System.Serializable]
@@ -114,12 +116,14 @@ public class PlayerSkill
 			int slotIndex = KeyCodeToSlotIndex(key);
 			int skillLevel = skill.SkillLevel;
 
-			saveSkills.Add(new SaveSkillData
-			{
-				SlotIndex = slotIndex,
-				SkillIndex = skill.SkillData.SkillIndex,
-				SkillLevel = skillLevel
-			});
+            saveSkills.Add(new SaveSkillData
+            {
+                SlotIndex = slotIndex,
+                SkillIndex = skill.SkillData.SkillIndex,
+                SkillLevel = skillLevel,
+                // TODO : 스킬 쿨타임이 있어야함
+                SkillCooldown = 0
+            });
 
 			// 매핑에 없는 슬롯 인덱스는 -1
 		}
@@ -314,14 +318,14 @@ public class PlayerSkill
         }
 
         // 플레이어 재화 체크
-        if (soul < 1 && !PlayerController.IsCheat)
+        if (soul < 1 && !GameManager.IsCheat)
         {
             Debug.Log("혼백이 부족합니다.");
             return;
         }
 
         // 재화 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
 
         // 스킬 추가
         AddSkill(skillIndex);

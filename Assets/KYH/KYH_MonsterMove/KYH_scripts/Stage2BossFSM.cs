@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -182,38 +180,38 @@ public class Stage2BossFSM : BaseBossFSM
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (WarningOrigin1 != null)
-        {
-            Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
-            Gizmos.DrawCube(WarningOrigin1.position, Pattern1BoxSize);
-            Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern 1 데미지 범위");
-        }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (WarningOrigin1 != null)
+    //    {
+    //        Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
+    //        Gizmos.DrawCube(WarningOrigin1.position, Pattern1BoxSize);
+    //        Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern 1 데미지 범위");
+    //    }
 
-        if (WarningOrigin2 != null)
-        {
-            Gizmos.color = new Color(0f, 1f, 1f, 0.4f);
-            Gizmos.DrawCube(WarningOrigin2.position, Pattern2BoxSize);
-            Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern 2 데미지 범위");
-        }
+    //    if (WarningOrigin2 != null)
+    //    {
+    //        Gizmos.color = new Color(0f, 1f, 1f, 0.4f);
+    //        Gizmos.DrawCube(WarningOrigin2.position, Pattern2BoxSize);
+    //        Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern 2 데미지 범위");
+    //    }
 
-        // Pattern1 이펙트 위치 시각화 (오른발)
-        if (DustEffect1SpawnRight != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(DustEffect1SpawnRight.position, 0.2f);
-            Handles.Label(DustEffect1SpawnRight.position + Vector3.up * 0.1f, "오른발 이펙트 위치");
-        }
+    //    // Pattern1 이펙트 위치 시각화 (오른발)
+    //    if (DustEffect1SpawnRight != null)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawSphere(DustEffect1SpawnRight.position, 0.2f);
+    //        Handles.Label(DustEffect1SpawnRight.position + Vector3.up * 0.1f, "오른발 이펙트 위치");
+    //    }
 
-        // Pattern1 이펙트 위치 시각화 (왼발)
-        if (DustEffect1SpawnLeft != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
-            Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
-        }
-    }
+    //    // Pattern1 이펙트 위치 시각화 (왼발)
+    //    if (DustEffect1SpawnLeft != null)
+    //    {
+    //        Gizmos.color = Color.blue;
+    //        Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
+    //        Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
+    //    }
+    //}
 
     protected override IEnumerator DeadRoutine()
     {
@@ -237,6 +235,9 @@ public class Stage2BossFSM : BaseBossFSM
 
         //Destroy(gameObject);
         gameObject.SetActive(false);
+
+        Debug.Log("보스 2 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
     }
 
     protected override int PatternCount => 2;

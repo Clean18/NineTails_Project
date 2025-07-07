@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5322483683192286247}
   - component: {fileID: 9175627777827666347}
   - component: {fileID: 1158723843331947341}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: New_1StageBoss
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -177,6 +177,7 @@ MonoBehaviour:
   MaxHealth: 1000
   CurrentHealth: 0
   DamageReduceRate: 0
+  CurrentState: 0
   IdleTime: 3
   sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}

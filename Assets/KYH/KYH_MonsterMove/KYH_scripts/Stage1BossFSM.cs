@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 
 /// <summary>
@@ -288,33 +287,33 @@ public class Stage1BossFSM : BaseBossFSM
         warningRects.Clear();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackOrigin == null) return;
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackOrigin == null) return;
 
-        // 색상 설정 (투명한 빨간색)
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+    //    // 색상 설정 (투명한 빨간색)
+    //    Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
 
-        // 부채꼴의 중심과 반지름
-        Vector3 origin = AttackOrigin.position;
-        float radius = AttackRange;
-        int segments = 30;
+    //    // 부채꼴의 중심과 반지름
+    //    Vector3 origin = AttackOrigin.position;
+    //    float radius = AttackRange;
+    //    int segments = 30;
 
-        // 시작 각도 설정 (왼쪽을 기준으로 180도 방향)
-        float startAngle = 180f - (AttackAngle / 2f);
-        float deltaAngle = AttackAngle / segments;
+    //    // 시작 각도 설정 (왼쪽을 기준으로 180도 방향)
+    //    float startAngle = 180f - (AttackAngle / 2f);
+    //    float deltaAngle = AttackAngle / segments;
 
-        // 선분들로 원호(Arc) 그리기
-        Vector3 prevPoint = origin + DirFromAngle(startAngle) * radius;
-        for (int i = 1; i <= segments; i++)
-        {
-            float currentAngle = startAngle + deltaAngle * i;
-            Vector3 nextPoint = origin + DirFromAngle(currentAngle) * radius;
-            Gizmos.DrawLine(origin, nextPoint);
-            Gizmos.DrawLine(prevPoint, nextPoint);
-            prevPoint = nextPoint;
-        }
-    }
+    //    // 선분들로 원호(Arc) 그리기
+    //    Vector3 prevPoint = origin + DirFromAngle(startAngle) * radius;
+    //    for (int i = 1; i <= segments; i++)
+    //    {
+    //        float currentAngle = startAngle + deltaAngle * i;
+    //        Vector3 nextPoint = origin + DirFromAngle(currentAngle) * radius;
+    //        Gizmos.DrawLine(origin, nextPoint);
+    //        Gizmos.DrawLine(prevPoint, nextPoint);
+    //        prevPoint = nextPoint;
+    //    }
+    //}
 
     // 각도를 받아 방향 벡터 반환 (Z축 기준 회전)
     private Vector3 DirFromAngle(float angle)
@@ -345,5 +344,8 @@ public class Stage1BossFSM : BaseBossFSM
 
         //Destroy(gameObject);
         gameObject.SetActive(false);
+
+        Debug.Log("보스 1 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
     }
 }

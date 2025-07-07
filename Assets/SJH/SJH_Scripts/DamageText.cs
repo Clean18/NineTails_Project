@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Xml;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// UIManager에서 생성한 플로팅 대미지 프리팹을 관리하는 스크립트

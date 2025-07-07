@@ -45,14 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f2df55f95429f458f8ffece2fd3363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillLevel: 0
   _animator: {fileID: 0}
   _hitMonsters: []
   _isSkillUsed: 0
   _projectilePrefab: {fileID: 1873357373014254779, guid: f32a813fa53bdee4c97b097228d88237, type: 3}
   _objCount: 5
   _radius: 3
-  _objSpeed: 140
+  _objSpeed: 70
   _centerOffset: {x: 0, y: 0, z: 0}
   _spinDuration: 7
   _isSpinning: 0

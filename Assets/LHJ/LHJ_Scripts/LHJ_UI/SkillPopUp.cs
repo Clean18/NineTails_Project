@@ -36,7 +36,6 @@ public class SkillPopUp : BaseUI
 	/// </summary>
 	private Dictionary<int, string> skillDescDic = new()
 	{
-        // TODO : 설명들어오면 설명대로 변경
 		[0] = "전방에 검을 두차례 휘둘러 적에게 <color=#FF0000>{0}%/{1}% -> {2}%/{3}%</color>의 피해를 입힌다.", // 1타 100% > 101% 2타 50% > 50.5%
 		[1] = "검에 혼령의 힘을 담아 주변의 적에게 <color=#FF0000>{0}%</color> -> <color=#FF0000>{1}%</color>의 피해를 입힌다.", // 75% > 75.75%
 		[2] = "혼령을 소환하여 주변의 적에게 <color=#FF0000>{0}% -> {1}%</color>의 피해를 입히고, 자신은 <color=#00FF00>최대 체력의 {0}% -> {1}%</color>만큼 피해를 흡수할 수 있는 보호막을 얻는다.", // 25% > 25.25% 실드도 똑같음
@@ -82,24 +81,42 @@ public class SkillPopUp : BaseUI
 			});
 			skillUIList[i]._active.onClick.AddListener(() =>
 			{
-				// TODO : Active 버튼 기능 추가
 				var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
-				var mapping = PlayerController.Instance.GetMappingSkills();
+                var mappingList = PlayerController.Instance.GetMappingSkillList();
+
+                // 플레이어의 단축키에서 ISkill 가져오기
+                ISkill mappingSkill = null;
+                foreach (var ms in mappingList)
+                {
+                    if (ms.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+                    {
+                        mappingSkill = ms;
+                        break;
+                    }
+                }
 
 				// 등록 여부 확인
-				bool isSlot = mapping.Values.Contains(skill);
+				bool isSlot = mappingSkill != null;
 
-				if (isSlot)
+                if (isSlot)
 				{
 					if (skillIndex == 0)
 					{
-						Debug.Log("기본공격은 단축창에서 제거할 수 없습니다.");
+                        UIManager.Instance.ShowWarningText("기본공격은 제거할 수 없습니다.");
+                        return;
 					}
-					else
-					{
-						Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
-						PlayerController.Instance.RemoveSkillSlot(skillIndex);
-					}
+                    // TODO : 쿨타임이면 제거 불가
+                    // skillIndex가 매핑에 있는지 체크해야함
+                    else if (mappingSkill.IsCooldown)
+                    {
+                        UIManager.Instance.ShowWarningText("스킬 쿨타임 중에는 제거할 수 없습니다.");
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
+                        PlayerController.Instance.RemoveSkillSlot(skillIndex);
+                    }
 				}
 				else
 				{
@@ -111,14 +128,7 @@ public class SkillPopUp : BaseUI
 				// 스킬 단축키 초기화
 				SkillButton.Instance.UIInit();
 			});
-
 		}
-		//GetEvent("Skill0Up").Click += data =>
-		//{
-		//    PlayerController.Instance.TrySkillLevelUp(0);
-		//    Debug.Log("스킬0 강화 버튼");
-		//    UpdateSkill();
-		//};
 	}
 
 	private void OnEnable() => UpdateSkill();
@@ -144,6 +154,9 @@ public class SkillPopUp : BaseUI
 		}
 	}
 
+    /// <summary>
+    /// 스킬 팝업 UI의 업데이트
+    /// </summary>
 	public void UpdateSkill()
 	{
 		var skills = PlayerController.Instance.GetSkillData();
@@ -156,7 +169,7 @@ public class SkillPopUp : BaseUI
 
 		// 리스트 합치기
 		List<ISkill> hasSkills = new();
-		hasSkills.AddRange(PlayerController.Instance.GetSkillMappingList());
+		hasSkills.AddRange(PlayerController.Instance.GetMappingSkillList());
 		hasSkills.AddRange(PlayerController.Instance.GetHasSkillList());
 
 		// 리스트 SkillIndex로 정렬
@@ -262,17 +275,17 @@ public class SkillPopUp : BaseUI
             switch (slotIndex)
             {
                 case 1:
-                    Debug.Log("1번 활성화");
+                    //Debug.Log("1번 활성화");
                     _slot1.gameObject.SetActive(true);
                     _slot1.rectTransform.anchoredPosition = new Vector2(_slot1.rectTransform.anchoredPosition.x, y);
                     break;
                 case 2:
-                    Debug.Log("2번 활성화");
+                    //Debug.Log("2번 활성화");
                     _slot2.gameObject.SetActive(true);
                     _slot2.rectTransform.anchoredPosition = new Vector2(_slot2.rectTransform.anchoredPosition.x, y);
                     break;
                 case 3:
-                    Debug.Log("3번 활성화");
+                    //Debug.Log("3번 활성화");
                     _slot3.gameObject.SetActive(true);
                     _slot3.rectTransform.anchoredPosition = new Vector2(_slot3.rectTransform.anchoredPosition.x, y);
                     break;

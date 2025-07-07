@@ -249,33 +249,33 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackOrigin == null) return;
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackOrigin == null) return;
 
-        // 1. 전체 공격 반경 원형
-        Gizmos.color = new Color(1, 0, 0, 0.4f); // 반투명 빨강
-        Gizmos.DrawWireSphere(AttackOrigin.position, AttackRange);
+    //    // 1. 전체 공격 반경 원형
+    //    Gizmos.color = new Color(1, 0, 0, 0.4f); // 반투명 빨강
+    //    Gizmos.DrawWireSphere(AttackOrigin.position, AttackRange);
 
-        // 2. 부채꼴 시각화 (중심선 + 양끝선)
-        Gizmos.color = Color.yellow;
+    //    // 2. 부채꼴 시각화 (중심선 + 양끝선)
+    //    Gizmos.color = Color.yellow;
 
-        Vector3 origin = AttackOrigin.position;
-        Vector3 forward = AttackOrigin.right; // 오른쪽 방향 기준
+    //    Vector3 origin = AttackOrigin.position;
+    //    Vector3 forward = AttackOrigin.right; // 오른쪽 방향 기준
 
-        float halfAngle = AttackAngle * 0.5f;
+    //    float halfAngle = AttackAngle * 0.5f;
 
-        // 중심선
-        Gizmos.DrawLine(origin, origin + forward * AttackRange);
+    //    // 중심선
+    //    Gizmos.DrawLine(origin, origin + forward * AttackRange);
 
-        // 왼쪽 선
-        Vector3 left = Quaternion.Euler(0, 0, -halfAngle) * forward;
-        Gizmos.DrawLine(origin, origin + left * AttackRange);
+    //    // 왼쪽 선
+    //    Vector3 left = Quaternion.Euler(0, 0, -halfAngle) * forward;
+    //    Gizmos.DrawLine(origin, origin + left * AttackRange);
 
-        // 오른쪽 선
-        Vector3 right = Quaternion.Euler(0, 0, halfAngle) * forward;
-        Gizmos.DrawLine(origin, origin + right * AttackRange);
-    }
+    //    // 오른쪽 선
+    //    Vector3 right = Quaternion.Euler(0, 0, halfAngle) * forward;
+    //    Gizmos.DrawLine(origin, origin + right * AttackRange);
+    //}
 
 
     // 일반 패턴 2 처리
@@ -458,7 +458,7 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     // 사망 처리
     private void HandleDead()
     {
-        //TODO : 죽는 애니메이션, 드랍아이템, 클리어 처리 UI 출력 등
+        // 죽는 애니메이션, 드랍아이템, 클리어 처리 UI 출력 등
         // Animator.SetTrigger("Die") 의 구현?
 
         if (!isDeadHandled)

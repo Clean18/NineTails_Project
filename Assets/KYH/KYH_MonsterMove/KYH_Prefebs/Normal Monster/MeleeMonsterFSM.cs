@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 근접형 몬스터 FSM - BaseMonsterFSM을 상속받아 근접 공격 로직만 구현
@@ -79,14 +78,14 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     }
 
     // Unity 편집기에서 공격 범위 확인용 Gizmo 그리기
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
-        }
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackPoint != null)
+    //    {
+    //        Gizmos.color = Color.cyan;
+    //        Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
+    //    }
+    //}
     protected override void ChangeState(MonsterState newState)
     {
         base.ChangeState(newState);

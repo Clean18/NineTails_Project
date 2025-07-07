@@ -311,23 +311,23 @@ public class Stage3BossFSM : BaseBossFSM
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        // 회오리 중심 위치가 설정되어 있으면 범위 기즈모를 그림
-        if (Pattern1Origin != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(Pattern1Origin.position, Pattern1Range);
-        }
-        // 패턴2 깃털 낙하 박스 범위 표시
-        if (Pattern2Center != null)
-        {
-            Gizmos.color = Color.yellow;
-            Vector3 center = Pattern2Center.position;
-            Vector3 size = new Vector3(Pattern2BoxSize.x, Pattern2BoxSize.y, 0f);
-            Gizmos.DrawWireCube(center, size);
-        }
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    // 회오리 중심 위치가 설정되어 있으면 범위 기즈모를 그림
+    //    if (Pattern1Origin != null)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawWireSphere(Pattern1Origin.position, Pattern1Range);
+    //    }
+    //    // 패턴2 깃털 낙하 박스 범위 표시
+    //    if (Pattern2Center != null)
+    //    {
+    //        Gizmos.color = Color.yellow;
+    //        Vector3 center = Pattern2Center.position;
+    //        Vector3 size = new Vector3(Pattern2BoxSize.x, Pattern2BoxSize.y, 0f);
+    //        Gizmos.DrawWireCube(center, size);
+    //    }
+    //}
 
     protected override IEnumerator DeadRoutine()
     {
@@ -351,5 +351,8 @@ public class Stage3BossFSM : BaseBossFSM
 
         //Destroy(gameObject);
         gameObject.SetActive(false);
+
+        Debug.Log("보스 3 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
     }
 }

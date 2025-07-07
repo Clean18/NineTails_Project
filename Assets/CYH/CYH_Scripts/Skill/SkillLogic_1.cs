@@ -29,11 +29,11 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _effectSpawnPos = new Vector3(0, 12.22765f, 0);
     }
 
-    public void UseSkill(Transform attacker)
+    public bool UseSkill(Transform attacker)
     {
         Debug.Log("스킬 1 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -45,12 +45,13 @@ public class SkillLogic_1 : SkillLogic, ISkill
         EnableHitbox();
         AnimationPlay();
         Debug.Log("스킬 1 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -61,6 +62,8 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         EnableHitbox();
         AnimationPlay();
+        Debug.Log("스킬 1 사용완료");
+        return true;
     }
 
     public void EnableHitbox()
@@ -135,7 +138,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         Debug.Log($"1번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            Debug.Log($"1번 스킬 쿨타임 남음: {remaining}초");
+            //Debug.Log($"1번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
