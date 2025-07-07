@@ -40,12 +40,10 @@ public class SkillLogic_6 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
-    public void UseSkill(Transform attacker)
+    public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        if (!PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         Debug.Log("스킬6 사용");
 
@@ -63,15 +61,14 @@ public class SkillLogic_6 : SkillLogic, ISkill
         CreateVideo(transform.position);
         DetectMonster();
         Debug.Log("스킬 6 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         Debug.Log("스킬 6 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        if (!PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         GameManager.IsImmortal = true;
 
@@ -86,6 +83,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
         CreateVideo(transform.position);
         DetectMonster();
         Debug.Log("스킬 6 사용완료");
+        return true;
     }
 
     public void SkillRoutine()

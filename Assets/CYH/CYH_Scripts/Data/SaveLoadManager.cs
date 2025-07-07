@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// JSON 형식으로 게임 데이터를 저장하고 불러오는 매니저 클래스입니다.

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 근접형 몬스터 FSM - BaseMonsterFSM을 상속받아 근접 공격 로직만 구현

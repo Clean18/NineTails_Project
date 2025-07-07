@@ -116,6 +116,17 @@ public class PlayerData
         {
             var amount = Math.Clamp(value, 0, MaxHp);
             _hp = amount;
+
+            // 죽음 상태 처리
+            if (_hp <= 0 && !_isDead)
+            {
+                _isDead = true;
+            }
+            else if (_hp > 0 && _isDead)
+            {
+                _isDead = false;
+            }
+
             OnStatChanged?.Invoke();
         }
     }

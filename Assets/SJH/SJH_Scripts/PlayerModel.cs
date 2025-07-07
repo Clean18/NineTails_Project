@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -98,7 +97,6 @@ public class PlayerModel
         Data.DecreaseHp(damage);
         if (Data.Hp <= 0 && !GameManager.IsImmortal)
         {
-            GameManager.IsImmortal = true;
             // TODO : 플레이어 죽음 처리
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트

@@ -59,7 +59,13 @@ public class GameManager : Singleton<GameManager>
         Debug.LogWarning("플레이어 초기화 완료");
 
         // 플레이어 사망상태면 풀피로 회복
-        if (Player.GetIsDead()) Player.TakeHeal(Player.GetMaxHp());
+        if (Player.GetHp() >= 0)
+        {
+            Player.TakeHeal(Player.GetMaxHp());
+        }
+
+        // 씬 이동되면 무적 해제
+        if (!IsCheat) IsImmortal = false;
 
         // TODO : 씬에 따라 플레이어 활성화 비활성화 > 나중에 크레딧씬 추가되면 추가필요
         //플레이어 비활성화(CYH)

@@ -47,14 +47,11 @@ public class SkillLogic_4 : SkillLogic, ISkill
     //    }
     //}
 
-    public void UseSkill(Transform attacker)
+    public bool UseSkill(Transform attacker)
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        // 플레이어 강제 정지상태면 return
-        if (!PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -64,7 +61,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         if (_hitMonsters.Count <= 0)
         {
             Debug.Log("스킬 4 공격할 대상이 없습니다.");
-            return;
+            return false;
         }
 
         // 쿨타임 체크 시작
@@ -75,16 +72,14 @@ public class SkillLogic_4 : SkillLogic, ISkill
         //DetectMonster();
 
         Debug.Log("스킬 4 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        // 플레이어 강제 정지상태면 return
-        if (!PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -94,7 +89,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         if (_hitMonsters.Count <= 0)
         {
             Debug.Log("스킬 4 공격할 대상이 없습니다.");
-            return;
+            return false;
         }
 
         // 쿨타임 체크 시작
@@ -105,6 +100,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         //DetectMonster();
 
         Debug.Log("스킬 4 사용완료");
+        return true;
     }
 
     // 애니메이션 종료 시 호출 (애니메이션 이벤트)
