@@ -812,6 +812,8 @@ MonoBehaviour:
   effect: {fileID: 255358934}
   logBoxSize: {fileID: 345022673}
   changeNameUI: {fileID: 1146961614}
+  changeNameInstruction: {fileID: 1749651958}
+  badNames: {fileID: 4900000, guid: a8104609e67ec36448ab75ba3b89fac6, type: 3}
   playerDialogBox: {fileID: 1473203399}
   logText: {fileID: 345022674}
   soundPlayer: {fileID: 1559610756}
