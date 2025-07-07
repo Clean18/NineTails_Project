@@ -121,10 +121,12 @@ public class PlayerData
             if (_hp <= 0 && !_isDead)
             {
                 _isDead = true;
+                Debug.Log("플레이어 사망처리");
             }
             else if (_hp > 0 && _isDead)
             {
                 _isDead = false;
+                Debug.Log("플레이어 살아있음");
             }
 
             OnStatChanged?.Invoke();
@@ -248,8 +250,6 @@ public class PlayerData
             }
         }
         Hp = Math.Max(0, Hp - totalDamage);
-        IsDead = Hp <= 0;
-        //Debug.LogError($"받은 대미지 : {totalDamage} / 체력 : {Hp} / IsDead : {IsDead}");
     }
 
     // 체력회복하는 함수

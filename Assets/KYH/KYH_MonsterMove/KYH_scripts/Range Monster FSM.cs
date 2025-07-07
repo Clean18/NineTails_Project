@@ -283,18 +283,18 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     /// <summary>
     /// 디버그용 범위 시각화
     /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, DetectRange);
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, DetectRange);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, AttackRange);
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, AttackRange);
 
-        if (AttackPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
-        }
-    }
+    //    if (AttackPoint != null)
+    //    {
+    //        Gizmos.color = Color.cyan;
+    //        Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
+    //    }
+    //}
 }

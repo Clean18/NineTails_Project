@@ -86,17 +86,17 @@ public class RangedMonsterFSM : BaseMonsterFSM
         // Destroy(gameObject, 0.5f);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, 0.2f); // 이펙트/발사 위치
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackPoint != null)
+    //    {
+    //        Gizmos.color = Color.cyan;
+    //        Gizmos.DrawWireSphere(AttackPoint.position, 0.2f); // 이펙트/발사 위치
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, AttackRange); // 원거리 사거리
-        }
-    }
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawWireSphere(transform.position, AttackRange); // 원거리 사거리
+    //    }
+    //}
 
     protected override void ChangeState(MonsterState newState)
     {

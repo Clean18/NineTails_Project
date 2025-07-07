@@ -80,14 +80,14 @@ public class HeavyMonsterFSM : BaseMonsterFSM
     }
 
     // Unity 편집기에서 공격 범위 확인용 Gizmo 그리기
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
-        }
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackPoint != null)
+    //    {
+    //        Gizmos.color = Color.cyan;
+    //        Gizmos.DrawWireSphere(AttackPoint.position, AttackRadius);
+    //    }
+    //}
     protected override void ChangeState(MonsterState newState)
     {
         base.ChangeState(newState);
