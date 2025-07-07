@@ -84,7 +84,7 @@ public class MissionManager : Singleton<MissionManager>
     IEnumerator CooldownRoutine()
     {
         IsCooldownActive = true;    
-        CooldownSeconds = 600f;     // 쿨타임 시간 설정
+        CooldownSeconds = 60f;     // 쿨타임 시간 설정
 
         while (CooldownSeconds > 0)
         {
