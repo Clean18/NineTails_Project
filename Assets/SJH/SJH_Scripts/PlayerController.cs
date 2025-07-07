@@ -584,7 +584,6 @@ public class PlayerController : MonoBehaviour
     // SkillLogic_1 애니메이션 이벤트 함수
     public void Skill1_DisableHitbox() => (SkillController.SkillList[1] as SkillLogic_1)?.DisableHitbox();
     public void Skill1_CreateEffect() => (SkillController.SkillList[1] as SkillLogic_1)?.CreateEffect();
-    public void Skill1_DestroyEffect() => (SkillController.SkillList[1] as SkillLogic_1)?.DestroyEffect();
 
     // SkillLogic_2 애니메이션 이벤트 함수
     public void Skill2_SkillRoutine() => (SkillController.SkillList[2] as SkillLogic_2)?.SkillRoutine();

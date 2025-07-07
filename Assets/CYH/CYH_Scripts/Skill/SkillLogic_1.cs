@@ -29,6 +29,14 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _effectSpawnPos = new Vector3(0, 12.22765f, 0);
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UseSkill(transform);
+        }
+    }
+
     public bool UseSkill(Transform attacker)
     {
         Debug.Log("스킬 1 UseSkill");
@@ -102,14 +110,10 @@ public class SkillLogic_1 : SkillLogic, ISkill
     {
         Debug.Log("CreateEffect");
         GameObject effect = Instantiate(_skillEffectPrefab, transform);
-        _skillEffect = effect;
         effect.transform.localPosition = _effectSpawnPos;
+        Destroy(effect, 0.59f);
     }
 
-    public void DestroyEffect()
-    {
-        Destroy(_skillEffect);
-    }
 
     protected override void Damage()
     {
