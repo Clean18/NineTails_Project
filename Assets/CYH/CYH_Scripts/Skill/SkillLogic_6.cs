@@ -89,7 +89,6 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public void SkillRoutine()
     {
         PlayerController.Instance.StartCoroutine(DamageRoutine());
-        OnAttackEnd();
     }
 
     public void OnAttackStart()

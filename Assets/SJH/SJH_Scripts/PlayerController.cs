@@ -600,6 +600,7 @@ public class PlayerController : MonoBehaviour
 
     // SkillLogic_6 애니메이션 이벤트 함수
     public void Skill6_SkillRoutine() => (SkillController.SkillList[6] as SkillLogic_6)?.SkillRoutine();
+    public void Skill6_OnAttackEnd() => (SkillController.SkillList[6] as SkillLogic_6)?.OnAttackEnd();
 
     #endregion
 
