@@ -40,6 +40,14 @@ public class SkillLogic_6 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            UseSkill(transform);
+        }
+    }
+
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -189,11 +197,11 @@ public class SkillLogic_6 : SkillLogic, ISkill
         Vector3 effectScale = effect.transform.localScale;
         effectScale.x *= -1 * GetPlayerScaleX();
         effect.transform.localScale = effectScale;
-        
+
         // 플레이어가 왼쪽을 바라볼 때 이펙트 위치 x값 조정
         if (effectScale.x > 0)
         {
-            effect.transform.position = new Vector3(-1 * (_effectOffset.x), _effectOffset.y, 0);
+            effect.transform.position = new Vector3(-1 * (_effectOffset.x) + transform.position.x, _effectOffset.y+ transform.position.y, 0);
         }
 
         // 3초 뒤 삭제
