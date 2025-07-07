@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [System.Serializable]
@@ -314,14 +312,14 @@ public class PlayerSkill
         }
 
         // 플레이어 재화 체크
-        if (soul < 1 && !PlayerController.IsCheat)
+        if (soul < 1 && !GameManager.IsCheat)
         {
             Debug.Log("혼백이 부족합니다.");
             return;
         }
 
         // 재화 감소
-        if (!PlayerController.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
 
         // 스킬 추가
         AddSkill(skillIndex);

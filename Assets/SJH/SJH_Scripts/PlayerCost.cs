@@ -1,6 +1,5 @@
 using System;
 using Unity.Mathematics;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public struct SavePlayerCost
@@ -38,7 +37,8 @@ public class PlayerCost
                 GetFirstSpiritEnergy = true;
                 _spiritEnergy = value;
                 Debug.Log("첫 영기 획득");
-                PlayerController.Instance.SaveData();
+                PlayerController.Instance.SetPlayerSceneIndex(14); // 여기서 세이브도 함
+                SceneChangeManager.Instance.LoadNextScene(14);
                 return;
             }
 

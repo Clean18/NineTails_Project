@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 
 /// <summary>
@@ -345,5 +344,8 @@ public class Stage1BossFSM : BaseBossFSM
 
         //Destroy(gameObject);
         gameObject.SetActive(false);
+
+        Debug.Log("보스 1 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 992056899868396465}
   - component: {fileID: -6634828117489559820}
   - component: {fileID: 5112722021896827988}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 3StageBoss
   m_TagString: Monster
   m_Icon: {fileID: 0}

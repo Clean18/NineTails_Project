@@ -458,7 +458,7 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     // 사망 처리
     private void HandleDead()
     {
-        //TODO : 죽는 애니메이션, 드랍아이템, 클리어 처리 UI 출력 등
+        // 죽는 애니메이션, 드랍아이템, 클리어 처리 UI 출력 등
         // Animator.SetTrigger("Die") 의 구현?
 
         if (!isDeadHandled)

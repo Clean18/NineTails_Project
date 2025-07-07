@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_0_HitBox : SkillLogic, ISkill
@@ -26,11 +25,11 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         SlotIndex = 0;
     }
 
-    public void UseSkill(Transform attacker)
+    public bool UseSkill(Transform attacker)
     {
         Debug.Log("기본공격 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -43,12 +42,13 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         // 첫번째 공격은 스크립트에서 실행
         OnAttackStart();
         AnimationPlay();
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -60,6 +60,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
+        return true;
     }
 
     public void OnAttackStart()

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -237,6 +236,9 @@ public class Stage2BossFSM : BaseBossFSM
 
         //Destroy(gameObject);
         gameObject.SetActive(false);
+
+        Debug.Log("보스 2 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
     }
 
     protected override int PatternCount => 2;

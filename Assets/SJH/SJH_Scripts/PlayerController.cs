@@ -101,13 +101,6 @@ public class PlayerController : MonoBehaviour
 	[Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
 	public Vector2 MoveDir; // 플레이어의 이동 방향
 
-	[Header("치트모드")]
-	public static bool IsCheat = false;
-
-    [Header("무적")]
-    public static bool IsImmortal = false;
-
-
     void Start()
 	{
 		// 시작은 자동모드
@@ -120,7 +113,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (_isInit == false)
 		{
-			//Debug.Log("초기화가 아직 안됐음");
+			Debug.Log("초기화가 아직 안됐음");
 			return;
 		}
 
@@ -181,7 +174,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SkillInput(int index)
+    bool SkillInput(int index)
     {
         // 여긴 스킬버튼에서 쿨타임 UI 처리
         switch (index)
@@ -190,24 +183,25 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("기본공격 사용");
                 //_model.Skill.DefaultAttack.UseSkill(transform);
                 var skill0 = _model.Skill.GetSkill(KeyCode.Mouse0);
-                skill0?.UseSkill(transform);
-                break;
+                if (skill0 == null) return false;
+                return skill0.UseSkill(transform);
             case 1:
                 Debug.Log("1번스킬 사용");
                 var skill1 = _model.Skill.GetSkill(KeyCode.Alpha1);
-                skill1?.UseSkill(transform);
-                break;
+                if (skill1 == null) return false;
+                return skill1.UseSkill(transform);
             case 2:
                 Debug.Log("2번스킬 사용");
                 var skill2 = _model.Skill.GetSkill(KeyCode.Alpha2);
-                skill2?.UseSkill(transform);
-                break;
+                if (skill2 == null) return false;
+                return skill2.UseSkill(transform);
             case 3:
                 Debug.Log("3번스킬 사용");
                 var skill3 = _model.Skill.GetSkill(KeyCode.Alpha3);
-                skill3?.UseSkill(transform);
-                break;
+                if (skill3 == null) return false;
+                return skill3.UseSkill(transform);
         }
+        return false;
     }
 
     /// <summary>
@@ -257,7 +251,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="damage"></param>
     public void TakeDamage(long damage)
 	{
-        if (IsImmortal)
+        if (GameManager.IsImmortal)
         {
             Debug.Log($"{damage}의 대미지를 입었지만 무적입니다.");
             return;
