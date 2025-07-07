@@ -22,6 +22,6 @@ public class BossHpUI : MonoBehaviour
 
         float ratio = (float)boss.CurrentHealth / boss.MaxHealth;
         bossHpSlider.value = ratio;
-        bossHpText.text = $"{boss.CurrentHealth}/{boss.MaxHealth}";
+        bossHpText.text = $"{boss.CurrentHealth:F0}/{boss.MaxHealth:F0}";
     }
 }

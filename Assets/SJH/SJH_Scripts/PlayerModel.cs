@@ -246,6 +246,8 @@ public class PlayerModel
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
         else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
+    public bool GetFirstWarmth() => Cost.GetFirstWarmth;
+    public bool GetFirstSpiritEnergy() => Cost.GetFirstSpiritEnergy;
     #endregion
 
     #region PlayerData 관련 함수
