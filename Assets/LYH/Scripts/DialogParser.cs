@@ -449,15 +449,15 @@ public class DialogParser : MonoBehaviour
         // 사용불가능 이름 리스트 필터
         for (int i = 0; i < notValidNames.Count; i++)
         {
-            if (notValidNames[i].Equals(name)) validName = false;
-            changeNameInstruction.text = "잘못된 이름입니다. 신중히 결정해주세요.\n(Enter로 확정)";
+            if (name.Contains(notValidNames[i])) validName = false;
+            changeNameInstruction.text = "잘못된 이름입니다.\n신중히 결정해주세요.\n(Enter로 확정)";
         }
         // 이름 길이 제한
         int byteCount = System.Text.Encoding.UTF8.GetByteCount(name);
         if (byteCount > 20)
         {
             validName = false;
-            changeNameInstruction.text = "이름이 너무 깁니다. 다른 이름으로 정해주세요.\n(Enter로 확정)";
+            changeNameInstruction.text = "이름이 너무 깁니다.\n다른 이름으로 정해주세요.\n(Enter로 확정)";
             return;
         }
 
