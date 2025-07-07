@@ -85,29 +85,7 @@ public class PlayerModel
     /// 플레이어가 피해를 입는 함수
     /// </summary>
     /// <param name="damage"></param>
-    public void ApplyDamage(long damage)
-    {
-        string scene = SceneManager.GetActiveScene().name;
-
-        if (scene == "Stage1-3_Battle" || scene == "Stage2-3_Battle" || scene == "Stage3-3_Battle")
-        {
-            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
-            // TODO : 업적 실패 처리
-        }
-        Data.DecreaseHp(damage);
-        if (Data.Hp <= 0 && !GameManager.IsImmortal)
-        {
-            // TODO : 플레이어 죽음 처리
-            PlayerController.Instance.SetBool("IsDead", true);
-            //Debug.LogError("플레이어 사망");
-            AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
-            if (MissionManager.Instance.IsRunning())
-            {
-                MissionManager.Instance.DeathFailMission();
-            }
-            UIManager.Instance.ShowPopUp<DiePopUp>();
-        }
-    }
+    public void ApplyDamage(long damage) => Data.DecreaseHp(damage);
     /// <summary>
     /// 플레이어가 회복하는 함수
     /// </summary>

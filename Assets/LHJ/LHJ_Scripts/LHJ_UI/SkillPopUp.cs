@@ -82,22 +82,41 @@ public class SkillPopUp : BaseUI
 			skillUIList[i]._active.onClick.AddListener(() =>
 			{
 				var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
-				var mapping = PlayerController.Instance.GetMappingSkills();
+                var mappingList = PlayerController.Instance.GetMappingSkillList();
+
+                // 플레이어의 단축키에서 ISkill 가져오기
+                ISkill mappingSkill = null;
+                foreach (var ms in mappingList)
+                {
+                    if (ms.SkillData.SkillIndex == skill.SkillData.SkillIndex)
+                    {
+                        mappingSkill = ms;
+                        break;
+                    }
+                }
 
 				// 등록 여부 확인
-				bool isSlot = mapping.Values.Contains(skill);
+				bool isSlot = mappingSkill != null;
 
-				if (isSlot)
+                if (isSlot)
 				{
 					if (skillIndex == 0)
 					{
-						Debug.Log("기본공격은 단축창에서 제거할 수 없습니다.");
+                        UIManager.Instance.ShowWarningText("기본공격은 제거할 수 없습니다.");
+                        return;
 					}
-					else
-					{
-						Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
-						PlayerController.Instance.RemoveSkillSlot(skillIndex);
-					}
+                    // TODO : 쿨타임이면 제거 불가
+                    // skillIndex가 매핑에 있는지 체크해야함
+                    else if (mappingSkill.IsCooldown)
+                    {
+                        UIManager.Instance.ShowWarningText("스킬 쿨타임 중에는 제거할 수 없습니다.");
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
+                        PlayerController.Instance.RemoveSkillSlot(skillIndex);
+                    }
 				}
 				else
 				{
@@ -135,6 +154,9 @@ public class SkillPopUp : BaseUI
 		}
 	}
 
+    /// <summary>
+    /// 스킬 팝업 UI의 업데이트
+    /// </summary>
 	public void UpdateSkill()
 	{
 		var skills = PlayerController.Instance.GetSkillData();
@@ -147,7 +169,7 @@ public class SkillPopUp : BaseUI
 
 		// 리스트 합치기
 		List<ISkill> hasSkills = new();
-		hasSkills.AddRange(PlayerController.Instance.GetSkillMappingList());
+		hasSkills.AddRange(PlayerController.Instance.GetMappingSkillList());
 		hasSkills.AddRange(PlayerController.Instance.GetHasSkillList());
 
 		// 리스트 SkillIndex로 정렬
@@ -253,17 +275,17 @@ public class SkillPopUp : BaseUI
             switch (slotIndex)
             {
                 case 1:
-                    Debug.Log("1번 활성화");
+                    //Debug.Log("1번 활성화");
                     _slot1.gameObject.SetActive(true);
                     _slot1.rectTransform.anchoredPosition = new Vector2(_slot1.rectTransform.anchoredPosition.x, y);
                     break;
                 case 2:
-                    Debug.Log("2번 활성화");
+                    //Debug.Log("2번 활성화");
                     _slot2.gameObject.SetActive(true);
                     _slot2.rectTransform.anchoredPosition = new Vector2(_slot2.rectTransform.anchoredPosition.x, y);
                     break;
                 case 3:
-                    Debug.Log("3번 활성화");
+                    //Debug.Log("3번 활성화");
                     _slot3.gameObject.SetActive(true);
                     _slot3.rectTransform.anchoredPosition = new Vector2(_slot3.rectTransform.anchoredPosition.x, y);
                     break;

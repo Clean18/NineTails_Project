@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #region enum ControlMode
 /// <summary>
@@ -116,24 +117,13 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("초기화가 아직 안됐음");
 			return;
 		}
-
-        if (GetIsDead())
-        {
-            return;
-        }
+        if (GetIsDead()) return;
 
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) _ai.Action();
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
-
-		// TODO : TEST 인풋
-		if (Input.GetKeyDown(KeyCode.Alpha5))
-		{
-			Test_Function();
-		}
-
 	}
 
 	public void InputHandler()
@@ -161,22 +151,19 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("1번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
-            skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(1);
+            if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("2번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha2);
-            skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(2);
+            if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Debug.Log("3번 슬롯 스킬 사용");
             var skill = _model.Skill.GetSkill(KeyCode.Alpha3);
-            skill?.UseSkill(transform);
-            SkillButton.Instance.UpdateCooldown(3);
+            if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(3);
         }
     }
 
@@ -263,18 +250,31 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-		_model.ApplyDamage(damage);
-		// TODO : view 피격처리
-        if(GetIsDead())
-        {
-            SetBool("IsDead", true);
-        }
+        // 죽어있을 때
+        if (GetIsDead()) return;
 
-		// TODO : UI 체력감소 처리
+        // 대미지 처리
+        _model.ApplyDamage(damage);
+
+        // view 처리
+        if (GetIsDead())
+        {
+            AIStop(); // velocity 0으로 변경
+            SetBool("IsDead", true);
+            OnDeath();
+        }
 
         // 대미지 색상 변경
         UIManager.Instance.ShowDamageText(transform, damage, Color.red);
-	}
+
+        // 업적 실패 처리
+        string scene = SceneManager.GetActiveScene().name;
+        if (scene == "Stage1-3_Battle" || scene == "Stage2-3_Battle" || scene == "Stage3-3_Battle")
+        {
+            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+            // TODO : 업적 실패 처리
+        }
+    }
 
 	/// <summary>
 	/// 플레이어가 체력을 회복하는 함수
@@ -301,6 +301,20 @@ public class PlayerController : MonoBehaviour
         // TODO : UI 보호막 증가 처리
         UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
     }
+    /// <summary>
+    /// 플레이어가 죽었을 때 실행하는 함수
+    /// </summary>
+    public void OnDeath()
+    {
+        AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
+        if (MissionManager.Instance.IsRunning())
+        {
+            MissionManager.Instance.DeathFailMission();
+        }
+        // 죽음 팝업 활성화
+        UIManager.Instance.ShowPopUp<DiePopUp>();
+    }
+
     #region Data 관련 함수
     /// <summary>
     /// 플레이어의 죽음 체크
@@ -468,12 +482,12 @@ public class PlayerController : MonoBehaviour
     /// 단축키에 등록된 스킬들을 Dictionary<KeyCode, ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
-    public Dictionary<KeyCode, ISkill> GetMappingSkills() => _model.GetMappingSkills();
+    public Dictionary<KeyCode, ISkill> GetMappingSkill() => _model.GetMappingSkills();
     /// <summary>
     /// 플레이어 단축키에 등록된 스킬들을 List<ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
-    public List<ISkill> GetSkillMappingList() => _model.GetSkillMappingList();
+    public List<ISkill> GetMappingSkillList() => _model.GetSkillMappingList();
     /// <summary>
     /// 플레이어가 보유중이고 단축키에 등록되지 않은 스킬들을 List<ISkill> 로 반환하는 함수
     /// </summary>
@@ -483,7 +497,7 @@ public class PlayerController : MonoBehaviour
     /// UI 스킬버튼 클릭으로 스킬 사용하는 함수
     /// </summary>
     /// <param name="index"></param>
-    public void UseSkill(int index) => SkillInput(index);
+    public bool UseSkill(int index) => SkillInput(index);
     /// <summary>
     /// skillIndex 번째 스킬을 획득하는 함수
     /// </summary>
@@ -589,33 +603,18 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    void OnDrawGizmos()
-	{
-		// 플레이어의 공격 범위 기즈모
-		// 팔각
-		for (int i = 0; i < DirectionCount; i++)
-		{
-			float angle = SightAngle * i;
-			Vector3 dir = Quaternion.Euler(0, 0, angle) * transform.up;
-			Gizmos.color = Color.red;
-			Gizmos.DrawLine(transform.position, transform.position + dir * SearchDistance);
-		}
-		// 원
-		Gizmos.DrawWireSphere(transform.position, SearchDistance);
-	}
-
-    /// <summary>
-    /// 테스트 함수
-    /// </summary>
-    public void Test_Function()
-    {
-        // TODO : 5번 누르면 스킬추가
-
-        _model.Skill.AddSkill(1);
-        _model.Skill.AddSkill(2);
-        _model.Skill.AddSkill(3);
-        _model.Skill.AddSkill(4);
-        _model.Skill.AddSkill(5);
-        _model.Skill.AddSkill(6);
-    }
+ //   void OnDrawGizmos()
+	//{
+	//	// 플레이어의 공격 범위 기즈모
+	//	// 팔각
+	//	for (int i = 0; i < DirectionCount; i++)
+	//	{
+	//		float angle = SightAngle * i;
+	//		Vector3 dir = Quaternion.Euler(0, 0, angle) * transform.up;
+	//		Gizmos.color = Color.red;
+	//		Gizmos.DrawLine(transform.position, transform.position + dir * SearchDistance);
+	//	}
+	//	// 원
+	//	Gizmos.DrawWireSphere(transform.position, SearchDistance);
+	//}
 }

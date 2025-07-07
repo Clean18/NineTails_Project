@@ -279,7 +279,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Debug.Log($"4번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            Debug.Log($"4번 스킬 쿨타임 남음: {remaining}초");
+            //Debug.Log($"4번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
@@ -287,10 +287,10 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Debug.Log("4번 스킬 쿨타임 종료");
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _radius);
+    //}
 }
 

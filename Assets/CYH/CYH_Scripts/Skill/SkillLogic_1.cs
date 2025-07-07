@@ -138,7 +138,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         Debug.Log($"1번 스킬 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            Debug.Log($"1번 스킬 쿨타임 남음: {remaining}초");
+            //Debug.Log($"1번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }

@@ -116,10 +116,10 @@ public class FallingRock : MonoBehaviour
     }
 
     // 에디터에서 범위 시각화 하는 기즈모 ( 필요없으면 삭제해도 됨 )
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, DamageRadius);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, DamageRadius);
+    //}
 }
 
