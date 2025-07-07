@@ -15,23 +15,23 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private bool canMove;
 
     void Awake()
-	{
-		_rigid = GetComponent<Rigidbody2D>();
+    {
+        _rigid = GetComponent<Rigidbody2D>();
         _sprite = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
 
         canMove = true;
     }
 
-	public void Move(Vector2 dir, float moveSpeed)
-	{
+    public void Move(Vector2 dir, float moveSpeed)
+    {
         if (!canMove) return;
 
         if (dir != Vector2.zero) _anim.SetBool("IsMoving", true);
         else _anim.SetBool("IsMoving", false);
 
         Vector2 movePos = dir.normalized * moveSpeed;
-		_rigid.velocity = movePos;
+        _rigid.velocity = movePos;
 
         if (dir.x < 0f)
         {
@@ -47,7 +47,7 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-	public void Stop()
+    public void Stop()
     {
         canMove = false;
         _anim.SetBool("IsMoving", false);
@@ -65,6 +65,11 @@ public class PlayerView : MonoBehaviour
     public void SetTrigger(string trigger)
     {
         _anim.SetTrigger(trigger);
+    }
+
+    public void SetBool(string name, bool value)
+    {
+        _anim.SetBool(name, value);
     }
 
     public bool GetMoveCheck() => canMove;
