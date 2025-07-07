@@ -29,6 +29,7 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogText;
 
     [SerializeField] private GameObject dialogUI;
+    [SerializeField] private GameObject cantskipUI;
     [SerializeField] private GameObject playerDialog;
 
     [SerializeField] private Image blackTransition;
@@ -171,6 +172,10 @@ public class DialogParser : MonoBehaviour
         else if (charIndex == 13)
         {
             charIndex = 5;
+        }
+        else if (charIndex == 14)
+        {
+            charIndex = 3;
         }
         else
         {
@@ -364,9 +369,16 @@ public class DialogParser : MonoBehaviour
 
     public void NextScene()
     {
-        int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
-        if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
-        else SceneChangeManager.Instance.LoadNextScene();
+        if (dialogData.name == "Stage1-1_Last")
+        {
+            cantskipUI.SetActive(true);
+        }
+        else
+        {
+            int curIndex = PlayerController.Instance.GetPlayerSceneIndex();
+            if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
+            else SceneChangeManager.Instance.LoadNextScene();
+        }
     }
 
     public void PreviousLine()
