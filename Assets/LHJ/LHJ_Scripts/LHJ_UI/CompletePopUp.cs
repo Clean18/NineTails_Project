@@ -17,12 +17,12 @@ public class CompletePopUp : BaseUI
                     Debug.Log($"4 > 6번 씬으로 이동");
                     PlayerController.Instance.SetPlayerSceneIndex(6);
                     SceneChangeManager.Instance.LoadCurrentScene();
-                    break; // 4 > 6
+                    return;
                 case 13:
                     Debug.Log($"13 > 15번 씬으로 이동");
                     PlayerController.Instance.SetPlayerSceneIndex(15);
                     SceneChangeManager.Instance.LoadCurrentScene();
-                    break; // 4 > 6
+                    return;
             }
             Debug.Log($"돌파미션 클리어! [{nextScene}] 씬으로 이동");
             //Debug.LogError($"{nextScene}");

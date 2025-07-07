@@ -1,16 +1,16 @@
 {
-    "_savedTimeString": "2025-07-07T22:59:39.7243659+09:00",
-    "PlayerName": "구미호",
-    "AttackLevel": 1,
+    "_savedTimeString": "2025-07-07T23:49:17.8480599+09:00",
+    "PlayerName": "미호",
+    "AttackLevel": 22,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 100,
+    "CurrentHp": 81,
     "SpeedLevel": 1,
-    "ShieldHp": 22,
-    "SceneIndex": 4,
+    "ShieldHp": 0,
+    "SceneIndex": 11,
     "SpiritEnergy": 0,
-    "Warmth": 550,
-    "Soul": 1,
+    "Warmth": 9096,
+    "Soul": 3,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
     "PlayerSkillList": [
@@ -24,7 +24,7 @@
             "SkillIndex": 1,
             "SkillLevel": 0,
             "SlotIndex": 1,
-            "SkillCooldown": 0.0
+            "SkillCooldown": 1.0
         },
         {
             "SkillIndex": 2,
@@ -36,7 +36,7 @@
             "SkillIndex": 3,
             "SkillLevel": 0,
             "SlotIndex": 3,
-            "SkillCooldown": 5.0
+            "SkillCooldown": 0.0
         },
         {
             "SkillIndex": 4,
@@ -66,11 +66,63 @@
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
+        },
+        {
+            "Id": "A2",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A18",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A55",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A58",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A3",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A20",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
         }
     ],
     "PlayerMissionList": [
         {
             "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M3",
             "IsClear": true,
             "CurrentCondition": -1
         }

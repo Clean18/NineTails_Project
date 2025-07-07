@@ -237,7 +237,7 @@ public class Stage2BossFSM : BaseBossFSM
         gameObject.SetActive(false);
 
         Debug.Log("보스 2 사망 다음 씬으로 이동");
-        //SceneChangeManager.Instance.LoadNextScene();
+        SceneChangeManager.Instance.LoadNextScene();
     }
 
     protected override int PatternCount => 2;
