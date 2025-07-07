@@ -119,11 +119,6 @@ public class PlayerController : MonoBehaviour
 		}
         if (GetIsDead()) return;
 
-        if (GetIsDead())
-        {
-            return;
-        }
-
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) _ai.Action();
 
@@ -264,13 +259,13 @@ public class PlayerController : MonoBehaviour
         // 대미지 처리
         _model.ApplyDamage(damage);
 
-		// TODO : view 피격처리
-        if(GetIsDead())
+        // view 처리
+        if (GetIsDead())
         {
+            AIStop(); // velocity 0으로 변경
             SetBool("IsDead", true);
+            OnDeath();
         }
-
-		// TODO : UI 체력감소 처리
 
         // 대미지 색상 변경
         UIManager.Instance.ShowDamageText(transform, damage, Color.red);
@@ -281,10 +276,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
             // TODO : 업적 실패 처리
-        }
-        if (GetHp() <= 0 && !GameManager.IsImmortal)
-        {
-            OnDeath();
         }
     }
 
