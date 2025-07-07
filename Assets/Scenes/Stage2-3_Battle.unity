@@ -694,6 +694,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: MaxHealth
+      value: 232610
+      objectReference: {fileID: 0}
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: DamageReduceRate
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1042960709677487614, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
       propertyPath: m_Name
       value: 2StageBoss

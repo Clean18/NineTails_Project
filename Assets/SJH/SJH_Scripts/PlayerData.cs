@@ -233,7 +233,7 @@ public class PlayerData
     public void DecreaseHp(long damage)
     {
         // 체력을 감소하기 전 보호막부터 우선 감소
-        long totalDamage = (long)(damage * (float)Defense / (Defense + 300f));
+        long totalDamage = (long)(damage * (1- (float)Defense / (Defense + 300f)));
         totalDamage = (1 > totalDamage) ? 1 : totalDamage; // 최소 1
         if (ShieldHp > 0)
         {
