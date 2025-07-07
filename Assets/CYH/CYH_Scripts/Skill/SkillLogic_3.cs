@@ -107,8 +107,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         if (_highestMonster != null)
             PlayerController.Instance.StartCoroutine(DamageCoroutine(_highestMonster));
-
-        OnAttackEnd();
     }
 
     public void OnAttackStart()

@@ -590,6 +590,7 @@ public class PlayerController : MonoBehaviour
 
     // SkillLogic_3 애니메이션 이벤트 함수
     public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();
+    public void Skill3_OnAttackEnd() => (SkillController.SkillList[3] as SkillLogic_3)?.OnAttackEnd();
 
     // SkillLogic_4 애니메이션 이벤트 함수
     public void Skill4_SkillRoutine() => (SkillController.SkillList[4] as SkillLogic_4)?.SkillRoutine();
