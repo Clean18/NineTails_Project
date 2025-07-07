@@ -32,7 +32,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] protected long warmthAmount;               // 온기 보상량
     [SerializeField] protected long spiritEnergyAmount;         // 정기 보상량
 
-    [SerializeField] protected MonsterState _currentState = MonsterState.Idle;   // 현재 FSM 상태
+    [SerializeField] protected MonsterState _currentState;      // 현재 FSM 상태
     protected Transform targetPlayer;                           // 타겟팅된 플레이어
     protected Coroutine attackRoutine;                          // 공격 루틴 저장
 
@@ -97,6 +97,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         // 타겟이 없으면 Idle 상태 유지
         if (targetPlayer == null)
         {
+            Debug.Log("타겟이 없어서 Idle로 상태 변함");
             ChangeState(MonsterState.Idle);
             return;
         }
@@ -147,6 +148,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 플레이어에게 이동
     protected virtual void MoveToPlayer()
     {
+        if (_currentState == MonsterState.Dead) return;
+
         if (targetPlayer == null) return;
         Vector2 dir = (targetPlayer.position - transform.position).normalized;
         transform.position += (Vector3)dir * MoveSpeed * Time.deltaTime;
@@ -170,6 +173,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     // 상태 전환 처리
     protected virtual void ChangeState(MonsterState newState)
     {
+        if (_currentState == MonsterState.Dead) return;
+
         if (_currentState == newState) return;
 
         // 이전 상태가 공격이면 공격 루틴 중단
@@ -202,11 +207,12 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         {
             return;
         }
+
         long finalDamage = (long)(damage * (1f - DamageReduceRate / 100f));
         CurrentHp -= finalDamage;
 
         Debug.Log($"[공통] 받은 피해: {finalDamage}, 남은 체력: {CurrentHp}");
-        UIManager.Instance.ShowDamageText(transform, damage); // 데미지 텍스트 출력
+        UIManager.Instance.ShowDamageText(transform, finalDamage); // 데미지 텍스트 출력
 
         //체력바 추가
         if (hpBar != null)

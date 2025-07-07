@@ -50,7 +50,7 @@ public class PlayerQuest
                 // 클리어 했으면 ClearTable에 추가
                 if (achiev.IsClear)
                 {
-                    achievClearTable.Add(achiev.Id);
+                    achievClearTable[achiev.Id] = true;
                 }
                 // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
                 else if (!achiev.IsClear && achiev.CurrentCondition > -1)
@@ -82,9 +82,9 @@ public class PlayerQuest
         var KillCountTable = AchievementManager.Instance.KillCountDic;
         List<SaveAchievementData> list = new();
 
-        foreach (var clearId in ClearTable)
+        foreach (var pair in ClearTable)
         {
-            list.Add(new SaveAchievementData(clearId, true, -1));
+            list.Add(new SaveAchievementData(pair.Key, pair.Value, -1));
         }
         foreach (var pair in KillCountTable)
         {
