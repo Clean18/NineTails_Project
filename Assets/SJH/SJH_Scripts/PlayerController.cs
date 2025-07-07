@@ -482,12 +482,12 @@ public class PlayerController : MonoBehaviour
     /// 단축키에 등록된 스킬들을 Dictionary<KeyCode, ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
-    public Dictionary<KeyCode, ISkill> GetMappingSkills() => _model.GetMappingSkills();
+    public Dictionary<KeyCode, ISkill> GetMappingSkill() => _model.GetMappingSkills();
     /// <summary>
     /// 플레이어 단축키에 등록된 스킬들을 List<ISkill> 로 반환하는 함수
     /// </summary>
     /// <returns></returns>
-    public List<ISkill> GetSkillMappingList() => _model.GetSkillMappingList();
+    public List<ISkill> GetMappingSkillList() => _model.GetSkillMappingList();
     /// <summary>
     /// 플레이어가 보유중이고 단축키에 등록되지 않은 스킬들을 List<ISkill> 로 반환하는 함수
     /// </summary>
@@ -497,7 +497,7 @@ public class PlayerController : MonoBehaviour
     /// UI 스킬버튼 클릭으로 스킬 사용하는 함수
     /// </summary>
     /// <param name="index"></param>
-    public void UseSkill(int index) => SkillInput(index);
+    public bool UseSkill(int index) => SkillInput(index);
     /// <summary>
     /// skillIndex 번째 스킬을 획득하는 함수
     /// </summary>

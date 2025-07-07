@@ -27,7 +27,7 @@ public class SkillButton : MonoBehaviour, IUI
         Instance = this;
 
         Debug.Log("스킬 단축키 UI 초기화");
-        var mappingSkills = PlayerController.Instance.GetMappingSkills();
+        var mappingSkills = PlayerController.Instance.GetMappingSkill();
 
         triggerKeys = new KeyCode[3]
         {
@@ -83,7 +83,7 @@ public class SkillButton : MonoBehaviour, IUI
                 // 쿨타임이 끝났을때 스킬 활성화
                 if (currentCooltimes[i] <= 0)
                 {
-                    skillButtons[i].interactable = true;   // 스킬버튼 클릭 활성화
+                    //skillButtons[i].interactable = true;   // 스킬버튼 클릭 활성화
                     _disableImages[i].fillAmount = 1;
                     _disableImages[i].gameObject.SetActive(false);
                 }
@@ -98,11 +98,13 @@ public class SkillButton : MonoBehaviour, IUI
         if (uiIndex < 0 || uiIndex >= currentCooltimes.Length) return;
         if (currentCooltimes[uiIndex] > 0) return;
 
-        PlayerController.Instance.UseSkill(index);
-
-        currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
-        skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
-        _disableImages[uiIndex].gameObject.SetActive(true);
+        // 스킬이 사용됐을 때만 실행
+        if (PlayerController.Instance.UseSkill(index))
+        {
+            currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
+            _disableImages[uiIndex].gameObject.SetActive(true);
+            //skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
+        }
     }
 
     // 플레이어가 1 ~ 3 입력, AI가 스킬 사용시 쿨타임
@@ -114,13 +116,13 @@ public class SkillButton : MonoBehaviour, IUI
         if (currentCooltimes[uiIndex] > 0) return;
 
         currentCooltimes[uiIndex] = coolTimes[uiIndex]; // 쿨타임
-        skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
         _disableImages[uiIndex].gameObject.SetActive(true);
+        //skillButtons[uiIndex].interactable = false;   // 스킬 버튼 클릭 비활성화
     }
 
     public void UpdateButtonImage()
     {
-        var mappingSkills = PlayerController.Instance.GetMappingSkills();
+        var mappingSkills = PlayerController.Instance.GetMappingSkill();
 
         for (int i = 0; i < coolTimeImages.Length; i++)
         {
