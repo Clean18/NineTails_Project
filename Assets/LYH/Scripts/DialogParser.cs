@@ -378,10 +378,10 @@ public class DialogParser : MonoBehaviour
                 logText.text += "      ";
                 if (dialogLines[i].charName != "")
                 {
-                    logText.text += dialogLines[i].charName;
+                    logText.text += dialogLines[i].charName.Replace("foxName", foxName);
                     logText.text += ": ";
                 }
-                logText.text += dialogLines[i].dialog;
+                logText.text += dialogLines[i].dialog.Replace("foxName", foxName);
                 horiSize += spacing;
             }
         }
