@@ -31,6 +31,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UseSkill(transform);
+        }
+    }
+
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -42,7 +50,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         DetectMonster();
         if (_hitMonsters.Count <= 0)
         {
-            Debug.Log("스킬 4 공격할 대상이 없습니다.");
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
             return false;
         }
 
@@ -75,7 +83,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         DetectMonster();
         if (_hitMonsters.Count <= 0)
         {
-            Debug.Log("스킬 4 공격할 대상이 없습니다.");
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
             return false;
         }
 
