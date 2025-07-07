@@ -68,7 +68,7 @@ public class PlayerSkill
         if (skillDatas == null) return;
 
         // 단축키 초기화
-        foreach (var data in skillDatas)
+        foreach (SaveSkillData data in skillDatas)
 		{
 			if (data.SkillIndex < 0) continue;
 
@@ -82,7 +82,7 @@ public class PlayerSkill
             if (key != KeyCode.Mouse0 && data.SkillIndex != 0 && key != KeyCode.None)
             {
                 SkillMapping[key] = skill;
-                skill.SlotIndex = data.SlotIndex;
+                skill.SkillInit(data);
             }
             // 남은 스킬 추가
             else
@@ -91,7 +91,6 @@ public class PlayerSkill
                 skill.SlotIndex = -1;
                 HasSkills.Add(skill);
             }
-
 		}
 		Debug.Log("플레이어 스킬 초기화 완료");
 	}
@@ -121,21 +120,20 @@ public class PlayerSkill
                 SlotIndex = slotIndex,
                 SkillIndex = skill.SkillData.SkillIndex,
                 SkillLevel = skillLevel,
-                // TODO : 스킬 쿨타임이 있어야함
-                SkillCooldown = 0
+                SkillCooldown = skill.RemainCooldown,
             });
 
 			// 매핑에 없는 슬롯 인덱스는 -1
 		}
-        // TODO : 가지고 있는 스킬 세이브
-        // 테스트 해봐야함
+        // 가지고 있는 스킬 세이브
         foreach (var skill in HasSkills)
         {
             saveSkills.Add(new SaveSkillData
             {
                 SlotIndex = -1,
                 SkillIndex = skill.SkillData.SkillIndex,
-                SkillLevel = skill.SkillLevel
+                SkillLevel = skill.SkillLevel,
+                SkillCooldown = skill.RemainCooldown,
             });
         }
         Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
@@ -227,8 +225,16 @@ public class PlayerSkill
             Debug.Log("스킬 레벨을 더 이상 올릴 수 없습니다.");
             return;
         }
+        if (GameManager.IsCheat)
+        {
+            Debug.Log("치트모드 스킬 성장");
+            skill.SkillLevel += 1;
+            Debug.Log($"스킬 레벨업! : {skill.SkillData.SkillName} Lv. {skill.SkillLevel}");
+            return;
+        }
         // 재화 체크
-        // TODO : 스킬이 노말인지 궁극기인지 구분해야함
+
+        // 스킬 레벨이 6이면 궁극기 아니면 노말
         bool isUlt = skill.SkillData.SkillIndex == 6;
 
         if (isUlt) // 궁극기 강화
@@ -418,6 +424,7 @@ public class PlayerSkill
         if (skill == null)
         {
             Debug.Log($"SkillIndex : {skillIndex} 스킬은 등록된 스킬이 아닙니다.");
+            return;
         }
 
         // 삭제되면 has리스트에 추가

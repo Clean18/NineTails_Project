@@ -57,6 +57,7 @@ public class MissionManager : Singleton<MissionManager>
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
+            // TODO : 이미 클리어한 돌파미션은 보상 지급 X
             MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
             if (currentMission.Id == "M9999") // M1미션일때
