@@ -32,17 +32,13 @@ public class StagePopUp : BaseUI
             //        SceneChangeManager.Instance.LoadSceneAsync(sceneName);
             //    }
             //}
-            if (MissionManager.Instance.IsCooldownActive)       // 쿨타임이 돌때 미션 진행불가
+            if (MissionManager.Instance.IsCooldownActive)
             {
                 Debug.Log("쿨타임 중 - 미션 재도전 불가");
                 return;
             }
-            if (SceneManager.GetActiveScene().name != sceneName)
-            {
-                SceneChangeManager.Instance.LoadSceneAsync(sceneName);
-            }
-            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();  // 미션 팝업창 생성
-            popUp.SetScene(sceneName);      // 씬 이름 전달
+            var popUp = UIManager.Instance.ShowPopUp<StartMissionPopUp>();
+            popUp.SetScene(sceneName);
         };
 
         GetEvent("Btn_Stage12").Click += data =>
