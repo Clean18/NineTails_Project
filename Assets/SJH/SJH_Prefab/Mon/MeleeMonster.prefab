@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 2
-  AttackRange: 2.5
+  AttackRange: 3.5
   AttackCooldown: 2
   MaxHp: 10
   DamageReduceRate: 0

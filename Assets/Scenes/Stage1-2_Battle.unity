@@ -227,6 +227,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
+      propertyPath: MonsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 5722814494859109534, guid: 7a940da0788b28741ab2b7c31360d7b3, type: 3}
+    - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: MonsterPrefabs.Array.data[1]
       value: 
       objectReference: {fileID: 0}

@@ -57,9 +57,6 @@ public class BossMainUI : BaseUI, IUI
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
         SetupCameraForBossStage();
-
-        // TODO : MissionManager의 IsRunning = true = 돌파미션 기존보스 생성
-        // else 스탯 다른 좀 더 약한 보스 활성화
     }
 
     // 메인에 플레이어 스탯 정보UI
