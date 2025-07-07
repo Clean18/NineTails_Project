@@ -1,17 +1,17 @@
 {
-    "_savedTimeString": "2025-07-07T23:49:17.8480599+09:00",
+    "_savedTimeString": "2025-07-08T01:40:02.3581771+09:00",
     "PlayerName": "미호",
-    "AttackLevel": 22,
+    "AttackLevel": 201,
     "DefenseLevel": 1,
-    "HpLevel": 1,
-    "CurrentHp": 81,
-    "SpeedLevel": 1,
-    "ShieldHp": 0,
-    "SceneIndex": 11,
-    "SpiritEnergy": 0,
-    "Warmth": 9096,
-    "Soul": 3,
-    "GetFirstSpiritEnergy": false,
+    "HpLevel": 4,
+    "CurrentHp": 106,
+    "SpeedLevel": 49,
+    "ShieldHp": 27,
+    "SceneIndex": 4,
+    "SpiritEnergy": 1122,
+    "Warmth": 70543,
+    "Soul": 7,
+    "GetFirstSpiritEnergy": true,
     "GetFirstWarmth": true,
     "PlayerSkillList": [
         {
@@ -22,26 +22,20 @@
         },
         {
             "SkillIndex": 1,
-            "SkillLevel": 0,
+            "SkillLevel": 11,
             "SlotIndex": 1,
-            "SkillCooldown": 1.0
+            "SkillCooldown": 0.0
         },
         {
             "SkillIndex": 2,
-            "SkillLevel": 0,
+            "SkillLevel": 4,
             "SlotIndex": 2,
             "SkillCooldown": 0.0
         },
         {
             "SkillIndex": 3,
-            "SkillLevel": 0,
+            "SkillLevel": 8,
             "SlotIndex": 3,
-            "SkillCooldown": 0.0
-        },
-        {
-            "SkillIndex": 4,
-            "SkillLevel": 0,
-            "SlotIndex": -1,
             "SkillCooldown": 0.0
         }
     ],
@@ -68,12 +62,6 @@
             "IsRewarded": false
         },
         {
-            "Id": "A2",
-            "IsClear": true,
-            "CurrentCondition": -1,
-            "IsRewarded": false
-        },
-        {
             "Id": "A18",
             "IsClear": true,
             "CurrentCondition": -1,
@@ -81,6 +69,18 @@
         },
         {
             "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A2",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A20",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
@@ -98,13 +98,145 @@
             "IsRewarded": false
         },
         {
+            "Id": "A25",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A21",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A26",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
             "Id": "A3",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
         },
         {
-            "Id": "A20",
+            "Id": "A34",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A35",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A4",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A22",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A5",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A56",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A59",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A36",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A37",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A38",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A39",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A23",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A27",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A28",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A24",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A6",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A7",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A8",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A57",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A60",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
@@ -123,6 +255,31 @@
         },
         {
             "Id": "M3",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M4",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M5",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M6",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M7",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M8",
             "IsClear": true,
             "CurrentCondition": -1
         }

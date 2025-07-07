@@ -72,6 +72,7 @@ public class Main : BaseUI, IUI
             UIManager.Instance.ShowPopUp<StagePopUp>();
         };
         // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
+        // TODO : 치트 팝업 띄우기
         var cheatBtn = GetEvent("Btn_Cheat");
         if (GameManager.IsCheat)
         {
