@@ -99,7 +99,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195018135616766724}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -215,7 +215,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   MoveDir: {x: 0, y: 0}
-  IsImmortal: 0
 --- !u!114 &7294450255420677462
 MonoBehaviour:
   m_ObjectHideFlags: 0
