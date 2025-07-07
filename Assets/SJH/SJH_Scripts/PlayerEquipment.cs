@@ -22,9 +22,9 @@ public class PlayerEquipment
             switch (_grade)
             {
                 case GradeType.Normal: return "N";
-                case GradeType.Common: return "R";
-                case GradeType.Uncommon: return "SR";
-                case GradeType.Rare: return "SSR";
+                case GradeType.Rare: return "R";
+                case GradeType.SuperRare: return "SR";
+                case GradeType.SuperSuperRare: return "SSR";
                 default: return "N";
             }
         }
@@ -33,9 +33,9 @@ public class PlayerEquipment
             switch (value)
             {
                 case "N": _grade = GradeType.Normal; break;
-                case "R": _grade = GradeType.Common; break;
-                case "SR": _grade = GradeType.Uncommon; break;
-                case "SSR": _grade = GradeType.Rare; break;
+                case "R": _grade = GradeType.Rare; break;
+                case "SR": _grade = GradeType.SuperRare; break;
+                case "SSR": _grade = GradeType.SuperSuperRare; break;
                 default: _grade = GradeType.Normal; break;
             }
             OnEquipmentChanged?.Invoke();
@@ -167,13 +167,13 @@ public class PlayerEquipment
     /// <summary>
     /// 장비 강화를 시도하는 함수
     /// </summary>
-    public void TryEnhance(long warmth)
+    public void TryEnhance(long spiritEnergy) // 온정 > 영기로 변경
     {
         var player = PlayerController.Instance;
         // SSR 등급은 무한히 강화가 되는 구조
         if (Grade == "SSR")
         {
-            if (warmth < BaseSSRCost && !GameManager.IsCheat)
+            if (spiritEnergy < BaseSSRCost && !GameManager.IsCheat)
             {
                 Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
                 UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
@@ -181,7 +181,7 @@ public class PlayerEquipment
             }
             Level += 1;
             IncreaseDamageLevel += 1;
-            if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, BaseSSRCost);
+            if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, BaseSSRCost);
             Debug.Log($"강화 성공! 현재 등급: {Grade}등급, 강화 단계: {Level}강");
             //Debug.Log($"공격력 증가율: {Attack * 100}%" + $"스킬 쿨타임 감소: {CooldownReduction * 100}%" + $"방어력 관통 수치: {ReduceDamage * 100}%" + $"누적 피해 증가: {IncreaseDamage}%");
             Debug.Log($"공격력 증가율: 50%" + $"스킬 쿨타임 감소: 30%" + $"방어력 관통 수치: 30%" + $"누적 피해 증가: {IncreaseDamage}%");
@@ -199,7 +199,7 @@ public class PlayerEquipment
         }
 
         // 재화 체크
-        if (warmth < nextUpgradeCost && !GameManager.IsCheat)
+        if (spiritEnergy < nextUpgradeCost && !GameManager.IsCheat)
         {
             Debug.Log("재화가 부족합니다");
             UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
@@ -208,7 +208,7 @@ public class PlayerEquipment
 
         // 강화 성공
         // 재화 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextUpgradeCost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, nextUpgradeCost);
         // 다음 강화 스탯 할당
         var nextUpgradeStat = DataManager.Instance.GetEquipmentUpgradeInfo(GradeType, Level + 1);
         InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
@@ -220,7 +220,7 @@ public class PlayerEquipment
     /// <summary>
     /// 장비 승급을 시도하는 함수
     /// </summary>
-    public void TryPromote(long warmth)
+    public void TryPromote(long spiritEnergy)
     {
         // 레벨 50인지 체크
         var player = PlayerController.Instance;
@@ -229,7 +229,7 @@ public class PlayerEquipment
             Debug.Log($"레벨이 부족합니다. 현재 레벨 : {Level}");
             return;
         }
-        if (GradeType == GradeType.Rare)
+        if (GradeType == GradeType.SuperSuperRare)
         {
             Debug.Log("승급할 수 없는 등급입니다.");
             return;
@@ -244,7 +244,7 @@ public class PlayerEquipment
         }
 
         // 승급 재화 체크
-        if (nextData.WarmthCost > warmth && !GameManager.IsCheat)
+        if (nextData.WarmthCost > spiritEnergy && !GameManager.IsCheat)
         {
             Debug.Log("재화가 부족합니다.");
             UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
@@ -252,7 +252,7 @@ public class PlayerEquipment
         }
 
         // 재화 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, nextData.WarmthCost);
+        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, nextData.WarmthCost);
 
         // 승급 확률 체크
         float rate = UnityEngine.Random.value;
