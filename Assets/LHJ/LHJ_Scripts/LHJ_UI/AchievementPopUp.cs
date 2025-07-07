@@ -15,29 +15,44 @@ public class AchievementPopUp : BaseUI
         public int currentIndex;                // 현재 진행 중인 업적 위치
     }
 
-    // 업적 그룹을 인스펙터에서 설정
     [SerializeField] private List<AchievementGroupUI> achievementGroups;
+
     private void OnEnable()
     {
         foreach (var group in achievementGroups)
         {
-            string groupKey = group.AchievementIds[0]; 
-            if (AchievementManager.Instance.AchievementGroupIndex.TryGetValue(groupKey, out int savedIndex))
+            group.currentIndex = 0;
+
+            for (int i = 0; i < group.AchievementIds.Count; i++)
             {
-                group.currentIndex = savedIndex;
-            }
-            else
-            {
-                group.currentIndex = 0;
+                string id = group.AchievementIds[i];
+
+                bool isAchieved = AchievementManager.Instance.AchievedIds.ContainsKey(id);
+                bool isRewarded = AchievementManager.Instance.IsRewarded(id);
+
+                if (!isAchieved)
+                {
+                    group.currentIndex = i; // 아직 클리어 안 된 업적
+                    break;
+                }
+                else if (!isRewarded)
+                {
+                    group.currentIndex = i; // 클리어는 했지만 보상버튼을 안눌렀을때
+                    break;
+                }
+
+                // 마지막까지 반복되면 모든 업적 완료
+                if (i == group.AchievementIds.Count - 1)
+                {
+                    group.currentIndex = group.AchievementIds.Count;
+                }
             }
             UpdateGroupUI(group);
         }
     }
 
-    // 각 업적 그룹 갱신
     private void UpdateGroupUI(AchievementGroupUI group)
     {
-        // 모든 업적을 완료했을 때 버튼 숨김
         if (group.currentIndex >= group.AchievementIds.Count)
         {
             group.nameText.text = "모든 업적을 완료했습니다!";
@@ -46,33 +61,29 @@ public class AchievementPopUp : BaseUI
             return;
         }
 
-        // Id가 테이블에 없을경우
-        if (!DataManager.Instance.AchievementTable.TryGetValue(group.AchievementIds[group.currentIndex], out var info))
+        string currentId = group.AchievementIds[group.currentIndex];
+        if (!DataManager.Instance.AchievementTable.TryGetValue(currentId, out var info))
         {
             group.rewardButton.gameObject.SetActive(false);
             return;
         }
-        string groupKey = group.AchievementIds[0];
 
-        // 업적 이름과 설명 UI 표시
         group.nameText.text = info.Name;
         group.descriptionText.text = info.Description;
-        bool isAchieved = AchievementManager.Instance.IsAchieved(info.Id);
-        bool isRewarded = AchievementManager.Instance.ReceivedReward(info.Id);
+
+        bool isAchieved = AchievementManager.Instance.AchievedIds.TryGetValue(currentId, out var achieved) && achieved;
+        bool isRewarded = AchievementManager.Instance.IsRewarded(currentId);
+
         group.rewardButton.gameObject.SetActive(isAchieved && !isRewarded);
 
-        // 보상 버튼 클릭시 초기화 후 재등록
         group.rewardButton.onClick.RemoveAllListeners();
         group.rewardButton.onClick.AddListener(() =>
         {
             Debug.Log("보상획득 클릭");
-            if (!AchievementManager.Instance.IsAchieved(info.Id)) return;
+            if (!isAchieved || isRewarded) return;
 
             AchievementManager.Instance.Reward(info);
             group.currentIndex++;
-
-            // 현재 진행준인 인덱스 업데이트
-            AchievementManager.Instance.AchievementGroupIndex[group.AchievementIds[0]] = group.currentIndex;
             UpdateGroupUI(group);
         });
     }

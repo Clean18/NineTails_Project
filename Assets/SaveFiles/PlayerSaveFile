@@ -9,6 +9,7 @@
     "ShieldHp": 0,
     "SceneIndex": 4,
     "SpiritEnergy": 0,
+
     "Warmth": 5151,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
@@ -23,6 +24,7 @@
         {
             "SkillIndex": 1,
             "SkillLevel": 0,
+
             "SlotIndex": 1,
             "SkillCooldown": 0.0
         },
@@ -41,6 +43,7 @@
         {
             "SkillIndex": 6,
             "SkillLevel": 0,
+
             "SlotIndex": -1,
             "SkillCooldown": 0.0
         },
@@ -49,12 +52,14 @@
             "SkillLevel": 0,
             "SlotIndex": -1,
             "SkillCooldown": 0.0
+
         },
         {
             "SkillIndex": 5,
             "SkillLevel": 0,
             "SlotIndex": -1,
             "SkillCooldown": 0.0
+
         }
     ],
     "Grade": "N",
@@ -64,32 +69,38 @@
         {
             "Id": "A43",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": true
         },
         {
             "Id": "A44",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": true
         },
         {
             "Id": "A45",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": false
         },
         {
             "Id": "A16",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": false
         },
         {
             "Id": "A17",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": false
         },
         {
             "Id": "A18",
             "IsClear": true,
-            "CurrentCondition": -1
+            "CurrentCondition": -1,
+            "IsRewarded": false
         },
         {
             "Id": "A19",
