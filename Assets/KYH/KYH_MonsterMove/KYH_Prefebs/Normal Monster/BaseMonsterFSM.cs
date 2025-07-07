@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -132,7 +131,6 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         {
             case MonsterState.Idle:
                 // 아무것도 하지 않음
-                // TODO : 애니메이션을 종료하는 함수 Idle로 전환
                 break;
 
             case MonsterState.Move:

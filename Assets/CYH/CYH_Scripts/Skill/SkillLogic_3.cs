@@ -31,12 +31,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
-    public void UseSkill(Transform attacker)
+    public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        if (!PlayerController.Instance.MoveCheck()) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         Debug.Log("스킬3 사용");
 
@@ -53,16 +51,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
         OnAttackStart();
         DetectMonster();
         GetHighestHpMonster();
+        Debug.Log("스킬 3 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         Debug.Log("스킬 3 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        if (!PlayerController.Instance.MoveCheck()) return;
-
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -77,6 +74,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
         DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
+        return true;
     }
 
     public void SkillRoutine()
