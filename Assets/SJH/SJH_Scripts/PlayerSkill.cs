@@ -136,7 +136,7 @@ public class PlayerSkill
                 SkillCooldown = skill.RemainCooldown,
             });
         }
-        Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
+        //Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
         skillList = saveSkills;
 		return saveSkills;
 	}
