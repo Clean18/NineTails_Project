@@ -96,7 +96,6 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public void SkillRoutine()
     {
         PlayerController.Instance.StartCoroutine(DamageRoutine());
-        OnAttackEnd();
     }
 
     public void OnAttackStart()
@@ -117,6 +116,14 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         //_animator.SetTrigger("UseSkill_6");
         PlayerController.Instance.SetTrigger("UseSkill_6");
+
+        // 3초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 3f);
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     // 궁극기 비디오 생성
@@ -189,11 +196,11 @@ public class SkillLogic_6 : SkillLogic, ISkill
         Vector3 effectScale = effect.transform.localScale;
         effectScale.x *= -1 * GetPlayerScaleX();
         effect.transform.localScale = effectScale;
-        
+
         // 플레이어가 왼쪽을 바라볼 때 이펙트 위치 x값 조정
         if (effectScale.x > 0)
         {
-            effect.transform.position = new Vector3(-1 * (_effectOffset.x), _effectOffset.y, 0);
+            effect.transform.position = new Vector3(-1 * (_effectOffset.x) + transform.position.x, _effectOffset.y+ transform.position.y, 0);
         }
 
         // 3초 뒤 삭제

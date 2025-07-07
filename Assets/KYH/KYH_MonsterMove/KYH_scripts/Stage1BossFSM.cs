@@ -348,4 +348,7 @@ public class Stage1BossFSM : BaseBossFSM
         Debug.Log("보스 1 사망 다음 씬으로 이동");
         SceneChangeManager.Instance.LoadNextScene();
     }
+
 }
+
+

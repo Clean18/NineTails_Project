@@ -801,10 +801,12 @@ MonoBehaviour:
   - {fileID: 4900000, guid: d52c237e7fc077742bdfe39dcd6fa2d4, type: 3}
   - {fileID: 4900000, guid: a847023228e9de544a3c5daf323ca682, type: 3}
   dialogData: {fileID: 0}
+  summaryData: {fileID: 4900000, guid: 44924050b1421404aa312045ce63287e, type: 3}
   charNameText: {fileID: 60897171}
   dialogText: {fileID: 1439676008}
+  summary: {fileID: 425821882}
   dialogUI: {fileID: 1507156198}
-  cantskipUI: {fileID: 0}
+  cantskipUI: {fileID: 1186346566}
   playerDialog: {fileID: 1245155915}
   blackTransition: {fileID: 329679210}
   effect: {fileID: 255358934}
@@ -1401,8 +1403,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000018358, y: 97}
-  m_SizeDelta: {x: 1214.6362, y: 436.0337}
+  m_AnchoredPosition: {x: 6.1525, y: 87}
+  m_SizeDelta: {x: 1117.3286, y: 364.24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &425821882
 MonoBehaviour:
@@ -1424,7 +1426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC2A4\uD1A0\uB9AC \uC694\uC57D\uBCF8"
+  m_text: "\uC2A4\uD1A0\uB9AC \uC694\uC57D\uBCF8\n\uAC00\uB098\uB2E4\uB77C\n\uB9C8\uBC14\uC0AC\n\uC544\uC790\uCC28\uCE74"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8151c37b8d78e1a4f9ff431fb42e8192, type: 2}
   m_sharedMaterial: {fileID: -2237702576553975334, guid: 8151c37b8d78e1a4f9ff431fb42e8192, type: 2}
@@ -1451,8 +1453,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1463,7 +1465,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -2675,7 +2677,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e5cfc5cf384cbc846a5c9a78e513a9e6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63c71896c2a033543ad8254e9a367ae3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3747,7 +3749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.41960785}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.6509804}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -7,12 +7,14 @@ public struct SaveAchievementData
 	public string Id;
 	public bool IsClear;
 	public int CurrentCondition;
+    public bool IsRewarded;
 
-    public SaveAchievementData(string id, bool isClear, int current)
+    public SaveAchievementData(string id, bool isClear, int current, bool isRewarded)
     {
         Id = id;
         IsClear = isClear;
         CurrentCondition = current;
+        IsRewarded = isRewarded;
     }
 }
 
@@ -40,6 +42,7 @@ public class PlayerQuest
 
         var achievClearTable = AchievementManager.Instance.AchievedIds;
         var achievKillCountTable = AchievementManager.Instance.KillCountDic;
+        var achievRewardTable = AchievementManager.Instance.RewardDic;
 
         if (saveAchive != null)
         {
@@ -51,6 +54,10 @@ public class PlayerQuest
                 if (achiev.IsClear)
                 {
                     achievClearTable[achiev.Id] = true;
+                    if (achiev.IsRewarded)
+                    {
+                        achievRewardTable[achiev.Id] = true;
+                    }
                 }
                 // 클리어 못하고 진행중(0) 이면 KillCountTable에 추가
                 else if (!achiev.IsClear && achiev.CurrentCondition > -1)
@@ -80,15 +87,17 @@ public class PlayerQuest
 	{
         var ClearTable = AchievementManager.Instance.AchievedIds;
         var KillCountTable = AchievementManager.Instance.KillCountDic;
+        var RewardDic = AchievementManager.Instance.RewardDic;
         List<SaveAchievementData> list = new();
 
         foreach (var pair in ClearTable)
         {
-            list.Add(new SaveAchievementData(pair.Key, pair.Value, -1));
+            bool isRewarded = RewardDic.ContainsKey(pair.Key) && RewardDic[pair.Key];
+            list.Add(new SaveAchievementData(pair.Key, pair.Value, -1, isRewarded));
         }
         foreach (var pair in KillCountTable)
         {
-            list.Add(new SaveAchievementData(pair.Key, false, pair.Value));
+            list.Add(new SaveAchievementData(pair.Key, false, pair.Value, false));
         }
 
 		return list;

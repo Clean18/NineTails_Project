@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class SkillLogic_4 : SkillLogic, ISkill
 {
@@ -63,6 +64,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
         }
 
         // 쿨타임 체크 시작
+        IsCooldown = true;
+
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         OnAttackStart();
@@ -79,6 +82,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
+
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
@@ -91,6 +95,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
         }
 
         // 쿨타임 체크 시작
+        IsCooldown = true;
+        
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         OnAttackStart();
@@ -114,6 +120,15 @@ public class SkillLogic_4 : SkillLogic, ISkill
         OnAttackEnd();
     }
 
+    public void AnimationPlay()
+    {
+        //_animator.SetTrigger("UseSkill_4");
+        PlayerController.Instance.SetTrigger("UseSkill_4");
+        
+        // 1초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 1f);
+    }
+
     public void OnAttackStart()
     {
         _isSkillUsed = true;
@@ -130,10 +145,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
         Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.MoveCheck()}");
     }
 
-    public void AnimationPlay()
+    private void PlayerMove()
     {
-        //_animator.SetTrigger("UseSkill_4");
-        PlayerController.Instance.SetTrigger("UseSkill_4");
+        PlayerController.Instance.Move();
     }
 
     // 범위 안의 모든 몬스터 탐색

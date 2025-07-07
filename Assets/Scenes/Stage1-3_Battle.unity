@@ -416,6 +416,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9175627777827666347, guid: 9ec5559d18e43ad4b906b7c07a3a901f, type: 3}
+      propertyPath: MaxHealth
+      value: 35400
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175627777827666347, guid: 9ec5559d18e43ad4b906b7c07a3a901f, type: 3}
+      propertyPath: DamageReduceRate
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

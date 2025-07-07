@@ -118,11 +118,6 @@ public class SkillLogic_2 : SkillLogic, ISkill
         OnAttackEnd();
     }
 
-    public void AnimationPlay()
-    {
-        PlayerController.Instance.SetTrigger("UseSkill_2");
-    }
-
     public void OnAttackStart()
     {
         _isSkillUsed = true;
@@ -134,6 +129,19 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public void OnAttackEnd()
     {
         _isSkillUsed = false;
+        PlayerController.Instance.Move();
+    }
+
+    public void AnimationPlay()
+    {
+        PlayerController.Instance.SetTrigger("UseSkill_2");
+
+        // 10프레임 후 플레이어 이동 활성화
+        Invoke("PlayerMove", 0.17f);
+    }
+
+    private void PlayerMove()
+    {
         PlayerController.Instance.Move();
     }
 

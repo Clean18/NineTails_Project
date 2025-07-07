@@ -158,6 +158,10 @@ PrefabInstance:
       propertyPath: bossStageCamera
       value: 
       objectReference: {fileID: 1306979446}
+    - target: {fileID: 6144050541231342413, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+      propertyPath: boss
+      value: 
+      objectReference: {fileID: 2049814803}
     - target: {fileID: 6631837413079924794, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -481,6 +485,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 992056899868396465, guid: ff3ebc37ef47e5142a291f0e373ed3b0, type: 3}
+      propertyPath: MaxHealth
+      value: 1073830
+      objectReference: {fileID: 0}
+    - target: {fileID: 992056899868396465, guid: ff3ebc37ef47e5142a291f0e373ed3b0, type: 3}
+      propertyPath: DamageReduceRate
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5302198693414457420, guid: ff3ebc37ef47e5142a291f0e373ed3b0, type: 3}
       propertyPath: m_Name
       value: 3StageBoss
@@ -530,6 +542,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff3ebc37ef47e5142a291f0e373ed3b0, type: 3}
+--- !u!114 &2049814803 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 992056899868396465, guid: ff3ebc37ef47e5142a291f0e373ed3b0, type: 3}
+  m_PrefabInstance: {fileID: 2049814802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa4e0132fd3dc4458c70382ad3f611c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

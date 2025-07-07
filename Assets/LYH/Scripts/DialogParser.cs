@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Rendering;
 
 // 데이터 구조 정의
 [System.Serializable]
@@ -20,13 +21,20 @@ public class DialogLine
     public string bgImg;
     public string extra1;
 }
+public class SummaryLine
+{
+    public string SceneName;
+    public string Summary;
+}
 
 public class DialogParser : MonoBehaviour
 {
     [SerializeField] private TextAsset[] dialogDatas = new TextAsset[21];
     [SerializeField] private TextAsset dialogData;
+    [SerializeField] private TextAsset summaryData;
     [SerializeField] private TextMeshProUGUI charNameText;
     [SerializeField] private TextMeshProUGUI dialogText;
+    [SerializeField] private TextMeshProUGUI summary;
 
     [SerializeField] private GameObject dialogUI;
     [SerializeField] private GameObject cantskipUI;
@@ -67,6 +75,7 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.5f;
 
     private List<DialogLine> dialogLines = new List<DialogLine>();
+    private List<SummaryLine> summaries = new List<SummaryLine>();
     private int currentIndex = 0;
     private int charIndex = 0;
     private bool isNextClicked = false;
@@ -83,7 +92,7 @@ public class DialogParser : MonoBehaviour
         // dialogName = 입력값 (추가완료)
         dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.GetPlayerSceneIndex()];
         Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.GetPlayerSceneIndex()}");
-
+        // csv 파싱
         for (int i = 0; i < dialogDatas.Length; i++)
         {
             if (dialogDatas[i].name == dialogName)
@@ -95,6 +104,13 @@ public class DialogParser : MonoBehaviour
         changeNameUI.onEndEdit.AddListener(changeFoxName);
         LoadDialog();
         ShowLine(0);
+        for (int i = 0; i < summaries.Count; i++)
+        {
+            if (summaries[i].SceneName == dialogName)
+            {
+                summary.text = summaries[i].Summary;
+            }
+        }
     }
 
     void LoadDialog()
@@ -107,9 +123,9 @@ public class DialogParser : MonoBehaviour
             string[] values = lines[i].Split(',');
 
             // CSV 필드가 누락되었을 경우 방지
-            while (values.Length < 11)
+            while (values.Length < 10)
             {
-                System.Array.Resize(ref values, 11);
+                System.Array.Resize(ref values, 10);
             }
 
             DialogLine line = new DialogLine
@@ -130,6 +146,30 @@ public class DialogParser : MonoBehaviour
         }
 
         Debug.Log($"총 {dialogLines.Count}개의 대사가 로드되었습니다.");
+
+        string[] summaryLines = summaryData.text.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+        // 첫 줄은 헤더이므로 생략
+        for (int i = 1; i < summaryLines.Length; i++)
+        {
+            string[] values = summaryLines[i].Split(',');
+
+            // CSV 필드가 누락되었을 경우 방지
+            while (values.Length < 2)
+            {
+                System.Array.Resize(ref values, 2);
+            }
+
+            SummaryLine line = new SummaryLine
+            {
+                SceneName = values[0],
+                Summary = values[1].Replace("ENTER","\n").Replace("`", ","),
+            };
+
+            summaries.Add(line);
+        }
+
+        Debug.Log($"총 {summaries.Count}개의 대사가 로드되었습니다.");
     }
 
     void ShowLine(int index) // 다음 대사를 표시하는 버튼을 눌렀을때 행동하는 함수
@@ -339,10 +379,10 @@ public class DialogParser : MonoBehaviour
                 logText.text += "      ";
                 if (dialogLines[i].charName != "")
                 {
-                    logText.text += dialogLines[i].charName;
+                    logText.text += dialogLines[i].charName.Replace("foxName", foxName);
                     logText.text += ": ";
                 }
-                logText.text += dialogLines[i].dialog;
+                logText.text += dialogLines[i].dialog.Replace("foxName", foxName);
                 horiSize += spacing;
             }
         }
