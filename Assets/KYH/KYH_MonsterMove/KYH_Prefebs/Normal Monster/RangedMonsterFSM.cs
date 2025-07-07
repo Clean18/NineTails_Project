@@ -25,6 +25,10 @@ public class RangedMonsterFSM : BaseMonsterFSM
     // BaseMonsterFSM의 추상 공격 루틴 구현 (원거리 투사체 방식)
     protected override IEnumerator AttackRoutine()
     {
+        if (_currentState == MonsterState.Dead)
+        {
+            yield break;
+        }
         while (_currentState == MonsterState.Attack)
         {
             MonsterAnimator.Play("Ranged_Attack");
