@@ -573,33 +573,18 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    void OnDrawGizmos()
-	{
-		// 플레이어의 공격 범위 기즈모
-		// 팔각
-		for (int i = 0; i < DirectionCount; i++)
-		{
-			float angle = SightAngle * i;
-			Vector3 dir = Quaternion.Euler(0, 0, angle) * transform.up;
-			Gizmos.color = Color.red;
-			Gizmos.DrawLine(transform.position, transform.position + dir * SearchDistance);
-		}
-		// 원
-		Gizmos.DrawWireSphere(transform.position, SearchDistance);
-	}
-
-    /// <summary>
-    /// 테스트 함수
-    /// </summary>
-    public void Test_Function()
-    {
-        // TODO : 5번 누르면 스킬추가
-
-        _model.Skill.AddSkill(1);
-        _model.Skill.AddSkill(2);
-        _model.Skill.AddSkill(3);
-        _model.Skill.AddSkill(4);
-        _model.Skill.AddSkill(5);
-        _model.Skill.AddSkill(6);
-    }
+ //   void OnDrawGizmos()
+	//{
+	//	// 플레이어의 공격 범위 기즈모
+	//	// 팔각
+	//	for (int i = 0; i < DirectionCount; i++)
+	//	{
+	//		float angle = SightAngle * i;
+	//		Vector3 dir = Quaternion.Euler(0, 0, angle) * transform.up;
+	//		Gizmos.color = Color.red;
+	//		Gizmos.DrawLine(transform.position, transform.position + dir * SearchDistance);
+	//	}
+	//	// 원
+	//	Gizmos.DrawWireSphere(transform.position, SearchDistance);
+	//}
 }

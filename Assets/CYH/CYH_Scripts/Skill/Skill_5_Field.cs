@@ -67,9 +67,9 @@ public class Skill_5_Field : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _detectionRadius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _detectionRadius);
+    //}
 }

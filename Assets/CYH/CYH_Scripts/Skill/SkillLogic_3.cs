@@ -223,9 +223,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
     }
     #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _radius);
+    //}
 }

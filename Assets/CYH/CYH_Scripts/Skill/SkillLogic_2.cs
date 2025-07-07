@@ -230,11 +230,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position+_centerOffset, _radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireSphere(transform.position+_centerOffset, _radius);
+    //}
 
     private void OnEnable()
     {
