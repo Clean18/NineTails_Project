@@ -66,19 +66,30 @@ public class SkillPopUp : BaseUI
 		for (int i = 0; i < skillUIList.Count; i++)
 		{
 			int skillIndex = i;
+            // 업그레이드 버튼
 			skillUIList[i]._upgradeButton.onClick.AddListener(() =>
 			{
-				PlayerController.Instance.TrySkillLevelUp(skillIndex);
-				Debug.Log($"스킬 {skillIndex}번 강화 버튼 클릭됨");
-				UpdateSkill();
+                // 2-3 클리어 체크
+                if ((AchievementManager.Instance.AchievedIds.ContainsKey("A6") && AchievementManager.Instance.AchievedIds["A6"]) || GameManager.IsCheat)
+                {
+                    PlayerController.Instance.TrySkillLevelUp(skillIndex);
+				    Debug.Log($"스킬 {skillIndex}번 강화 버튼 클릭됨");
+				    UpdateSkill();
+                }
+                else
+                {
+                    Debug.Log("2-3 스테이지 클리어 이후 사용가능합니다.");
+                    UIManager.Instance.ShowWarningText("2-3 스테이지 클리어 이후 사용가능합니다.");
+                }
 			});
+            // 스킬 획득 버튼
 			skillUIList[i]._getButton.onClick.AddListener(() =>
 			{
-				// 스킬 획득
 				PlayerController.Instance.LearnSkill(skillIndex);
 				Debug.Log($"스킬 {skillIndex}번 습득 버튼 클릭됨");
 				UpdateSkill();
 			});
+            // 단축키 등록 버튼
 			skillUIList[i]._active.onClick.AddListener(() =>
 			{
 				var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];

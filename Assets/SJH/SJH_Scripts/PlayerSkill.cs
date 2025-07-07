@@ -136,7 +136,7 @@ public class PlayerSkill
                 SkillCooldown = skill.RemainCooldown,
             });
         }
-        Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
+        //Debug.LogWarning($"저장할 스킬 개수 : {saveSkills.Count}");
         skillList = saveSkills;
 		return saveSkills;
 	}
@@ -249,6 +249,7 @@ public class PlayerSkill
             if (player.GetSpiritEnergy() < ultCost)
             {
                 Debug.Log("영기가 부족합니다.");
+                UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
                 return;
             }
             // 재화 감소
@@ -265,6 +266,7 @@ public class PlayerSkill
             if (player.GetSpiritEnergy() < normalCost)
             {
                 Debug.Log("영기가 부족합니다.");
+                UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
                 return;
             }
             player.SpendCost(CostType.SpiritEnergy, normalCost);
@@ -327,6 +329,7 @@ public class PlayerSkill
         if (soul < 1 && !GameManager.IsCheat)
         {
             Debug.Log("혼백이 부족합니다.");
+            UIManager.Instance.ShowWarningText("혼백이 부족합니다.");
             return;
         }
 
@@ -362,7 +365,8 @@ public class PlayerSkill
 
         if (skill == null || isHas == false)
         {
-            Debug.Log("가지고 있지 않은 스킬입니다.");
+            Debug.Log("아직 배우지 않은 스킬입니다.");
+            UIManager.Instance.ShowWarningText("아직 배우지 않은 스킬입니다.");
             return;
         }
 
@@ -394,7 +398,8 @@ public class PlayerSkill
             }
         }
 
-        Debug.Log("등록 가능한 슬롯이 없습니다.");
+        Debug.Log("스킬은 최대 3개까지만 동시에 사용할 수 있습니다.");
+        UIManager.Instance.ShowWarningText("스킬은 최대 3개까지만 동시에 사용할 수 있습니다.");
     }
     /// <summary>
     /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
