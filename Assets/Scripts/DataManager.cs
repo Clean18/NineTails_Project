@@ -223,8 +223,9 @@ public class DataManager : Singleton<DataManager>
 	IEnumerator StatDataInit()
 	{
 		// CSV 다운로드
-		string csvString = "https://docs.google.com/spreadsheets/d/1gRFa0xZI2dQDW37blA48rheCbATOGygO/gviz/tq?tqx=out:csv&sheet=Character_StatLevel";
-		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+		//string csvString = "https://docs.google.com/spreadsheets/d/1gRFa0xZI2dQDW37blA48rheCbATOGygO/gviz/tq?tqx=out:csv&sheet=Character_StatLevel"; 1dS1PsY8ndanDCTmP0HtqStSyqbhepLj2
+		string csvString = "https://docs.google.com/spreadsheets/d/1dS1PsY8ndanDCTmP0HtqStSyqbhepLj2/gviz/tq?tqx=out:csv&sheet=Character_StatLevel";
+        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
 		yield return csvData.SendWebRequest();
 
 		if (csvData.result != UnityWebRequest.Result.Success)
@@ -280,14 +281,14 @@ public class DataManager : Singleton<DataManager>
 			StatCostTable[StatDataType.Defense][statLevel] = levelupCost;
 			StatCostTable[StatDataType.Speed][statLevel] = levelupCost;
 
-            Debug.Log("===============");
-            Debug.Log($"{statLevel} 레벨");
-            Debug.Log($"공격력 : {attack}");
-            Debug.Log($"체력 : {hp}");
-            Debug.Log($"방어력 : {defense}");
-            Debug.Log($"비용 : {levelupCost}");
-            Debug.Log($"스피드 : {speed}");
-            Debug.Log("===============");
+            //Debug.Log("===============");
+            //Debug.Log($"{statLevel} 레벨");
+            //Debug.Log($"공격력 : {attack}");
+            //Debug.Log($"체력 : {hp}");
+            //Debug.Log($"방어력 : {defense}");
+            //Debug.Log($"비용 : {levelupCost}");
+            //Debug.Log($"스피드 : {speed}");
+            //Debug.Log("===============");
         }
 	}
 	IEnumerator EquipmentUpgradeCostInit()
