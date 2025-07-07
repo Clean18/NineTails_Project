@@ -36,7 +36,7 @@ public struct SaveMissionData
 [System.Serializable]
 public class PlayerQuest
 {
-	public void InitQuest(List<SaveAchievementData> saveAchive = null, List<SaveMissionData> saveMission = null)
+	public void InitQuest(List<SaveAchievementData> saveAchive = null, List<SaveMissionData> saveMission = null, float missionCooldown = 0f)
 	{
         if (AchievementManager.Instance == null) return;
 
@@ -80,6 +80,12 @@ public class PlayerQuest
                 }
             }
         }
+
+        // 돌파미션 쿨타임이 남아있으면 쿨다운 시작
+        if (missionCooldown != 0 && missionCooldown > 0.0001f)
+        {
+            MissionManager.Instance.StartCoroutine(MissionManager.Instance.CooldownRoutine(missionCooldown));
+        }
         Debug.Log("미션 초기화 완료");
     }
 
@@ -116,4 +122,6 @@ public class PlayerQuest
         Debug.Log($"저장 : 클리어한 미션 개수 : {ClearTable.Count}");
         return list;
 	}
+
+    public float SaveMissionCooldown() => MissionManager.Instance.CooldownSeconds;
 }

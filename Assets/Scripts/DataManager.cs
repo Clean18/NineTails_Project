@@ -280,15 +280,15 @@ public class DataManager : Singleton<DataManager>
 			StatCostTable[StatDataType.Defense][statLevel] = levelupCost;
 			StatCostTable[StatDataType.Speed][statLevel] = levelupCost;
 
-			//Debug.Log("===============");
-			//Debug.Log($"{statLevel} 레벨");
-			//Debug.Log($"공격력 : {attack}");
-			//Debug.Log($"체력 : {hp}");
-			//Debug.Log($"방어력 : {defense}");
-			//Debug.Log($"비용 : {levelupCost}");
-			//Debug.Log($"스피드 : {speed}");
-			//Debug.Log("===============");
-		}
+            Debug.Log("===============");
+            Debug.Log($"{statLevel} 레벨");
+            Debug.Log($"공격력 : {attack}");
+            Debug.Log($"체력 : {hp}");
+            Debug.Log($"방어력 : {defense}");
+            Debug.Log($"비용 : {levelupCost}");
+            Debug.Log($"스피드 : {speed}");
+            Debug.Log("===============");
+        }
 	}
 	IEnumerator EquipmentUpgradeCostInit()
 	{

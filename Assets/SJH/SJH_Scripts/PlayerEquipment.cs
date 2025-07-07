@@ -176,6 +176,7 @@ public class PlayerEquipment
             if (warmth < BaseSSRCost && !GameManager.IsCheat)
             {
                 Debug.Log("재화가 부족하여 강화를 할 수 없습니다.");
+                UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
                 return;
             }
             Level += 1;
@@ -201,6 +202,7 @@ public class PlayerEquipment
         if (warmth < nextUpgradeCost && !GameManager.IsCheat)
         {
             Debug.Log("재화가 부족합니다");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 
@@ -245,6 +247,7 @@ public class PlayerEquipment
         if (nextData.WarmthCost > warmth && !GameManager.IsCheat)
         {
             Debug.Log("재화가 부족합니다.");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 

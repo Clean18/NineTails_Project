@@ -74,4 +74,6 @@ public partial class GameData
     public List<SaveAchievementData> PlayerAchivementList = new();
     // 미션
     public List<SaveMissionData> PlayerMissionList = new();
+    // 돌파미션 리트라이 쿨타임
+    public float MissionCooldown = 0;
 }
