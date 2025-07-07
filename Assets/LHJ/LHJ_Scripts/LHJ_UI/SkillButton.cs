@@ -35,6 +35,7 @@ public class SkillButton : MonoBehaviour, IUI
             KeyCode.Alpha2,
             KeyCode.Alpha3,
         };
+        //currentCooltimes = new float[skillButtons.Length];
 
         // 스킬 아이콘 변경
         UpdateButtonImage();
@@ -44,24 +45,47 @@ public class SkillButton : MonoBehaviour, IUI
         for (int i = 0; i < coolTimes.Length; i++)
         {
             if (mappingSkills.TryGetValue(triggerKeys[i], out var skill) && skill != null && skill.SkillData != null)
+            {
                 coolTimes[i] = skill.SkillData.CoolTime;
+
+                // 쿨타임 중이면 현재 상태 유지
+                if (skill.IsCooldown)
+                {
+                    Debug.Log($"슬롯 {i + 1}번 스킬은 쿨타임 중이므로 초기화 생략");
+                    continue;
+                }
+            }
             else
+            {
                 coolTimes[i] = 1f;
+            }
+
+            // 쿨타임이 아닌 경우만 초기화
+            currentCooltimes[i] = 0f;
+            _disableImages[i].fillAmount = 1;
+            _disableImages[i].gameObject.SetActive(false);
         }
 
-        currentCooltimes = new float[skillButtons.Length];
+        //for (int i = 0; i < coolTimes.Length; i++)
+        //{
+        //    if (mappingSkills.TryGetValue(triggerKeys[i], out var skill) && skill != null && skill.SkillData != null)
+        //        coolTimes[i] = skill.SkillData.CoolTime;
+        //    else
+        //        coolTimes[i] = 1f;
+        //}
 
         for (int i = 0; i < skillButtons.Length; i++)
         {
             int index = i + 1;
+            skillButtons[i].onClick.RemoveAllListeners();
             skillButtons[i].onClick.AddListener(() => // 버튼 클릭시 해당 스킬 발동
             {
                 Debug.Log($"{index} 스킬버튼 클릭");
                 UseSkill(index);
             });
             //coolTimeImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
-            _disableImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
-            _disableImages[i].gameObject.SetActive(false);
+            //_disableImages[i].fillAmount = 1;   // 해당 스킬 쿨타임 이미지 초기화
+            //_disableImages[i].gameObject.SetActive(false);
         }
     }
 
