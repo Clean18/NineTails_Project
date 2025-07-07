@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 /// <summary>
@@ -23,24 +23,45 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     }
 
     [Header("Boss HP")]
-    [SerializeField] protected float MaxHealth = 1000f;     // 최대 체력
+    [SerializeField] public float MaxHealth = 1000f;     // 최대 체력
     public float CurrentHealth;         // 현재 체력
     [SerializeField] protected float DamageReduceRate = 0f; // 몬스터의 데미지 감소율
 
-    protected BossState CurrentState;         // 현재 FSM 상태
+    [SerializeField] protected BossState CurrentState;         // 현재 FSM 상태
     protected bool isDeadHandled = false;     // 죽음 처리 중복 방지용
 
     [Header("FSM Timer")]
     [SerializeField] protected float IdleTime = 3f;         // Idle 상태에서 대기하는 시간 (다음 패턴 전환까지 딜레이)
     protected float IdleTimer;                             // Idle 상태에서 누적된 시간
 
+    [Header("Audio")]
+    [SerializeField] protected AudioMixerGroup sfxMixerGroup;
+    protected AudioSource sfxAudioSource;
+
     [SerializeField] protected Transform PlayerTransform;  // 플레이어 트랜스폼
 
     protected Coroutine BossPatternRoutine;                // 현재 실행 중인 패턴 코루틴 참조
     protected virtual int PatternCount => 3;
+
+    [field: SerializeField] public MonsterType Type { get; set; }
+
     protected Vector3 originalPosition;                               // 초기 위치 저장
+    protected SpriteRenderer _sprite;
+
+    [Header("플레이어 레이어")]
+    [SerializeField] protected LayerMask _playerLayer;
+    
+
+    protected virtual void Awake()
+    {
+        sfxAudioSource = gameObject.AddComponent<AudioSource>();
+        sfxAudioSource.outputAudioMixerGroup = sfxMixerGroup;
+        sfxAudioSource.playOnAwake = false;
+        sfxAudioSource.loop = false;
+        _sprite = GetComponent<SpriteRenderer>();
+    }
     // 시작 시 상태 초기화
-    protected virtual void Start()
+    protected virtual void OnEnable()
     {
         CurrentState = BossState.Null;
         StartCoroutine(BossInit());
@@ -50,8 +71,8 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     // 게임 매니저에서 플레이어 트랜스폼이 준비되었을 때까지 대기 후 초기화
     protected IEnumerator BossInit()
     {
-        yield return new WaitUntil(() => GameManager.Instance?.PlayerController != null);
-        PlayerTransform = GameManager.Instance.PlayerController.transform;
+        yield return new WaitUntil(() => GameManager.Instance?.Player != null);
+        PlayerTransform = GameManager.Instance.Player.transform;
 
         CurrentHealth = MaxHealth;              // 보스 체력 초기화
         TransitionToState(BossState.Intro);     // Intro 상태로 시작
@@ -136,7 +157,10 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
         {
             isDeadHandled = true;
             Debug.Log("보스 사망 연출 시작");
-            Invoke(nameof(DestroySelf), 3f); // 3초 후 제거
+            MissionManager.Instance.AddKill();
+            AchievementManager.Instance.CheckBossAchievements(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name); // 업적 조건 체크
+            //Invoke(nameof(DestroySelf), 3f); // 3초 후 제거
+            StartCoroutine(DeadRoutine());
         }
     }
 
@@ -147,6 +171,8 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
     {
         Destroy(gameObject);
     }
+
+    protected abstract IEnumerator DeadRoutine();
 
     /// <summary>
     /// IDamagable 인터페이스 구현 - 데미지 처리
@@ -159,11 +185,18 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
         CurrentHealth -= finalDamage;
 
         Debug.Log($"플레이어가 보스에게 데미지 {damage} 를 입힘, 실제 피해 : {finalDamage} | 남은 체력: {CurrentHealth}");
+        UIManager.Instance.ShowDamageText(transform, damage); // 데미지 텍스트 출력
 
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;
             TransitionToState(BossState.Dead);
         }
+    }
+
+    protected void PlaySound(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null || sfxAudioSource == null) return;
+        sfxAudioSource.PlayOneShot(clip, volume);
     }
 }

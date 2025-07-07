@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8007892468903386084}
   - component: {fileID: 4845150603074451690}
+  - component: {fileID: 7911376091029855256}
   m_Layer: 0
   m_Name: WarningStomps
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -5.242174, y: 0.085469484, z: 0.1028336}
-  m_LocalScale: {x: 9, y: 12, z: 1}
+  m_LocalScale: {x: 15, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.8490566, g: 0.15619439, b: 0.15619439, a: 0.23529412}
   m_FlipX: 0
@@ -84,3 +85,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7911376091029855256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9209678113999117585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18904430e2414d44b92fc7709f6eaee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

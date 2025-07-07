@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6363571827731124655}
   - component: {fileID: 992056899868396465}
   - component: {fileID: -6634828117489559820}
-  m_Layer: 0
+  - component: {fileID: 5112722021896827988}
+  m_Layer: 9
   m_Name: 3StageBoss
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5302198693414457420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.7, y: -0.06, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,7 +49,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5302198693414457420}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -134,37 +135,43 @@ MonoBehaviour:
   MaxHealth: 1000
   CurrentHealth: 0
   DamageReduceRate: 0
+  CurrentState: 0
   IdleTime: 3
+  sfxMixerGroup: {fileID: 7955276204997878286, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
   PlayerTransform: {fileID: 0}
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   WarningCirclePrefab: {fileID: 4009488767628743915, guid: 158347338ee333d40a9c328760dc7f98, type: 3}
-  WhirlwindEffect: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  RoarSound1: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  WhirlwindEffect: {fileID: 7622797204963500680, guid: cbae91d6e8c358747b29051fdb82909a, type: 3}
+  RoarSound1: {fileID: 8300000, guid: 872054574556689478ff17775c3091fc, type: 3}
+  CycloneSound: {fileID: 8300000, guid: 0fd58a40a9ab2e540a6497745f0d41df, type: 3}
   Pattern1Duration: 3
   Pattern1HitInterval: 0.5
-  Pattern1DamagePercent: 5
+  Pattern1DamagePercent: 0.05
   Pattern1Range: 5
   Pattern1Origin: {fileID: 7236268419808362022}
   FeatherProjectilePrefab: {fileID: 3510348135383430409, guid: 9f995bf7c0702f643af73e035b26911a, type: 3}
   WarningFeatherSpotPrefab: {fileID: 5189788415599195678, guid: 355d0ac260d388c439aa713cdfed337f, type: 3}
-  FeatherEffectPrefab: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  RoarSound2: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound2: {fileID: 8300000, guid: af3b3f34a1d9cfd4191c7282769f3bfd, type: 3}
   Pattern2Delay: 2
-  Pattern2DamagePercent: 5
+  Pattern2DamagePercent: 0.05
   FeatherCount: 6
   FeatherDamageRadius: 5
   Pattern2BoxSize: {x: 20, y: 10}
   Pattern2Center: {fileID: 8300456024747162924}
   WarningRectPrefab: {fileID: 1660686088289365442, guid: b4eda7e859ba6754583aa4bb4a3d64c8, type: 3}
   AuraEffect: {fileID: 2558184982816737896, guid: 8229b5f5ce9adce498f6326bc26ffb4d, type: 3}
-  ChargeSound: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
+  RoarSound3: {fileID: 8300000, guid: c4c0973513e7f3b428fd7cd1e0c0617a, type: 3}
+  ChargeSound: {fileID: 8300000, guid: 562b3b975c1d574419cad47d5595173e, type: 3}
   ChargeDelay: 3
-  Pattern3DamagePercent: 70
+  Pattern3DamagePercent: 0.7
   ChargeForce: 20
   ChargeStartPos: {fileID: 901650526432405170}
   ChargeEndPos: {fileID: 1317349505045386407}
-  BossAnimator: {fileID: 0}
+  BossAnimator: {fileID: -6634828117489559820}
   BossRigidbody: {fileID: 1268472704501020521}
-  ChargeCollider: {fileID: 8819723863059629524}
+  ChargeCollider: {fileID: 5112722021896827988}
 --- !u!95 &-6634828117489559820
 Animator:
   serializedVersion: 5
@@ -186,6 +193,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &5112722021896827988
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5302198693414457420}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 6.4268646, y: -1.6554042}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 30, y: 20}
+    newSize: {x: 30, y: 20}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 17.14627, y: 10.84659}
+  m_EdgeRadius: 0
 --- !u!1 &5470536494085540429
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +248,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2409656554703173392}
   - component: {fileID: 1099062796175659405}
-  - component: {fileID: 8819723863059629524}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -271,51 +322,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8819723863059629524
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5470536494085540429}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.50089186, y: 0.10852671}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 30, y: 20}
-    newSize: {x: 30, y: 20}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.2707095, y: 2.9534783}
-  m_EdgeRadius: 0
 --- !u!1 &6842502208882439182
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +334,7 @@ GameObject:
   m_Layer: 0
   m_Name: CycloneOrigin
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -341,7 +347,7 @@ Transform:
   m_GameObject: {fileID: 6842502208882439182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0, z: 0}
+  m_LocalPosition: {x: -15.18, y: -1.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -359,7 +365,7 @@ GameObject:
   m_Layer: 0
   m_Name: ChargeStart
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -390,7 +396,7 @@ GameObject:
   m_Layer: 0
   m_Name: ChargeFinish
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -403,7 +409,7 @@ Transform:
   m_GameObject: {fileID: 7798260313970475835}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.21, y: -0.43, z: -0.10908507}
+  m_LocalPosition: {x: -54.28143, y: -0.43, z: -0.10908507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -421,7 +427,7 @@ GameObject:
   m_Layer: 0
   m_Name: Dropfeathers
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

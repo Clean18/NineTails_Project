@@ -1,5 +1,3 @@
-using System.Buffers.Text;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +6,17 @@ public class UIManager : Singleton<UIManager>
     public StartUI StartUI;
     public GameUI GameUI;
     public Main MainUI;
+    public BossMainUI BossMainUI;
+
+    public static bool IsFloatingText = true;
+
+    // 플레이어가 입력한 닉네임 저장 변수
+    public string PlayerName { get; set; }
 
     public List<IUI> SceneUIList = new();
 
     [SerializeField] private GameObject damageTextPrefab;
+    [SerializeField] private GameObject _warningTextPrefab;
 
     private PopUpCanvas popUpCanvas;
     public PopUpCanvas PopUpCanvas
@@ -50,9 +55,25 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowDamageText(Transform spawnPos, long damage)
     {
-        if (damageTextPrefab.Equals(null)) return;
+        if (damageTextPrefab.Equals(null) || !IsFloatingText) return;
 
         var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
-        go.GetComponent<DamageText>()?.Init($"{damage}");
+        go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}");
+    }
+
+    public void ShowDamageText(Transform spawnPos, long damage, Color color)
+    {
+        if (damageTextPrefab.Equals(null) || !IsFloatingText) return;
+
+        var go = Instantiate(damageTextPrefab, spawnPos.position, Quaternion.identity);
+        go.GetComponent<DamageText>()?.InitFloatingDamage($"{damage}", color);
+    }
+
+    public void ShowWarningText(string text)
+    {
+        if (_warningTextPrefab.Equals(null) || !IsFloatingText) return;
+
+        var go = Instantiate(_warningTextPrefab);
+        go.GetComponent<DamageText>()?.InitWarningMessage($"{text}");
     }
 }

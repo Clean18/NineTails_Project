@@ -2,13 +2,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 public class GameUI : SceneUI, IUI
 {
 	public TMP_Text AIStateText;
 	public Button ControlModeBtn;
-	public Button Test_BossStateBtn;
 
 	void Start()
 	{
@@ -23,13 +21,11 @@ public class GameUI : SceneUI, IUI
 	void SubscribeEvent()
 	{
 		ControlModeBtn?.onClick.AddListener(OnControlModeBtn);
-		Test_BossStateBtn?.onClick.AddListener(OnBossStageBtn);
 	}
 
 	void UnsubscribeEvent()
 	{
         ControlModeBtn?.onClick.RemoveListener(OnControlModeBtn);
-        Test_BossStateBtn?.onClick.RemoveListener(OnBossStageBtn);
     }
 
 	public void ChangeStateText(AIState state)
@@ -53,10 +49,10 @@ public class GameUI : SceneUI, IUI
 
 	public void OnControlModeBtn()
 	{
-		if (GameManager.Instance.PlayerController == null) return;
+		if (GameManager.Instance.Player == null) return;
 
 		// 플레이어 모드 전환
-		var player = GameManager.Instance.PlayerController;
+		var player = GameManager.Instance.Player;
 
 		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 

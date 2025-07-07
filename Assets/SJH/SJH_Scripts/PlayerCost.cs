@@ -4,9 +4,11 @@ using UnityEngine;
 
 public struct SavePlayerCost
 {
-    public long SpiritEnergy;
-    public long Warmth;
-    public long Soul;
+    public long SpiritEnergy;           // 저장할 영기
+    public long Warmth;                 // 저장할 온정
+    public long Soul;                   // 저장할 혼백
+    public bool GetFirstWarmth;         // 첫 온정 획득 트리거
+    public bool GetFirstSpiritEnergy;   // 첫 영기 획득 트리거
 }
 
 /// <summary>
@@ -30,6 +32,16 @@ public class PlayerCost
         get => _spiritEnergy;
         set
         {
+            if (!GetFirstSpiritEnergy && value > 0)
+            {
+                GetFirstSpiritEnergy = true;
+                _spiritEnergy = value;
+                Debug.Log("첫 영기 획득");
+                PlayerController.Instance.SetPlayerSceneIndex(14); // 여기서 세이브도 함
+                SceneChangeManager.Instance.LoadNextScene(14);
+                return;
+            }
+
             _spiritEnergy = value;
             OnCostChanged?.Invoke();
         }
@@ -45,6 +57,16 @@ public class PlayerCost
         get => _warmth;
         set
         {
+            if (!GetFirstWarmth && value > 0)
+            {
+                GetFirstWarmth = true;
+                _warmth = value;
+                Debug.Log($"첫 온정 획득 : {GetFirstWarmth}");
+                // Stage 1-1 Middle 다이얼로그로 이동 5번씬
+                PlayerController.Instance.SetPlayerSceneIndex(5); // 여기서 세이브도 함
+                SceneChangeManager.Instance.LoadNextScene(5);
+                return;
+            }
             _warmth = value;
             OnCostChanged?.Invoke();
         }
@@ -61,8 +83,18 @@ public class PlayerCost
         }
     }
 
-    public void InitCost(long spiritEnergy = 0, long warmth = 0, long soul = 0)
+    // 첫 온정 획득
+    public bool GetFirstWarmth;
+    // 첫 영기 획득
+    public bool GetFirstSpiritEnergy;
+
+    public void InitCost(long spiritEnergy = 0, long warmth = 0, long soul = 0, bool getFirstWarmth = false, bool getFirstSpiritEnergy = false)
     {
+        // 첫 획득을 먼저 지정해줘야 반복안됨
+        GetFirstWarmth = getFirstWarmth;
+        GetFirstSpiritEnergy = getFirstSpiritEnergy;
+
+        // 재화 할당
         SpiritEnergy = spiritEnergy;
         Warmth = warmth;
         Soul = soul;
@@ -110,6 +142,9 @@ public class PlayerCost
         cost.SpiritEnergy = SpiritEnergy;
         cost.Warmth = Warmth;
         cost.Soul = Soul;
+        cost.GetFirstWarmth = GetFirstWarmth;
+        cost.GetFirstSpiritEnergy = GetFirstSpiritEnergy;
+
         return cost;
     }
 }

@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class FallingRock : MonoBehaviour
 {
     [Header("데미지 설정")]
     [SerializeField] private float DamagePercent = 0.1f;     // 플레이어에게 줄 데미지 비율
     [SerializeField] private string TargetTag = "Player";    // 데미지를 둘 대상의 태그
+    [SerializeField] private LayerMask PlayerLayer;          // 플레이어 레이어
     [SerializeField] private float DamageRadius = 1.5f;      // 피격 판정 범위( 원형 )
 
     [Header("낙석 정지 조건")]
@@ -16,14 +19,34 @@ public class FallingRock : MonoBehaviour
     [Header("참조 위치")]
     public Transform WarningPoint;                           // 낙하 대상 지점 ( BossMonsterSFM 에서 할당)
 
+    [Header("사운드 설정")]
+    [SerializeField] private AudioClip DropRockSound;                  // 낙석 충돌 사운드
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;           // Audio Mixer의 SFX 그룹
+    private AudioSource audioSource;                                   // 사운드 재생용 AudioSource
+
+
     private Rigidbody2D rb;
     private bool hasDealtDamage = false;        // 데미지 판정이 이미 이루어졌는지 여부확인
     private bool hasLaunched = false;           // 낙하가 시작되었는지의 여부 확인
+    [SerializeField] Animator DropRockAnimator;
 
     private void Start()
     {
+        
         rb = GetComponent<Rigidbody2D>();       // Rigidbody2D 컴포넌트 가져오기
-        rb.gravityScale = 0f;                   // 중력 제거      
+        rb.gravityScale = 0f;                   // 중력 제거
+                                                
+        // AudioSource 생성 및 설정 (Mixer 연결 포함)
+        audioSource = gameObject.AddComponent<AudioSource>();              // 런타임에 오디오 소스 추가
+        audioSource.outputAudioMixerGroup = sfxMixerGroup;                // Mixer 그룹 연결 (SFX 그룹)
+        audioSource.playOnAwake = false;                                  // 자동 재생 방지
+        audioSource.loop = false;
+        
+        // 낙석 소리 재생 (PlayClipAtPoint 대신, Mixer 연동된 AudioSource로 재생)
+        if (DropRockSound != null)
+        {
+            audioSource.PlayOneShot(DropRockSound);
+        }
 
         if (WarningPoint != null)
         {
@@ -56,7 +79,7 @@ public class FallingRock : MonoBehaviour
         float warningY = WarningPoint.position.y;
         float delta = rockY - warningY;
 
-        Debug.Log($"[낙석 거리] RockY: {rockY}, WarningY: {warningY}, 차이: {delta}");
+        //Debug.Log($"[낙석 거리] RockY: {rockY}, WarningY: {warningY}, 차이: {delta}");
 
         // 도달 허용 오차 범위 이내이면 충돌로 판단하게 하는 조건문
         if (Mathf.Abs(delta) <= StopThreshold)
@@ -83,26 +106,20 @@ public class FallingRock : MonoBehaviour
     // 데미지 판정 함수 ( 원형 범위 내에 있는 플레이어 컴포넌트 탐지 )
     private void DealDamage()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, DamageRadius);
-        foreach (var hit in hits)
+        Collider2D hits = Physics2D.OverlapCircle(transform.position, DamageRadius, PlayerLayer);
+        if (hits != null)
         {
-            if (hit.CompareTag(TargetTag))
-            {
-                var player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
-                {
-                    player.TakeDamageByPercent(DamagePercent);
-                    Debug.Log($" 낙석 데미지: {hit.name}에게 {DamagePercent * 100}% 피해");
-                }
-            }
+            // 10% 대미지
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * DamagePercent));
+            Debug.Log($" 낙석 데미지: {DamagePercent * 100}% 피해");
         }
     }
 
     // 에디터에서 범위 시각화 하는 기즈모 ( 필요없으면 삭제해도 됨 )
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, DamageRadius);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, DamageRadius);
+    //}
 }
 

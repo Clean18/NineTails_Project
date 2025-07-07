@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 5fb2d6dfd9505804a9e6c9ba12bfedf7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamagePercent: 0.2
   LifeTime: 5
+  SpearGhostSound: {fileID: 8300000, guid: c7824efa8f7e91a4c93e45e1fc2c7992, type: 3}
 --- !u!50 &303783098945277447
 Rigidbody2D:
   serializedVersion: 4

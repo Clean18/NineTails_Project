@@ -1,16 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_1 : SkillLogic, ISkill
 {
     [SerializeField] private GameObject _hitBoxPrefab;
+    [SerializeField] private GameObject _skillEffectPrefab;
+
     [SerializeField] private CircleCollider2D _hitBox;
+    [SerializeField] private GameObject _skillEffect;
+    [SerializeField] private Vector3 _effectSpawnPos;
 
     [field: SerializeField] public ActiveSkillData SkillData { get; set; }
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
@@ -22,14 +26,22 @@ public class SkillLogic_1 : SkillLogic, ISkill
         _hitBox.enabled = false;
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 1;
+        SlotIndex = -1;
+        _effectSpawnPos = new Vector3(0, 12.22765f, 0);
     }
 
-    public void UseSkill(Transform attacker)
+    public void SkillInit(SaveSkillData playerSkillData)
     {
-        Debug.Log("스킬 1 UseSkill");
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
+
+    public bool UseSkill(Transform attacker)
+    {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        Debug.Log("스킬 1 UseSkill");
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -41,12 +53,13 @@ public class SkillLogic_1 : SkillLogic, ISkill
         EnableHitbox();
         AnimationPlay();
         Debug.Log("스킬 1 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -54,8 +67,11 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
+
         EnableHitbox();
         AnimationPlay();
+        Debug.Log("스킬 1 사용완료");
+        return true;
     }
 
     public void EnableHitbox()
@@ -76,17 +92,40 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // OnTrigger 플래그
         _isSkillUsed = false;
+
+        // 플레이어 움직임 활성화
+        PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()
     {
         if (!_hitBox.enabled) return;
         else PlayerController.Instance.SetTrigger("UseSkill_1");
+
+        // 플레이어 움직임 비활성화
+        PlayerController.Instance.Stop();
+
+        // 1초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 1f);
     }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
+    }
+
+    public void CreateEffect()
+    {
+        Debug.Log("CreateEffect");
+        GameObject effect = Instantiate(_skillEffectPrefab, transform);
+        effect.transform.localPosition = _effectSpawnPos;
+        Destroy(effect, 0.59f);
+    }
+
 
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((0.75f + 0.0075f * SkillLevel)));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((0.75f + 0.0075f * SkillLevel)));
 
         foreach (var monster in _hitMonsters)
         {
@@ -107,14 +146,28 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = SkillData.CoolTime;
-        while (remaining > 0f)
+        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
         {
-            Debug.Log($"쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
-            remaining -= 1f;
+            RemainCooldown -= 1f;
         }
+        RemainCooldown = 0f;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
+    }
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
 }

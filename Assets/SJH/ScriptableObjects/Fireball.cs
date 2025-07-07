@@ -34,7 +34,7 @@ public class Fireball : SkillData
 		Vector3 spawnPos = attacker.position;
 		Vector3 dir = (attackDir - spawnPos).normalized;
 
-        var player = GameManager.Instance.PlayerController;
+        var player = GameManager.Instance.Player;
 
 		var go = Instantiate(SkillPrefab, spawnPos, Quaternion.identity);
 		go.transform.up = dir;

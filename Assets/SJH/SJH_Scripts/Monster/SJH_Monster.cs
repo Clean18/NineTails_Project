@@ -21,7 +21,7 @@ public class SJH_Monster : MonoBehaviour
 
 	void OnEnable()
 	{
-		if (GameManager.Instance.PlayerController != null) _targetTransform = GameManager.Instance.PlayerController.transform;
+		if (GameManager.Instance.Player != null) _targetTransform = GameManager.Instance.Player.transform;
 	}
 
 	void OnDisable()

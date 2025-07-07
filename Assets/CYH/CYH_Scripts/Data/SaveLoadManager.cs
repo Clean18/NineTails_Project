@@ -10,7 +10,8 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public GameData GameData;
     public const string FileName = "PlayerSaveFile"; //SaveFile
-    public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");
+    //public string DataPath => Path.Combine(Application.dataPath, $"CYH/CYH_SaveFiles/{FileName}");
+    public string DataPath => Path.Combine(Application.dataPath, $"SaveFiles/{FileName}");
 
     [field: SerializeField] public int ElapsedSeconds { get; private set; } // 게임종료 후 총 경과 시간(초) - 테스트용
 
@@ -47,24 +48,24 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         }
     }
 
-    private void Update()
-    {
-        // 테스트용
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SaveData();
-        }
+    //private void Update()
+    //{
+    //    // 테스트용
+    //    if (Input.GetKeyDown(KeyCode.M))
+    //    {
+    //        SaveData();
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            LoadData();
-        }
+    //    if (Input.GetKeyDown(KeyCode.N))
+    //    {
+    //        LoadData();
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            DeleteData();
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.B))
+    //    {
+    //        DeleteData();
+    //    }
+    //}
 
     #region SaveCoroutine
     // 1초마다 SaveData 호출
@@ -109,7 +110,6 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
         string json = JsonUtility.ToJson(GameData, true);
         File.WriteAllText($"{DataPath}", json);
-        Debug.Log("SaveData");
         Debug.Log($"마지막 저장 시간: {GameData.SavedTime}");
     }
 
@@ -198,8 +198,13 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     void OnApplicationQuit()
     {
-        GameManager.Instance.PlayerController?.SaveData();
-        SaveData();
+        Debug.Log("게임 종료");
+        PlayerSave();
     }
 
+    public void PlayerSave()
+    {
+        GameManager.Instance.Player?.SaveData();
+        SaveData();
+    }
 }

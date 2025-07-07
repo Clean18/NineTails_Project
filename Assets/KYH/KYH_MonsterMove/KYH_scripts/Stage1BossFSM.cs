@@ -18,26 +18,28 @@ public class Stage1BossFSM : BaseBossFSM
     [SerializeField] private AudioClip SwingSound;              // 팔 휘두르는 사운드
     [SerializeField] private GameObject WarningRangeIndicator;  // 공격 경고 범위 ( 빨간 UI 와 같은것 )
     [SerializeField] private float Pattern1EffectDuration = 2f; // 이펙트와 경고의 유지시간.
+    [SerializeField] private AudioClip RoarSound1;              // 울부짖는 소리 1
     private GameObject CurrentWarningIndicator;
 
     [Header("Pattern2 Setting")]
     [SerializeField] private GameObject DropRockPrefab;         // 떨어지는 돌 프리팹
     [SerializeField] private GameObject WarningCirclePrefab;    // 바닥에 표시될 경고 원 프리팹
     [SerializeField] private Transform DropPosition;            // 돌이 떨어질 위치 (보스 앞 등)
-    [SerializeField] private AudioClip RoarSound;               // 돌 떨어뜨리기 전 포효 사운드
+    [SerializeField] private AudioClip RoarSound2;              // 돌 떨어뜨리기 전 포효 사운드
     [SerializeField] private float Pattern2Delay = 3f;          // 경고 표시 후 돌이 떨어지는 시간
     [SerializeField] private float Pattern2EffectDuration = 2f; // 돌 이펙트가 유지되는 시간
     [SerializeField] private float DropRadius = 3f;             // 플레이어 위치 기준 낙석 출현 범위
 
     [Header("Pattern3 Setting")]
-    [SerializeField] private GameObject SpearGhostPrefebs;   // 창귀 투사체 프리팹
+    [SerializeField] private GameObject SpearGhostPrefebs;      // 창귀 투사체 프리팹
     [SerializeField] private float SpearSpeed = 10f;            // 투사체 속도
-    [SerializeField] private AudioClip SpearGhostSound;         // 발사 사운드
-    [SerializeField] private GameObject WarningRectPrefab; // 경고용 직사각형 오브젝트
-    [SerializeField] private float WarningDistance = 2f;   // 보스로부터 경고 오브젝트까지의 거리
+    [SerializeField] private AudioClip RoarSound3;              // 포효 사운드
+    [SerializeField] private GameObject WarningRectPrefab;      // 경고용 직사각형 오브젝트
+    [SerializeField] private float WarningDistance = 2f;        // 보스로부터 경고 오브젝트까지의 거리
     private List<GameObject> warningRects = new List<GameObject>();
 
-    
+
+
 
     protected override void HandlePattern1()
     {
@@ -52,11 +54,10 @@ public class Stage1BossFSM : BaseBossFSM
 
     private IEnumerator Pattern1Coroutine()
     {
-        // 1. 고정된 방향으로 설정 (왼쪽)
-        Vector2 fixedDirection = Vector2.left;
-        float fixedAngle = 135f;
+        PlaySound(RoarSound1);
 
-        // 2. 경고 프리팹 인스턴스화 (왼쪽 방향)
+        // 1. 경고 생성 (왼쪽 고정 방향)
+        float fixedAngle = 135f;
         if (WarningRangeIndicator != null)
         {
             CurrentWarningIndicator = Instantiate(
@@ -66,43 +67,46 @@ public class Stage1BossFSM : BaseBossFSM
             );
         }
 
-        // 3. 경고 후 대기
+        // 2. 경고 대기
         yield return new WaitForSeconds(3f);
 
-        // 4. 애니메이션 & 사운드
-        BossAnimator.Play("Tiger_Pattern1");
-        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
-        Debug.Log("패턴1 - 할퀴기 공격 시작");
+        // 3. 애니메이션 실행 → 이펙트, 데미지는 애니메이션 이벤트에서
+        //BossAnimator.Play("Tiger_Pattern1");
+        BossAnimator.Play("Boss1_Attack1");
+        PlaySound(SwingSound);
 
-        // 5. 이펙트 생성 (왼쪽 방향)
-        if (AttackEffectPrefab != null)
-        {
-            // 왼쪽 방향 벡터
-            Vector3 direction = Vector3.left;
-
-            // 생성 위치: AttackOrigin 위치에서 왼쪽으로 1단위 거리 이동
-            float spawnOffset = 5f; // 거리 조절 (값을 늘리면 더 멀리)
-            Vector3 spawnPos = AttackOrigin.position + direction * spawnOffset;
-
-            GameObject fx = Instantiate(AttackEffectPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
-            Destroy(fx, Pattern1EffectDuration);
-        }
-
-        // 6. 부채꼴 범위 내 데미지 판정
-        DealDamageInCone(fixedDirection);
-
-        // 7. 이펙트 유지 시간 대기
+        // 4. 유지 시간 대기
         yield return new WaitForSeconds(Pattern1EffectDuration);
 
-        // 8. 경고 제거
+        // 5. 경고 제거
         if (CurrentWarningIndicator != null)
             Destroy(CurrentWarningIndicator);
 
-        // 9. 상태 복귀
+        // 6. Idle 복귀
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
+    }
 
-        BossAnimator.Play("Tiger_Idle_ani");
+    // Pattern1 공격 처리 - 애니메이션 이벤트에서 호출됨
+    public void OnTigerSwipeAttack()
+    {
+        Debug.Log("애니메이션 이벤트 - OnTigerSwipeAttack 호출됨");
+
+        // 이펙트 생성 (왼쪽 방향 기준)
+        if (AttackEffectPrefab != null)
+        {
+            Vector3 direction = Vector3.left;
+            float spawnOffset = 5f;
+            Vector3 spawnPos = AttackOrigin.position + direction * spawnOffset;
+
+            GameObject fx = Instantiate(AttackEffectPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
+            // Boss1Effect에서 활성화시 자동으로 삭제
+        }
+
+        // 데미지 판정
+        DealDamageInCone(Vector2.left);
     }
 
     /// <summary>
@@ -112,30 +116,18 @@ public class Stage1BossFSM : BaseBossFSM
     /// <param name="forwardDirection">공격의 기준 방향 (보통 플레이어 방향)</param>
     private void DealDamageInCone(Vector2 forwardDirection)
     {
-        // 1. 중심 위치(AttackOrigin.position)를 기준으로 원형 범위 내에 있는 모든 Collider2D를 가져온다.
-        Collider2D[] hits = Physics2D.OverlapCircleAll(AttackOrigin.position, AttackRange);
+        Collider2D hit = Physics2D.OverlapCircle(AttackOrigin.position, AttackRange, _playerLayer);
 
-        foreach (var hit in hits)
+        if (hit != null)
         {
-            // 2. 태그가 "Player"인 대상만 공격 대상으로 고려
-            if (!hit.CompareTag("Player")) continue;
-
-            // 3. 대상까지의 방향 벡터 계산
-            Vector2 dirToTarget = (hit.transform.position - AttackOrigin.position).normalized;
-
-            // 4. 공격 방향(forwardDirection)과 대상 방향(dirToTarget) 사이의 각도 계산
+            // 방향 벡터 계산
+            Vector2 dirToTarget = ((Vector2)hit.transform.position - (Vector2)AttackOrigin.position).normalized;
             float angle = Vector2.Angle(forwardDirection, dirToTarget);
 
-            // 5. 부채꼴 범위 안에 있을 경우에만
             if (angle <= AttackAngle / 2f)
             {
-                // 6. PlayerData 스크립트가 붙어 있다면 데미지 처리
-                var player = hit.GetComponent<Game.Data.PlayerData>();
-                if (player != null)
-                {
-                    Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
-                    player.TakeDamageByPercent(0.4f); // 체력의 40%를 데미지로 줌
-                }
+                PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * 0.4f));
+                Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
             }
         }
     }
@@ -153,8 +145,9 @@ public class Stage1BossFSM : BaseBossFSM
     private IEnumerator Pattern2Coroutine()
     {
         // 1. 보스 애니메이션, 사운드
-        BossAnimator.Play("Tiger_Pattern2");
-        AudioSource.PlayClipAtPoint(RoarSound, transform.position);
+        //BossAnimator.Play("Tiger_Pattern2");
+        BossAnimator.Play("Boss1_Attack2");
+        PlaySound(RoarSound2);
 
 
         // 2. 낙석 위치 랜덤 계산
@@ -187,7 +180,8 @@ public class Stage1BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Tiger_Idle_ani");
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
     }
 
     protected override void HandlePattern3()
@@ -207,12 +201,13 @@ public class Stage1BossFSM : BaseBossFSM
         ShowWarningRects(baseAngle);
 
         // 3. 대기 연출
-        BossAnimator.Play("Tiger_Pattern3");
+        //BossAnimator.Play("Tiger_Pattern3");
+        BossAnimator.Play("Boss1_Attack3");
         Debug.Log("보스 창귀발사 대기모션");
         yield return new WaitForSeconds(3f);
 
         // 4. 투사 모션
-        AudioSource.PlayClipAtPoint(SwingSound, transform.position);
+        PlaySound(SwingSound);
         yield return new WaitForSeconds(0.4f);
 
         // 5. 3방향 투사체 발사
@@ -222,7 +217,7 @@ public class Stage1BossFSM : BaseBossFSM
             FireSpearGhost(baseAngle, offset);
         }
 
-        AudioSource.PlayClipAtPoint(SpearGhostSound, transform.position);
+        PlaySound(RoarSound3);
         yield return new WaitForSeconds(1f);
 
         // 6. 경고 제거
@@ -232,7 +227,8 @@ public class Stage1BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Tiger_Idle_ani");
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
     }
 
     /// <summary>
@@ -297,33 +293,33 @@ public class Stage1BossFSM : BaseBossFSM
         warningRects.Clear();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (AttackOrigin == null) return;
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (AttackOrigin == null) return;
 
-        // 색상 설정 (투명한 빨간색)
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+    //    // 색상 설정 (투명한 빨간색)
+    //    Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
 
-        // 부채꼴의 중심과 반지름
-        Vector3 origin = AttackOrigin.position;
-        float radius = AttackRange;
-        int segments = 30;
+    //    // 부채꼴의 중심과 반지름
+    //    Vector3 origin = AttackOrigin.position;
+    //    float radius = AttackRange;
+    //    int segments = 30;
 
-        // 시작 각도 설정 (왼쪽을 기준으로 180도 방향)
-        float startAngle = 180f - (AttackAngle / 2f);
-        float deltaAngle = AttackAngle / segments;
+    //    // 시작 각도 설정 (왼쪽을 기준으로 180도 방향)
+    //    float startAngle = 180f - (AttackAngle / 2f);
+    //    float deltaAngle = AttackAngle / segments;
 
-        // 선분들로 원호(Arc) 그리기
-        Vector3 prevPoint = origin + DirFromAngle(startAngle) * radius;
-        for (int i = 1; i <= segments; i++)
-        {
-            float currentAngle = startAngle + deltaAngle * i;
-            Vector3 nextPoint = origin + DirFromAngle(currentAngle) * radius;
-            Gizmos.DrawLine(origin, nextPoint);
-            Gizmos.DrawLine(prevPoint, nextPoint);
-            prevPoint = nextPoint;
-        }
-    }
+    //    // 선분들로 원호(Arc) 그리기
+    //    Vector3 prevPoint = origin + DirFromAngle(startAngle) * radius;
+    //    for (int i = 1; i <= segments; i++)
+    //    {
+    //        float currentAngle = startAngle + deltaAngle * i;
+    //        Vector3 nextPoint = origin + DirFromAngle(currentAngle) * radius;
+    //        Gizmos.DrawLine(origin, nextPoint);
+    //        Gizmos.DrawLine(prevPoint, nextPoint);
+    //        prevPoint = nextPoint;
+    //    }
+    //}
 
     // 각도를 받아 방향 벡터 반환 (Z축 기준 회전)
     private Vector3 DirFromAngle(float angle)
@@ -331,4 +327,34 @@ public class Stage1BossFSM : BaseBossFSM
         float rad = angle * Mathf.Deg2Rad;
         return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0f);
     }
+
+    protected override IEnumerator DeadRoutine()
+    {
+        yield return null;
+
+        float timer = 0f;
+        float duration = 3f;
+        Color startColor = _sprite.color;
+
+        while (timer < duration)
+        {
+            float t = timer / duration;
+
+            Color newColor = startColor;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            _sprite.color = newColor;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
+
+        Debug.Log("보스 1 사망 다음 씬으로 이동");
+        SceneChangeManager.Instance.LoadNextScene();
+    }
+
 }
+
+

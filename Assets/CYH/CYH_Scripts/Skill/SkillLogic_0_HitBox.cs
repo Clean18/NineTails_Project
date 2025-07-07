@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillLogic_0_HitBox : SkillLogic, ISkill
@@ -12,6 +11,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
@@ -26,11 +26,18 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         SlotIndex = 0;
     }
 
-    public void UseSkill(Transform attacker)
+    public void SkillInit(SaveSkillData playerSkillData)
     {
-        Debug.Log("기본공격 UseSkill");
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
+
+    public bool UseSkill(Transform attacker)
+    {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        Debug.Log("기본공격 UseSkill");
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -43,12 +50,13 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         // 첫번째 공격은 스크립트에서 실행
         OnAttackStart();
         AnimationPlay();
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown) return;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -60,6 +68,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         _slashCount = 1;
         OnAttackStart();
         AnimationPlay();
+        return true;
     }
 
     public void OnAttackStart()
@@ -102,7 +111,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetAttack() * ((100f + SkillLevel) / 100f));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((100f + SkillLevel) / 100f));
 
         if(_slashCount == 1)
         {
@@ -136,16 +145,28 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
-        Debug.Log($"{remaining} 초");
+        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        //Debug.Log($"기본 공격 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {
-            Debug.Log($"쿨타임 남음: {remaining}초");
+            //Debug.Log($"기본 공격 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
         }
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        //Debug.Log("기본 공격 쿨타임 종료");
+    }
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
 }

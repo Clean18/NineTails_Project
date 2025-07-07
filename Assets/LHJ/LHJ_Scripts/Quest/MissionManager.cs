@@ -8,31 +8,28 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MissionManager : Singleton<MissionManager>
 {
-    private MissionInfo currentMission;     // 현재 진행 미션
-    private float timer;                    // 남은 시간
-    private int killCount;                  // 킬 횟수
-    private bool isRunning;                 // 미션 실행 여부
-
-    public HashSet<string> missionIds = new();  // 미션 중복 방지
+    [SerializeField] private MissionInfo currentMission;     // 현재 진행 미션
+    [SerializeField] private float timer;                    // 남은 시간
+    public int killCount;                                    // 킬 횟수
+    [SerializeField] private bool isRunning;                 // 미션 실행 여부
+    public HashSet<string> MissionIds = new();               // 미션 중복 방지
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
     // 미션을 실행하는 함수
-    public void StartMission()
+    public void StartMission(string sceneName)
     {
-        string stage = SceneManager.GetActiveScene().name;
-
         // 미션 정보 가져오기
-        if (!DataManager.Instance.MissionTable.TryGetValue(stage, out currentMission))
+        if (!DataManager.Instance.MissionTable.TryGetValue(sceneName, out currentMission))
         {
             Debug.Log("해당 스테이지 미션 정보 없음");
             return;
         }
         // 클리어 미션이면 재실행하지않음
-        if (missionIds.Contains(currentMission.Id))
-        {
-            return;
-        }
+        //if (MissionIds.Contains(currentMission.Id))
+        //{
+        //    return;
+        //}
         // 초기값 설정
         timer = currentMission.TimeLimit;
         killCount = 0;
@@ -60,9 +57,21 @@ public class MissionManager : Singleton<MissionManager>
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
-            missionIds.Add(currentMission.Id);  // 미션 클리어 
+            // 이미 클리어한 돌파미션은 보상 지급 X
+            //MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
-            UIManager.Instance.ShowPopUp<CompletePopUp>();      // 성공 팝업창 생성
+            if (currentMission.Id == "M9999") // M1미션일때
+            {
+                Time.timeScale = 0;
+                Debug.Log("닉네임 팝업창 생성");
+                UIManager.Instance.ShowPopUp<NameInputPopUp>(); // 닉네임 팝업창 생성
+            }
+            else
+            {
+                // 그 외 미션은 일반 클리어 팝업
+                Debug.Log("돌파미션 클리어 팝업창 생성");
+                UIManager.Instance.ShowPopUp<CompletePopUp>();  // 미션 성공 팝업창 생성
+            }
         }
         else
         {
@@ -72,10 +81,29 @@ public class MissionManager : Singleton<MissionManager>
         }
     }
     // 미션 실패 쿨타임
-    IEnumerator CooldownRoutine()
+    public IEnumerator CooldownRoutine()
     {
         IsCooldownActive = true;    
-        CooldownSeconds = 10f;     // 쿨타임 시간 설정
+        CooldownSeconds = 60f;     // 쿨타임 시간 설정
+
+        while (CooldownSeconds > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            CooldownSeconds--;      // 남은 쿨타임 감소
+        }
+
+        IsCooldownActive = false;
+    }
+
+    /// <summary>
+    /// 플레이어 데이터 로드 시 쿨타임을 감소할 코루틴
+    /// </summary>
+    /// <param name="cooldownSeconds"></param>
+    /// <returns></returns>
+    public IEnumerator CooldownRoutine(float cooldownSeconds)
+    {
+        IsCooldownActive = true;
+        CooldownSeconds = cooldownSeconds;     // 쿨타임 시간 설정
 
         while (CooldownSeconds > 0)
         {
@@ -99,6 +127,12 @@ public class MissionManager : Singleton<MissionManager>
             isRunning = false;
         }
     }
+    public void DeathFailMission()
+    {
+        isRunning = false;
+        Debug.Log("[MissionManager] 미션 실패 (플레이어 사망)");
+        StartCoroutine(CooldownRoutine());
+    }
     // 미션 진행중 확인 여부
     public bool IsRunning()
     {
@@ -120,6 +154,22 @@ public class MissionManager : Singleton<MissionManager>
     // 미션 보상
     private void Reward(MissionInfo mission)
     {
-        Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
+        // 보상 추가
+        if (!IsCleared(mission.Id))
+        {
+            MissionIds.Add(mission.Id);
+            Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
+            PlayerController.Instance.AddCost(CostType.Warmth, mission.WarmthReward);
+            PlayerController.Instance.AddCost(CostType.SpiritEnergy, mission.SpritReward);
+            PlayerController.Instance.AddCost(CostType.Soul, mission.SkillPoint);
+        }
+        else
+        {
+            Debug.Log($"이미 획득한 미션입니다. : {mission.Id}");
+        }
+    }
+    public bool IsCleared(string missionId)
+    {
+        return MissionIds.Contains(missionId);
     }
 }

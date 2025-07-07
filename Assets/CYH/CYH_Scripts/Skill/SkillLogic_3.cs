@@ -22,103 +22,107 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
-
-    //public PlayerController PlayerController { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
         Debug.Log("스킬 3 초기화");
         IsCooldown = false;
         SkillLevel = 0;
-        SlotIndex = 3;
+        SlotIndex = -1;
     }
 
-    //private void Awake()
-    //{
-    //    //_playerController = GetComponent<PlayerControllerTypeA_Copy>();
-    //    SkillData = _data;
-
-    //    _animator = GetComponent<Animator>();
-    //}
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha3))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
-
-    public void UseSkill(Transform attacker)
+    public void SkillInit(SaveSkillData playerSkillData)
+    {
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
+    public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
-        Debug.Log("스킬3 사용");
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
+            return false;
+        }
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        _hitMonsters.Clear();
-
         OnAttackStart();
-        DetectMonster();
         GetHighestHpMonster();
+        Debug.Log("스킬 3 사용완료");
+        return true;
     }
 
-    public void UseSkill(Transform attacker, Transform defender)
+    public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        //if (_isCooldown) return;
-        if (IsCooldown) return;
-        Debug.Log($"IsCooldown: {IsCooldown}");
-        
-        Debug.Log("스킬3 사용");
+        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
+            return false;
+        }
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        _hitMonsters.Clear();
-
         OnAttackStart();
-        DetectMonster();
         GetHighestHpMonster();
+        Debug.Log("스킬 3 사용완료");
+        return true;
     }
 
     public void SkillRoutine()
     {
         if (_highestMonster != null)
             PlayerController.Instance.StartCoroutine(DamageCoroutine(_highestMonster));
-
-        OnAttackEnd();
-    }
-
-    public void OnAttackStart()
-    {
-        _isSkillUsed = true;
-    }
-
-    public void OnAttackEnd()
-    {
-        _isSkillUsed = false;
     }
 
     public void AnimationPlay()
     {
         //_animator.SetTrigger("UseSkill_3");
         PlayerController.Instance.SetTrigger("UseSkill_3");
+
+        // 3초 뒤 플레이어 이동 활성화
+        Invoke("PlayerMove", 3f);
+    }
+
+    public void OnAttackStart()
+    {
+        _isSkillUsed = true;
+
+        PlayerController.Instance.Stop();
+    }
+
+    public void OnAttackEnd()
+    {
+        _isSkillUsed = false;
+        PlayerController.Instance.Move();
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     private void DetectMonster()
@@ -149,18 +153,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
             float hp = 0f;
 
             // 1) <MonsterFSM>인지 체크
-            if (monster.TryGetComponent<MonsterFSM>(out var mM))
-                hp = mM.CurrentHp;
+            if (monster.TryGetComponent<BaseBossFSM>(out var mM))
+                hp = mM.CurrentHealth;
 
-            // 2) <RangeMonsterFSM>인지 체크
-            else if (monster.TryGetComponent<RangeMonsterFSM>(out var mR))
-                hp = mR.CurrentHp;
-
-            // 3) <BaseBossFSM>인지 체크
+            // 2) <BaseBossFSM>인지 체크
             else if (monster.TryGetComponent<BaseBossFSM>(out var mB))
                 hp = mB.CurrentHealth;
 
-            // 셋 중 하나라도 만족할 때
+            // 둘 중 하나라도 만족할 때
             if (hp > highestHp)
             {
                 highestHp = hp;
@@ -179,7 +179,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = _playerController.AttackPoint * (1.0f + 0.01f * SkillLevel);
-        long damage = (long)(PlayerController.Instance.GetAttack() * (1.0f + 0.01f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (1.0f + 0.01f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
@@ -227,23 +227,35 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        //float remaining = _data.CoolTime;
-        float remaining = SkillData.CoolTime;
-        while (remaining > 0f)
+        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
         {
-            //Debug.Log($"쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
-            remaining -= 1f;
+            RemainCooldown -= 1f;
         }
-        //_isCooldown = false;
+        RemainCooldown = 0f;
         IsCooldown = false;
-        Debug.Log("쿨타임 종료");
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
+    }
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
     #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _radius);
+    //}
 }

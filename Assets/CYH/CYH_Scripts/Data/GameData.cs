@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,18 +32,23 @@ public partial class GameData
     public long CurrentHp = 100;
     // 이속 레벨
     public int SpeedLevel = 1;
-    // 가하는 피해 레벨
-    public int IncreaseDamageLevel = 0;
     // 보호막 체력
     public long ShieldHp = 0;
+    // 플레이어 마지막 씬의 인덱스
+    public int SceneIndex = 2;
 
     [Header("PlayerCost")]
     // 영기
     public long SpiritEnergy = 0;
-    // 온기
+    // 온정
     public long Warmth = 0;
+    // 혼백
+    public long Soul = 0;
+    // 영기 첫 획득
+    public bool GetFirstSpiritEnergy = false;
+    // 온정 첫 획득
+    public bool GetFirstWarmth = false;
 
-    // TODO : PlayerSkill
     [Header("PlayerSkill")]
     public List<SaveSkillData> PlayerSkillList = new()
     {
@@ -62,4 +66,14 @@ public partial class GameData
     public string Grade = "N";
     // 장비 레벨
     public int Level = 1;
+    // 가하는 피해 레벨
+    public int IncreaseDamageLevel = 0;
+
+    [Header("PlayerQuest")]
+    // 업적
+    public List<SaveAchievementData> PlayerAchivementList = new();
+    // 미션
+    public List<SaveMissionData> PlayerMissionList = new();
+    // 돌파미션 리트라이 쿨타임
+    public float MissionCooldown = 0;
 }

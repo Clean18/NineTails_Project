@@ -28,7 +28,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private Transform AttackPoint;             // 공격 기준 위치
     [SerializeField] private GameObject ProjectilePrefabs;      // 투사체 프리팹
     [SerializeField] private float ProjectileSpeed = 8f;        // 투사체 속도
-    [SerializeField] private float AttackDamage = 10f;          // 공격 데미지
+    [SerializeField] private int AttackDamage = 10;          // 공격 데미지
     [SerializeField] private AudioClip AttackSound;             // 공격 사운드
     [SerializeField] private Animator MonsterAnimator;          // 애니메이터
 
@@ -40,6 +40,8 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private long warmthAmount;
     [SerializeField] private long spiritEnergyAmount;
 
+    public MonsterType Type { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
     private void Start()
     {
         CurrentHp = MaxHp;
@@ -48,7 +50,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     private void Update()
     {
         // 추가
-        if (GameManager.Instance.PlayerController == null) return;
+        if (GameManager.Instance.Player == null) return;
 
         _findTimer += Time.deltaTime;
         StateChangeTimer += Time.deltaTime;     //  쿨타임의 타이머 증가
@@ -150,7 +152,7 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
         //}
 
         //targetPlayer = Closest;
-        targetPlayer = GameManager.Instance.PlayerController.transform;
+        targetPlayer = GameManager.Instance.Player.transform;
     }
 
     private void ChangeState(MonsterState newstate)
@@ -271,9 +273,8 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     private void Die()
     {
         Debug.Log("몬스터 사망함");
-        // TODO : 플레이어 재화 증가
-        GameManager.Instance.PlayerController.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
-        GameManager.Instance.PlayerController.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         MissionManager.Instance.AddKill(); // 돌파미션 킬 체크
         string stageId = SceneManager.GetActiveScene().name;    // 현재 씬이름을 스테이지Id로 사용
         AchievementManager.Instance?.KillCount(stageId);        // 해당 씬 킬 업적 체크
@@ -283,18 +284,18 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     /// <summary>
     /// 디버그용 범위 시각화
     /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, DetectRange);
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, DetectRange);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, AttackRange);
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, AttackRange);
 
-        if (AttackPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
-        }
-    }
+    //    if (AttackPoint != null)
+    //    {
+    //        Gizmos.color = Color.cyan;
+    //        Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
+    //    }
+    //}
 }

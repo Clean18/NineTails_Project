@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MonsterProjectile : MonoBehaviour
 {
-    private float damage;
+    private int damage;
     [SerializeField] private float lifeTime = 5f; // 수명 제한
 
     private void Start()
@@ -12,7 +12,7 @@ public class MonsterProjectile : MonoBehaviour
         Destroy(gameObject, lifeTime); // 일정 시간 후 자동 삭제
     }
 
-    public void SetDamage(float dmg)
+    public void SetDamage(int dmg)
     {
         damage = dmg;
     }
@@ -23,7 +23,7 @@ public class MonsterProjectile : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
-            var player = GameManager.Instance.PlayerController;
+            var player = GameManager.Instance.Player;
             if (player != null)
             {
                 //player.TakeDamage(damage);
@@ -45,7 +45,7 @@ public class MonsterProjectile : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             //Game.Data.PlayerData player = other.GetComponent<Game.Data.PlayerData>();
-            var player = GameManager.Instance.PlayerController;
+            var player = GameManager.Instance.Player;
             if (player != null)
             {
                 //player.TakeDamage(damage);
