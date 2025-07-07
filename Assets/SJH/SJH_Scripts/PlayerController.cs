@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     public SkillController SkillController;
 
-	// TODO : 게임이 시작되면 시작은 Auto
+	// 게임이 시작되면 시작은 Auto ? Manual
 	[Header("컨트롤 모드 Auto/Manual")]
 	[SerializeField] private ControlMode _mode;
 	public ControlMode Mode
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 		set
 		{
 			_mode = value;
-			// TODO : 자동모드가 되면 항상 Search에서 시작
+			// 자동모드가 되면 항상 Search에서 시작
 			Debug.Log($"AIState : {CurrentState} > {value}");
 			if (CurrentState != AIState.Search) CurrentState = AIState.Search;
 		}
@@ -230,8 +230,6 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log("UI 초기화 완료");
 
-        // TODO : 로딩종료
-
         _isInit = true;
 
         yield break;
@@ -252,6 +250,8 @@ public class PlayerController : MonoBehaviour
 
         // 죽어있을 때
         if (GetIsDead()) return;
+
+        Debug.Log($"플레이어 [{damage}] 피해");
 
         // 대미지 처리
         _model.ApplyDamage(damage);
@@ -282,10 +282,8 @@ public class PlayerController : MonoBehaviour
 	/// <param name="amount"></param>
 	public void TakeHeal(long amount)
 	{
-		_model.ApplyHeal(amount);
-        // TODO : view 힐처리
-        // TODO : UI 체력증가 처리
-
+        Debug.Log($"플레이어 [{amount}] 회복");
+        _model.ApplyHeal(amount);
         UIManager.Instance.ShowDamageText(transform, amount, Color.green);
     }
 
@@ -296,9 +294,8 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public void TakeShield(long amount)
     {
+        Debug.Log($"플레이어 [{amount}] 보호막 획득");
         _model.ApplyShield(amount);
-        // TODO : view 보호막처리
-        // TODO : UI 보호막 증가 처리
         UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
     }
     /// <summary>
@@ -414,10 +411,7 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     public long GetTotalDamage() => (long)((_model.GetAttack() * (1f + _model.GetEquipmentAttack())) * (1f + _model.GetIncreseDamage()));
     public int GetPlayerSceneIndex() => _model.GetPlayerSceneIndex();
-    public void SetPlayerSceneIndex(int index)
-    {
-        _model.SetPlayerSceneIndex(index);
-    }
+    public void SetPlayerSceneIndex(int index) => _model.SetPlayerSceneIndex(index);
     #endregion
 
     #region Cost 관련 함수

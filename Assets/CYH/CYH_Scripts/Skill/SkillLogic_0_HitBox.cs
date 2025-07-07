@@ -11,6 +11,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
@@ -25,11 +26,18 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         SlotIndex = 0;
     }
 
+    public void SkillInit(SaveSkillData playerSkillData)
+    {
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
+
     public bool UseSkill(Transform attacker)
     {
-        Debug.Log("기본공격 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        Debug.Log("기본공격 UseSkill");
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -147,5 +155,18 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         }
         IsCooldown = false;
         //Debug.Log("기본 공격 쿨타임 종료");
+    }
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
 }

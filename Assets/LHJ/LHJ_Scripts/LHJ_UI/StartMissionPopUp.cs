@@ -19,7 +19,7 @@ public class StartMissionPopUp : BaseUI
             if (MissionManager.Instance.MissionIds.Contains(currentMission.Id))
             {
                 // 미션 꺤 텍스트
-                desc.text = "다음 스테이지에 넘어가기 위해\n돌파 미션을 진행하시겠습니까?";
+                desc.text = "이미 클리어한 스테이지 입니다.\n돌파 미션을 진행하고 스토리를 다시 보시겠습니까?";
             }
             else
             {
@@ -36,7 +36,7 @@ public class StartMissionPopUp : BaseUI
             // 씬 세이브
             PlayerController.Instance.SetPlayerSceneIndex(_saveSceneIndex);
 
-            // TODO : 로딩씬이름 하드코딩 변경
+            // 로딩씬이름 하드코딩 변경
             SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene_v1", _sceneName, 1);
         };
         GetEvent("Btn_N").Click += data => UIManager.Instance.ClosePopUp();

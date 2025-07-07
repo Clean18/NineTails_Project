@@ -30,7 +30,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
 
-    //public PlayerController PlayerController { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
@@ -39,14 +39,12 @@ public class SkillLogic_4 : SkillLogic, ISkill
         SkillLevel = 0;
         SlotIndex = -1;
     }
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha4))
-    //    {
-    //        UseSkill(transform);
-    //    }
-    //}
+    public void SkillInit(SaveSkillData playerSkillData)
+    {
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
 
     public bool UseSkill(Transform attacker)
     {
@@ -289,16 +287,30 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
-        Debug.Log($"4번 스킬 쿨타임 {remaining} 초");
-        while (remaining > 0f)
+        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
         {
-            //Debug.Log($"4번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
-            remaining -= 1f;
+            RemainCooldown -= 1f;
         }
+        RemainCooldown = 0f;
         IsCooldown = false;
-        Debug.Log("4번 스킬 쿨타임 종료");
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
+    }
+
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
 
     //private void OnDrawGizmos()

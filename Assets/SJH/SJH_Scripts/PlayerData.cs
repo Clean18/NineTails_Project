@@ -98,8 +98,14 @@ public class PlayerData
         private set
         {
             //Debug.Log("체력 계산");
+            long prevMaxHp = MaxHp;
+
+            // 체력 증가분 만큼 체력 회복
             _hpLevel = Mathf.Clamp(value, 1, 300);
             MaxHp = GetStat(StatDataType.Hp, _hpLevel);
+            
+            long heal = MaxHp - prevMaxHp;
+            if (heal > 0) Hp = Math.Min(Hp + heal, MaxHp);
             OnStatChanged?.Invoke();
             if (PlayerController.Instance.IsInit) AchievementManager.Instance?.CheckPowerAchievements();  // 전투력 업적 체크
         }
@@ -170,7 +176,6 @@ public class PlayerData
         set
         {
             _shieldHp = value;
-            // TODO : 이벤트 연결
             OnStatChanged?.Invoke();
         }
     }
@@ -256,7 +261,6 @@ public class PlayerData
     public void HealHp(long amount)
     {
         Hp += amount;
-        Debug.Log($"플레이어 {amount} 회복");
     }
 
     public void HealShield(long amount)
@@ -267,7 +271,6 @@ public class PlayerData
     public void ClearShield()
     {
         ShieldHp = 0;
-        // TODO : 실드 UI 업데이트
     }
 
     // 스탯 변경 함수
@@ -286,7 +289,6 @@ public class PlayerData
     public void HpLevelup()
     {
         HpLevel += 1;
-        // TODO : 체력이 증가한 만큼 현재 체력도 회복
         Debug.Log($"체력 업! 레벨 : {HpLevel}");
     }
 

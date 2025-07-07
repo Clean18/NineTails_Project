@@ -42,11 +42,15 @@ public abstract class BaseBossFSM : MonoBehaviour, IDamagable
 
     protected Coroutine BossPatternRoutine;                // 현재 실행 중인 패턴 코루틴 참조
     protected virtual int PatternCount => 3;
+
+    [field: SerializeField] public MonsterType Type { get; set; }
+
     protected Vector3 originalPosition;                               // 초기 위치 저장
     protected SpriteRenderer _sprite;
 
     [Header("플레이어 레이어")]
     [SerializeField] protected LayerMask _playerLayer;
+    
 
     protected virtual void Awake()
     {

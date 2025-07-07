@@ -57,6 +57,7 @@ public class MissionManager : Singleton<MissionManager>
             Debug.Log("[MissionManager] 미션 성공 (시간 내 클리어)");
             // 스테이지 클리어 업적 체크
             AchievementManager.Instance.CheckStageClear(SceneManager.GetActiveScene().name);
+            // 이미 클리어한 돌파미션은 보상 지급 X
             MissionIds.Add(currentMission.Id);  // 미션 클리어 
             Reward(currentMission); // 미션 보상
             if (currentMission.Id == "M9999") // M1미션일때
@@ -134,8 +135,18 @@ public class MissionManager : Singleton<MissionManager>
     // 미션 보상
     private void Reward(MissionInfo mission)
     {
-        // TODO : 보상 추가
-        Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
+        // 보상 추가
+        if (!IsCleared(mission.Id))
+        {
+            Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
+            PlayerController.Instance.AddCost(CostType.Warmth, mission.WarmthReward);
+            PlayerController.Instance.AddCost(CostType.SpiritEnergy, mission.SpritReward);
+            PlayerController.Instance.AddCost(CostType.Soul, mission.SkillPoint);
+        }
+        else
+        {
+            Debug.Log($"이미 획득한 미션입니다. : {mission.Id}");
+        }
     }
     public bool IsCleared(string missionId)
     {

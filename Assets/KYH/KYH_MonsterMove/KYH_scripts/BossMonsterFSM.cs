@@ -67,6 +67,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private long warmthAmount;
     [SerializeField] private long spiritEnergyAmount;
 
+    public MonsterType Type { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
     private void Start()
     {
         CurrentState = BossState.Null;

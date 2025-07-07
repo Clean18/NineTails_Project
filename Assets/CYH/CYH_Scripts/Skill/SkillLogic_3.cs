@@ -22,6 +22,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     [field: SerializeField] public bool IsCooldown { get; set; }
     [field: SerializeField] public int SkillLevel { get; set; }
     [field: SerializeField] public int SlotIndex { get; set; }
+    [field: SerializeField] public float RemainCooldown { get; set; }
 
     public void SkillInit()
     {
@@ -31,6 +32,12 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
+    public void SkillInit(SaveSkillData playerSkillData)
+    {
+        SlotIndex = playerSkillData.SlotIndex;
+        IsCooldown = playerSkillData.SkillCooldown > 0f;
+        if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+    }
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -47,17 +54,12 @@ public class SkillLogic_3 : SkillLogic, ISkill
         }
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        //_hitMonsters.Clear();
-
         OnAttackStart();
-        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;
@@ -65,7 +67,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public bool UseSkill(Transform attacker, Transform defender)
     {
-        Debug.Log("스킬 3 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
@@ -85,11 +86,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        //_hitMonsters.Clear();
-
         OnAttackStart();
-        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;
@@ -230,16 +227,29 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
-        Debug.Log($"3번 스킬 쿨타임 {remaining} 초");
-        while (remaining > 0f)
+        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
         {
-            //Debug.Log($"3번 스킬 쿨타임 남음: {remaining}초");
             yield return new WaitForSeconds(1f);
-            remaining -= 1f;
+            RemainCooldown -= 1f;
         }
+        RemainCooldown = 0f;
         IsCooldown = false;
-        Debug.Log("3번 스킬 쿨타임 종료");
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
+    }
+    private IEnumerator CooldownCoroutine(float reamainCooldown)
+    {
+        RemainCooldown = reamainCooldown;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
+        while (RemainCooldown > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            RemainCooldown -= 1f;
+        }
+        RemainCooldown = 0f;
+        IsCooldown = false;
+        Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 종료");
     }
     #endregion
 

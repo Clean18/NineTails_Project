@@ -19,7 +19,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] protected float DamageReduceRate = 0f;     // 데미지 감소율 (퍼센트)
     public float CurrentHp;                                     // 현재 체력
     [SerializeField] protected int AttackDamage;
-    [SerializeField] protected MonsterType Type;
+    [field: SerializeField] public MonsterType Type { get; set; }
     [SerializeField] protected int Level;
 
     [Header("FSM Control")]
@@ -97,7 +97,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
         // 타겟이 없으면 Idle 상태 유지
         if (targetPlayer == null)
         {
-            Debug.Log("타겟이 없어서 Idle로 상태 변함");
+            //Debug.Log("타겟이 없어서 Idle로 상태 변함");
             ChangeState(MonsterState.Idle);
             return;
         }

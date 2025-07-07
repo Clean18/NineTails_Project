@@ -17,7 +17,6 @@ public class PlayerAI
         set
         {
             _targetSkill = value;
-            // TODO : 인스펙터용
             if (value != null) _targetSkillName = _targetSkill.SkillData.SkillName;
         }
     }
@@ -61,7 +60,7 @@ public class PlayerAI
         List<ISkill> ranSkills = new();
         // 기본공격은 이 리스트에 없어야함
         // -> 모든 스킬이 쿨타임일 때 사용할 예정 
-        foreach (var skill in _model.Skill.SkillMapping.Values)
+        foreach (var skill in _model.GetSkillMappingList())
 		{
             // 쿨타임이 아닌 스킬 등록
             if (skill != null && !skill.IsCooldown) ranSkills.Add(skill);

@@ -47,6 +47,9 @@ public class PlayerView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 애니메이션, velocity, 플레이어 이동을 멈추는 함수
+    /// </summary>
     public void Stop()
     {
         canMove = false;
@@ -56,6 +59,9 @@ public class PlayerView : MonoBehaviour
 
     public void Move() => canMove = true;
 
+    /// <summary>
+    /// 애니메이션과 velocity만 멈추는 함수
+    /// </summary>
     public void AIStop()
     {
         _anim.SetBool("IsMoving", false);

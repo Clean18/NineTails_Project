@@ -196,12 +196,15 @@ public class AchievementManager : Singleton<AchievementManager>
     }
     public void Reward(AchievementInfo achievementInfo)
     {
-        Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
-        PlayerController.Instance.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
-        PlayerController.Instance.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
-        AchievedIds[achievementInfo.Id] = true;
-        RewardDic[achievementInfo.Id] = true;
-        // TODO : 업적 정보 넘겨서 클리어 체크
+        // 클리어 한 업적이면 보상 지급 X
+        if (AchievedIds.TryGetValue(achievementInfo.Id, out bool isClear) && !isClear)
+        {
+            Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
+            PlayerController.Instance.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
+            PlayerController.Instance.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
+            AchievedIds[achievementInfo.Id] = true;
+            RewardDic[achievementInfo.Id] = true;
+        }
     }
     public bool IsAchieved(string achievementId)
     {

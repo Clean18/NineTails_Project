@@ -48,10 +48,12 @@ public class SkillButton : MonoBehaviour, IUI
             {
                 coolTimes[i] = skill.SkillData.CoolTime;
 
-                // 쿨타임 중이면 현재 상태 유지
+                // 쿨타임 중이면 남은 시간으로 재할당해서 다시 쿨타임돌아가게
                 if (skill.IsCooldown)
                 {
-                    Debug.Log($"슬롯 {i + 1}번 스킬은 쿨타임 중이므로 초기화 생략");
+                    currentCooltimes[i] = skill.RemainCooldown;
+                    _disableImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];
+                    _disableImages[i].gameObject.SetActive(true);
                     continue;
                 }
             }
@@ -65,15 +67,6 @@ public class SkillButton : MonoBehaviour, IUI
             _disableImages[i].fillAmount = 1;
             _disableImages[i].gameObject.SetActive(false);
         }
-
-        //for (int i = 0; i < coolTimes.Length; i++)
-        //{
-        //    if (mappingSkills.TryGetValue(triggerKeys[i], out var skill) && skill != null && skill.SkillData != null)
-        //        coolTimes[i] = skill.SkillData.CoolTime;
-        //    else
-        //        coolTimes[i] = 1f;
-        //}
-
         for (int i = 0; i < skillButtons.Length; i++)
         {
             int index = i + 1;
