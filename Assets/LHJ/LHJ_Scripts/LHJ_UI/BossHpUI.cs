@@ -8,7 +8,8 @@ public class BossHpUI : MonoBehaviour
 {
     [SerializeField] private Slider bossHpSlider;
     [SerializeField] private TMP_Text bossHpText;
-    [SerializeField] private BaseBossFSM boss;
+
+    private BaseBossFSM boss;
 
     public void Init(BaseBossFSM bossTarget)
     {

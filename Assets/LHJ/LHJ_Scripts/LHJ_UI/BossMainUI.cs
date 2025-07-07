@@ -15,6 +15,9 @@ public class BossMainUI : BaseUI, IUI
     [SerializeField] private TextMeshProUGUI timeText;          // 미션 시간
     [SerializeField] private Transform bossStageCamera;        // 카메라가 위치할 오브젝트
     [SerializeField] private float cameraSize;
+    [SerializeField] private BossHpUI bossHpUI;
+    [SerializeField] private BaseBossFSM storyBoss;
+    [SerializeField] private BaseBossFSM missionBoss;
 
     private void Start()
     {
@@ -32,7 +35,25 @@ public class BossMainUI : BaseUI, IUI
             Debug.Log("옵션 UI 활성화");
             UIManager.Instance.ShowPopUp<SettingPopUp>();
         };
-   
+        bool isMission = MissionManager.Instance != null && MissionManager.Instance.IsRunning();
+
+        BaseBossFSM selectedBoss;
+
+        if (isMission)
+        {
+            missionBoss.gameObject.SetActive(true);
+            storyBoss.gameObject.SetActive(false);
+            selectedBoss = missionBoss;
+        }
+        else
+        {
+            missionBoss.gameObject.SetActive(false);
+            storyBoss.gameObject.SetActive(true);
+            selectedBoss = storyBoss;
+        }
+
+        bossHpUI.Init(selectedBoss);
+
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
         SetupCameraForBossStage();
