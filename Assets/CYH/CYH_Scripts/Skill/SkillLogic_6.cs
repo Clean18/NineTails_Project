@@ -183,6 +183,12 @@ public class SkillLogic_6 : SkillLogic, ISkill
         effectScale.x *= -1 * GetPlayerScaleX();
         effect.transform.localScale = effectScale;
         
+        // 플레이어가 왼쪽을 바라볼 때 이펙트 위치 x값 조정
+        if (effectScale.x > 0)
+        {
+            effect.transform.position = new Vector3(-1 * (_effectOffset.x), _effectOffset.y, 0);
+        }
+
         // 3초 뒤 삭제
         Destroy(effect, 3f);
     }
