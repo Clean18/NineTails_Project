@@ -71,10 +71,12 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public bool UseSkill(Transform attacker, Transform defender)
     {
-        Debug.Log("스킬 6 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
+        Debug.Log("스킬6 사용");
+
+        // 무적 시작
         GameManager.IsImmortal = true;
 
         // 쿨타임 체크 시작

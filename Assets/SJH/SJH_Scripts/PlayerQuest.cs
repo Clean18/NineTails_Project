@@ -43,7 +43,7 @@ public class PlayerQuest
 
         if (saveAchive != null)
         {
-            // TODO : 업적매니저 HashSet에 IsClear가 true면 추가
+            // 업적매니저 HashSet에 IsClear가 true면 추가
             // False고 0 이상이면 KillCountDic에 추가
             foreach (var achiev in saveAchive)
             {
@@ -96,7 +96,7 @@ public class PlayerQuest
 
 	public List<SaveMissionData> SaveMissionData()
 	{
-        // TODO : 미션 아이디랑 체크 필요함
+        // 미션 아이디랑 체크 필요함
         var ClearTable = MissionManager.Instance.MissionIds;
         List<SaveMissionData> list = new();
 

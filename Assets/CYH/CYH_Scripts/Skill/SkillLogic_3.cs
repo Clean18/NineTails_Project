@@ -54,17 +54,12 @@ public class SkillLogic_3 : SkillLogic, ISkill
         }
 
         // 쿨타임 체크 시작
-        //_isCooldown = true;
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        //_hitMonsters.Clear();
-
         OnAttackStart();
-        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;
@@ -74,7 +69,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
-        Debug.Log("스킬 3 UseSkill");
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -92,11 +86,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
         AnimationPlay();
 
-        // 스킬 발동 전 몬스터 목록 초기화
-        //_hitMonsters.Clear();
-
         OnAttackStart();
-        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;

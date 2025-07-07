@@ -29,7 +29,7 @@ public class PlayerModel
     /// </summary>
     public void InitModel(GameData saveData)
 	{
-        // TODO : 세이브파일이 없으면 saveData는 null
+        // 세이브파일이 없으면 saveData는 null
         if (saveData == null)
         {
             SaveLoadManager.Instance.GameData = InitFirst();

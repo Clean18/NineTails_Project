@@ -40,6 +40,8 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     [SerializeField] private long warmthAmount;
     [SerializeField] private long spiritEnergyAmount;
 
+    public MonsterType Type { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
     private void Start()
     {
         CurrentHp = MaxHp;
@@ -271,7 +273,6 @@ public class RangeMonsterFSM : MonoBehaviour, IDamagable
     private void Die()
     {
         Debug.Log("몬스터 사망함");
-        // TODO : 플레이어 재화 증가
         GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
         GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         MissionManager.Instance.AddKill(); // 돌파미션 킬 체크

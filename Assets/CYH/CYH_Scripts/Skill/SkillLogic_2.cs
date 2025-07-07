@@ -89,16 +89,17 @@ public class SkillLogic_2 : SkillLogic, ISkill
     {
         // 쿨타임 체크
         if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck()) return false;
+        Debug.Log("스킬 2 UseSkill");
 
-        // 스킬 사용
-        Debug.Log("스킬_2 사용");
+        // 보호막 체력 설정
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
 
         // 지속시간 체크 시작
         _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
-        
         // 쿨타임 체크 시작
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+        Debug.Log("스킬 2 사용완료");
 
         AnimationPlay();
         OnAttackStart();

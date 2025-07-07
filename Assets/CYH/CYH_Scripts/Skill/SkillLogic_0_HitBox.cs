@@ -35,9 +35,9 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
 
     public bool UseSkill(Transform attacker)
     {
-        Debug.Log("기본공격 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        Debug.Log("기본공격 UseSkill");
 
         // 쿨타임 체크 시작
         IsCooldown = true;

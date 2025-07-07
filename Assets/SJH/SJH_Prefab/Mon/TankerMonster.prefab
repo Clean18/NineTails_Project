@@ -233,7 +233,7 @@ MonoBehaviour:
   DamageReduceRate: 30
   CurrentHp: 0
   AttackDamage: 10
-  Type: 2
+  <Type>k__BackingField: 2
   Level: 0
   FindInterval: 1
   StateChangeCooldown: 1

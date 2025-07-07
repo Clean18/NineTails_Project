@@ -74,7 +74,7 @@ public class SkillPopUp : BaseUI
 			});
 			skillUIList[i]._getButton.onClick.AddListener(() =>
 			{
-				// TODO : 스킬 획득
+				// 스킬 획득
 				PlayerController.Instance.LearnSkill(skillIndex);
 				Debug.Log($"스킬 {skillIndex}번 습득 버튼 클릭됨");
 				UpdateSkill();
@@ -105,7 +105,7 @@ public class SkillPopUp : BaseUI
                         UIManager.Instance.ShowWarningText("기본공격은 제거할 수 없습니다.");
                         return;
 					}
-                    // TODO : 쿨타임이면 제거 불가
+                    // 쿨타임이면 제거 불가
                     // skillIndex가 매핑에 있는지 체크해야함
                     else if (mappingSkill.IsCooldown)
                     {

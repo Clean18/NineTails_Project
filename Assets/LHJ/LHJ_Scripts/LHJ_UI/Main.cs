@@ -83,7 +83,7 @@ public class Main : BaseUI, IUI
             cheatBtn.Click += data =>
             {
                 Debug.Log("치트모드 활성화");
-                // TODO : 삭제하기
+                // TODO : 치트모드 시 무적 삭제하기
                 GameManager.IsImmortal = true;
                 GameManager.IsCheat = true;
                 cheatBtn.gameObject.SetActive(false);

@@ -49,7 +49,6 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
     public bool UseSkill(Transform attacker, Transform defender)
     {
-        Debug.Log("스킬 5 UseSkill");
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
@@ -64,7 +63,6 @@ public class SkillLogic_5 : SkillLogic, ISkill
 
         OnAttackStart();
         AnimationPlay();
-        Debug.Log("스킬 5 사용완료");
         return true;
     }
 

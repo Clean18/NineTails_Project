@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-07-07T15:39:36.7232001+09:00",
+    "_savedTimeString": "2025-07-07T18:04:37.9572704+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 1,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 100,
+    "CurrentHp": 98,
     "SpeedLevel": 1,
     "ShieldHp": 0,
-    "SceneIndex": 4,
+    "SceneIndex": 7,
     "SpiritEnergy": 0,
-    "Warmth": 902,
+    "Warmth": 5962,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -21,25 +21,25 @@
             "SkillCooldown": 0.0
         },
         {
-            "SkillIndex": 6,
+            "SkillIndex": 4,
             "SkillLevel": 0,
             "SlotIndex": 1,
-            "SkillCooldown": 20.0
+            "SkillCooldown": 0.0
         },
         {
             "SkillIndex": 2,
             "SkillLevel": 0,
             "SlotIndex": 2,
-            "SkillCooldown": 5.0
+            "SkillCooldown": 0.0
         },
         {
             "SkillIndex": 3,
             "SkillLevel": 0,
             "SlotIndex": 3,
-            "SkillCooldown": 10.0
+            "SkillCooldown": 12.0
         },
         {
-            "SkillIndex": 4,
+            "SkillIndex": 6,
             "SkillLevel": 0,
             "SlotIndex": -1,
             "SkillCooldown": 0.0
@@ -70,7 +70,58 @@
             "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1
+        },
+        {
+            "Id": "A18",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A43",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A20",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A55",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A58",
+            "IsClear": true,
+            "CurrentCondition": -1
         }
     ],
-    "PlayerMissionList": []
+    "PlayerMissionList": [
+        {
+            "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ]
 }

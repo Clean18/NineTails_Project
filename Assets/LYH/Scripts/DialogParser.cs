@@ -61,7 +61,8 @@ public class DialogParser : MonoBehaviour
 
     [SerializeField] private string dialogName;
     // foxName 입력값 저장해놓는 변수 -> TODO SetPlayerName(foxNameInput) 해줄 필요가 있습니다.
-    [SerializeField] private string foxName; // => PlayerController.Instance.GetPlayerName(); // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
+    // 플레이어가 정해주는 구미호의 이름 -> 저장된 데이터에서 가져오는 것과 데이터에 저장하는 두가지가 구현되어야 합니다.
+    [SerializeField] private string foxName;
     [SerializeField] private int spacing;
     [SerializeField] private float fadeDuration = 0.5f;
 

@@ -36,7 +36,7 @@ public class StartMissionPopUp : BaseUI
             // 씬 세이브
             PlayerController.Instance.SetPlayerSceneIndex(_saveSceneIndex);
 
-            // TODO : 로딩씬이름 하드코딩 변경
+            // 로딩씬이름 하드코딩 변경
             SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene_v1", _sceneName, 1);
         };
         GetEvent("Btn_N").Click += data => UIManager.Instance.ClosePopUp();

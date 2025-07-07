@@ -96,7 +96,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     {
         if (_currentState == MonsterState.Attack/* && attackRoutine == null*/)
         {
-            Debug.Log("근거리 몬스터 공격 실행");
+            //Debug.Log("근거리 몬스터 공격 실행");
             //attackRoutine = StartCoroutine(AttackRoutine());
             // 애니메이션 이벤트 함수에서 공격 실행
             MonsterAnimator.Play("Melee_Attack");

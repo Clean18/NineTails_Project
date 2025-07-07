@@ -32,6 +32,7 @@ public enum MonsterType
 	Melee,  // 근접
 	Ranged, // 원거리
 	Tanker, // 탱커
+    Boss,   // 보스
 }
 
 /// <summary>
@@ -641,16 +642,21 @@ public class DataManager : Singleton<DataManager>
     void DownloadFailed()
 	{
 		Debug.Log("다운로드 실패");
-		// TODO : 게임종료할지 어떻게할지
-	}
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 에디터 플레이모드 종료
+#else
+		// 빌드된 게임에서는 정상 종료
+		Application.Quit();                              // 빌드에서는 게임 종료
+#endif
+    }
 
-	#region Table Get 함수
-	/// <summary>
-	/// 플레이어 스탯의 레벨별 수치 데이터
-	/// <br/> ex) Table[스탯타입][레벨] == 스탯값
-	/// <br/> -1 로 예외처리
-	/// </summary>
-	public long GetStatData(StatDataType statType, int level) => StatDataTable.TryGetValue(statType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
+    #region Table Get 함수
+    /// <summary>
+    /// 플레이어 스탯의 레벨별 수치 데이터
+    /// <br/> ex) Table[스탯타입][레벨] == 스탯값
+    /// <br/> -1 로 예외처리
+    /// </summary>
+    public long GetStatData(StatDataType statType, int level) => StatDataTable.TryGetValue(statType, out var data) && data.TryGetValue(level, out long result) ? result : -1;
   /// <summary>
 	/// 플레이어 스탯의 레벨별 성장비용
 	/// <br/> ex) Table[스탯타입][레벨] == 성장비용

@@ -50,7 +50,7 @@ public class UpgradePopUp : BaseUI
 
         _currentGradeText.text = $"현재 등급 : {GradeEngToKor(equipmentData.Grade)}\n현재 레벨 : {equipmentData.Level}";
 
-        // TODO : 무기 등급에 따라 텍스트 바뀜
+        // 무기 등급에 따라 텍스트 바뀜
         string nextGradeText = "";
         switch (equipmentData.Grade)
         {

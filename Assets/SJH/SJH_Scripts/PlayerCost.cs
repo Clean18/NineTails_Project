@@ -62,7 +62,7 @@ public class PlayerCost
                 GetFirstWarmth = true;
                 _warmth = value;
                 Debug.Log($"첫 온정 획득 : {GetFirstWarmth}");
-                // TODO : Stage 1-1 Middle 다이얼로그로 이동 5번씬
+                // Stage 1-1 Middle 다이얼로그로 이동 5번씬
                 PlayerController.Instance.SetPlayerSceneIndex(5); // 여기서 세이브도 함
                 SceneChangeManager.Instance.LoadNextScene(5);
                 return;
