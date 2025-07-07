@@ -12,7 +12,7 @@ public class AchievementPopUp : BaseUI
         public TextMeshProUGUI nameText;        // 이름 표시 텍스트
         public TextMeshProUGUI descriptionText; // 설명 표시 텍스트
         public Button rewardButton;             // 보상 버튼
-        public int currentIndex = 0;            // 현재 진행 중인 업적 위치
+        public int currentIndex;                // 현재 진행 중인 업적 위치
     }
 
     // 업적 그룹을 인스펙터에서 설정
@@ -21,6 +21,15 @@ public class AchievementPopUp : BaseUI
     {
         foreach (var group in achievementGroups)
         {
+            string groupKey = group.AchievementIds[0]; 
+            if (AchievementManager.Instance.AchievementGroupIndex.TryGetValue(groupKey, out int savedIndex))
+            {
+                group.currentIndex = savedIndex;
+            }
+            else
+            {
+                group.currentIndex = 0;
+            }
             UpdateGroupUI(group);
         }
     }
@@ -43,12 +52,14 @@ public class AchievementPopUp : BaseUI
             group.rewardButton.gameObject.SetActive(false);
             return;
         }
+        string groupKey = group.AchievementIds[0];
 
         // 업적 이름과 설명 UI 표시
         group.nameText.text = info.Name;
         group.descriptionText.text = info.Description;
-        bool isAchieved = AchievementManager.Instance.IsAchieved(info.Id);  
-        group.rewardButton.gameObject.SetActive(isAchieved); // 업적 클리어시 버튼 활성화
+        bool isAchieved = AchievementManager.Instance.IsAchieved(info.Id);
+        bool isRewarded = AchievementManager.Instance.ReceivedReward(info.Id);
+        group.rewardButton.gameObject.SetActive(isAchieved && !isRewarded);
 
         // 보상 버튼 클릭시 초기화 후 재등록
         group.rewardButton.onClick.RemoveAllListeners();
@@ -58,7 +69,10 @@ public class AchievementPopUp : BaseUI
             if (!AchievementManager.Instance.IsAchieved(info.Id)) return;
 
             AchievementManager.Instance.Reward(info);
-            group.currentIndex++;   // 다음 업적 인덱스로 이동
+            group.currentIndex++;
+
+            // 현재 진행준인 인덱스 업데이트
+            AchievementManager.Instance.AchievementGroupIndex[group.AchievementIds[0]] = group.currentIndex;
             UpdateGroupUI(group);
         });
     }

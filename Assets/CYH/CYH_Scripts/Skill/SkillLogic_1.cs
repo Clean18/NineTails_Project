@@ -110,14 +110,10 @@ public class SkillLogic_1 : SkillLogic, ISkill
     {
         Debug.Log("CreateEffect");
         GameObject effect = Instantiate(_skillEffectPrefab, transform);
-        _skillEffect = effect;
         effect.transform.localPosition = _effectSpawnPos;
+        Destroy(effect, 0.59f);
     }
 
-    public void DestroyEffect()
-    {
-        Destroy(_skillEffect);
-    }
 
     protected override void Damage()
     {
