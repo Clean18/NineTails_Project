@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #region enum ControlMode
 /// <summary>
@@ -116,18 +117,13 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("초기화가 아직 안됐음");
 			return;
 		}
+        if (GetIsDead()) return;
 
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) _ai.Action();
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
-
-		// TODO : TEST 인풋
-		if (Input.GetKeyDown(KeyCode.Alpha5))
-		{
-			Test_Function();
-		}
 	}
 
 	public void InputHandler()
@@ -257,13 +253,29 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-		_model.ApplyDamage(damage);
+        // 죽어있을 때
+        if (GetIsDead()) return;
+
+        // 대미지 처리
+        _model.ApplyDamage(damage);
+
 		// TODO : view 피격처리
-		// TODO : UI 체력감소 처리
 
         // 대미지 색상 변경
         UIManager.Instance.ShowDamageText(transform, damage, Color.red);
-	}
+
+        // 업적 실패 처리
+        string scene = SceneManager.GetActiveScene().name;
+        if (scene == "Stage1-3_Battle" || scene == "Stage2-3_Battle" || scene == "Stage3-3_Battle")
+        {
+            Debug.Log("[업적 실패] 보스 스테이지에서 피격됨");
+            // TODO : 업적 실패 처리
+        }
+        if (GetHp() <= 0 && !GameManager.IsImmortal)
+        {
+            OnDeath();
+        }
+    }
 
 	/// <summary>
 	/// 플레이어가 체력을 회복하는 함수
@@ -290,6 +302,20 @@ public class PlayerController : MonoBehaviour
         // TODO : UI 보호막 증가 처리
         UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
     }
+    /// <summary>
+    /// 플레이어가 죽었을 때 실행하는 함수
+    /// </summary>
+    public void OnDeath()
+    {
+        AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
+        if (MissionManager.Instance.IsRunning())
+        {
+            MissionManager.Instance.DeathFailMission();
+        }
+        // 죽음 팝업 활성화
+        UIManager.Instance.ShowPopUp<DiePopUp>();
+    }
+
     #region Data 관련 함수
     /// <summary>
     /// 플레이어의 죽음 체크

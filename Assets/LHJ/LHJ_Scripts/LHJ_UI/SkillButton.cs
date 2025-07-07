@@ -78,14 +78,12 @@ public class SkillButton : MonoBehaviour, IUI
             if (currentCooltimes[i] > 0)
             {
                 currentCooltimes[i] -= Time.deltaTime;
-                //coolTimeImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];  // 쿨타임이미지 fillamount 갱신
                 _disableImages[i].fillAmount = currentCooltimes[i] / coolTimes[i];  // 쿨타임이미지 fillamount 갱신
 
                 // 쿨타임이 끝났을때 스킬 활성화
                 if (currentCooltimes[i] <= 0)
                 {
                     skillButtons[i].interactable = true;   // 스킬버튼 클릭 활성화
-                    //coolTimeImages[i].fillAmount = 1;
                     _disableImages[i].fillAmount = 1;
                     _disableImages[i].gameObject.SetActive(false);
                 }
