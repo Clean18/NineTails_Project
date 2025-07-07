@@ -110,6 +110,14 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         //_animator.SetTrigger("UseSkill_6");
         PlayerController.Instance.SetTrigger("UseSkill_6");
+
+        // 3초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 3f);
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     // 궁극기 비디오 생성
