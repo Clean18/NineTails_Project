@@ -36,7 +36,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
-        Debug.Log("스킬3 사용");
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
+            return false;
+        }
 
         // 쿨타임 체크 시작
         //_isCooldown = true;
@@ -46,10 +54,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
         AnimationPlay();
 
         // 스킬 발동 전 몬스터 목록 초기화
-        _hitMonsters.Clear();
+        //_hitMonsters.Clear();
 
         OnAttackStart();
-        DetectMonster();
+        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;
@@ -61,6 +69,16 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임이면 return
         if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
 
+        // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
+        // 스킬 발동 전 몬스터 목록 초기화
+        _hitMonsters.Clear();
+        DetectMonster();
+        if (_hitMonsters.Count <= 0)
+        {
+            Debug.Log("스킬 3 공격할 대상이 없습니다.");
+            return false;
+        }
+
         // 쿨타임 체크 시작
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
@@ -68,10 +86,10 @@ public class SkillLogic_3 : SkillLogic, ISkill
         AnimationPlay();
 
         // 스킬 발동 전 몬스터 목록 초기화
-        _hitMonsters.Clear();
+        //_hitMonsters.Clear();
 
         OnAttackStart();
-        DetectMonster();
+        //DetectMonster();
         GetHighestHpMonster();
         Debug.Log("스킬 3 사용완료");
         return true;
@@ -81,8 +99,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         if (_highestMonster != null)
             PlayerController.Instance.StartCoroutine(DamageCoroutine(_highestMonster));
+    }
 
-        OnAttackEnd();
+    public void AnimationPlay()
+    {
+        //_animator.SetTrigger("UseSkill_3");
+        PlayerController.Instance.SetTrigger("UseSkill_3");
+
+        // 3초 뒤 플레이어 이동 활성화
+        Invoke("PlayerMove", 3f);
     }
 
     public void OnAttackStart()
@@ -98,10 +123,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         PlayerController.Instance.Move();
     }
 
-    public void AnimationPlay()
+    private void PlayerMove()
     {
-        //_animator.SetTrigger("UseSkill_3");
-        PlayerController.Instance.SetTrigger("UseSkill_3");
+        PlayerController.Instance.Move();
     }
 
     private void DetectMonster()
@@ -132,18 +156,14 @@ public class SkillLogic_3 : SkillLogic, ISkill
             float hp = 0f;
 
             // 1) <MonsterFSM>인지 체크
-            if (monster.TryGetComponent<MonsterFSM>(out var mM))
-                hp = mM.CurrentHp;
+            if (monster.TryGetComponent<BaseBossFSM>(out var mM))
+                hp = mM.CurrentHealth;
 
-            // 2) <RangeMonsterFSM>인지 체크
-            else if (monster.TryGetComponent<RangeMonsterFSM>(out var mR))
-                hp = mR.CurrentHp;
-
-            // 3) <BaseBossFSM>인지 체크
+            // 2) <BaseBossFSM>인지 체크
             else if (monster.TryGetComponent<BaseBossFSM>(out var mB))
                 hp = mB.CurrentHealth;
 
-            // 셋 중 하나라도 만족할 때
+            // 둘 중 하나라도 만족할 때
             if (hp > highestHp)
             {
                 highestHp = hp;

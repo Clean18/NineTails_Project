@@ -1,15 +1,16 @@
 {
-    "_savedTimeString": "2025-07-07T18:08:52.4511680+09:00",
+    "_savedTimeString": "2025-07-07T14:54:24.2091120+09:00",
     "PlayerName": "구미호",
     "AttackLevel": 1,
     "DefenseLevel": 1,
     "HpLevel": 1,
-    "CurrentHp": 90,
+    "CurrentHp": 39,
     "SpeedLevel": 1,
     "ShieldHp": 0,
     "SceneIndex": 4,
     "SpiritEnergy": 0,
-    "Warmth": 4699,
+
+    "Warmth": 5151,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -21,8 +22,9 @@
             "SkillCooldown": 0.0
         },
         {
-            "SkillIndex": 5,
+            "SkillIndex": 1,
             "SkillLevel": 0,
+
             "SlotIndex": 1,
             "SkillCooldown": 0.0
         },
@@ -41,12 +43,7 @@
         {
             "SkillIndex": 6,
             "SkillLevel": 0,
-            "SlotIndex": -1,
-            "SkillCooldown": 0.0
-        },
-        {
-            "SkillIndex": 1,
-            "SkillLevel": 0,
+
             "SlotIndex": -1,
             "SkillCooldown": 0.0
         },
@@ -55,6 +52,14 @@
             "SkillLevel": 0,
             "SlotIndex": -1,
             "SkillCooldown": 0.0
+
+        },
+        {
+            "SkillIndex": 5,
+            "SkillLevel": 0,
+            "SlotIndex": -1,
+            "SkillCooldown": 0.0
+
         }
     ],
     "Grade": "N",
@@ -100,8 +105,12 @@
         {
             "Id": "A19",
             "IsClear": true,
-            "CurrentCondition": -1,
-            "IsRewarded": false
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "A20",
+            "IsClear": true,
+            "CurrentCondition": -1
         }
     ],
     "PlayerMissionList": []

@@ -96,20 +96,24 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
         // 플레이어 움직임 비활성화
         PlayerController.Instance.Stop();
+
+        // 1초 뒤 플레이어 움직임 활성화
+        Invoke("PlayerMove", 1f);
+    }
+
+    private void PlayerMove()
+    {
+        PlayerController.Instance.Move();
     }
 
     public void CreateEffect()
     {
         Debug.Log("CreateEffect");
         GameObject effect = Instantiate(_skillEffectPrefab, transform);
-        _skillEffect = effect;
         effect.transform.localPosition = _effectSpawnPos;
+        Destroy(effect, 0.59f);
     }
 
-    public void DestroyEffect()
-    {
-        Destroy(_skillEffect);
-    }
 
     protected override void Damage()
     {
