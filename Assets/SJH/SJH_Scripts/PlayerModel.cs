@@ -98,6 +98,7 @@ public class PlayerModel
         if (Data.Hp <= 0 && !GameManager.IsImmortal)
         {
             // TODO : 플레이어 죽음 처리
+            PlayerController.Instance.SetBool("IsDead", true);
             //Debug.LogError("플레이어 사망");
             AchievementManager.Instance?.CheckDeathAchievements(); // 플레이어 Death 업적 카운트
             if (MissionManager.Instance.IsRunning())

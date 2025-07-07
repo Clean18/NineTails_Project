@@ -117,6 +117,11 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
+        if (GetIsDead())
+        {
+            return;
+        }
+
 		// Auto일 때는 입력 제한
 		if (Mode == ControlMode.Auto) _ai.Action();
 
@@ -128,6 +133,7 @@ public class PlayerController : MonoBehaviour
 		{
 			Test_Function();
 		}
+
 	}
 
 	public void InputHandler()
@@ -259,6 +265,11 @@ public class PlayerController : MonoBehaviour
 
 		_model.ApplyDamage(damage);
 		// TODO : view 피격처리
+        if(GetIsDead())
+        {
+            SetBool("IsDead", true);
+        }
+
 		// TODO : UI 체력감소 처리
 
         // 대미지 색상 변경
@@ -511,6 +522,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="trigger"></param>
     public void SetTrigger(string trigger) => _view.SetTrigger(trigger);
+    /// <summary>
+    /// 플레이어 애니메이터 전환
+    /// </summary>
+    /// <param name="name", ></param>
+    public void SetBool(string name, bool value) => _view.SetBool(name, value);
     /// <summary>
     /// 플레이어 강제 스탑
     /// </summary>
