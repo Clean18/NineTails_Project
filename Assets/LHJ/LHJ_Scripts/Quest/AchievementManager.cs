@@ -203,7 +203,7 @@ public class AchievementManager : Singleton<AchievementManager>
             PlayerController.Instance.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
             PlayerController.Instance.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
             AchievedIds[achievementInfo.Id] = true;
-            RewardDict[achievementInfo.Id] = true;
+            RewardDic[achievementInfo.Id] = true;
         }
     }
     public bool IsAchieved(string achievementId)
