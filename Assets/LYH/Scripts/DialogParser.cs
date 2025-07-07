@@ -225,7 +225,7 @@ public class DialogParser : MonoBehaviour
         }
         else if (charIndex == 14)
         {
-            charIndex = 3;
+            charIndex = 2;
         }
         else
         {
@@ -304,7 +304,8 @@ public class DialogParser : MonoBehaviour
             }
             else if (line.charName == "background") // 배경 컷씬
             {
-                StartCoroutine(startBackground(line.bgImg, dialogLines[index + 1].bgImg));
+                if (index < dialogLines.Count - 1) StartCoroutine(startBackground(line.bgImg, dialogLines[index + 1].bgImg));
+                else StartCoroutine(startBackground(line.bgImg, line.bgImg));
             }
         }
         else if (charIndex == 4) // 내레이션 분류
@@ -578,25 +579,29 @@ public class DialogParser : MonoBehaviour
             blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
             yield return null;
         }
-        // 중간 대기 & 배경 원상복구
-        yield return new WaitForSeconds(0.2f);
-        for (int i = 0; i < bgSprites.Length; i++)
+        // 트랜지션 다음에 나올 이미지가 다를 경우에 추가 트랜지션 효과
+        if (bgName != nextBgName)
         {
-            if (bgSprites[i].name == nextBgName)
+            // 중간 대기 & 배경 원상복구
+            yield return new WaitForSeconds(0.2f);
+            for (int i = 0; i < bgSprites.Length; i++)
             {
-                bgImg.sprite = bgSprites[i];
+                if (bgSprites[i].name == nextBgName)
+                {
+                    bgImg.sprite = bgSprites[i];
+                }
             }
+            // 페이드 아웃
+            elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+                blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                yield return null;
+            }
+            blackTransition.gameObject.SetActive(false);
         }
-        // 페이드 아웃
-        elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-            blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
-            yield return null;
-        }
-        blackTransition.gameObject.SetActive(false);
         isNextClicked = false;
         NextLine();
     }

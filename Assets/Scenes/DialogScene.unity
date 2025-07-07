@@ -853,6 +853,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a2f5b36f51a86544ea72dd405fa96ac8, type: 3}
   - {fileID: 21300000, guid: 73e4e3fcd9be595498f0839ec880174c, type: 3}
   - {fileID: 21300000, guid: e2b668362a83bc24390bcb01b67d37d4, type: 3}
+  - {fileID: 21300000, guid: 57499fac71e36044a924f5d4e98c21c6, type: 3}
+  - {fileID: 21300000, guid: ce9d7f223b6b4b84c975f27306433a37, type: 3}
+  - {fileID: 21300000, guid: 830aab907136be24789f8a817475c21e, type: 3}
   effects:
   - {fileID: 21300000, guid: 15563a0cac1110c45a797f967b31f7cb, type: 3}
   - {fileID: 21300000, guid: 4cf8947a3f6b2604bb7fd58ed95c789e, type: 3}
