@@ -31,14 +31,6 @@ public class SkillLogic_3 : SkillLogic, ISkill
         SlotIndex = -1;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UseSkill(transform);
-        }
-    }
-
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
@@ -107,8 +99,15 @@ public class SkillLogic_3 : SkillLogic, ISkill
     {
         if (_highestMonster != null)
             PlayerController.Instance.StartCoroutine(DamageCoroutine(_highestMonster));
+    }
 
-        OnAttackEnd();
+    public void AnimationPlay()
+    {
+        //_animator.SetTrigger("UseSkill_3");
+        PlayerController.Instance.SetTrigger("UseSkill_3");
+
+        // 3초 뒤 플레이어 이동 활성화
+        Invoke("PlayerMove", 3f);
     }
 
     public void OnAttackStart()
@@ -124,10 +123,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         PlayerController.Instance.Move();
     }
 
-    public void AnimationPlay()
+    private void PlayerMove()
     {
-        //_animator.SetTrigger("UseSkill_3");
-        PlayerController.Instance.SetTrigger("UseSkill_3");
+        PlayerController.Instance.Move();
     }
 
     private void DetectMonster()
