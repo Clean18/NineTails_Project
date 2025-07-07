@@ -173,7 +173,7 @@ public class StagePopUp : BaseUI
 
     void MissionCooldown()
     {
-        Debug.Log("쿨타임 중 - 미션 재도전 불가");
-        UIManager.Instance.ShowWarningText("쿨타임 중 - 미션 재도전 불가");
+        Debug.Log("돌파미션 쿨타임중 [아직 돌파 미션에 재도전할 수 없습니다.]");
+        UIManager.Instance.ShowWarningText("아직 돌파 미션에 재도전할 수 없습니다.");
     }
 }

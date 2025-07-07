@@ -322,6 +322,7 @@ public class PlayerData
         if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 
@@ -349,6 +350,7 @@ public class PlayerData
         if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 
@@ -375,6 +377,7 @@ public class PlayerData
         if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 
@@ -402,6 +405,7 @@ public class PlayerData
         if (cost > warmth && !GameManager.IsCheat)
         {
             Debug.Log($"온기가 부족합니다. {cost} > {warmth}");
+            UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
             return;
         }
 
