@@ -23,6 +23,12 @@ public class HeavyMonsterFSM : BaseMonsterFSM
     // 부모 클래스에서 정의된 추상 메서드 → 근접 공격 루틴 구현
     protected override IEnumerator AttackRoutine()
     {
+        if (_currentState == MonsterState.Dead)
+        {
+            Debug.Log("죽어서 진행안함");
+            yield break;
+        }
+
         // 공격 상태일 동안 반복 실행
         while (_currentState == MonsterState.Attack)
         {
@@ -55,8 +61,8 @@ public class HeavyMonsterFSM : BaseMonsterFSM
         // 상태 변경으로 루프 종료되면 코루틴 정리
         attackRoutine = null;
 
-        //MonsterAnimator.Play("Idle_Tree");
-        MonsterAnimator.Play("Tanker_Idle");
+        // MonsterAnimator.Play("Idle_Tree");
+        // MonsterAnimator.Play("Tanker_Idle");
     }
 
     public override void TakeDamage(long damage)
