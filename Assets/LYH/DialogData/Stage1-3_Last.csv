@@ -1,0 +1,31 @@
+index,charName,imgName,dialog,animation,location,sound,bgmusic,bg,extra1
+1,금강호,tiger,커헉!,,right,hit,stop,burning_town,여기서부터 금강호 보스 배경음악 종료
+2,금강호,tiger,감히 여우 따위가…!,,right,,,burning_town,
+3,금강호,tiger,이 산의 왕에게! 감히…!,,right,,,burning_town,
+4,foxName,fox_normal,왕은 무슨.,,left,,,burning_town,
+5,foxName,fox_sword,이번엔 확실히 끝내주마.,,left,threat,,burning_town,
+6,금강호,tiger,자` 잠깐…! 거래를 하자!,,right,,,burning_town,
+7,금강호,tiger,날 풀어주면… 요괴왕이 있는 곳을…!,,right,,,black,
+8,sound,Horizontal_Slash,써-걱!,,,slash,,black,검은 화면에서 하얀 검격이 세로로 가르는 연출
+9,금강호,tiger,커…헉…!,tremble,right,,,black,
+10,foxName,fox_normal,끝까지 추한 게 예전이나 지금이나 똑같군.,,center,,stage1_bgm,burning_town,
+11,내레이션,,죽어서 사라진 금강호의 자리엔 구슬 하나만이 덩그러니 놓여 있었다.,,,,stage1_bgm,burning_town,
+12,내레이션,,그녀는 그 구슬을 줍더니 깨진 혼령구슬에 갖다댔다.,,,magic,stage1_bgm,burning_town,
+13,내레이션,spirit,혼령 구슬의 일곱개의 금 중 하나가 사라졌다.,,,,stage1_bgm,burning_town,배치된 구슬 그림 사라짐
+14,foxName,fox_normal,앞으로 여섯` 그리고 하나.,,left,,stage1_bgm,burning_town,
+15,foxName,fox_normal,떠난다.,,left,,stage1_bgm,burning_town,왼쪽에 있는 구미호 일러스트의 앞 방향이 반대방향으로 전환
+16,진월,,예… 옙!,,,,stage1_bgm,burning_town,,npc1,
+17,마을사람,npc1,자` 잠깐만요!,,right,,stop,burning_town,
+18,foxName,fox_normal,...,,left,,,burning_town,
+19,마을사람,npc1,감사합니다!,,right,,,burning_town,
+20,마을사람,npc1,여러분이 아니었다면…,,right,,,burning_town,
+21,foxName,fox_normal,앞으로 더 많은 요괴가 몰려올 거야.,,left,,,burning_town,
+22,foxName,fox_normal,살고 싶으면 남쪽으로 꺼져.,,left,,,burning_town,
+23,sound,,,,,,stage1_bgm,burning_town,구미호 왼쪽으로 이동하여 퇴장(게임 화면 밖까지 나가서 퇴장
+24,내레이션,,그녀는 더 할 말이 없다는 듯 그저 발걸음을 옮겼다.,,,,stage1_bgm,burning_town,진월 일러스트는 이동하지 않고 대기.
+25,내레이션,,나도 그녀를 따라가느라 아주 잠깐 동안만 볼 수 있었지만.,,,,stage1_bgm,burning_town,
+26,내레이션,,난 보았다.,,,,stage1_bgm,burning_town,
+27,내레이션,,살아남은 마을 사람들을.,,,,stage1_bgm,burning_town,
+28,내레이션,,그리고` foxName 그녀의 표정을.,,,,stage1_bgm,burning_town,
+29,내레이션,,다만` 그게 웃는 건지 우는 건지 알 수가 없었다.,,,,stage1_bgm,burning_town,
+30,background,,,,,,stage1_bgm,chapter2_logo,
