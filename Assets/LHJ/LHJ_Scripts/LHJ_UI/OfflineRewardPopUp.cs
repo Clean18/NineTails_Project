@@ -67,5 +67,7 @@ public class OfflineRewardPopUp : BaseUI
         timeText.text = $"방치한 시간\n{hours}시간 {minutes}분";
         warmthText.text = $"획득한 온정\n{warmth}";
         spiritText.text = $"획득한 영기\n{spirit}";
+
+        SaveLoadManager.Instance.TimeInit();
     }
 }
