@@ -338,10 +338,10 @@ public class DataManager : Singleton<DataManager>
 
 				EquipmentUpgradeCostTable[grade][level] = cost;
 
-                Debug.Log("===============");
-                Debug.Log($"{grade} 등급");
-                Debug.Log($"레벨 : {level} / 비용 : {cost}");
-                Debug.Log("===============");
+                //Debug.Log("===============");
+                //Debug.Log($"{grade} 등급");
+                //Debug.Log($"레벨 : {level} / 비용 : {cost}");
+                //Debug.Log("===============");
             }
 		}
 	}

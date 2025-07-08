@@ -1,43 +1,138 @@
 {
-    "_savedTimeString": "2025-07-08T11:57:46.2828265+09:00",
-    "PlayerName": "구미호",
-    "AttackLevel": 1,
-    "DefenseLevel": 1,
-    "HpLevel": 1,
-    "CurrentHp": 72,
-    "SpeedLevel": 1,
+    "_savedTimeString": "2025-07-08T13:07:56.5141488+09:00",
+    "PlayerName": "미호",
+    "AttackLevel": 61,
+    "DefenseLevel": 39,
+    "HpLevel": 49,
+    "CurrentHp": 250,
+    "SpeedLevel": 27,
     "ShieldHp": 0,
-    "SceneIndex": 4,
+    "SceneIndex": 9,
     "SpiritEnergy": 0,
-    "Warmth": 1170,
-    "Soul": 0,
+    "Warmth": 22729,
+    "Soul": 4,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
     "PlayerSkillList": [
         {
             "SkillIndex": 0,
-            "SkillLevel": 0,
+            "SkillLevel": 34,
             "SlotIndex": 0,
             "SkillCooldown": 0.0
+        },
+        {
+            "SkillIndex": 1,
+            "SkillLevel": 33,
+            "SlotIndex": 1,
+            "SkillCooldown": 0.0
+        },
+        {
+            "SkillIndex": 2,
+            "SkillLevel": 17,
+            "SlotIndex": 2,
+            "SkillCooldown": 4.0
+        },
+        {
+            "SkillIndex": 4,
+            "SkillLevel": 20,
+            "SlotIndex": 3,
+            "SkillCooldown": 9.0
         }
     ],
     "Grade": "N",
-    "Level": 1,
+    "Level": 39,
     "IncreaseDamageLevel": 0,
     "PlayerAchivementList": [
         {
             "Id": "A16",
             "IsClear": true,
             "CurrentCondition": -1,
-            "IsRewarded": false
+            "IsRewarded": true
         },
         {
             "Id": "A43",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
+        },
+        {
+            "Id": "A8",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A34",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A35",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A17",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A46",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A47",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A48",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A1",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": true
+        },
+        {
+            "Id": "A18",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A2",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A19",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
         }
     ],
-    "PlayerMissionList": [],
+    "PlayerMissionList": [
+        {
+            "Id": "M1",
+            "IsClear": true,
+            "CurrentCondition": -1
+        },
+        {
+            "Id": "M2",
+            "IsClear": true,
+            "CurrentCondition": -1
+        }
+    ],
     "MissionCooldown": 0.0
 }
