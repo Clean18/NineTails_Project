@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
 
 	[Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
 	public Vector2 MoveDir; // 플레이어의 이동 방향
+    [SerializeField] private AudioSource _audioSource;
 
     void Start()
 	{
@@ -108,6 +109,7 @@ public class PlayerController : MonoBehaviour
 		CurrentState = AIState.Search;
 		Mode = ControlMode.Auto;
         //Mode = ControlMode.Manual;
+        _audioSource = GetComponent<AudioSource>();
     }
 
 	void Update()
@@ -581,6 +583,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
 	public GameData SaveData() => SaveLoadManager.Instance.GameData = _model.GetGameData();
+
+    public void PlaySkillSound(AudioClip clip)
+    {
+        if (_audioSource == null) return;
+
+        _audioSource.PlayOneShot(clip, 1f);
+    }
 
     #region 애니메이션 이벤트 함수
 

@@ -68,6 +68,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
+
         OnAttackStart();
         AnimationPlay();
         //DetectMonster();
@@ -98,6 +101,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
         IsCooldown = true;
         
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         OnAttackStart();
         AnimationPlay();

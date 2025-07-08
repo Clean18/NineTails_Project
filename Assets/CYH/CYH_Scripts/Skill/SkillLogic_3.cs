@@ -57,6 +57,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
+
         AnimationPlay();
 
         OnAttackStart();
@@ -83,6 +86,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
 
