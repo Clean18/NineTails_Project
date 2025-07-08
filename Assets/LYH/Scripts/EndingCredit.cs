@@ -8,6 +8,7 @@ public class EndingCredit : MonoBehaviour
 {
     [SerializeField] private VideoPlayer player;
     [SerializeField] private GameObject GameEndUI;
+    [SerializeField] private RawImage playUI;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class EndingCredit : MonoBehaviour
     private void OnVideoEnd(VideoPlayer vp)
     {
         GameEndUI.SetActive(true);
+        playUI.gameObject.SetActive(false);
     }
 
     public void previousScene()

@@ -597,6 +597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1194844953}
   GameEndUI: {fileID: 45878314}
+  playUI: {fileID: 1987393282}
 --- !u!328 &1194844953
 VideoPlayer:
   m_ObjectHideFlags: 0
