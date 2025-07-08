@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum PromotionAchievementType
@@ -14,7 +15,6 @@ public class AchievementManager : Singleton<AchievementManager>
     public Dictionary<string, int> KillCountDic = new();       // 업적별 조건 달성 여부 확인
     public Dictionary<string, bool> RewardDic = new();         // 보상 획득 여부 확인
     private int totalDeathCount = 0;
-
     // 스테이지별 킬 업적 조건 검사 함수
     public void KillCount(string currentStageId)
     {
@@ -167,7 +167,8 @@ public class AchievementManager : Singleton<AchievementManager>
         {
             if (achievement.Type != "Boss") continue;   // Type이 보스가 아니면 무시
             if (AchievedIds.ContainsKey(achievement.Id)) continue; // 이미 달성한 업적이면 무시
-            if (achievement.Scene != scene) continue;   // 업적에 해당하는씬이 아니면 무시
+            var scenes = achievement.Scene.Split('|');
+            if (!scenes.Contains(scene)) continue;
 
             float purpose = achievement.Purpose;
 
