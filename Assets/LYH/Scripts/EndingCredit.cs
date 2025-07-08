@@ -36,7 +36,6 @@ public class EndingCredit : MonoBehaviour
         if (player.isPlaying)
         {
             player.Stop(); // 영상 정지
-            OnVideoEnd(player); // 강제로 종료 처리
             GameEndUI.SetActive(true);
             playUI.gameObject.SetActive(false);
         }

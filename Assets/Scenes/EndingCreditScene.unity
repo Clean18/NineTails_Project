@@ -734,7 +734,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1194844952}
         m_TargetAssemblyTypeName: EndingCredit, Assembly-CSharp
-        m_MethodName: previousScene
+        m_MethodName: skipVideo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
