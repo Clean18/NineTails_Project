@@ -568,8 +568,11 @@ public class PlayerController : MonoBehaviour
 
     #region AI 함수
 
-    public void AIInit() => _ai.MonsterSkillCheck();
-
+    public void AIInit()
+    {
+        _ai.StopSearchRoutine();
+        _ai.MonsterSkillCheck();
+    }
     #endregion
 
     /// <summary>

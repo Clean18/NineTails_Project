@@ -150,33 +150,33 @@ public class PlayerAI
 
 	IEnumerator SearchRoutine()
 	{
-		while ((_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Search)
+        while ((_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Search)
             || (_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Chase))
 		{
 			yield return _searchDelay;
 
-			if (TargetMonster != null) continue;
+            if (TargetMonster != null) continue;
 
-			var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
+            var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
             if (monsters.Length == 0)
             {
                 // 범위에 몬스터가 없으면 이동 정지
                 _view.AIStop();
                 continue;
             }
-
-			// 원 안의 몬스터들을 8칸으로 분류
-			Dictionary<int, List<Transform>> searchDic = new();
+            Debug.Log("Check 4");
+            // 원 안의 몬스터들을 8칸으로 분류
+            Dictionary<int, List<Transform>> searchDic = new();
 			for (int i = 1; i <= _controller.DirectionCount; i++)
 				searchDic[i] = new List<Transform>(); // 1 ~ 8
 
-			foreach (var collider in monsters)
+			foreach (var monster in monsters)
 			{
-				Vector2 dir = (collider.transform.position - _controller.transform.position).normalized;
-				float angle = Vector2.SignedAngle(Vector2.up, dir);
+				Vector2 dir = (monster.transform.position - _controller.transform.position).normalized;
+                float angle = Vector2.SignedAngle(Vector2.up, dir);
 				if (angle < 0) angle += 360;
 				int sector = (int)(angle / _controller.SightAngle) + 1;
-				searchDic[sector].Add(collider.transform);
+				searchDic[sector].Add(monster.transform);
 			}
 
 			// 몬스터가 가장 많은 섹터들 선택
@@ -251,7 +251,7 @@ public class PlayerAI
 		}
 	}
 
-	void StopSearchRoutine()
+	public void StopSearchRoutine()
 	{
 		if (_searchRoutine != null)
 		{

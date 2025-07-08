@@ -75,6 +75,10 @@ public class GameManager : Singleton<GameManager>
             Player.gameObject.SetActive(false);
             Debug.Log(Player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
         }
+        if (currentSceneName == "Stage1-3_Battle" || currentSceneName == "Stage2-3_Battle" || currentSceneName == "Stage3-3_Battle")
+        {
+            Player.Mode = ControlMode.Manual;
+        }
 
         Debug.LogWarning("씬 전환 초기화 완료");
     }
