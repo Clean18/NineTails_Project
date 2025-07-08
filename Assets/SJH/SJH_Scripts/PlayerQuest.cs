@@ -84,7 +84,11 @@ public class PlayerQuest
         // 돌파미션 쿨타임이 남아있으면 쿨다운 시작
         if (missionCooldown != 0 && missionCooldown > 0.0001f)
         {
-            MissionManager.Instance.StartCoroutine(MissionManager.Instance.CooldownRoutine(missionCooldown));
+            if (MissionManager.Instance.MissionCooldownRoutine != null)
+            {
+                MissionManager.Instance.MissionCooldownRoutine = null;
+                MissionManager.Instance.StartCoroutine(MissionManager.Instance.CooldownRoutine(missionCooldown));
+            }
         }
         Debug.Log("미션 초기화 완료");
     }

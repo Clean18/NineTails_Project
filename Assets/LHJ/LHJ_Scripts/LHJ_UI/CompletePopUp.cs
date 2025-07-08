@@ -28,9 +28,6 @@ public class CompletePopUp : BaseUI
             //Debug.LogError($"{nextScene}");
             SceneChangeManager.Instance.LoadNextScene();
             //SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene_v1", nextScene, 1);
-        };
-        GetEvent("Btn_N").Click -= data =>
-        {
             UIManager.Instance.ClosePopUp();
         };
     }

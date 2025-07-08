@@ -16,6 +16,8 @@ public class MissionManager : Singleton<MissionManager>
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
+    public Coroutine MissionCooldownRoutine;
+
     // 미션을 실행하는 함수
     public void StartMission(string sceneName)
     {
@@ -85,7 +87,7 @@ public class MissionManager : Singleton<MissionManager>
     {
         IsCooldownActive = true;    
         CooldownSeconds = 60f;     // 쿨타임 시간 설정
-
+        Debug.Log("미션 돌파 쿨타임 감소");
         while (CooldownSeconds > 0)
         {
             yield return new WaitForSeconds(1f);
@@ -104,7 +106,7 @@ public class MissionManager : Singleton<MissionManager>
     {
         IsCooldownActive = true;
         CooldownSeconds = cooldownSeconds;     // 쿨타임 시간 설정
-
+        Debug.Log("미션 돌파 쿨타임 감소");
         while (CooldownSeconds > 0)
         {
             yield return new WaitForSeconds(1f);
