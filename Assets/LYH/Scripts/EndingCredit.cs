@@ -36,4 +36,14 @@ public class EndingCredit : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
+    public void skipVideo()
+    {
+        if (player.isPlaying)
+        {
+            player.Stop(); // 영상 정지
+            GameEndUI.SetActive(true);
+            playUI.gameObject.SetActive(false);
+        }
+    }
+
 }

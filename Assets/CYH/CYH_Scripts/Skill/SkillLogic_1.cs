@@ -96,7 +96,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
         IsSkillUsed = false;
 
         // 플레이어 움직임 활성화
-        PlayerController.Instance.Move();
+        //PlayerController.Instance.Move();
     }
 
     public void AnimationPlay()
