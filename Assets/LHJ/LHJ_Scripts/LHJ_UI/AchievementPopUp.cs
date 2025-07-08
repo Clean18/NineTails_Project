@@ -87,4 +87,11 @@ public class AchievementPopUp : BaseUI
             UpdateGroupUI(group);
         });
     }
+    private void Start()
+    {
+        GetEvent("Btn_close").Click += data =>
+        {
+            UIManager.Instance.ClosePopUp();
+        };
+    }
 }

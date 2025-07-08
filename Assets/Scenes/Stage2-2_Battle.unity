@@ -600,7 +600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: _spawnLevel
-      value: 78
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: SpawnPoints.Array.size
