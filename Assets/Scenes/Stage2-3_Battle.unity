@@ -603,13 +603,29 @@ PrefabInstance:
       propertyPath: DamageReduceRate
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: Pattern1BoxSize.x
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: Pattern1BoxSize.y
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: Pattern2BoxSize.x
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 192895534083032659, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
+      propertyPath: Pattern2BoxSize.y
+      value: 19
+      objectReference: {fileID: 0}
     - target: {fileID: 1042960709677487614, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
       propertyPath: m_Name
       value: 2StageBoss_Story
       objectReference: {fileID: 0}
     - target: {fileID: 1042960709677487614, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9099191836802624891, guid: 8b54d29042fc37946bd15f2e5275a693, type: 3}
       propertyPath: m_LocalPosition.x

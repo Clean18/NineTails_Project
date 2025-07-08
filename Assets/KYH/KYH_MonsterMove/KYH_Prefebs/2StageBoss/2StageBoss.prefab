@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 977721620020872853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.5, y: -4, z: 0}
+  m_LocalPosition: {x: -14, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -260,7 +260,7 @@ MonoBehaviour:
   DustEffect1: {fileID: 8536767884723880176, guid: 2ae28178dadda184cadf179556339e97, type: 3}
   RoarSound1: {fileID: 8300000, guid: c50e71db561f3dc48a094211106c3af4, type: 3}
   Pattern1Delay: 3
-  Pattern1BoxSize: {x: 20, y: 15}
+  Pattern1BoxSize: {x: 27, y: 19}
   DustEffect1SpawnRight: {fileID: 1743992433580517759}
   DustEffect1SpawnLeft: {fileID: 8364971859131105924}
   LegMoveSound: {fileID: 8300000, guid: 2bca70511ebd0894aa019023532f0915, type: 3}
@@ -273,7 +273,7 @@ MonoBehaviour:
   RoarSound2: {fileID: 8300000, guid: 7be283f5c0c8544418abb130c11cfaa3, type: 3}
   SwingBonkSound: {fileID: 8300000, guid: f35e795b02f3e204b9e5b59a326651a0, type: 3}
   Pattern2Delay: 5
-  Pattern2BoxSize: {x: 20, y: 15}
+  Pattern2BoxSize: {x: 27, y: 19}
   SwingBonkPoint1: {fileID: 265232001713993468}
   SwingBonkPoint2: {fileID: 2616877424119103672}
   LongMenArm: {fileID: 6103169461024174632}
@@ -617,7 +617,7 @@ Transform:
   m_GameObject: {fileID: 6836385998834411750}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.5, y: 4.5, z: 0}
+  m_LocalPosition: {x: -14, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
