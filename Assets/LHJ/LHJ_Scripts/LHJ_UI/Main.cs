@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,11 +23,14 @@ public class Main : BaseUI, IUI
     [SerializeField] private Slider missionTimeSlider;          // 시간 슬라이드
 
     [SerializeField] private TMP_Text _autoBtnText;             // 자동/수동 버튼 텍스트
+    [SerializeField] private AudioSource _bgmSource;
+    [SerializeField] private List<AudioClip> _bgmList;
 
     private void Start()
     {
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
+        _bgmSource = GetComponent<AudioSource>();
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
@@ -127,8 +131,22 @@ public class Main : BaseUI, IUI
 
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
-
         UpdateNicknameUI();
+
+        // 사운드 초기화
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene == "Stage1-1_Battle" || currentScene == "Stage1-2_Battle") _bgmSource.clip = _bgmList[0];
+        else if (currentScene == "Stage1-3_Battle") _bgmSource.clip = _bgmList[1];
+        else if (currentScene == "Stage2-1_Battle" || currentScene == "Stage2-2_Battle") _bgmSource.clip = _bgmList[2];
+        else if (currentScene == "Stage2-3_Battle") _bgmSource.clip = _bgmList[3];
+        else if (currentScene == "Stage3-1_Battle" || currentScene == "Stage3-2_Battle") _bgmSource.clip = _bgmList[4];
+        else if (currentScene == "Stage3-3_Battle") _bgmSource.clip = _bgmList[5];
+
+        if (_bgmSource.clip != null)
+        {
+            _bgmSource.loop = true;
+            _bgmSource.Play();
+        }
     }
 
     // 메인에 플레이어 스탯 정보UI

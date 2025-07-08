@@ -6283,6 +6283,14 @@ MonoBehaviour:
   killCountText: {fileID: 7671622302677019820}
   missionTimeSlider: {fileID: 3290893503602990100}
   _autoBtnText: {fileID: 8388642264522572835}
+  _bgmSource: {fileID: 0}
+  _bgmList:
+  - {fileID: 8300000, guid: d3e61201861a08c42afcbc4eaa84b284, type: 3}
+  - {fileID: 8300000, guid: 99464a13a111e4d43b98c9763d8e48d8, type: 3}
+  - {fileID: 8300000, guid: 59ec4ce8105b47b479f163790de2a3fa, type: 3}
+  - {fileID: 8300000, guid: 1d144a2be45b17c45a969e5f3ab9b229, type: 3}
+  - {fileID: 8300000, guid: 02b428287a3669a4888911dfdabddc3d, type: 3}
+  - {fileID: 8300000, guid: 4f02d70883f1e854db524f9c627b9609, type: 3}
 --- !u!82 &5616065474428405930
 AudioSource:
   m_ObjectHideFlags: 0
