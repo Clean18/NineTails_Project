@@ -12,9 +12,8 @@ public class PopUpCanvas : MonoBehaviour
         // 팝업창이 있을시
         if (stack.Count > 0)
         {
-            // 현재 가장 위에있는 팝업창을 비활성화시킴
-            BaseUI top = stack.Peek();
-            top.gameObject.SetActive(false);
+            BaseUI top = stack.Pop(); // 기존에 있던 팝업 제거
+            Destroy(top.gameObject);  
         }
         // 새로운 UI를 스택에 추가
         stack.Push(ui);  
@@ -36,5 +35,9 @@ public class PopUpCanvas : MonoBehaviour
             top = stack.Peek();
             top.gameObject.SetActive(true);
         }
+    }
+    public Stack<BaseUI> GetStack()
+    {
+        return stack;
     }
 }

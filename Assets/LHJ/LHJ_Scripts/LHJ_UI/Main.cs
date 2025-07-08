@@ -42,12 +42,14 @@ public class Main : BaseUI, IUI
         GetEvent("Btn_Stat").Click += data => // Stats
         {
             Debug.Log("스탯 강화 UI 활성화");
-            UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
+            if (!IsPopUpOpen<StatUpPopUp>())
+                UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
         };
         GetEvent("Btn_Skill").Click += data => // Skill
         {
             Debug.Log("스킬 강화 UI 활성화");
-            UIManager.Instance.ShowPopUp<SkillPopUp>();
+            if (!IsPopUpOpen<SkillPopUp>())
+                UIManager.Instance.ShowPopUp<SkillPopUp>();
         };
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
@@ -55,7 +57,8 @@ public class Main : BaseUI, IUI
             if ((AchievementManager.Instance.AchievedIds.ContainsKey("A3") && AchievementManager.Instance.AchievedIds["A3"]) || GameManager.IsCheat)
             {
                 Debug.Log("장비 강화 UI 활성화");
-                UIManager.Instance.ShowPopUp<UpgradePopUp>();
+                if (!IsPopUpOpen<UpgradePopUp>())
+                    UIManager.Instance.ShowPopUp<UpgradePopUp>();
             }
             else
             {
@@ -65,11 +68,13 @@ public class Main : BaseUI, IUI
         GetEvent("Btn_Option").Click += data => // Setting
         {
             Debug.Log("옵션 UI 활성화");
-            UIManager.Instance.ShowPopUp<SettingPopUp>();
+            if (!IsPopUpOpen<SettingPopUp>())
+                UIManager.Instance.ShowPopUp<SettingPopUp>();
         };
         GetEvent("Btn_Stage").Click += data => // Mission
         {
-            UIManager.Instance.ShowPopUp<StagePopUp>();
+            if (!IsPopUpOpen<StagePopUp>())
+                UIManager.Instance.ShowPopUp<StagePopUp>();
         };
         // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
         // TODO : 치트 팝업 띄우기
@@ -91,7 +96,8 @@ public class Main : BaseUI, IUI
         }
         GetEvent("Btn_Achievement").Click += data => // Achievement
         {
-            UIManager.Instance.ShowPopUp<AchievementPopUp>();
+            if (!IsPopUpOpen<AchievementPopUp>())
+                UIManager.Instance.ShowPopUp<AchievementPopUp>();
         };
         GetEvent("Btn_Auto").Click += data =>
         {
@@ -189,5 +195,13 @@ public class Main : BaseUI, IUI
         {
             if (retrycoolTimeText != null) retrycoolTimeText.text = "";    // 쿨타임 끝나면 텍스트 초기화
         }
+    }
+    private bool IsPopUpOpen<T>() where T : BaseUI
+    {
+        foreach (var popup in UIManager.Instance.PopUpCanvas.GetStack())
+        {
+            if (popup is T) return true;
+        }
+        return false;
     }
 }
