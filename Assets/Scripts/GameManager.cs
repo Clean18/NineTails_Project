@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
@@ -12,6 +13,22 @@ public class GameManager : Singleton<GameManager>
 
     public static bool IsCheat = false;
     public static bool IsImmortal = false;
+
+    [SerializeField] private AudioMixer _audioMixer;
+
+    private const string BGM_PARAM = "BGM Volume";
+    private const string SFX_PARAM = "SFX Volume";
+
+    private const string BGM_PREF = "BGM VolumePref";
+    private const string SFX_PREF = "SFX VolumePref";
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SetBGMVolume(PlayerPrefs.GetFloat(BGM_PREF, 1f));
+        SetSFXVolume(PlayerPrefs.GetFloat(SFX_PREF, 1f));
+    }
 
     void OnEnable()
     {
@@ -91,4 +108,21 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void OnStartBtn() => SceneChangeManager.Instance.LoadFirstScene();
+
+    public void SetBGMVolume(float value)
+    {
+        float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+        _audioMixer.SetFloat(BGM_PARAM, dB);
+        PlayerPrefs.SetFloat(BGM_PREF, value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+        _audioMixer.SetFloat(SFX_PARAM, dB);
+        PlayerPrefs.SetFloat(SFX_PREF, value);
+    }
+
+    public float GetSavedBGMVolume() => PlayerPrefs.GetFloat(BGM_PREF, 1f);
+    public float GetSavedSFXVolume() => PlayerPrefs.GetFloat(SFX_PREF, 1f);
 }

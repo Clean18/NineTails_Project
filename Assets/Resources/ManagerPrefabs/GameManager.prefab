@@ -45,5 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 1195018135616766724, guid: 491fe325d2be7bb4dbcc27dc46f100f2, type: 3}
-  PlayerController: {fileID: 0}
+  Player: {fileID: 0}
   Spawner: {fileID: 0}
+  _audioMixer: {fileID: 24100000, guid: 4e7e7b7a716e99840b9ecb1c59e2ff2c, type: 2}
