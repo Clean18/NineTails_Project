@@ -52,12 +52,13 @@ public class Stage2BossFSM : BaseBossFSM
         BossAnimator.Play("Boss_Roar");
         PlaySound(RoarSound1);
 
-        // 2. 경고 범위 표시
+        // 경고 프리팹 인스턴스
         GameObject warning = Instantiate(
             WarningLineVertical,
             WarningOrigin1.position,
             WarningOrigin1.rotation
         );
+        ApplyBoxSizeToWarningPrefab(warning, Pattern1BoxSize); // ← 크기 동기화
 
         // 3. 대기 후 애니메이션 순차 재생 (실제 처리 → 애니메이션 이벤트로)
         yield return new WaitForSeconds(Pattern1Delay);
@@ -93,12 +94,12 @@ public class Stage2BossFSM : BaseBossFSM
         yield return new WaitForSeconds(0.5f);
         PlaySound(RoarSound2);
 
-        // 2. 경고 표시
         GameObject warning = Instantiate(
-            WarningLineHorizontal,
-            WarningOrigin2.position,
-            WarningOrigin2.rotation
-        );
+    WarningLineHorizontal,
+    WarningOrigin2.position,
+    WarningOrigin2.rotation
+);
+        ApplyBoxSizeToWarningPrefab(warning, Pattern2BoxSize); // ← 크기 동기화
 
         yield return new WaitForSeconds(Pattern2Delay);
 
@@ -132,7 +133,7 @@ public class Stage2BossFSM : BaseBossFSM
             Destroy(dust, 2f);
         }
 
-        DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
+        DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.1f);
     }
 
     // Pattern1 - 왼발 발구르기
@@ -149,7 +150,7 @@ public class Stage2BossFSM : BaseBossFSM
             Destroy(dust, 2f);
         }
 
-        DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.3f);
+        DealBoxDamage(WarningOrigin1.position, Pattern1BoxSize, 0.1f);
     }
 
     // Pattern2 - 방망이 강타
@@ -163,7 +164,7 @@ public class Stage2BossFSM : BaseBossFSM
             Destroy(dust1, 2f);
             Destroy(dust2, 2f);
         }
-        DealBoxDamage(WarningOrigin2.position, Pattern2BoxSize, 0.6f);
+        DealBoxDamage(WarningOrigin2.position, Pattern2BoxSize, 0.2f);
     }
 
     /// <summary>
@@ -172,46 +173,88 @@ public class Stage2BossFSM : BaseBossFSM
     private void DealBoxDamage(Vector2 center, Vector2 size, float damagePercent)
     {
         Collider2D hit = Physics2D.OverlapBox(center, size, 0f, _playerLayer);
-
+        Debug.LogError ($"{center} {size} {PlayerController.Instance.transform.position}");
+        Debug.Log($"OverlapBox 위치: {center}, 크기: {size}");
         if (hit != null)
         {
+            Debug.LogError("피격됨");
             PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * damagePercent));
             Debug.Log($"Stage2 - 플레이어 {hit.name}에게 {damagePercent * 100f}% 데미지");
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void ApplyBoxSizeToWarningPrefab(GameObject warningObj, Vector2 boxSize)
     {
-        if (WarningOrigin1 != null)
+        if (warningObj == null) return;
+
+        SpriteRenderer sr = warningObj.GetComponent<SpriteRenderer>();
+        if (sr == null)
         {
-            Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
-            Gizmos.DrawCube(WarningOrigin1.position, Pattern1BoxSize);
-            //Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern 1 데미지 범위");
+            Debug.LogWarning("경고 오브젝트에 SpriteRenderer가 없습니다.");
+            return;
         }
 
-        if (WarningOrigin2 != null)
+        // DrawMode가 Sliced나 Tiled여야 size 조절 가능
+        if (sr.drawMode == SpriteDrawMode.Simple)
         {
-            Gizmos.color = new Color(0f, 1f, 1f, 0.4f);
-            Gizmos.DrawCube(WarningOrigin2.position, Pattern2BoxSize);
-            //Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern 2 데미지 범위");
+            Debug.LogWarning($"{warningObj.name} 은 DrawMode가 Simple이라 크기 조절 불가합니다.");
+            return;
         }
 
-        // Pattern1 이펙트 위치 시각화 (오른발)
-        if (DustEffect1SpawnRight != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(DustEffect1SpawnRight.position, 0.2f);
-            //Handles.Label(DustEffect1SpawnRight.position + Vector3.up * 0.1f, "오른발 이펙트 위치");
-        }
-
-        // Pattern1 이펙트 위치 시각화 (왼발)
-        if (DustEffect1SpawnLeft != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
-            //Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
-        }
+        sr.size = boxSize;
     }
+
+  //private void OnDrawGizmosSelected()
+  // { 
+  //
+  //   
+  //   // Pattern1 - 데미지 판정 박스
+  //   if (WarningOrigin1 != null)
+  //   {
+  //       Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); // 주황색
+  //       Gizmos.matrix = Matrix4x4.TRS(WarningOrigin1.position, WarningOrigin1.rotation, Vector3.one);
+  //       Gizmos.DrawCube(Vector3.zero, Pattern1BoxSize);
+  //       UnityEditor.Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern1 Damage Box");
+  //   }
+  //
+  //   // Pattern2 - 데미지 판정 박스
+  //   if (WarningOrigin2 != null)
+  //   {
+  //       Gizmos.color = new Color(0f, 0.8f, 1f, 0.4f); // 청록색
+  //       Gizmos.matrix = Matrix4x4.TRS(WarningOrigin2.position, WarningOrigin2.rotation, Vector3.one);
+  //       Gizmos.DrawCube(Vector3.zero, Pattern2BoxSize);
+  //       UnityEditor.Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern2 Damage Box");
+  //   }
+        //    if (WarningOrigin1 != null)
+        //    {
+        //        Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
+        //        Gizmos.DrawCube(WarningOrigin1.position, Pattern1BoxSize);
+        //        Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern 1 데미지 범위");
+        //    }
+
+        //    if (WarningOrigin2 != null)
+        //    {
+        //        Gizmos.color = new Color(0f, 1f, 1f, 0.4f);
+        //        Gizmos.DrawCube(WarningOrigin2.position, Pattern2BoxSize);
+        //        Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern 2 데미지 범위");
+        //    }
+
+        //    // Pattern1 이펙트 위치 시각화 (오른발)
+        //    if (DustEffect1SpawnRight != null)
+        //    {
+        //        Gizmos.color = Color.red;
+        //        Gizmos.DrawSphere(DustEffect1SpawnRight.position, 0.2f);
+        //        Handles.Label(DustEffect1SpawnRight.position + Vector3.up * 0.1f, "오른발 이펙트 위치");
+        //    }
+
+        //    // Pattern1 이펙트 위치 시각화 (왼발)
+        //    if (DustEffect1SpawnLeft != null)
+        //    {
+        //        Gizmos.color = Color.blue;
+        //        Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
+        //        Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
+        //    }
+  //  }
 
     protected override IEnumerator DeadRoutine()
     {

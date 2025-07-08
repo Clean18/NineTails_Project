@@ -59,6 +59,9 @@ public class SkillLogic_6 : SkillLogic, ISkill
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
+
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();
 
@@ -82,6 +85,9 @@ public class SkillLogic_6 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         // 스킬 발동 전 몬스터 목록 초기화
         _hitMonsters.Clear();

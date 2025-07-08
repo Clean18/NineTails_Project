@@ -80,6 +80,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
         Debug.Log("스킬 2 사용완료");
 
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
+
         AnimationPlay();
         OnAttackStart();
         return true;
@@ -100,6 +103,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
         Debug.Log("스킬 2 사용완료");
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
         OnAttackStart();
