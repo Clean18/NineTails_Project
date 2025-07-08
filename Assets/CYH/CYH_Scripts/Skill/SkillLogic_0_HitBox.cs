@@ -24,6 +24,8 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         IsCooldown = false;
         SkillLevel = 0;
         SlotIndex = 0;
+
+        IsSkillUsed = false;
     }
 
     public void SkillInit(SaveSkillData playerSkillData)
@@ -31,12 +33,13 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         SlotIndex = playerSkillData.SlotIndex;
         IsCooldown = playerSkillData.SkillCooldown > 0f;
         if (IsCooldown) PlayerController.Instance.StartCoroutine(CooldownCoroutine(playerSkillData.SkillCooldown));
+        IsSkillUsed = false;
     }
 
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("기본공격 UseSkill");
 
         // 쿨타임 체크 시작
@@ -56,7 +59,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -74,7 +77,8 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public void OnAttackStart()
     {
         // OnTrigger 플래그
-        _isSkillUsed = true;
+        IsSkillUsed = true;
+        //_isSkillUsed = true;
 
         _hitBox.enabled = true;
     }
@@ -90,7 +94,8 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
         if (_slashCount == 2) _slashCount = 0;
 
         // OnTrigger 플래그
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
     }
 
     public void AnimationPlay()
@@ -133,7 +138,8 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!_isSkillUsed) return;
+        //if (!_isSkillUsed) return;
+        if (!IsSkillUsed) return;
 
         if (!other.CompareTag("Monster")) return;
         if (!_hitMonsters.Contains(other.gameObject))

@@ -7,7 +7,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
     [Header("Attack Setting")]
    // [SerializeField] private GameObject AttackEffectPrefab;  // 공격 시 생성할 이펙트 프리팹
     [SerializeField] private Transform AttackPoint;          // 공격 중심 위치 (예: 손, 발)
-    [SerializeField] private float AttackRadius = 1f;        // 원형 공격 범위 반지름
+    [SerializeField] private float AttackRadius;        // 원형 공격 범위 반지름
     [SerializeField] private LayerMask PlayerLayer;          // 플레이어 판정용 레이어
     [SerializeField] private AudioClip AttackSound;          // 공격 시 재생할 사운드
     [SerializeField] private AudioClip HitSound;
@@ -73,7 +73,7 @@ public class MeleeMonsterFSM : BaseMonsterFSM
         // Destroy(gameObject, 1f);
     }
 
-    // Unity 편집기에서 공격 범위 확인용 Gizmo 그리기
+    //Unity 편집기에서 공격 범위 확인용 Gizmo 그리기
     //private void OnDrawGizmosSelected()
     //{
     //    if (AttackPoint != null)

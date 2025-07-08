@@ -40,9 +40,9 @@ public class PlayerData
     /// </summary> 
     [SerializeField]
     public long PowerLevel
-    { get => (long)((PlayerController.Instance.GetAttack() * (1f + PlayerController.Instance.GetEquipmentAttack()) * 0.95f + MaxHp * 0.05) * (1 + Defense / 1200f * 0.25f)); }
+    { get => (long) ((PlayerController.Instance.GetAttack()* (1f + PlayerController.Instance.GetEquipmentAttack()) * 1.20f + MaxHp* 1.10) * (1 + Defense / 1200f * 0.25f)); }
 
-    [field: SerializeField] private int _attackLevel;
+[field: SerializeField] private int _attackLevel;
     /// <summary>
     /// 공격력 10 ~ 5,202,220,766,384,660
     /// </summary>

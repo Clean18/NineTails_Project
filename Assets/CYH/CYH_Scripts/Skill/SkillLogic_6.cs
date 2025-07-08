@@ -48,7 +48,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         Debug.Log("스킬6 사용");
 
@@ -72,7 +72,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         Debug.Log("스킬6 사용");
 
@@ -100,7 +100,8 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
         PlayerController.Instance.Stop();
     }
 
@@ -108,7 +109,8 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         // 무적 해제
         if (!GameManager.IsCheat) GameManager.IsImmortal = false;
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
     }
 

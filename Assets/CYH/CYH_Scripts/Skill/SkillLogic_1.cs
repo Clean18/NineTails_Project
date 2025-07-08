@@ -40,7 +40,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("스킬 1 UseSkill");
 
         // 쿨타임 체크 시작
@@ -59,7 +59,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -77,7 +77,8 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public void EnableHitbox()
     {
         // OnTrigger 플래그
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         _hitBox.enabled = true;
     }
@@ -91,7 +92,8 @@ public class SkillLogic_1 : SkillLogic, ISkill
         Damage();
 
         // OnTrigger 플래그
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
 
         // 플레이어 움직임 활성화
         PlayerController.Instance.Move();
