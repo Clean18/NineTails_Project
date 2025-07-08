@@ -15,6 +15,7 @@ public class AchievementManager : Singleton<AchievementManager>
     public Dictionary<string, int> KillCountDic = new();       // 업적별 조건 달성 여부 확인
     public Dictionary<string, bool> RewardDic = new();         // 보상 획득 여부 확인
     private int totalDeathCount = 0;
+    private int hitCount = 0;
     // 스테이지별 킬 업적 조건 검사 함수
     public void KillCount(string currentStageId)
     {
@@ -188,7 +189,7 @@ public class AchievementManager : Singleton<AchievementManager>
                     Debug.Log($"[업적 달성] {achievement.Name} - 체력 조건 충족 현재: {hpPercent}, 조건: {purpose})");
                 }
             }
-            else if (purpose == 0f) // 피격되지 않고 클리어
+            else if (purpose == 0f && hitCount == 0)
             {
                 AchievedIds[achievement.Id] = true;
                 Debug.Log($"[업적 달성] {achievement.Name} - 노히트 클리어");
@@ -223,8 +224,20 @@ public class AchievementManager : Singleton<AchievementManager>
     {
         return RewardDic.TryGetValue(id, out bool rewarded) && rewarded;
     }
-    private void Start()
+    public void RegisterHit()
     {
-        Debug.Log($"[디버그] 세이브된 총 사망 횟수: {totalDeathCount}");
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        // 보스 업적에 등록된 씬인지 확인
+        foreach (var achievement in DataManager.Instance.AchievementTable.Values)
+        {
+            if (achievement.Type != "Boss") continue;
+
+            if (achievement.Scene == currentScene)
+            {
+                hitCount++;
+                break;
+            }
+        }
     }
 }
