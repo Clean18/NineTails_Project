@@ -139,7 +139,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         PlayerController.Instance.SetTrigger("UseSkill_2");
 
         // 10프레임 후 플레이어 이동 활성화
-        Invoke("PlayerMove", 0.17f);
+        Invoke("PlayerMove", 1f);
     }
 
     private void PlayerMove()

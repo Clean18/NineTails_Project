@@ -166,7 +166,7 @@ public class DialogParser : MonoBehaviour
             SummaryLine line = new SummaryLine
             {
                 SceneName = values[0],
-                Summary = values[1].Replace("ENTER","\n").Replace("`", ","),
+                Summary = values[1].Replace("ENTER","\n").Replace("`", ",").Replace("foxName",foxName),
             };
 
             summaries.Add(line);
