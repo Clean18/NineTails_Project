@@ -80,7 +80,7 @@ MonoBehaviour:
   _monsterLayer:
     serializedVersion: 2
     m_Bits: 512
-  _effectOffset: {x: 2.8, y: 4.5}
+  _effectOffset: {x: 2.5, y: 4.7}
   _damageInterval: 0.1
   _damageCount: 5
   _videoPrefab: {fileID: 2081190918094020834, guid: c216516ebe189034e9a5d48ecb683dd7, type: 3}
@@ -90,3 +90,4 @@ MonoBehaviour:
   <IsCooldown>k__BackingField: 0
   <SkillLevel>k__BackingField: 0
   <SlotIndex>k__BackingField: -1
+  <RemainCooldown>k__BackingField: 0
