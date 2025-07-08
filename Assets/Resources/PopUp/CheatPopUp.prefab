@@ -466,19 +466,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3446172909706183686}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8520322893431955551}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7860517101544313478
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,19 +587,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 183515070550249858}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8520322893431955551}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8520322893431955551
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,7 +597,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6969030309084992148}
-  - component: {fileID: 427670792709066155}
+  - component: {fileID: 1456315281537110714}
   m_Layer: 5
   m_Name: CheatPopUp
   m_TagString: Untagged
@@ -653,7 +629,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &427670792709066155
+--- !u!114 &1456315281537110714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -662,7 +638,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8520322893431955551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6036d2214e6bc9b479aa44bf8bd9c693, type: 3}
+  m_Script: {fileID: 11500000, guid: 978a9eead87707c469f8e61d33a77158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9057511301254723982
