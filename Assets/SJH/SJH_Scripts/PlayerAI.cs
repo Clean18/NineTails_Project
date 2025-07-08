@@ -110,6 +110,7 @@ public class PlayerAI
 		if (MonsterSkillCheck()) return;
 
 		// 사거리 벗어나면 다시 추격
+
 		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
 		if (distance > TargetSkill.SkillData.Range && TargetSkill.SkillData.Range != 0)
 		{
@@ -120,6 +121,10 @@ public class PlayerAI
 
 		// 스킬 사용
 		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
+        // 방향전환
+        float dirX = TargetMonster.position.x - _controller.transform.position.x;
+        _controller.PlayerFlip(dirX);
+
 		if (TargetSkill.UseSkill(_controller.transform, TargetMonster.transform)) SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
 		TargetMonster = null;
 		TargetSkill = null;

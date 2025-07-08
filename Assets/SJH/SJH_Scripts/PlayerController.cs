@@ -564,6 +564,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public bool MoveCheck() => _view.GetMoveCheck();
+    public void PlayerFlip(float dirX) => _view.PlayerFlip(dirX);
     #endregion
 
     #region AI 함수

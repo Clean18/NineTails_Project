@@ -127,6 +127,8 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
             }
         }
 
+
+
         // 상태에 따라 행동 수행
         switch (_currentState)
         {

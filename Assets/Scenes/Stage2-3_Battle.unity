@@ -167,6 +167,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1343238094}
     - target: {fileID: 2828480529645284565, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+      propertyPath: _autoBtnText
+      value: 
+      objectReference: {fileID: 202164401}
+    - target: {fileID: 2828480529645284565, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
       propertyPath: bossStageCamera
       value: 
       objectReference: {fileID: 1109665226}
@@ -295,6 +299,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7485102477017836958, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
   m_PrefabInstance: {fileID: 202164398}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &202164401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 293254682957889966, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+  m_PrefabInstance: {fileID: 202164398}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &652514748
 GameObject:
   m_ObjectHideFlags: 0

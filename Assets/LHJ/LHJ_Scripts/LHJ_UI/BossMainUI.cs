@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BossMainUI : BaseUI, IUI
@@ -18,6 +19,7 @@ public class BossMainUI : BaseUI, IUI
     [SerializeField] private BossHpUI bossHpUI;
     [SerializeField] private BaseBossFSM storyBoss;
     [SerializeField] private BaseBossFSM missionBoss;
+    [SerializeField] private TMP_Text _autoBtnText;
 
     private void Start()
     {
@@ -35,6 +37,24 @@ public class BossMainUI : BaseUI, IUI
             Debug.Log("옵션 UI 활성화");
             UIManager.Instance.ShowPopUp<SettingPopUp>();
         };
+        // 오토모드 팝업
+        _autoBtnText.text = PlayerController.Instance.Mode == ControlMode.Auto ? "자동" : "수동";
+        GetEvent("Btn_Auto").Click += data =>
+        {
+            if (GameManager.Instance.Player == null) return;
+
+            // 플레이어 모드 전환
+            var player = PlayerController.Instance;
+
+            player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
+            _autoBtnText.text = player.Mode == ControlMode.Auto ? "자동" : "수동";
+
+            player.AIInit();
+
+            // 플레이어 velocity 초기화
+            player.AIStop();
+        };
+
         bool isMission = MissionManager.Instance != null && MissionManager.Instance.IsRunning();
 
         BaseBossFSM selectedBoss;
@@ -51,6 +71,8 @@ public class BossMainUI : BaseUI, IUI
             storyBoss.gameObject.SetActive(true);
             selectedBoss = storyBoss;
         }
+
+
 
         bossHpUI.Init(selectedBoss);
 

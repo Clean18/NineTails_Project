@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-07-08T16:40:26.8024800+09:00",
+    "_savedTimeString": "2025-07-08T17:33:17.2807513+09:00",
     "PlayerName": "구미호",
-    "AttackLevel": 1,
+    "AttackLevel": 16,
     "DefenseLevel": 1,
-    "HpLevel": 1,
-    "CurrentHp": 85,
+    "HpLevel": 72,
+    "CurrentHp": 254,
     "SpeedLevel": 1,
-    "ShieldHp": 0,
+    "ShieldHp": 99,
     "SceneIndex": 4,
     "SpiritEnergy": 0,
-    "Warmth": 720,
+    "Warmth": 5490,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -19,6 +19,24 @@
             "SkillLevel": 0,
             "SlotIndex": 0,
             "SkillCooldown": 0.0
+        },
+        {
+            "SkillIndex": 1,
+            "SkillLevel": 0,
+            "SlotIndex": 1,
+            "SkillCooldown": 2.0
+        },
+        {
+            "SkillIndex": 2,
+            "SkillLevel": 0,
+            "SlotIndex": 2,
+            "SkillCooldown": 7.0
+        },
+        {
+            "SkillIndex": 4,
+            "SkillLevel": 100,
+            "SlotIndex": 3,
+            "SkillCooldown": 6.0
         }
     ],
     "Grade": "N",
@@ -27,6 +45,24 @@
     "PlayerAchivementList": [
         {
             "Id": "A43",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A16",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A34",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
