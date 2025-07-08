@@ -29,6 +29,11 @@ public class EndingCredit : MonoBehaviour
     public void EndGame()
     {
         Debug.Log("End Game.");
-        // TODO 게임 종료 버튼
+        Application.Quit();
+
+#if UNITY_EDITOR
+        // 에디터에서는 강제로 플레이 모드 중지
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }
