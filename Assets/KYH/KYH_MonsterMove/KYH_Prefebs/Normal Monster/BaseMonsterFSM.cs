@@ -61,7 +61,7 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
     protected void PlaySound(AudioClip clip, float volume = 1f)
     {
-        if (clip == null || sfxAudioSource == null) return;
+        if (clip == null || sfxAudioSource == null || !gameObject.activeSelf) return;
         sfxAudioSource.PlayOneShot(clip, volume);
     }
 
