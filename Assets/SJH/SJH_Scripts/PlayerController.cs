@@ -101,7 +101,6 @@ public class PlayerController : MonoBehaviour
 
 	[Header("수동모드 필드변수")] // Manual 에서 사용하는 필드변수
 	public Vector2 MoveDir; // 플레이어의 이동 방향
-
     void Start()
 	{
 		// 시작은 자동모드
