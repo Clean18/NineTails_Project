@@ -186,7 +186,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 971121944272405935, guid: a0a6a8ea2ec99e84188126013a156d20, type: 3}
   ProjectileSpeed: 8
   AttackSound: {fileID: 8300000, guid: a471f02d8b50c5e4ab9897bc393500be, type: 3}
-  HitSound: {fileID: 8300000, guid: de369f444c96d8d4ca7ce58318d326ff, type: 3}
+  HitSound: {fileID: 8300000, guid: cb2cb3daaff6cf741aaf2f8c0685e1d0, type: 3}
   DeadSound: {fileID: 8300000, guid: 894dab87c9a794540a78b6b8b60d06a3, type: 3}
   MonsterAnimator: {fileID: 5400549020384515940}
 --- !u!95 &5400549020384515940

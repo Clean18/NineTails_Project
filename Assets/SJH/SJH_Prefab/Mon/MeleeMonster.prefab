@@ -188,7 +188,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   AttackSound: {fileID: 8300000, guid: fb327200ca62af248982e937b922564c, type: 3}
-  HitSound: {fileID: 8300000, guid: de369f444c96d8d4ca7ce58318d326ff, type: 3}
+  HitSound: {fileID: 8300000, guid: cb2cb3daaff6cf741aaf2f8c0685e1d0, type: 3}
   DeadSound: {fileID: 8300000, guid: 1786309aed6c76e4496c72200dfdab1b, type: 3}
   MonsterAnimator: {fileID: 3001105941823830549}
 --- !u!95 &3001105941823830549
