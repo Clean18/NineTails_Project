@@ -31,4 +31,14 @@ public class EndingCredit : MonoBehaviour
         Debug.Log("End Game.");
         // TODO 게임 종료 버튼
     }
+    public void skipVideo()
+    {
+        if (player.isPlaying)
+        {
+            player.Stop(); // 영상 정지
+            GameEndUI.SetActive(true);
+            playUI.gameObject.SetActive(false);
+        }
+    }
+
 }
