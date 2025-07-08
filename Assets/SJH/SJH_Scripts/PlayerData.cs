@@ -255,6 +255,7 @@ public class PlayerData
             }
         }
         Hp = Math.Max(0, Hp - totalDamage);
+        AchievementManager.Instance.RegisterHit();
     }
 
     // 체력회복하는 함수
