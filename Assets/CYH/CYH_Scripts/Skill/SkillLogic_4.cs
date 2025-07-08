@@ -50,7 +50,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -68,6 +68,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
 
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
+
         OnAttackStart();
         AnimationPlay();
         //DetectMonster();
@@ -80,7 +83,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
@@ -98,6 +101,9 @@ public class SkillLogic_4 : SkillLogic, ISkill
         IsCooldown = true;
         
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         OnAttackStart();
         AnimationPlay();
@@ -131,7 +137,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
         PlayerController.Instance.Stop();
@@ -140,7 +147,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void OnAttackEnd()
     {
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
         Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.MoveCheck()}");
     }
@@ -214,7 +222,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         if (_randomMonsters.Count == 0) return;
         //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel);
-        long baseHeal = PlayerController.Instance.GetMaxHp() * (long)(0.05f + 0.0005f * SkillLevel);
+        long baseHeal = (long)(PlayerController.Instance.GetMaxHp() * (0.05f + 0.0005f * SkillLevel));
         long healAmount = System.Math.Max(1, baseHeal);
         PlayerController.Instance.TakeHeal(healAmount);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");

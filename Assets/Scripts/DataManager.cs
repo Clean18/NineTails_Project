@@ -20,9 +20,9 @@ public enum StatDataType
 public enum GradeType
 {
 	Normal,     // 평범
-	Common,     // 고급
-	Uncommon,   // 진귀
-	Rare,       // 설화
+	Rare,     // 고급
+	SuperRare,   // 진귀
+	SuperSuperRare,       // 설화
 }
 /// <summary>
 /// 몬스터 종류
@@ -296,21 +296,21 @@ public class DataManager : Singleton<DataManager>
 		// CSV 다운로드
 		string csvString = "https://docs.google.com/spreadsheets/d/1s4FQBQfvX_Dl3fvUFV9DDI5LKe2pRy6RSE-X0X8cNlQ/gviz/tq?tqx=out:csv&sheet=";
 
-		List<GradeType> gradeList = new()
+        List<GradeType> gradeList = new()
 		{
 			GradeType.Normal,
-			GradeType.Common,
-			GradeType.Uncommon,
 			GradeType.Rare,
+			GradeType.SuperRare,
+			GradeType.SuperSuperRare,
 		};
 
 		// 딕셔너리 초기화
 		EquipmentUpgradeCostTable = new()
 		{
 			[GradeType.Normal] = new(),     // 평범
-			[GradeType.Common] = new(),     // 고급
-			[GradeType.Uncommon] = new(),   // 진귀
-			[GradeType.Rare] = new(),       // 설화
+			[GradeType.Rare] = new(),     // 고급
+			[GradeType.SuperRare] = new(),   // 진귀
+			[GradeType.SuperSuperRare] = new(),       // 설화
 		};
 
 		foreach (var grade in gradeList)
@@ -338,11 +338,11 @@ public class DataManager : Singleton<DataManager>
 
 				EquipmentUpgradeCostTable[grade][level] = cost;
 
-				//Debug.Log("===============");
-				//Debug.Log($"{grade} 등급");
-				//Debug.Log($"레벨 : {level} / 비용 : {cost}");
-				//Debug.Log("===============");
-			}
+                //Debug.Log("===============");
+                //Debug.Log($"{grade} 등급");
+                //Debug.Log($"레벨 : {level} / 비용 : {cost}");
+                //Debug.Log("===============");
+            }
 		}
 	}
 	IEnumerator EquipmentDataInit()
@@ -361,9 +361,9 @@ public class DataManager : Singleton<DataManager>
 		EquipmentDataTable = new()
 		{
 			[GradeType.Normal] = new(),     // 평범
-			[GradeType.Common] = new(),     // 고급
-			[GradeType.Uncommon] = new(),   // 진귀
-			[GradeType.Rare] = new(),       // 설화
+			[GradeType.Rare] = new(),     // 고급
+			[GradeType.SuperRare] = new(),   // 진귀
+			[GradeType.SuperSuperRare] = new(),       // 설화
 		};
 
 		string csv = csvData.downloadHandler.text;
@@ -394,8 +394,8 @@ public class DataManager : Singleton<DataManager>
 			switch (grade)
 			{
 				case "N": EquipmentDataTable[GradeType.Normal][level] = info; break;
-				case "R": EquipmentDataTable[GradeType.Common][level] = info; break;
-				case "SR": EquipmentDataTable[GradeType.Uncommon][level] = info; break;
+				case "R": EquipmentDataTable[GradeType.Rare][level] = info; break;
+				case "SR": EquipmentDataTable[GradeType.SuperRare][level] = info; break;
 			}
 
 			//Debug.Log($"{grade} 등급");
@@ -408,9 +408,9 @@ public class DataManager : Singleton<DataManager>
 	}
 	IEnumerator MissionDataInit()
 	{
-		// CSV 다운로드
-		string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
-		UnityWebRequest csvData = UnityWebRequest.Get(csvString);
+        // CSV 다운로드
+        string csvString = "https://docs.google.com/spreadsheets/d/1n7AH55p6OCQZMm6MolTxhY2X7k8kQXoIDH2qoGv4RIc/export?format=csv&gid=929060478";
+        UnityWebRequest csvData = UnityWebRequest.Get(csvString);
 		yield return csvData.SendWebRequest();
 
 		if (csvData.result != UnityWebRequest.Result.Success)
@@ -503,9 +503,9 @@ public class DataManager : Singleton<DataManager>
 		EquipmentUpgradeTable = new()
 		{
 			[GradeType.Normal] = new(),     // 평범
-			[GradeType.Common] = new(),     // 고급
-			[GradeType.Uncommon] = new(),   // 진귀
-			[GradeType.Rare] = new(),       // 설화
+			[GradeType.Rare] = new(),     // 고급
+			[GradeType.SuperRare] = new(),   // 진귀
+			[GradeType.SuperSuperRare] = new(),       // 설화
 		};
 
 		string csv = csvData.downloadHandler.text;
@@ -532,8 +532,8 @@ public class DataManager : Singleton<DataManager>
 			switch (currentGrade)
 			{
 				case "N": EquipmentUpgradeTable[GradeType.Normal] = info; break;
-				case "R": EquipmentUpgradeTable[GradeType.Common] = info; break;
-				case "SR": EquipmentUpgradeTable[GradeType.Uncommon] = info; break;
+				case "R": EquipmentUpgradeTable[GradeType.Rare] = info; break;
+				case "SR": EquipmentUpgradeTable[GradeType.SuperRare] = info; break;
 			}
 
 			//Debug.Log($"{currentGrade} 등급 -> {nextGrade} 등급");

@@ -295,11 +295,11 @@ public class PlayerModel
     /// <summary>
     /// 장비 강화를 시도하는 함수
     /// </summary>
-    public void TryEnhance() => Equipment.TryEnhance(Cost.Warmth);
+    public void TryEnhance() => Equipment.TryEnhance(Cost.SpiritEnergy);
     /// <summary>
     /// 장비 승급을 시도하는 함수
     /// </summary>
-	public void TryPromote() => Equipment?.TryPromote(Cost.Warmth);
+	public void TryPromote() => Equipment?.TryPromote(Cost.SpiritEnergy);
     /// <summary>
     /// 현재 장비 등급을 GradeType으로 반환하는 함수
     /// </summary>

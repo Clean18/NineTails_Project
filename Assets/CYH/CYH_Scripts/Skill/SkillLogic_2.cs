@@ -67,7 +67,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
@@ -79,6 +79,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
         Debug.Log("스킬 2 사용완료");
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
         OnAttackStart();
@@ -88,7 +91,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
@@ -100,6 +103,9 @@ public class SkillLogic_2 : SkillLogic, ISkill
         IsCooldown = true;
         _cooldownRoutine = PlayerController.Instance.StartCoroutine(CooldownCoroutine());
         Debug.Log("스킬 2 사용완료");
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
         OnAttackStart();
@@ -120,7 +126,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
         PlayerController.Instance.Stop();
@@ -128,7 +135,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     public void OnAttackEnd()
     {
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
     }
 
@@ -137,7 +145,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         PlayerController.Instance.SetTrigger("UseSkill_2");
 
         // 10프레임 후 플레이어 이동 활성화
-        Invoke("PlayerMove", 0.17f);
+        Invoke("PlayerMove", 1f);
     }
 
     private void PlayerMove()

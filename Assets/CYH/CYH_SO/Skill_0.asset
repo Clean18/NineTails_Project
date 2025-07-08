@@ -17,7 +17,5 @@ MonoBehaviour:
     \uD718\uB458\uB7EC \uC804\uBC29\uC758 \uC801\uC744 \uBB34\uCC0C\uB978\uB2E4."
   <CoolTime>k__BackingField: 1
   <SkillSprite>k__BackingField: {fileID: 21300000, guid: b606860b1398f1c40a953a5fb3813787, type: 3}
-  <SkillAnimation>k__BackingField: {fileID: 0}
-  <SkillPrefab>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 2
   <SkillIndex>k__BackingField: 0

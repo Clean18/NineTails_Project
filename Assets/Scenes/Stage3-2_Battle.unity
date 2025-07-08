@@ -505,7 +505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: MonsterPrefabs.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: SpawnPoints.Array.data[12]
@@ -514,11 +514,11 @@ PrefabInstance:
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: MonsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2588384446282473732, guid: 1bab64309565da048b8431dd3e6f7f7f, type: 3}
     - target: {fileID: 4437144932941939700, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: MonsterPrefabs.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5722814494859109534, guid: 7a940da0788b28741ab2b7c31360d7b3, type: 3}
     - target: {fileID: 5059337430934822698, guid: 28a08715325627f47a44f570ce891a31, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.08

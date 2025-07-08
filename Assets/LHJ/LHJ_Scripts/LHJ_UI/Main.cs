@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,10 +22,31 @@ public class Main : BaseUI, IUI
     [SerializeField] private TextMeshProUGUI killCountText;     // 처치 수 / 목표 수
     [SerializeField] private Slider missionTimeSlider;          // 시간 슬라이드
 
+    [SerializeField] private TMP_Text _autoBtnText;             // 자동/수동 버튼 텍스트
+    [SerializeField] private AudioSource _bgmSource;
+    [SerializeField] private List<AudioClip> _bgmList;
+
+    [SerializeField] private Image _offlineRewardEffect;        // 오프라인 보상 버튼 뒤에 이펙트
+
+    private Dictionary<string, int> _sceneBgmDic = new()
+    {
+        { "Stage1-1_Battle", 0 },
+        { "Stage1-2_Battle", 0 },
+        { "Stage1-3_Battle", 1 },
+        { "Stage2-1_Battle", 2 },
+        { "Stage2-2_Battle", 2 },
+        { "Stage2-3_Battle", 3 },
+        { "Stage3-1_Battle", 4 },
+        { "Stage3-2_Battle", 4 },
+        { "Stage3-3_Battle", 5 },
+    };
+
+
     private void Start()
     {
         UIManager.Instance.MainUI = this;
         UIManager.Instance.SceneUIList.Add(this);
+        _bgmSource = GetComponent<AudioSource>();
         Debug.Log($"Main 씬 UI 리스트에 추가 {UIManager.Instance.SceneUIList.Count}");
     }
 
@@ -38,41 +60,51 @@ public class Main : BaseUI, IUI
     public void UIInit()
     {
         Debug.LogWarning("Main 초기화");
+
         // 여기서 버튼들 팝업 활성화
+        // 스탯 팝업
         GetEvent("Btn_Stat").Click += data => // Stats
         {
             Debug.Log("스탯 강화 UI 활성화");
-            UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
+            if (!IsPopUpOpen<StatUpPopUp>())
+                UIManager.Instance.ShowPopUp<StatUpPopUp>(); // StatusPopUp
         };
+        // 스킬 팝업
         GetEvent("Btn_Skill").Click += data => // Skill
         {
             Debug.Log("스킬 강화 UI 활성화");
-            UIManager.Instance.ShowPopUp<SkillPopUp>();
+            if (!IsPopUpOpen<SkillPopUp>())
+                UIManager.Instance.ShowPopUp<SkillPopUp>();
         };
+        // 장비 팝업
         GetEvent("Btn_Weapon").Click += data => //Equipment
         {
             // 1-3 스테이지 클리어 업적 체크
             if ((AchievementManager.Instance.AchievedIds.ContainsKey("A3") && AchievementManager.Instance.AchievedIds["A3"]) || GameManager.IsCheat)
             {
                 Debug.Log("장비 강화 UI 활성화");
-                UIManager.Instance.ShowPopUp<UpgradePopUp>();
+                if (!IsPopUpOpen<UpgradePopUp>())
+                    UIManager.Instance.ShowPopUp<UpgradePopUp>();
             }
             else
             {
                 UIManager.Instance.ShowWarningText("1-3 스테이지 클리어 이후 사용가능합니다.");
             }
         };
+        // 옵션 팝업
         GetEvent("Btn_Option").Click += data => // Setting
         {
             Debug.Log("옵션 UI 활성화");
-            UIManager.Instance.ShowPopUp<SettingPopUp>();
+            if (!IsPopUpOpen<SettingPopUp>())
+                UIManager.Instance.ShowPopUp<SettingPopUp>();
         };
+        // 스테이지 팝업
         GetEvent("Btn_Stage").Click += data => // Mission
         {
-            UIManager.Instance.ShowPopUp<StagePopUp>();
+            if (!IsPopUpOpen<StagePopUp>())
+                UIManager.Instance.ShowPopUp<StagePopUp>();
         };
-        // 치트버튼은 static으로 관리, 게임 종료시 초기화, 씬 전환시 유지되게
-        // TODO : 치트 팝업 띄우기
+        // 치트 팝업
         var cheatBtn = GetEvent("Btn_Cheat");
         if (GameManager.IsCheat)
         {
@@ -82,40 +114,66 @@ public class Main : BaseUI, IUI
         {
             cheatBtn.Click += data =>
             {
-                Debug.Log("치트모드 활성화");
-                // TODO : 치트모드 시 무적 삭제하기
-                GameManager.IsImmortal = true;
-                GameManager.IsCheat = true;
-                cheatBtn.gameObject.SetActive(false);
+                UIManager.Instance.ShowPopUp<CheatPopUp>();
             };
         }
+        // 업적 팝업
         GetEvent("Btn_Achievement").Click += data => // Achievement
         {
-            UIManager.Instance.ShowPopUp<AchievementPopUp>();
+            if (!IsPopUpOpen<AchievementPopUp>())
+                UIManager.Instance.ShowPopUp<AchievementPopUp>();
         };
+        // 오토모드 팝업
+        _autoBtnText.text = PlayerController.Instance.Mode == ControlMode.Auto ? "자동" : "수동";
         GetEvent("Btn_Auto").Click += data =>
         {
             if (GameManager.Instance.Player == null) return;
 
-            // 보스방이면 오토 사용 불가
-            string curSceneName = SceneManager.GetActiveScene().name;
-            if (curSceneName == "Stage1-3_Battle" || curSceneName == "Stage2-3_Battle" || curSceneName == "Stage3-3_Battle") return;
-
             // 플레이어 모드 전환
-            var player = GameManager.Instance.Player;
+            var player = PlayerController.Instance;
 
             player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
+            _autoBtnText.text = player.Mode == ControlMode.Auto ? "자동" : "수동";
 
             player.AIInit();
 
             // 플레이어 velocity 초기화
             player.AIStop();
         };
+        // 10분 이하면 비활성화
+        int elapsedMinutes = SaveLoadManager.Instance.ElapsedMinutes;
+        Debug.Log($"[보상 검사] 경과 시간: {elapsedMinutes}분");
+        if (elapsedMinutes < 10)
+        {
+            Debug.Log("보상 없음 - 10분 미만");
+            _offlineRewardEffect.enabled = false;
+        }
+        else
+        {
+            Debug.Log("보상 있음 - 효과 ON");
+            _offlineRewardEffect.enabled = true;
+        }
+
+        // 오프라인 보상 팝업
+        GetEvent("Btn_Offline2").Click += data =>
+        {
+            Debug.Log("오프라인 보상 팝업 활성화");
+            UIManager.Instance.ShowPopUp<OfflineRewardPopUp>();
+        };
 
         PlayerStatUI();
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
-
         UpdateNicknameUI();
+
+
+        // 사운드 초기화
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (_sceneBgmDic.TryGetValue(currentScene, out int index))
+        {
+            _bgmSource.clip = _bgmList[index];
+            _bgmSource.loop = true;
+            _bgmSource.Play();
+        }
     }
 
     // 메인에 플레이어 스탯 정보UI
@@ -189,5 +247,13 @@ public class Main : BaseUI, IUI
         {
             if (retrycoolTimeText != null) retrycoolTimeText.text = "";    // 쿨타임 끝나면 텍스트 초기화
         }
+    }
+    private bool IsPopUpOpen<T>() where T : BaseUI
+    {
+        foreach (var popup in UIManager.Instance.PopUpCanvas.GetStack())
+        {
+            if (popup is T) return true;
+        }
+        return false;
     }
 }

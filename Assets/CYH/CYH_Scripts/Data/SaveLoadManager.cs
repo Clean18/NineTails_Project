@@ -128,9 +128,9 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         Debug.Log("LoadData");
 
         // 테스트용
-        ElapsedTime();
         _elapsedMinutes = 0;
         ElapsedSeconds = 0;
+        ElapsedTime();
 
         return true;
     }
@@ -174,15 +174,14 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         DateTime gameStartTime = DateTime.Now;
         TimeSpan elapsedTime = gameStartTime - GameData.SavedTime;
 
-        // 초 단위는 버리고 분 단위만 추출
-        //_elapsedMinutes = (int)elapsedTime.TotalMinutes;
-        //Debug.Log($"게임 시작 시간: {gameStartTime}");
-        //Debug.Log($"게임 종료 후 경과 시간: {ElapsedMinutes}분");
+        Debug.Log($"게임 시작 시간: {gameStartTime}");
 
         // 테스트용 초 단위 체크
-        ElapsedSeconds = (int)elapsedTime.TotalSeconds;
-        Debug.Log($"게임 시작 시간: {gameStartTime}");
-        Debug.Log($"게임 종료 후 경과 시간: {ElapsedSeconds}초");
+        //ElapsedSeconds = (int)elapsedTime.TotalSeconds;
+        // 초 단위는 버리고 분 단위만 추출
+        _elapsedMinutes = (int)elapsedTime.TotalMinutes;
+        Debug.Log($"게임 종료 후 경과 시간: {ElapsedMinutes}분");
+        //Debug.Log($"게임 종료 후 경과 시간: {ElapsedSeconds}초");
     }
     #endregion
 
@@ -206,5 +205,10 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     {
         GameManager.Instance.Player?.SaveData();
         SaveData();
+    }
+
+    public void TimeInit()
+    {
+        _elapsedMinutes = 0;
     }
 }

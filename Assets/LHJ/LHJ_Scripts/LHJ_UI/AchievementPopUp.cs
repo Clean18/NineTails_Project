@@ -83,8 +83,17 @@ public class AchievementPopUp : BaseUI
             if (!isAchieved || isRewarded) return;
 
             AchievementManager.Instance.Reward(info);
+            var popup = UIManager.Instance.ShowPopUp<RewardPopUp>();
+            popup.Init(info);
             group.currentIndex++;
             UpdateGroupUI(group);
         });
+    }
+    private void Start()
+    {
+        GetEvent("Btn_close").Click += data =>
+        {
+            UIManager.Instance.ClosePopUp();
+        };
     }
 }

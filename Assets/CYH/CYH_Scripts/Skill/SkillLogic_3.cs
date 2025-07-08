@@ -41,7 +41,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -56,6 +56,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
 
@@ -68,7 +71,7 @@ public class SkillLogic_3 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -83,6 +86,9 @@ public class SkillLogic_3 : SkillLogic, ISkill
         // 쿨타임 체크 시작
         IsCooldown = true;
         PlayerController.Instance.StartCoroutine(CooldownCoroutine());
+
+        // 스킬 사운드
+        PlayerController.Instance.PlaySkillSound(SkillData.SkillAudioClip);
 
         AnimationPlay();
 
@@ -109,14 +115,16 @@ public class SkillLogic_3 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         PlayerController.Instance.Stop();
     }
 
     public void OnAttackEnd()
     {
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
     }
 

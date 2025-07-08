@@ -35,6 +35,8 @@ public class PlayerAI
 
 	public void Action()
 	{
+        if (SkillLogic.IsSkillUsed) return;
+
 		switch (_controller.CurrentState)
 		{
 			case AIState.Search: SearchAction(); break;
@@ -110,6 +112,7 @@ public class PlayerAI
 		if (MonsterSkillCheck()) return;
 
 		// 사거리 벗어나면 다시 추격
+
 		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
 		if (distance > TargetSkill.SkillData.Range && TargetSkill.SkillData.Range != 0)
 		{
@@ -120,8 +123,11 @@ public class PlayerAI
 
 		// 스킬 사용
 		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
-		TargetSkill.UseSkill(_controller.transform, TargetMonster.transform);
-        SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
+        // 방향전환
+        float dirX = TargetMonster.position.x - _controller.transform.position.x;
+        _controller.PlayerFlip(dirX);
+
+		if (TargetSkill.UseSkill(_controller.transform, TargetMonster.transform)) SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
 		TargetMonster = null;
 		TargetSkill = null;
 
@@ -151,33 +157,33 @@ public class PlayerAI
 
 	IEnumerator SearchRoutine()
 	{
-		while ((_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Search)
+        while ((_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Search)
             || (_controller.Mode == ControlMode.Auto && _controller.CurrentState == AIState.Chase))
 		{
 			yield return _searchDelay;
 
-			if (TargetMonster != null) continue;
+            if (TargetMonster != null) continue;
 
-			var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
+            var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
             if (monsters.Length == 0)
             {
                 // 범위에 몬스터가 없으면 이동 정지
                 _view.AIStop();
                 continue;
             }
-
-			// 원 안의 몬스터들을 8칸으로 분류
-			Dictionary<int, List<Transform>> searchDic = new();
+            Debug.Log("Check 4");
+            // 원 안의 몬스터들을 8칸으로 분류
+            Dictionary<int, List<Transform>> searchDic = new();
 			for (int i = 1; i <= _controller.DirectionCount; i++)
 				searchDic[i] = new List<Transform>(); // 1 ~ 8
 
-			foreach (var collider in monsters)
+			foreach (var monster in monsters)
 			{
-				Vector2 dir = (collider.transform.position - _controller.transform.position).normalized;
-				float angle = Vector2.SignedAngle(Vector2.up, dir);
+				Vector2 dir = (monster.transform.position - _controller.transform.position).normalized;
+                float angle = Vector2.SignedAngle(Vector2.up, dir);
 				if (angle < 0) angle += 360;
 				int sector = (int)(angle / _controller.SightAngle) + 1;
-				searchDic[sector].Add(collider.transform);
+				searchDic[sector].Add(monster.transform);
 			}
 
 			// 몬스터가 가장 많은 섹터들 선택
@@ -209,7 +215,15 @@ public class PlayerAI
 				float currentDistance = 0f;
 				foreach (var mon in searchDic[sector])
 				{
-					currentDistance += (mon.position - playerPos).magnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
+					float distance = (mon.position - playerPos).magnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
+
+                    bool isRanged = mon.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
+
+                    if (isRanged)
+                    {
+                        distance /= 3; // or 3
+                    }
+                    currentDistance += distance;
 				}
 
 				if (currentDistance < prevDistance) // 현재 섹터의 거리합이 이전 섹터의 거리합보다 낮으면 변경
@@ -244,7 +258,7 @@ public class PlayerAI
 		}
 	}
 
-	void StopSearchRoutine()
+	public void StopSearchRoutine()
 	{
 		if (_searchRoutine != null)
 		{
