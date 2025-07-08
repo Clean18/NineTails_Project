@@ -204,52 +204,52 @@ public class Stage2BossFSM : BaseBossFSM
         sr.size = boxSize;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        // === Pattern1 경고 프리팹 예상 위치 ===
-        if (WarningLineVertical != null && WarningOrigin1 != null)
-        {
-            SpriteRenderer sr = WarningLineVertical.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                Vector2 spriteSize = sr.size;
-                Gizmos.color = new Color(1f, 1f, 0f, 0.3f); // 노란색
-                Gizmos.matrix = Matrix4x4.TRS(WarningOrigin1.position, WarningOrigin1.rotation, Vector3.one);
-                Gizmos.DrawWireCube(Vector3.zero, spriteSize);
-                UnityEditor.Handles.Label(WarningOrigin1.position + Vector3.up * 0.5f, "Pattern1 Warning Prefab 예상");
-            }
-        }
-        // Pattern1 - 데미지 판정 박스
-        if (WarningOrigin1 != null)
-        {
-            Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); // 주황색
-            Gizmos.matrix = Matrix4x4.TRS(WarningOrigin1.position, WarningOrigin1.rotation, Vector3.one);
-            Gizmos.DrawCube(Vector3.zero, Pattern1BoxSize);
-            UnityEditor.Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern1 Damage Box");
-        }
-
-        // === Pattern2 경고 프리팹 예상 위치 ===
-        if (WarningLineHorizontal != null && WarningOrigin2 != null)
-        {
-            SpriteRenderer sr = WarningLineHorizontal.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                Vector2 spriteSize = sr.size;
-                Gizmos.color = new Color(1f, 0f, 1f, 0.3f); // 보라색
-                Gizmos.matrix = Matrix4x4.TRS(WarningOrigin2.position, WarningOrigin2.rotation, Vector3.one);
-                Gizmos.DrawWireCube(Vector3.zero, spriteSize);
-                UnityEditor.Handles.Label(WarningOrigin2.position + Vector3.up * 0.5f, "Pattern2 Warning Prefab 예상");
-            }
-        }
-
-        // Pattern2 - 데미지 판정 박스
-        if (WarningOrigin2 != null)
-        {
-            Gizmos.color = new Color(0f, 0.8f, 1f, 0.4f); // 청록색
-            Gizmos.matrix = Matrix4x4.TRS(WarningOrigin2.position, WarningOrigin2.rotation, Vector3.one);
-            Gizmos.DrawCube(Vector3.zero, Pattern2BoxSize);
-            UnityEditor.Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern2 Damage Box");
-        }
+   //rivate void OnDrawGizmosSelected()
+   //
+   //   // === Pattern1 경고 프리팹 예상 위치 ===
+   //   if (WarningLineVertical != null && WarningOrigin1 != null)
+   //   {
+   //       SpriteRenderer sr = WarningLineVertical.GetComponent<SpriteRenderer>();
+   //       if (sr != null)
+   //       {
+   //           Vector2 spriteSize = sr.size;
+   //           Gizmos.color = new Color(1f, 1f, 0f, 0.3f); // 노란색
+   //           Gizmos.matrix = Matrix4x4.TRS(WarningOrigin1.position, WarningOrigin1.rotation, Vector3.one);
+   //           Gizmos.DrawWireCube(Vector3.zero, spriteSize);
+   //           UnityEditor.Handles.Label(WarningOrigin1.position + Vector3.up * 0.5f, "Pattern1 Warning Prefab 예상");
+   //       }
+   //   }
+   //   // Pattern1 - 데미지 판정 박스
+   //   if (WarningOrigin1 != null)
+   //   {
+   //       Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); // 주황색
+   //       Gizmos.matrix = Matrix4x4.TRS(WarningOrigin1.position, WarningOrigin1.rotation, Vector3.one);
+   //       Gizmos.DrawCube(Vector3.zero, Pattern1BoxSize);
+   //       UnityEditor.Handles.Label(WarningOrigin1.position + Vector3.up * 0.3f, "Pattern1 Damage Box");
+   //   }
+   //
+   //   // === Pattern2 경고 프리팹 예상 위치 ===
+   //   if (WarningLineHorizontal != null && WarningOrigin2 != null)
+   //   {
+   //       SpriteRenderer sr = WarningLineHorizontal.GetComponent<SpriteRenderer>();
+   //       if (sr != null)
+   //       {
+   //           Vector2 spriteSize = sr.size;
+   //           Gizmos.color = new Color(1f, 0f, 1f, 0.3f); // 보라색
+   //           Gizmos.matrix = Matrix4x4.TRS(WarningOrigin2.position, WarningOrigin2.rotation, Vector3.one);
+   //           Gizmos.DrawWireCube(Vector3.zero, spriteSize);
+   //           UnityEditor.Handles.Label(WarningOrigin2.position + Vector3.up * 0.5f, "Pattern2 Warning Prefab 예상");
+   //       }
+   //   }
+   //
+   //   // Pattern2 - 데미지 판정 박스
+   //   if (WarningOrigin2 != null)
+   //   {
+   //       Gizmos.color = new Color(0f, 0.8f, 1f, 0.4f); // 청록색
+   //       Gizmos.matrix = Matrix4x4.TRS(WarningOrigin2.position, WarningOrigin2.rotation, Vector3.one);
+   //       Gizmos.DrawCube(Vector3.zero, Pattern2BoxSize);
+   //       UnityEditor.Handles.Label(WarningOrigin2.position + Vector3.up * 0.3f, "Pattern2 Damage Box");
+   //   }
         //    if (WarningOrigin1 != null)
         //    {
         //        Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
@@ -279,7 +279,7 @@ public class Stage2BossFSM : BaseBossFSM
         //        Gizmos.DrawSphere(DustEffect1SpawnLeft.position, 0.2f);
         //        Handles.Label(DustEffect1SpawnLeft.position + Vector3.up * 0.1f, "왼발 이펙트 위치");
         //    }
-    }
+   // }
 
     protected override IEnumerator DeadRoutine()
     {
