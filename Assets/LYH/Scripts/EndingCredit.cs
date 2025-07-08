@@ -24,9 +24,11 @@ public class EndingCredit : MonoBehaviour
     public void previousScene()
     {
         Debug.Log("Go to 3-2 Battle Scene.");
+        SceneChangeManager.Instance.LoadNextScene(25);
     }
     public void EndGame()
     {
         Debug.Log("End Game.");
+        // TODO 게임 종료 버튼
     }
 }
