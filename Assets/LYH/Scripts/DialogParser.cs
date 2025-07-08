@@ -387,7 +387,7 @@ public class DialogParser : MonoBehaviour
                 logText.text += "\n";
                 logText.text += "\n";
                 logText.text += "      ";
-                if (dialogLines[i].charName != "")
+                if (dialogLines[i].charName != "" && dialogLines[i].charName != "sound")
                 {
                     logText.text += dialogLines[i].charName.Replace("foxName", foxName);
                     logText.text += ": ";
@@ -522,7 +522,7 @@ public class DialogParser : MonoBehaviour
         if (imgName != "")
         {
             effect.gameObject.SetActive(true);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             effect.gameObject.SetActive(false);
         }
     }
@@ -600,8 +600,8 @@ public class DialogParser : MonoBehaviour
                 blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
                 yield return null;
             }
-            blackTransition.gameObject.SetActive(false);
         }
+        blackTransition.gameObject.SetActive(false);
         isNextClicked = false;
         NextLine();
     }
