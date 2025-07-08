@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c218dc80ea51fc94e949325a7399b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamagePercent: 0.1
+  DamagePercent: 0.3
   TargetTag: Player
   PlayerLayer:
     serializedVersion: 2
