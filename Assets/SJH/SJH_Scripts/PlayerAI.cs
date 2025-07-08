@@ -120,8 +120,7 @@ public class PlayerAI
 
 		// 스킬 사용
 		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
-		TargetSkill.UseSkill(_controller.transform, TargetMonster.transform);
-        SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
+		if (TargetSkill.UseSkill(_controller.transform, TargetMonster.transform)) SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
 		TargetMonster = null;
 		TargetSkill = null;
 
@@ -209,7 +208,15 @@ public class PlayerAI
 				float currentDistance = 0f;
 				foreach (var mon in searchDic[sector])
 				{
-					currentDistance += (mon.position - playerPos).magnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
+					float distance = (mon.position - playerPos).magnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
+
+                    bool isRanged = mon.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
+
+                    if (isRanged)
+                    {
+                        distance /= 3; // or 3
+                    }
+                    currentDistance += distance;
 				}
 
 				if (currentDistance < prevDistance) // 현재 섹터의 거리합이 이전 섹터의 거리합보다 낮으면 변경

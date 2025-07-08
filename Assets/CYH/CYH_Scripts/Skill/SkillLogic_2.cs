@@ -67,7 +67,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
@@ -88,7 +88,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
@@ -120,7 +120,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
         PlayerController.Instance.Stop();
@@ -128,7 +129,8 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     public void OnAttackEnd()
     {
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
     }
 

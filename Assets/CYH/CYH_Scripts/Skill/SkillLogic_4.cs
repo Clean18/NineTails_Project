@@ -50,7 +50,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -80,7 +80,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck()) return false;
+        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
 
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
@@ -131,7 +131,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void OnAttackStart()
     {
-        _isSkillUsed = true;
+        //_isSkillUsed = true;
+        IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
         PlayerController.Instance.Stop();
@@ -140,7 +141,8 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     public void OnAttackEnd()
     {
-        _isSkillUsed = false;
+        //_isSkillUsed = false;
+        IsSkillUsed = false;
         PlayerController.Instance.Move();
         Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.MoveCheck()}");
     }
