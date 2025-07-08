@@ -206,4 +206,9 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         GameManager.Instance.Player?.SaveData();
         SaveData();
     }
+
+    public void TimeInit()
+    {
+        _elapsedMinutes = 0;
+    }
 }

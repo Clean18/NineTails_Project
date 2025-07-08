@@ -1,6 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -12,6 +16,24 @@ public class GameManager : Singleton<GameManager>
 
     public static bool IsCheat = false;
     public static bool IsImmortal = false;
+
+    [SerializeField] private AudioMixer _audioMixer;
+
+    private const string BGM_PARAM = "BGM Volume";
+    private const string SFX_PARAM = "SFX Volume";
+
+    private const string BGM_PREF = "BGM VolumePref";
+    private const string SFX_PREF = "SFX VolumePref";
+
+    [SerializeField] private LoadingFade _loadingFade;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SetBGMVolume(PlayerPrefs.GetFloat(BGM_PREF, 1f));
+        SetSFXVolume(PlayerPrefs.GetFloat(SFX_PREF, 1f));
+    }
 
     void OnEnable()
     {
@@ -39,6 +61,7 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("씬로드 데이터 세이브");
             PlayerController.Instance.SaveData();
         }
+        _loadingFade.FadeStart();
     }
 
     IEnumerator SceneInitRoutine()
@@ -70,12 +93,11 @@ public class GameManager : Singleton<GameManager>
         // TODO : 씬에 따라 플레이어 활성화 비활성화 > 나중에 크레딧씬 추가되면 추가필요
         //플레이어 비활성화(CYH)
         string currentSceneName = SceneManager.GetActiveScene().name;
-        if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1")
+        if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1" || currentSceneName == "EndingCreditScene")
         {
             Player.gameObject.SetActive(false);
             Debug.Log(Player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
         }
-
         Debug.LogWarning("씬 전환 초기화 완료");
     }
 
@@ -87,4 +109,21 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void OnStartBtn() => SceneChangeManager.Instance.LoadFirstScene();
+
+    public void SetBGMVolume(float value)
+    {
+        float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+        _audioMixer.SetFloat(BGM_PARAM, dB);
+        PlayerPrefs.SetFloat(BGM_PREF, value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+        _audioMixer.SetFloat(SFX_PARAM, dB);
+        PlayerPrefs.SetFloat(SFX_PREF, value);
+    }
+
+    public float GetSavedBGMVolume() => PlayerPrefs.GetFloat(BGM_PREF, 1f);
+    public float GetSavedSFXVolume() => PlayerPrefs.GetFloat(SFX_PREF, 1f);
 }

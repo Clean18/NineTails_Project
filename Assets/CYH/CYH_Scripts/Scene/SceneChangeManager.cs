@@ -205,10 +205,9 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     {
         // 다음 인덱스 계산
         if (sceneIndex <= 2) sceneIndex = 2;
-        int nextIndex = sceneIndex + 1;
 
         // 유효 범위 체크
-        if (_stageInfo != null && nextIndex < _stageInfo.Count)
+        if (_stageInfo != null)
         {
             // 씬 정보로 씬 이름 가져오기
             string nextScene = _gameSceneDict[_stageInfo[sceneIndex]];
@@ -216,19 +215,17 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
             {
                 Debug.Log("게임시작씬 or 로딩씬 index라 프롤로그 씬으로 변경");
                 sceneIndex = 2;
-                nextIndex = 3;
                 nextScene = _gameSceneDict[_stageInfo[sceneIndex]];
             }
-            Debug.Log($"현재 씬 : {sceneIndex}");
-            CurrentSceneIndex = sceneIndex;
+            PlayerController.Instance.SetPlayerSceneIndex(sceneIndex);
+            Debug.Log($"크레딧 후 이동 할 씬 {nextScene}");
             LoadSceneAsync(nextScene);
-            NextSceneIndex = nextIndex;
 
             // 플레이어 비활성화 (CYH)
             string currentSceneName = SceneManager.GetActiveScene().name;
-            if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1")
+            if (currentSceneName == "GameStartScene" || currentSceneName == "DialogScene" || currentSceneName == "LoadingScene_v1" || currentSceneName == "EndingCreditScene")
             {
-                PlayerController player = FindObjectOfType<PlayerController>();
+                PlayerController player = PlayerController.Instance;
                 player.gameObject.SetActive(false);
                 Debug.Log(player.gameObject.activeSelf == false ? "플레이어 비활성화 상태" : "플레이어 활성화 상태");
             }
