@@ -8,7 +8,8 @@ public class BossHpUI : MonoBehaviour
 {
     [SerializeField] private Slider bossHpSlider;
     [SerializeField] private TMP_Text bossHpText;
-    [SerializeField] private BaseBossFSM boss;
+
+    private BaseBossFSM boss;
 
     public void Init(BaseBossFSM bossTarget)
     {
@@ -21,6 +22,6 @@ public class BossHpUI : MonoBehaviour
 
         float ratio = (float)boss.CurrentHealth / boss.MaxHealth;
         bossHpSlider.value = ratio;
-        bossHpText.text = $"{boss.CurrentHealth}/{boss.MaxHealth}";
+        bossHpText.text = $"{boss.CurrentHealth:F0}/{boss.MaxHealth:F0}";
     }
 }

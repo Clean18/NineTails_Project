@@ -71,7 +71,8 @@ public class Stage1BossFSM : BaseBossFSM
         yield return new WaitForSeconds(3f);
 
         // 3. 애니메이션 실행 → 이펙트, 데미지는 애니메이션 이벤트에서
-        BossAnimator.Play("Tiger_Pattern1");
+        //BossAnimator.Play("Tiger_Pattern1");
+        BossAnimator.Play("Boss1_Attack1");
         PlaySound(SwingSound);
 
         // 4. 유지 시간 대기
@@ -82,7 +83,8 @@ public class Stage1BossFSM : BaseBossFSM
             Destroy(CurrentWarningIndicator);
 
         // 6. Idle 복귀
-        BossAnimator.Play("Tiger_Idle_ani");
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
     }
@@ -143,7 +145,8 @@ public class Stage1BossFSM : BaseBossFSM
     private IEnumerator Pattern2Coroutine()
     {
         // 1. 보스 애니메이션, 사운드
-        BossAnimator.Play("Tiger_Pattern2");
+        //BossAnimator.Play("Tiger_Pattern2");
+        BossAnimator.Play("Boss1_Attack2");
         PlaySound(RoarSound2);
 
 
@@ -177,7 +180,8 @@ public class Stage1BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Tiger_Idle_ani");
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
     }
 
     protected override void HandlePattern3()
@@ -197,7 +201,8 @@ public class Stage1BossFSM : BaseBossFSM
         ShowWarningRects(baseAngle);
 
         // 3. 대기 연출
-        BossAnimator.Play("Tiger_Pattern3");
+        //BossAnimator.Play("Tiger_Pattern3");
+        BossAnimator.Play("Boss1_Attack3");
         Debug.Log("보스 창귀발사 대기모션");
         yield return new WaitForSeconds(3f);
 
@@ -222,7 +227,8 @@ public class Stage1BossFSM : BaseBossFSM
         TransitionToState(BossState.Idle);
         BossPatternRoutine = null;
 
-        BossAnimator.Play("Tiger_Idle_ani");
+        //BossAnimator.Play("Tiger_Idle_ani");
+        BossAnimator.Play("Boss1_NewIdle");
     }
 
     /// <summary>
@@ -346,7 +352,7 @@ public class Stage1BossFSM : BaseBossFSM
         gameObject.SetActive(false);
 
         Debug.Log("보스 1 사망 다음 씬으로 이동");
-        //SceneChangeManager.Instance.LoadNextScene();
+        SceneChangeManager.Instance.LoadNextScene();
     }
 
 }

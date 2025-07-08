@@ -8,11 +8,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MissionManager : Singleton<MissionManager>
 {
-    private MissionInfo currentMission;     // 현재 진행 미션
-    private float timer;                    // 남은 시간
-    public int killCount;                   // 킬 횟수
-    private bool isRunning;                 // 미션 실행 여부
-    public HashSet<string> MissionIds = new();  // 미션 중복 방지
+    [SerializeField] private MissionInfo currentMission;     // 현재 진행 미션
+    [SerializeField] private float timer;                    // 남은 시간
+    public int killCount;                                    // 킬 횟수
+    [SerializeField] private bool isRunning;                 // 미션 실행 여부
+    public HashSet<string> MissionIds = new();               // 미션 중복 방지
 
     public bool IsCooldownActive { get; private set; }      // 외부에서 쿨타임 여부 확인용
     public float CooldownSeconds { get; private set; }        // 남은 쿨타임 초
@@ -84,7 +84,7 @@ public class MissionManager : Singleton<MissionManager>
     public IEnumerator CooldownRoutine()
     {
         IsCooldownActive = true;    
-        CooldownSeconds = 600f;     // 쿨타임 시간 설정
+        CooldownSeconds = 60f;     // 쿨타임 시간 설정
 
         while (CooldownSeconds > 0)
         {

@@ -46,6 +46,8 @@ public class DialogParser : MonoBehaviour
     [SerializeField] private RectTransform logBoxSize;
 
     [SerializeField] private TMP_InputField changeNameUI;
+    [SerializeField] private TextMeshProUGUI changeNameInstruction;
+    [SerializeField] private TextAsset badNames;
 
     [SerializeField] private TextMeshProUGUI playerDialogBox;
     [SerializeField] private TextMeshProUGUI logText;
@@ -76,10 +78,11 @@ public class DialogParser : MonoBehaviour
 
     private List<DialogLine> dialogLines = new List<DialogLine>();
     private List<SummaryLine> summaries = new List<SummaryLine>();
+    private List<String> notValidNames = new List<String>();
+
     private int currentIndex = 0;
     private int charIndex = 0;
     private bool isNextClicked = false;
-
     
     public string foxNameInput;
 
@@ -169,7 +172,13 @@ public class DialogParser : MonoBehaviour
             summaries.Add(line);
         }
 
-        Debug.Log($"총 {summaries.Count}개의 대사가 로드되었습니다.");
+        Debug.Log($"총 {summaries.Count}개의 줄거리가 로드되었습니다.");
+        // ---------------------------------------------------------------
+        string[] badNameCsv = badNames.text.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < badNameCsv.Length; i++)
+        {
+            notValidNames.Add(badNameCsv[i]);
+        }
     }
 
     void ShowLine(int index) // 다음 대사를 표시하는 버튼을 눌렀을때 행동하는 함수
@@ -216,7 +225,7 @@ public class DialogParser : MonoBehaviour
         }
         else if (charIndex == 14)
         {
-            charIndex = 3;
+            charIndex = 2;
         }
         else
         {
@@ -295,7 +304,8 @@ public class DialogParser : MonoBehaviour
             }
             else if (line.charName == "background") // 배경 컷씬
             {
-                StartCoroutine(startBackground(line.bgImg, dialogLines[index + 1].bgImg));
+                if (index < dialogLines.Count - 1) StartCoroutine(startBackground(line.bgImg, dialogLines[index + 1].bgImg));
+                else StartCoroutine(startBackground(line.bgImg, line.bgImg));
             }
         }
         else if (charIndex == 4) // 내레이션 분류
@@ -436,16 +446,34 @@ public class DialogParser : MonoBehaviour
     }
     public void changeFoxName(string name)
     {
-        foxName = name;
-        Debug.Log(name);
+        bool validName = true;
+        // 사용불가능 이름 리스트 필터
+        for (int i = 0; i < notValidNames.Count; i++)
+        {
+            if (name.Contains(notValidNames[i])) validName = false;
+            changeNameInstruction.text = "잘못된 이름입니다.\n신중히 결정해주세요.\n(Enter로 확정)";
+        }
+        // 이름 길이 제한
+        int byteCount = System.Text.Encoding.UTF8.GetByteCount(name);
+        if (byteCount > 20)
+        {
+            validName = false;
+            changeNameInstruction.text = "이름이 너무 깁니다.\n다른 이름으로 정해주세요.\n(Enter로 확정)";
+            return;
+        }
 
-        // ----------------------------#############################
-        // 플레이어 이름값 저장
-        PlayerController.Instance.SetPlayerName(foxName);
+        if (validName)
+        {
+            foxName = name;
+            Debug.Log(name);
+            // ----------------------------#############################
+            // 플레이어 이름값 저장
+            PlayerController.Instance.SetPlayerName(foxName);
 
-        // UI 끄고 다음 대사 출력
-        changeNameUI.gameObject.SetActive(false);
-        NextLine();
+            // UI 끄고 다음 대사 출력
+            changeNameUI.gameObject.SetActive(false);
+            NextLine();
+        }
     }
 
     void SetLocation(string location, int imgNum)
@@ -551,25 +579,29 @@ public class DialogParser : MonoBehaviour
             blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
             yield return null;
         }
-        // 중간 대기 & 배경 원상복구
-        yield return new WaitForSeconds(0.2f);
-        for (int i = 0; i < bgSprites.Length; i++)
+        // 트랜지션 다음에 나올 이미지가 다를 경우에 추가 트랜지션 효과
+        if (bgName != nextBgName)
         {
-            if (bgSprites[i].name == nextBgName)
+            // 중간 대기 & 배경 원상복구
+            yield return new WaitForSeconds(0.2f);
+            for (int i = 0; i < bgSprites.Length; i++)
             {
-                bgImg.sprite = bgSprites[i];
+                if (bgSprites[i].name == nextBgName)
+                {
+                    bgImg.sprite = bgSprites[i];
+                }
             }
+            // 페이드 아웃
+            elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+                blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                yield return null;
+            }
+            blackTransition.gameObject.SetActive(false);
         }
-        // 페이드 아웃
-        elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-            blackTransition.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
-            yield return null;
-        }
-        blackTransition.gameObject.SetActive(false);
         isNextClicked = false;
         NextLine();
     }
