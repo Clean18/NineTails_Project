@@ -26,6 +26,8 @@ public class Main : BaseUI, IUI
     [SerializeField] private AudioSource _bgmSource;
     [SerializeField] private List<AudioClip> _bgmList;
 
+    [SerializeField] private Image _offlineRewardEffect;        // 오프라인 보상 버튼 뒤에 이펙트
+
     private Dictionary<string, int> _sceneBgmDic = new()
     {
         { "Stage1-1_Battle", 0 },
@@ -142,6 +144,20 @@ public class Main : BaseUI, IUI
             // 플레이어 velocity 초기화
             player.AIStop();
         };
+        // 10분 이하면 비활성화
+        int elapsedMinutes = SaveLoadManager.Instance.ElapsedMinutes;
+        Debug.Log($"[보상 검사] 경과 시간: {elapsedMinutes}분");
+        if (elapsedMinutes < 10)
+        {
+            Debug.Log("보상 없음 - 10분 미만");
+            _offlineRewardEffect.enabled = false;
+        }
+        else
+        {
+            Debug.Log("보상 있음 - 효과 ON");
+            _offlineRewardEffect.enabled = true;
+        }
+
         // 오프라인 보상 팝업
         GetEvent("Btn_Offline2").Click += data =>
         {
