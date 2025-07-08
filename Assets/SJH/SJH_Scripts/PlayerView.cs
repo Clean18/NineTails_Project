@@ -33,17 +33,20 @@ public class PlayerView : MonoBehaviour
         Vector2 movePos = dir.normalized * moveSpeed;
         _rigid.velocity = movePos;
 
-        if (dir.x < 0f)
+        PlayerFlip(dir.x);
+    }
+
+    public void PlayerFlip(float dirX)
+    {
+        if (dirX < 0f)
         {
             _facingDir = -1;
             transform.localScale = new Vector3(-_spriteSize, _spriteSize, _spriteSize);
-            //transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        else if (dir.x > 0f)
+        else if (dirX > 0f)
         {
             _facingDir = 1;
             transform.localScale = new Vector3(_spriteSize, _spriteSize, _spriteSize);
-            //transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 

@@ -34,6 +34,14 @@ public class OfflineRewardPopUp : BaseUI
     private void OfflineRewardUI()
     {
         int elapsedMinutes = SaveLoadManager.Instance.ElapsedMinutes;
+        if (elapsedMinutes < 10)
+        {
+            Debug.Log("받을 보상이 없습니다.");
+            timeText.text = $"받을 보상이 없습니다.";
+            warmthText.text = $"획득한 온정\n{0}";
+            spiritText.text = $"획득한 영기\n{0}";
+            return;
+        }
         // 시, 분으로 변환
         int hours = elapsedMinutes / 60;
         int minutes = elapsedMinutes % 60;
@@ -67,5 +75,8 @@ public class OfflineRewardPopUp : BaseUI
         timeText.text = $"방치한 시간\n{hours}시간 {minutes}분";
         warmthText.text = $"획득한 온정\n{warmth}";
         spiritText.text = $"획득한 영기\n{spirit}";
+
+        SaveLoadManager.Instance.TimeInit();
+        UIManager.Instance.MainUI.UIInit();
     }
 }

@@ -651,6 +651,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 293254682957889966, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+      propertyPath: m_text
+      value: "\uC790\uB3D9"
+      objectReference: {fileID: 0}
     - target: {fileID: 340501281796728474, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -704,6 +708,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1357033276}
     - target: {fileID: 2828480529645284565, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+      propertyPath: _autoBtnText
+      value: 
+      objectReference: {fileID: 1478086022}
+    - target: {fileID: 2828480529645284565, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
       propertyPath: bossStageCamera
       value: 
       objectReference: {fileID: 493732957}
@@ -711,6 +719,10 @@ PrefabInstance:
       propertyPath: bossCameraTarget
       value: 
       objectReference: {fileID: 493732957}
+    - target: {fileID: 5418342459856602081, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6144050541231342413, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
       propertyPath: boss
       value: 
@@ -831,6 +843,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c04fbe2b3a5ed14d85c982981a65d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1478086022 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 293254682957889966, guid: 3696a9194e63254479b7dc0a56a17f2e, type: 3}
+  m_PrefabInstance: {fileID: 1478086020}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1718986715

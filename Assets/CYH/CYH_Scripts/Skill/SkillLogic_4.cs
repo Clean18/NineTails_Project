@@ -216,7 +216,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         if (_randomMonsters.Count == 0) return;
         //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel);
-        long baseHeal = PlayerController.Instance.GetMaxHp() * (long)(0.05f + 0.0005f * SkillLevel);
+        long baseHeal = (long)(PlayerController.Instance.GetMaxHp() * (0.05f + 0.0005f * SkillLevel));
         long healAmount = System.Math.Max(1, baseHeal);
         PlayerController.Instance.TakeHeal(healAmount);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");

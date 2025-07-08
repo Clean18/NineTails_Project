@@ -1,11 +1,27 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StagePopUp : BaseUI
 {
     [SerializeField] private string[] sceneNames;
     static bool firstSceneCheck = false;
+
+    [SerializeField] private Image[] _sceneImages;
+    [SerializeField] private Color _selectedColor;
+    [SerializeField] private Color _defaultColor;
+
     private void Start()
     {
+        string currentScene = SceneManager.GetActiveScene().name;
+        for (int i = 0; i < sceneNames.Length; i++)
+        {
+            if (i >= _sceneImages.Length) break; // 방어 코드
+
+            if (sceneNames[i] == currentScene) _sceneImages[i].color = _selectedColor;
+            else _sceneImages[i].color = _defaultColor;
+        }
+
         GetEvent("Btn_Stage11").Click += data =>
         {
             if (!PlayerController.Instance.GetFirstWarmth())
