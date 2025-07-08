@@ -35,6 +35,8 @@ public class PlayerAI
 
 	public void Action()
 	{
+        if (SkillLogic.IsSkillUsed) return;
+
 		switch (_controller.CurrentState)
 		{
 			case AIState.Search: SearchAction(); break;

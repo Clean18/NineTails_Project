@@ -58,7 +58,7 @@ public class FallingFeather : MonoBehaviour
             DealDamage();
             hasDealtDamage = true;
 
-            featherAnimator.Play("Fire_Feather");
+            //featherAnimator.Play("Fire_Feather");
 
             if (WarningPoint != null)
             {
