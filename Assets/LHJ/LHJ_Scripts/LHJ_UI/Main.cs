@@ -26,6 +26,20 @@ public class Main : BaseUI, IUI
     [SerializeField] private AudioSource _bgmSource;
     [SerializeField] private List<AudioClip> _bgmList;
 
+    private Dictionary<string, int> _sceneBgmDic = new()
+    {
+        { "Stage1-1_Battle", 0 },
+        { "Stage1-2_Battle", 0 },
+        { "Stage1-3_Battle", 1 },
+        { "Stage2-1_Battle", 2 },
+        { "Stage2-2_Battle", 2 },
+        { "Stage2-3_Battle", 3 },
+        { "Stage3-1_Battle", 4 },
+        { "Stage3-2_Battle", 4 },
+        { "Stage3-3_Battle", 5 },
+    };
+
+
     private void Start()
     {
         UIManager.Instance.MainUI = this;
@@ -133,17 +147,12 @@ public class Main : BaseUI, IUI
         PlayerController.Instance.ConnectEvent(PlayerStatUI);
         UpdateNicknameUI();
 
+
         // 사운드 초기화
         string currentScene = SceneManager.GetActiveScene().name;
-        if (currentScene == "Stage1-1_Battle" || currentScene == "Stage1-2_Battle") _bgmSource.clip = _bgmList[0];
-        else if (currentScene == "Stage1-3_Battle") _bgmSource.clip = _bgmList[1];
-        else if (currentScene == "Stage2-1_Battle" || currentScene == "Stage2-2_Battle") _bgmSource.clip = _bgmList[2];
-        else if (currentScene == "Stage2-3_Battle") _bgmSource.clip = _bgmList[3];
-        else if (currentScene == "Stage3-1_Battle" || currentScene == "Stage3-2_Battle") _bgmSource.clip = _bgmList[4];
-        else if (currentScene == "Stage3-3_Battle") _bgmSource.clip = _bgmList[5];
-
-        if (_bgmSource.clip != null)
+        if (_sceneBgmDic.TryGetValue(currentScene, out int index))
         {
+            _bgmSource.clip = _bgmList[index];
             _bgmSource.loop = true;
             _bgmSource.Play();
         }
