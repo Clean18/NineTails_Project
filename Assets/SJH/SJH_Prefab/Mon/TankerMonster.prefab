@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 2
-  AttackRange: 2.5
+  AttackRange: 2
   AttackCooldown: 2
   MaxHp: 10
   DamageReduceRate: 30
@@ -244,7 +244,7 @@ MonoBehaviour:
   _sprite: {fileID: 0}
   hpBar: {fileID: 0}
   AttackPoint: {fileID: 5669510611927272354}
-  AttackRadius: 1
+  AttackRadius: 2
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 256

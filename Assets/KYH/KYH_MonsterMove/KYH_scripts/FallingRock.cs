@@ -7,7 +7,7 @@ using UnityEngine.Audio;
 public class FallingRock : MonoBehaviour
 {
     [Header("데미지 설정")]
-    [SerializeField] private float DamagePercent = 0.1f;     // 플레이어에게 줄 데미지 비율
+    [SerializeField] private float DamagePercent = 0.3f;     // 플레이어에게 줄 데미지 비율
     [SerializeField] private string TargetTag = "Player";    // 데미지를 둘 대상의 태그
     [SerializeField] private LayerMask PlayerLayer;          // 플레이어 레이어
     [SerializeField] private float DamageRadius = 1.5f;      // 피격 판정 범위( 원형 )
