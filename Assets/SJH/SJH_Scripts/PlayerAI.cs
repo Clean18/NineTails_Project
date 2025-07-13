@@ -241,7 +241,15 @@ public class PlayerAI
 			foreach (var monster in searchDic[targetSector])
 			{
 				float distance = (monster.position - playerPos).magnitude;
-				if (distance < minDistance)
+
+                // 원거리면 거리 보정
+                bool isRanged = monster.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
+                if (isRanged)
+                {
+                    distance /= 3;
+                }
+
+                if (distance < minDistance)
 				{
 					minDistance = distance;
 					TargetMonster = monster;
