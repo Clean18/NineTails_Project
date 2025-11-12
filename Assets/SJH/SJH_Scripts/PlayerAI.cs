@@ -168,8 +168,8 @@ public class PlayerAI
 
 			// 1. 몬스터 탐색
 			//var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
-			int monsters = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _controller.SearchDistance, _monsterTable, _controller.MonsterLayer);
-			if (monsters == 0)
+			int monsterCount = Physics2D.OverlapCircleNonAlloc(_controller.transform.position, _controller.SearchDistance, _monsterTable, _controller.MonsterLayer);
+			if (monsterCount == 0)
 			{
 				// 범위에 몬스터가 없으면 이동 정지
 				_view.AIStop();
@@ -189,13 +189,13 @@ public class PlayerAI
 			Vector2 playerPos = _controller.transform.position;
 			float sightAngle = _controller.SightAngle;
 
-			for (int i = 0; i < monsters; i++)
+			for (int i = 0; i < monsterCount; i++)
 			{
 				var col = _monsterTable[i];
 				if (col == null) continue;
 
-				Vector2 toMonster = (Vector2)col.transform.position - playerPos;
-				float angle = Vector2.SignedAngle(Vector2.up, toMonster);
+				Vector2 monDir = ((Vector2)col.transform.position - playerPos).normalized;
+				float angle = Vector2.SignedAngle(Vector2.up, monDir);
 				if (angle < 0) angle += 360;
 
 				int sector = (int)(angle / sightAngle);
@@ -225,68 +225,50 @@ public class PlayerAI
 			if (monsterSectors.Count == 0) continue;
 
 			// 몬스터가 가장 많은 섹터들 중 거리합이 가장 낮은 섹터 선택
-			int targetSector = monsterSectors[0];
-			float bestDistance = float.MaxValue; // 비교용 값
+			// 최종적으로 선별할 변수들
+			int targetSector = -1;
+			float bestDistance = float.MaxValue; // 거리 비교용 값
+			Transform nearestMonster = null;     // 최종 타겟 변수
 
 			foreach (int sector in monsterSectors)
 			{
-				float currentDistance = 0f; // 섹터별 값
+				float currentDistance = 0f; // 현재 섹터별 값
+				float minDistance = float.MaxValue;
+				Transform nearMonster = null;
 
 				foreach (var mon in searchList[sector])
 				{
 					float distance = ((Vector2)mon.position - playerPos).sqrMagnitude; // 현재 섹터의 몬스터들과 플레이어의 거리합산
 
-                    bool isRanged = mon.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
+					bool isRanged = mon.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
 
-					if (isRanged)
-					{
-						//distance /= 3;          // or 3
-                        distance *= (1f / 9f);
-					}
-					currentDistance += distance;
+					if (isRanged) distance *= (1f / 9f); // squrMagnitude를 사용했기에 1/9로 3분의 1을 적용
+
+                    currentDistance += distance;
+
+                    // 현재 섹터 내 가장 가까운 몬스터 저장
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        nearMonster = mon;
+                    }
 				}
 
 				if (currentDistance < bestDistance) // 현재 섹터의 거리합이 이전 섹터의 거리합보다 낮으면 변경
 				{
 					bestDistance = currentDistance;
 					targetSector = sector;
+                    nearestMonster = nearMonster;
 				}
 			}
 
-			if (searchList[targetSector].Count == 0) continue;
-
-			// 2. 선택된 칸 중 가까운 몬스터 선택
-			float minDistance = float.MaxValue;
-            TargetMonster = null;
-
-			foreach (var monster in searchList[targetSector])
-			{
-				float distance = ((Vector2)monster.position - playerPos).sqrMagnitude;
-
-				// 원거리면 거리 보정
-				bool isRanged = monster.TryGetComponent(out IDamagable dmg) && dmg.Type == MonsterType.Ranged;
-				if (isRanged)
-				{
-					//distance /= 3;
-                    distance *= (1f / 9f);
-
-                }
-
-				if (distance < minDistance)
-				{
-					minDistance = distance;
-					TargetMonster = monster;
-				}
-			}
+			if (nearestMonster == null) continue;
 
             // 타겟 확정시 상태 변경
-			if (TargetMonster != null)
-			{
-				Debug.Log("SkillLoad로 변경");
-				_controller.CurrentState = AIState.SkillLoad;
-				StopSearchRoutine();
-				yield break;
-			}
+            TargetMonster = nearestMonster;
+            _controller.CurrentState = AIState.SkillLoad;
+            StopSearchRoutine();
+            yield break;
 		}
 	}
 
