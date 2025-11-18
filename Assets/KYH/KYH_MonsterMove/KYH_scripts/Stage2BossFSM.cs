@@ -178,7 +178,7 @@ public class Stage2BossFSM : BaseBossFSM
         if (hit != null)
         {
             Debug.LogError("피격됨");
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * damagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * damagePercent));
             Debug.Log($"Stage2 - 플레이어 {hit.name}에게 {damagePercent * 100f}% 데미지");
         }
     }

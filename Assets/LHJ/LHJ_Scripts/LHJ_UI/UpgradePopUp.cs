@@ -25,14 +25,14 @@ public class UpgradePopUp : BaseUI
         // 강화 버튼 클릭시 Upgrade에 있는 TryEnhance 함수 실행 후 텍스트 업데이트
         GetEvent("UpgradeBtn").Click += data =>
         {
-            PlayerController.Instance.TryEnhance();
+            PlayerController.Instance.Model.TryEnhance();
             UpdateText();
         };
 
         // 승급 버튼 클릭시 TryPromote 함수 실행 후 텍스트 업데이트
         GetEvent("PromotionBtn").Click += data =>
         {
-            PlayerController.Instance.TryPromote();
+            PlayerController.Instance.Model.TryPromote();
             UpdateText();
         };
     }
@@ -43,10 +43,10 @@ public class UpgradePopUp : BaseUI
     // UI 텍스트 업데이트 함수
     public void UpdateText()
     {
-        var equipmentData = PlayerController.Instance.GetEquipmentData();
-        long cost = DataManager.Instance.GetEquipmentUpgradeCost(PlayerController.Instance.GetGradeType(), equipmentData.Level);
-        var currentData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.GetGradeType(), equipmentData.Level);
-        var nextData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.GetGradeType(), equipmentData.Level + 1);
+        var equipmentData = PlayerController.Instance.Model.GetEquipmentData();
+        long cost = DataManager.Instance.GetEquipmentUpgradeCost(PlayerController.Instance.Model.GetGradeType(), equipmentData.Level);
+        var currentData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.Model.GetGradeType(), equipmentData.Level);
+        var nextData = DataManager.Instance.GetEquipmentUpgradeInfo(PlayerController.Instance.Model.GetGradeType(), equipmentData.Level + 1);
 
         _currentGradeText.text = $"현재 등급 : {GradeEngToKor(equipmentData.Grade)}\n현재 레벨 : {equipmentData.Level}";
 
@@ -57,7 +57,7 @@ public class UpgradePopUp : BaseUI
             case "N": nextGradeText = $"공격력\n{currentData.Attack * 100}% → {nextData.Attack * 100}%"; break;
             case "R": nextGradeText = $"스킬 쿨타임 감소\n{currentData.CooldownReduction * 100}% → {nextData.CooldownReduction * 100}%"; break;
             case "SR": nextGradeText = $"받는 피해 감소 관통\n{currentData.ReduceDamage * 100}% → {nextData.ReduceDamage * 100}%"; break;
-            case "SSR": nextGradeText = $"가하는 피해\n{PlayerController.Instance.GetIncreseDamage(equipmentData.Level) * 10}% → {PlayerController.Instance.GetIncreseDamage(equipmentData.Level + 1) * 10}%"; break;
+            case "SSR": nextGradeText = $"가하는 피해\n{PlayerController.Instance.Model.GetIncreseDamage(equipmentData.Level) * 10}% → {PlayerController.Instance.Model.GetIncreseDamage(equipmentData.Level + 1) * 10}%"; break;
         }
 
         _nextGradeText.text = nextGradeText;
@@ -69,14 +69,14 @@ public class UpgradePopUp : BaseUI
             _attackText.text = $"공격력 50% 증가";
             _cooldownText.text = $"스킬 쿨타임 감소 30%";
             _reduceDamageText.text = $"받는 피해 감소 관통 30% 증가";
-            _increaseDamageText.text = $"가하는 피해 {PlayerController.Instance.GetIncreseDamage() * 10}% 증가";
+            _increaseDamageText.text = $"가하는 피해 {PlayerController.Instance.Model.GetIncreseDamage() * 10}% 증가";
         }
         else
         {
             _attackText.text = $"공격력 {currentData.Attack * 100}% 증가";
             _cooldownText.text = $"스킬 쿨타임 감소 {currentData.CooldownReduction * 100}%";
             _reduceDamageText.text = $"받는 피해 감소 관통 {currentData.ReduceDamage * 100}% 증가";
-            _increaseDamageText.text = $"가하는 피해 {PlayerController.Instance.GetIncreseDamage() * 10}% 증가";
+            _increaseDamageText.text = $"가하는 피해 {PlayerController.Instance.Model.GetIncreseDamage() * 10}% 증가";
         }
 
         var promotionBtn = GetEvent("PromotionBtn");

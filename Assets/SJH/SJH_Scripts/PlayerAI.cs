@@ -9,20 +9,10 @@ public class PlayerAI
 	private PlayerView _view;
 	private PlayerModel _model;
 
-	public Transform TargetMonster; // 공격할 몬스터
-	private ISkill _targetSkill;
-	public ISkill TargetSkill      // 사용할 스킬
-	{
-		get => _targetSkill;
-		set
-		{
-			_targetSkill = value;
-			if (value != null) _targetSkillName = _targetSkill.SkillData.SkillName;
-		}
-	}
-	[SerializeField] private string _targetSkillName;
+	private Transform _targetMonster; // 공격할 몬스터
+    private ISkill _targetSkill;      // 사용할 스킬
 
-	private Coroutine _searchRoutine;
+    private Coroutine _searchRoutine;
 	private WaitForSeconds _searchDelay;
 
 	[SerializeField] Collider2D[] _monsterTable;
@@ -34,6 +24,12 @@ public class PlayerAI
 		_model = model;
 		_searchDelay = new WaitForSeconds(0.5f);
 	}
+
+    public void AIInit()
+    {
+        StopSearchRoutine();
+        MonsterSkillCheck();
+    }
 
 	public void Action()
 	{
@@ -56,10 +52,7 @@ public class PlayerAI
 
 	void SkillLoad()
 	{
-		//Debug.Log("SkillLoad Action");
-
-		TargetSkill = null;
-		//float maxCooldown = float.MinValue;
+		_targetSkill = null;
 
 		List<ISkill> ranSkills = new();
 		// 기본공격은 이 리스트에 없어야함
@@ -72,16 +65,16 @@ public class PlayerAI
 		// 쿨타임이 아닌 스킬들 중 랜덤 사용
 		if (ranSkills.Count > 0)
 		{
-			TargetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
+			_targetSkill = ranSkills[Random.Range(0, ranSkills.Count)];
 		}
 		else
 		{
-			TargetSkill = _model.Skill.DefaultAttack;
+			_targetSkill = _model.Skill.DefaultAttack;
 		}
-		Debug.Log($"{TargetSkill.SkillData.SkillName} 스킬장전");
+		Debug.Log($"{_targetSkill.SkillData.SkillName} 스킬장전");
 
 		// 사용 가능한 스킬을 TargetSkill 에 등록 후 Chase로 변경
-		if (TargetSkill != null) _controller.CurrentState = AIState.Chase;
+		if (_targetSkill != null) _controller.CurrentState = AIState.Chase;
 		// 스킬이 쿨타임일 때는 TargetMonster도 초기화해야 SearchRoutine에서 안걸림
 		else MonsterSkillCheck();
 	}
@@ -92,9 +85,9 @@ public class PlayerAI
 		if (MonsterSkillCheck()) return;
 
 		// 공격 스킬의 범위가 공격 대상을 공격할 수 있으면 SKill로
-		Vector3 dir = TargetMonster.position - _controller.transform.position;
+		Vector3 dir = _targetMonster.position - _controller.transform.position;
 		float distance = dir.magnitude;
-		if (!MonsterSkillCheck() && distance <= TargetSkill.SkillData.Range || TargetSkill.SkillData.Range == 0)
+		if (!MonsterSkillCheck() && distance <= _targetSkill.SkillData.Range || _targetSkill.SkillData.Range == 0)
 		{
 			_view.AIStop();
 			StopSearchRoutine();
@@ -115,8 +108,8 @@ public class PlayerAI
 
 		// 사거리 벗어나면 다시 추격
 
-		float distance = (TargetMonster.position - _controller.transform.position).magnitude;
-		if (distance > TargetSkill.SkillData.Range && TargetSkill.SkillData.Range != 0)
+		float distance = (_targetMonster.position - _controller.transform.position).magnitude;
+		if (distance > _targetSkill.SkillData.Range && _targetSkill.SkillData.Range != 0)
 		{
 			Debug.Log("Attack Action : 공격 스킬 사거리 멀음 추격 전환");
 			_controller.CurrentState = AIState.Chase;
@@ -124,14 +117,14 @@ public class PlayerAI
 		}
 
 		// 스킬 사용
-		Debug.Log($"Attack Action : {TargetSkill.SkillData.SkillName} 스킬 사용");
+		Debug.Log($"Attack Action : {_targetSkill.SkillData.SkillName} 스킬 사용");
 		// 방향전환
-		float dirX = TargetMonster.position.x - _controller.transform.position.x;
-		_controller.PlayerFlip(dirX);
+		float dirX = _targetMonster.position.x - _controller.transform.position.x;
+		_controller.View.PlayerFlip(dirX);
 
-		if (TargetSkill.UseSkill(_controller.transform, TargetMonster.transform)) SkillButton.Instance.UpdateCooldown(TargetSkill.SlotIndex);
-		TargetMonster = null;
-		TargetSkill = null;
+		if (_targetSkill.UseSkill(_controller.transform, _targetMonster.transform)) SkillButton.Instance.UpdateCooldown(_targetSkill.SlotIndex);
+		_targetMonster = null;
+		_targetSkill = null;
 
 		// 다음 행동은 상황 따라 다시 판단
 		Debug.Log("Attack Action : 공격 스킬 완료 탐색 전환");
@@ -145,11 +138,11 @@ public class PlayerAI
 	public bool MonsterSkillCheck()
 	{
 		bool result = false;
-		if (TargetMonster == null || !TargetMonster.gameObject.activeSelf || TargetSkill == null || TargetSkill.IsCooldown)
+		if (_targetMonster == null || !_targetMonster.gameObject.activeSelf || _targetSkill == null || _targetSkill.IsCooldown)
 		{
 			Debug.Log($"초기화 {_controller.CurrentState}");
-			TargetMonster = null;
-			TargetSkill = null;
+			_targetMonster = null;
+			_targetSkill = null;
 			_controller.CurrentState = AIState.Search;
 			result = true;
 			return result;
@@ -164,7 +157,7 @@ public class PlayerAI
 		{
 			yield return _searchDelay;
 
-			if (TargetMonster != null) continue;
+			if (_targetMonster != null) continue;
 
 			// 1. 몬스터 탐색
 			//var monsters = Physics2D.OverlapCircleAll(_controller.transform.position, _controller.SearchDistance, _controller.MonsterLayer);
@@ -265,7 +258,7 @@ public class PlayerAI
 			if (nearestMonster == null) continue;
 
             // 타겟 확정시 상태 변경
-            TargetMonster = nearestMonster;
+            _targetMonster = nearestMonster;
             _controller.CurrentState = AIState.SkillLoad;
             StopSearchRoutine();
             yield break;

@@ -234,9 +234,9 @@ public abstract class BaseMonsterFSM : MonoBehaviour, IDamagable
 
         // 플레이어 보상 지급
         // 100%
-        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.Player.Model.AddCost(CostType.Warmth, warmthAmount);
         // 10%
-        if (Random.Range(0, 100) < 10) GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        if (Random.Range(0, 100) < 10) GameManager.Instance.Player.Model.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
 
         // 미션 처리
         MissionManager.Instance.AddKill();

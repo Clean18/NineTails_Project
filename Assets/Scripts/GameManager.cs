@@ -82,9 +82,9 @@ public class GameManager : Singleton<GameManager>
         Debug.LogWarning("플레이어 초기화 완료");
 
         // 플레이어 사망상태면 풀피로 회복
-        if (Player.GetHp() <= 0 || Player.GetIsDead())
+        if (Player.Model.Data.IsDead || Player.Model.Data.Hp <= 0)
         {
-            Player.TakeHeal(Player.GetMaxHp());
+            Player.TakeHeal(Player.Model.Data.MaxHp);
         }
 
         // 씬 이동될 때 치트모드가 아니면 무적 해제

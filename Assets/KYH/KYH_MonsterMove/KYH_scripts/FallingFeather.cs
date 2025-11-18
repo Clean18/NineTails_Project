@@ -76,7 +76,7 @@ public class FallingFeather : MonoBehaviour
 
         if (hits != null)
         {
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * DamagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * DamagePercent));
             Debug.Log($"[FallingFeather] 플레이어에게 {DamagePercent * 100}% 데미지");
         }
     }

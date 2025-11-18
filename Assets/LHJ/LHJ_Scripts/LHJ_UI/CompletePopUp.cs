@@ -10,17 +10,17 @@ public class CompletePopUp : BaseUI
             string nextScene = MissionManager.Instance.GetNextScene();
             //SceneManager.LoadScene(nextScene);
 
-            int index = PlayerController.Instance.GetPlayerSceneIndex();
+            int index = PlayerController.Instance.Model.GetPlayerSceneIndex();
             switch (index)
             {
                 case 4:
                     Debug.Log($"4 > 6번 씬으로 이동");
-                    PlayerController.Instance.SetPlayerSceneIndex(6);
+                    PlayerController.Instance.Model.SetPlayerSceneIndex(6);
                     SceneChangeManager.Instance.LoadCurrentScene();
                     return;
                 case 13:
                     Debug.Log($"13 > 15번 씬으로 이동");
-                    PlayerController.Instance.SetPlayerSceneIndex(15);
+                    PlayerController.Instance.Model.SetPlayerSceneIndex(15);
                     SceneChangeManager.Instance.LoadCurrentScene();
                     return;
             }

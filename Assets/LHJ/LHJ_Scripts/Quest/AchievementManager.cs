@@ -67,12 +67,12 @@ public class AchievementManager : Singleton<AchievementManager>
 
             // 온정 업적 체크: 보상이 온정이고 플레이어 보유 온정이 조건보다 높거나 같을때 
             if (achievement.WarmthReward > 0 &&
-                PlayerController.Instance.GetCost(CostType.Warmth) >= achievement.Purpose)
+                PlayerController.Instance.Model.GetCost(CostType.Warmth) >= achievement.Purpose)
                 isAchieved = true;
 
             // 영기 업적 체크: 보상이 영기이고 플레이어 보유 영기가 조건보다 높거나 같을때 
             if (achievement.SpritReward > 0 &&
-                PlayerController.Instance.GetCost(CostType.SpiritEnergy) >= achievement.Purpose)
+                PlayerController.Instance.Model.GetCost(CostType.SpiritEnergy) >= achievement.Purpose)
                 isAchieved = true;
 
             if (isAchieved) // 조건이 하나라도 만족할때
@@ -91,7 +91,7 @@ public class AchievementManager : Singleton<AchievementManager>
             if (AchievedIds.ContainsKey(achievement.Id)) continue;   // 이미 달성된 업적이면 무시하고 진행
 
             // 전투력 업적과 플레이어 전투력 비교
-            if (PlayerController.Instance.GetPower() >= achievement.Purpose)
+            if (PlayerController.Instance.Model.Data.PowerLevel >= achievement.Purpose)
             {
                 AchievedIds[achievement.Id] = true;
                 Debug.Log($"[업적 달성] {achievement.Name} - 전투력 조건 달성");
@@ -173,15 +173,15 @@ public class AchievementManager : Singleton<AchievementManager>
 
             float purpose = achievement.Purpose;
 
-            if (PlayerController.Instance.GetPower() < purpose)     // 권장 전투력 보다 전투력이 낮을때
+            if (PlayerController.Instance.Model.Data.PowerLevel < purpose)     // 권장 전투력 보다 전투력이 낮을때
             {
                 AchievedIds[achievement.Id] = true;
-                Debug.Log($"[업적 달성] {achievement.Name} - 권장 전투력 미만 클리어 (보유 전투력: {PlayerController.Instance.GetPower()}, 조건: {purpose})");
+                Debug.Log($"[업적 달성] {achievement.Name} - 권장 전투력 미만 클리어 (보유 전투력: {PlayerController.Instance.Model.Data.PowerLevel}, 조건: {purpose})");
             }
      
             else if (purpose > 0f) // 체력 퍼센트 조건
             {
-                float hpPercent = (float)PlayerController.Instance.GetHp() / PlayerController.Instance.GetMaxHp();
+                float hpPercent = (float)PlayerController.Instance.Model.Data.Hp / PlayerController.Instance.Model.Data.MaxHp;
 
                 if (hpPercent < purpose)    // 클리어 당시 플레이어 체력이 목적퍼센트보다 미만일때
                 {
@@ -211,8 +211,8 @@ public class AchievementManager : Singleton<AchievementManager>
         }
 
         Debug.Log($"[보상] 온정 +{achievementInfo.WarmthReward}, 영기 +{achievementInfo.SpritReward}");
-        PlayerController.Instance.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
-        PlayerController.Instance.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
+        PlayerController.Instance.Model.AddCost(CostType.Warmth, achievementInfo.WarmthReward);
+        PlayerController.Instance.Model.AddCost(CostType.SpiritEnergy, achievementInfo.SpritReward);
 
         RewardDic[achievementInfo.Id] = true;
     }

@@ -48,7 +48,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
         Debug.Log("스킬6 사용");
 
@@ -75,7 +75,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
         Debug.Log("스킬6 사용");
 
@@ -108,7 +108,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     {
         //_isSkillUsed = true;
         IsSkillUsed = true;
-        PlayerController.Instance.Stop();
+        PlayerController.Instance.View.Stop();
     }
 
     public void OnAttackEnd()
@@ -117,13 +117,13 @@ public class SkillLogic_6 : SkillLogic, ISkill
         if (!GameManager.IsCheat) GameManager.IsImmortal = false;
         //_isSkillUsed = false;
         IsSkillUsed = false;
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     public void AnimationPlay()
     {
         //_animator.SetTrigger("UseSkill_6");
-        PlayerController.Instance.SetTrigger("UseSkill_6");
+        PlayerController.Instance.View.SetTrigger("UseSkill_6");
 
         // 3초 뒤 플레이어 움직임 활성화
         Invoke("PlayerMove", 3f);
@@ -131,7 +131,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     private void PlayerMove()
     {
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     // 궁극기 비디오 생성
@@ -174,7 +174,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = _playerController.AttackPoint * (4.0f + 0.04f * SkillLevel);
-        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (4.0f + 0.04f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.Model.GetTotalDamage() * (4.0f + 0.04f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{_highestMonster.name}에게 {damage}의 피해를 가했음");
     }
@@ -217,7 +217,7 @@ public class SkillLogic_6 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

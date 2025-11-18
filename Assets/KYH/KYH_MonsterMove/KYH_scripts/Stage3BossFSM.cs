@@ -273,7 +273,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         if (other.CompareTag("Player"))
         {
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * Pattern3DamagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * Pattern3DamagePercent));
             Debug.Log($"[Stage3BossFSM] 돌진으로 플레이어에게 {Pattern3DamagePercent * 100}% 피해");
 
             hasChargedHit = true;
@@ -290,7 +290,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         if (collision.collider.CompareTag("Player"))
         {
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * Pattern3DamagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * Pattern3DamagePercent));
             Debug.Log($"[Stage3BossFSM] 돌진으로 플레이어에게 {Pattern3DamagePercent * 100}% 피해");
 
             hasChargedHit = true;
@@ -306,7 +306,7 @@ public class Stage3BossFSM : BaseBossFSM
 
         if (hit != null)
         {
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * damagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * damagePercent));
             Debug.Log($"[Stage3BossFSM] 플레이어에게 {damagePercent * 100}% 데미지");
         }
     }

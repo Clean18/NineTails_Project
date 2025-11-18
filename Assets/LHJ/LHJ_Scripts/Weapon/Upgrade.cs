@@ -27,8 +27,8 @@ public class Upgrade : MonoBehaviour
     // 장비등급, 강화단계 읽기 전용 프로퍼티
     public string CurrentGrade => currentGrade;
     public int CurrentLevel => currentLevel;
-    public long Warmth => (PlayerController.Instance == null ? 0 : PlayerController.Instance.GetCost(CostType.Warmth));
-    public long SpiritEnergy => (PlayerController.Instance == null ? 0 : PlayerController.Instance.GetCost(CostType.SpiritEnergy));
+    public long Warmth => (PlayerController.Instance == null ? 0 : PlayerController.Instance.Model.GetCost(CostType.Warmth));
+    public long SpiritEnergy => (PlayerController.Instance == null ? 0 : PlayerController.Instance.Model.GetCost(CostType.SpiritEnergy));
 
     void Start()
     {
@@ -82,7 +82,7 @@ public class Upgrade : MonoBehaviour
                 return;
             }
             currentLevel += 1;
-            PlayerController.Instance.SpendCost(CostType.Warmth, baseSSRCost);
+            PlayerController.Instance.Model.SpendCost(CostType.Warmth, baseSSRCost);
             //Warmth -= baseSSRCost;
             float bonusPerLevel = 0.02f; // 매 강화 시 +2%
             ssrDamageBonus += bonusPerLevel;
@@ -125,7 +125,7 @@ public class Upgrade : MonoBehaviour
         else
         {
             // 강화 성공 처리
-            PlayerController.Instance.SpendCost(CostType.Warmth, nextInfo.WarmthCost);
+            PlayerController.Instance.Model.SpendCost(CostType.Warmth, nextInfo.WarmthCost);
             //Warmth -= nextInfo.WarmthCost;
             currentLevel += 1;
             currentAttack = nextInfo.Attack;

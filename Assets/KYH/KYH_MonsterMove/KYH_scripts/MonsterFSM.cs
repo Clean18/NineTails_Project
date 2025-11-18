@@ -256,8 +256,8 @@ public class MonsterFSM : MonoBehaviour, IDamagable
     {
         Debug.Log("몬스터 사망함");
         // 플레이어 재화 증가
-        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
-        GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        GameManager.Instance.Player.Model.AddCost(CostType.Warmth, warmthAmount); // 온기는 랜덤으로
+        GameManager.Instance.Player.Model.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         MissionManager.Instance.AddKill(); // 돌파미션 킬 체크
         string stageId = SceneManager.GetActiveScene().name;    // 현재 씬이름을 스테이지Id로 사용
         AchievementManager.Instance?.KillCount(stageId);        // 해당 씬 킬 업적 체크

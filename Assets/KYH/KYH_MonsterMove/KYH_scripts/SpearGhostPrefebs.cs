@@ -32,7 +32,7 @@ public class SpearGhostPrefebs : MonoBehaviour
 
             //    Debug.Log($" 데미지 적용 완료. 적용된 퍼센트: {DamagePercent * 100}");
             //}
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * DamagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * DamagePercent));
             Debug.Log($" 데미지 적용 완료. 적용된 퍼센트: {DamagePercent * 100}");
             Destroy(gameObject);
         }

@@ -246,14 +246,14 @@ public class PlayerSkill
                 return;
             }
             // 노말체크
-            if (player.GetSpiritEnergy() < ultCost)
+            if (player.Model.GetSpiritEnergy() < ultCost)
             {
                 Debug.Log("영기가 부족합니다.");
                 UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
                 return;
             }
             // 재화 감소
-            player.SpendCost(CostType.SpiritEnergy, ultCost);
+            player.Model.SpendCost(CostType.SpiritEnergy, ultCost);
         }
         else // 노말 강화
         {
@@ -263,13 +263,13 @@ public class PlayerSkill
                 Debug.Log("스킬을 강화할 수 없습니다.");
                 return;
             }
-            if (player.GetSpiritEnergy() < normalCost)
+            if (player.Model.GetSpiritEnergy() < normalCost)
             {
                 Debug.Log("영기가 부족합니다.");
                 UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
                 return;
             }
-            player.SpendCost(CostType.SpiritEnergy, normalCost);
+            player.Model.SpendCost(CostType.SpiritEnergy, normalCost);
         }
         /*
          * 플레이어의 스킬 보유 여부를 체크안한다면
@@ -334,7 +334,7 @@ public class PlayerSkill
         }
 
         // 재화 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Soul, 1);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.Soul, 1);
 
         // 스킬 추가
         AddSkill(skillIndex);

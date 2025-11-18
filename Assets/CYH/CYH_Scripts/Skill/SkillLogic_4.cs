@@ -50,7 +50,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
         // 스킬 발동 전 몬스터 목록 초기화
@@ -83,7 +83,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         Debug.Log("스킬 4 UseSkill");
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
 
         // 쿨타임 전에 몬스터가 있으면 실행 없으면 return
@@ -129,7 +129,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     public void AnimationPlay()
     {
         //_animator.SetTrigger("UseSkill_4");
-        PlayerController.Instance.SetTrigger("UseSkill_4");
+        PlayerController.Instance.View.SetTrigger("UseSkill_4");
         
         // 1초 뒤 플레이어 움직임 활성화
         Invoke("PlayerMove", 1f);
@@ -141,21 +141,21 @@ public class SkillLogic_4 : SkillLogic, ISkill
         IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
-        PlayerController.Instance.Stop();
-        Debug.Log($"플레이어 강제 정지 : {PlayerController.Instance.MoveCheck()}");
+        PlayerController.Instance.View.Stop();
+        Debug.Log($"플레이어 강제 정지 : {PlayerController.Instance.View.IsMoving()}");
     }
 
     public void OnAttackEnd()
     {
         //_isSkillUsed = false;
         IsSkillUsed = false;
-        PlayerController.Instance.Move();
-        Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.MoveCheck()}");
+        PlayerController.Instance.View.Move();
+        Debug.Log($"플레이어 정지 해제 : {PlayerController.Instance.View.IsMoving()}");
     }
 
     private void PlayerMove()
     {
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     // 범위 안의 모든 몬스터 탐색
@@ -222,7 +222,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     {
         if (_randomMonsters.Count == 0) return;
         //_playerController.hp += _playerController.maxHp * (0.05f + 0.0005f * SkillLevel);
-        long baseHeal = (long)(PlayerController.Instance.GetMaxHp() * (0.05f + 0.0005f * SkillLevel));
+        long baseHeal = (long)(PlayerController.Instance.Model.Data.MaxHp * (0.05f + 0.0005f * SkillLevel));
         long healAmount = System.Math.Max(1, baseHeal);
         PlayerController.Instance.TakeHeal(healAmount);
         //Debug.Log($"몬스터 [{count}]마리에게 데미지를 가해 총 [{_playerController.maxHp * (0.05f + 0.0005f * SkillLevel) * count}]의 Hp를 회복");
@@ -232,7 +232,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
     protected override void Damage(GameObject monster)
     {
         //float damage = (float)(_playerController.AttackPoint * (0.15f + 0.0015f * SkillLevel));
-        long damage = (long)(PlayerController.Instance.GetTotalDamage() * (0.15f + 0.0015f * SkillLevel));
+        long damage = (long)(PlayerController.Instance.Model.GetTotalDamage() * (0.15f + 0.0015f * SkillLevel));
         monster?.GetComponent<IDamagable>().TakeDamage((long)damage);
         //Debug.Log($"{monster.name}에게 {damage}의 피해를 가했음");
     }
@@ -290,12 +290,12 @@ public class SkillLogic_4 : SkillLogic, ISkill
             Destroy(effect);
         
         // 플레이어 이동 활성화
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

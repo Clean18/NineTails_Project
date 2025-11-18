@@ -39,7 +39,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
         Debug.Log("기본공격 UseSkill");
 
         // 쿨타임 체크 시작
@@ -62,7 +62,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -107,7 +107,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     public void AnimationPlay()
     {
         if (!_hitBox.enabled) return;
-        else PlayerController.Instance.SetTrigger("UseSkill_0");
+        else PlayerController.Instance.View.SetTrigger("UseSkill_0");
     }
 
     // 애니메이션이 끝났을 때 이벤트로 호출
@@ -122,7 +122,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 각 타마다 _hitMonsters 리스트에 담긴 몬스터에게 한 번씩만 데미지 처리
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((100f + SkillLevel) / 100f));
+        long damage = (long)(PlayerController.Instance.Model.GetTotalDamage() * ((100f + SkillLevel) / 100f));
 
         if(_slashCount == 1)
         {
@@ -157,7 +157,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        float remaining = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
         //Debug.Log($"기본 공격 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {

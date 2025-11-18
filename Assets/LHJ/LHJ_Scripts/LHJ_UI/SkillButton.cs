@@ -27,7 +27,7 @@ public class SkillButton : MonoBehaviour, IUI
         Instance = this;
 
         Debug.Log("스킬 단축키 UI 초기화");
-        var mappingSkills = PlayerController.Instance.GetMappingSkill();
+        var mappingSkills = PlayerController.Instance.Model.GetMappingSkills();
 
         triggerKeys = new KeyCode[3]
         {
@@ -139,7 +139,7 @@ public class SkillButton : MonoBehaviour, IUI
 
     public void UpdateButtonImage()
     {
-        var mappingSkills = PlayerController.Instance.GetMappingSkill();
+        var mappingSkills = PlayerController.Instance.Model.GetMappingSkills();
 
         for (int i = 0; i < coolTimeImages.Length; i++)
         {

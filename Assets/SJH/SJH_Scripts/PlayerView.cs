@@ -80,6 +80,5 @@ public class PlayerView : MonoBehaviour
     {
         _anim.SetBool(name, value);
     }
-
-    public bool GetMoveCheck() => canMove;
+    public bool IsMoving() => canMove;
 }

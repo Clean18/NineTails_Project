@@ -161,9 +161,9 @@ public class MissionManager : Singleton<MissionManager>
         {
             MissionIds.Add(mission.Id);
             Debug.Log($"[보상] 온정 +{mission.WarmthReward}, 영기 +{mission.SpritReward}, 스킬 포인트 +{mission.SkillPoint}");
-            PlayerController.Instance.AddCost(CostType.Warmth, mission.WarmthReward);
-            PlayerController.Instance.AddCost(CostType.SpiritEnergy, mission.SpritReward);
-            PlayerController.Instance.AddCost(CostType.Soul, mission.SkillPoint);
+            PlayerController.Instance.Model.AddCost(CostType.Warmth, mission.WarmthReward);
+            PlayerController.Instance.Model.AddCost(CostType.SpiritEnergy, mission.SpritReward);
+            PlayerController.Instance.Model.AddCost(CostType.Soul, mission.SkillPoint);
         }
         else
         {

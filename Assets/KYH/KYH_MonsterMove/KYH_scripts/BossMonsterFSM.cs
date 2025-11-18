@@ -480,8 +480,8 @@ public class BossMonsterFSM : MonoBehaviour, IDamagable
     private void DestroySelf()
     {
         Debug.Log("보스 오브젝트 제거됨");
-        GameManager.Instance.Player.AddCost(CostType.Warmth, warmthAmount);
-        GameManager.Instance.Player.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
+        GameManager.Instance.Player.Model.AddCost(CostType.Warmth, warmthAmount);
+        GameManager.Instance.Player.Model.AddCost(CostType.SpiritEnergy, spiritEnergyAmount);
         Destroy(gameObject);
     }
 

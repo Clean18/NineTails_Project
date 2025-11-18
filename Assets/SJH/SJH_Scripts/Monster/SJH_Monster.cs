@@ -59,7 +59,7 @@ public class SJH_Monster : MonoBehaviour
 
     public void IdleAction()
     {
-        if (!PlayerController.Instance.GetIsDead()) MonsterState = AIState.Chase;
+        if (!PlayerController.Instance.Model.Data.IsDead) MonsterState = AIState.Chase;
     }
 
     public void ChaseAction()

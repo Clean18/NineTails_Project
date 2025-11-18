@@ -65,11 +65,11 @@ public class OfflineRewardPopUp : BaseUI
 
         long warmth = (long)(90 * System.Math.Pow(1.03, (stageLevel - 1) * minutes));
         long spirit = 0;
-        if (stageLevel > 55 && PlayerController.Instance.GetFirstSpiritEnergy()) spirit = (long)(90 * System.Math.Pow(1.03, stageLevel - 55) * minutes);
+        if (stageLevel > 55 && PlayerController.Instance.Model.GetFirstSpiritEnergy()) spirit = (long)(90 * System.Math.Pow(1.03, stageLevel - 55) * minutes);
 
         // 보상 지급
-        PlayerController.Instance.AddCost(CostType.Warmth, warmth);
-        PlayerController.Instance.AddCost(CostType.SpiritEnergy, spirit);
+        PlayerController.Instance.Model.AddCost(CostType.Warmth, warmth);
+        PlayerController.Instance.Model.AddCost(CostType.SpiritEnergy, spirit);
 
         // UI 표시
         timeText.text = $"방치한 시간\n{hours}시간 {minutes}분";

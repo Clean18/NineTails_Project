@@ -49,10 +49,10 @@ public class BossMainUI : BaseUI, IUI
             player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
             _autoBtnText.text = player.Mode == ControlMode.Auto ? "자동" : "수동";
 
-            player.AIInit();
+            player.AI.AIInit();
 
             // 플레이어 velocity 초기화
-            player.AIStop();
+            player.View.AIStop();
         };
 
         bool isMission = MissionManager.Instance != null && MissionManager.Instance.IsRunning();
@@ -77,7 +77,7 @@ public class BossMainUI : BaseUI, IUI
         bossHpUI.Init(selectedBoss);
 
         PlayerStatUI();
-        PlayerController.Instance.ConnectEvent(PlayerStatUI);
+        PlayerController.Instance.Model.ConnectEvent(PlayerStatUI);
         SetupCameraForBossStage();
     }
 
@@ -87,15 +87,19 @@ public class BossMainUI : BaseUI, IUI
         var player = PlayerController.Instance;
         if (player == null) return;
         // Data
-        powerText.text = $"전투력 : {player.GetPower()}";
-        attackText.text = $"공격력 : {player.GetAttack()}";
-        defenseText.text = $"방어력 : {player.GetDefense()}";
+        powerText.text = $"전투력 : {player.Model.Data.PowerLevel}";
+        attackText.text = $"공격력 : {player.Model.Data.Attack}";
+        defenseText.text = $"방어력 : {player.Model.Data.Defense}";
 
-        _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
-        double hpPer = (double)player.GetHp() / player.GetMaxHp() * 100f;
+        long hp = player.Model.Data.Hp;
+        long maxHp = player.Model.Data.MaxHp;
+        long shieldHp = player.Model.Data.ShieldHp;
+
+        _hpSlider.value = (float)hp / maxHp;
+        double hpPer = (double)hp / maxHp * 100f;
         hpText.text = $"{hpPer:F0}%";
 
-        double shieldPer = (float)player.GetShieldHp() / player.GetMaxHp();
+        double shieldPer = (float)shieldHp / maxHp;
         _shieldSlider.value = (float)shieldPer;
     }
 

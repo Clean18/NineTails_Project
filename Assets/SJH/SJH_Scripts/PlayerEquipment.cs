@@ -181,7 +181,7 @@ public class PlayerEquipment
             }
             Level += 1;
             IncreaseDamageLevel += 1;
-            if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, BaseSSRCost);
+            if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.SpiritEnergy, BaseSSRCost);
             Debug.Log($"강화 성공! 현재 등급: {Grade}등급, 강화 단계: {Level}강");
             //Debug.Log($"공격력 증가율: {Attack * 100}%" + $"스킬 쿨타임 감소: {CooldownReduction * 100}%" + $"방어력 관통 수치: {ReduceDamage * 100}%" + $"누적 피해 증가: {IncreaseDamage}%");
             Debug.Log($"공격력 증가율: 50%" + $"스킬 쿨타임 감소: 30%" + $"방어력 관통 수치: 30%" + $"누적 피해 증가: {IncreaseDamage}%");
@@ -208,7 +208,7 @@ public class PlayerEquipment
 
         // 강화 성공
         // 재화 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, nextUpgradeCost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.SpiritEnergy, nextUpgradeCost);
         // 다음 강화 스탯 할당
         var nextUpgradeStat = DataManager.Instance.GetEquipmentUpgradeInfo(GradeType, Level + 1);
         InitEquipment(nextUpgradeStat.Grade, nextUpgradeStat.Level, nextUpgradeStat.IncreaseDamageLevel);
@@ -252,7 +252,7 @@ public class PlayerEquipment
         }
 
         // 재화 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.SpiritEnergy, nextData.WarmthCost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.SpiritEnergy, nextData.WarmthCost);
 
         // 승급 확률 체크
         float rate = UnityEngine.Random.value;

@@ -138,7 +138,7 @@ public class Main : BaseUI, IUI
             player.AIInit();
 
             // 플레이어 velocity 초기화
-            player.AIStop();
+            player.View.AIStop();
         };
         // 10분 이하면 비활성화
         int elapsedMinutes = SaveLoadManager.Instance.ElapsedMinutes;
@@ -162,7 +162,7 @@ public class Main : BaseUI, IUI
         };
 
         PlayerStatUI();
-        PlayerController.Instance.ConnectEvent(PlayerStatUI);
+        PlayerController.Instance.Model.ConnectEvent(PlayerStatUI);
         UpdateNicknameUI();
 
 
@@ -182,29 +182,33 @@ public class Main : BaseUI, IUI
         var player = PlayerController.Instance;
         if (player == null) return;
         // Data
-        powerText.text = $"전투력 : {player.GetPower()}";
-        attackText.text = $"공격력 : {player.GetAttack()}";
-        defenseText.text = $"방어력 : {player.GetDefense()}";
+        powerText.text = $"전투력 : {player.Model.Data.PowerLevel}";
+        attackText.text = $"공격력 : {player.Model.Data.Attack}";
+        defenseText.text = $"방어력 : {player.Model.Data.Defense}";
 
-        _hpSlider.value = (float)player.GetHp() / player.GetMaxHp();
-        double hpPer = (double)player.GetHp() / player.GetMaxHp() * 100f;
+        long hp = player.Model.Data.Hp;
+        long maxHp = player.Model.Data.MaxHp;
+        long shieldHp = player.Model.Data.ShieldHp;
+
+        _hpSlider.value = (float)hp / maxHp;
+        double hpPer = (double)hp / maxHp * 100f;
         hpText.text = $"{hpPer:F0}%";
 
-        double shieldPer = (float)player.GetShieldHp() / player.GetMaxHp();
+        double shieldPer = (float)shieldHp / maxHp;
         _shieldSlider.value = (float)shieldPer;
         // Cost
-        _warmthText.text = $"{player.GetWarmth()}";
-        _spritenergyText.text = $"{player.GetSpiritEnergy()}";
+        _warmthText.text = $"{player.Model.GetWarmth()}";
+        _spritenergyText.text = $"{player.Model.GetSpiritEnergy()}";
         // 플레이어 스킬이 7개가 아니면 활성화
-        _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.GetSkillData().Count != 7);
-        _soulText.text = $"{player.GetSoul()}";
+        _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.Model.GetSkillData().Count != 7);
+        _soulText.text = $"{player.Model.GetSoul()}";
     }
 
     // 닉네임 갱신
     public void UpdateNicknameUI()
     {
         // 현재 플레이어 이름값
-        string playerName = PlayerController.Instance.GetPlayerName();
+        string playerName = PlayerController.Instance.Model.GetPlayerName();
         if (string.IsNullOrEmpty(playerName))
         {
             txt_Nickname.text = "구미호";

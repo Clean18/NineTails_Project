@@ -28,25 +28,25 @@ public class StatUpPopUp : BaseUI
         // 업그레이드 버튼은 여기서 연결
         GetEvent("HpUpgradeBtn").Click += data =>
         {
-            PlayerController.Instance.TryHpLevelup();
+            PlayerController.Instance.Model.TryHpLevelup();
             Debug.Log("체력 강화 버튼");
             UpdateStatUpUI();
         };
         GetEvent("AttackUpgradeBtn").Click += data =>
         {
-            PlayerController.Instance.TryAttackLevelup();
+            PlayerController.Instance.Model.TryAttackLevelup();
             Debug.Log("공격력 강화 버튼");
             UpdateStatUpUI();
         };
         GetEvent("DefenseUpgradeBtn").Click += data =>
         {
-            PlayerController.Instance.TryDefenseLevelup();
+            PlayerController.Instance.Model.TryDefenseLevelup();
             Debug.Log("방어력 강화 버튼");
             UpdateStatUpUI();
         };
         GetEvent("SpeedUpgradeBtn").Click += data =>
         {
-            PlayerController.Instance.TrySpeedLevelup();
+            PlayerController.Instance.Model.TrySpeedLevelup();
             Debug.Log("이동속도 강화 버튼");
             UpdateStatUpUI();
         };
@@ -65,7 +65,7 @@ public class StatUpPopUp : BaseUI
         // 플레이어 닉네임
         _playerName.text = $"닉네임 : {data.PlayerName}";
         // 플레이어 전투력
-        _power.text = $"전투력 : {PlayerController.Instance.GetPower()}";
+        _power.text = $"전투력 : {PlayerController.Instance.Model.Data.PowerLevel}";
 
         // 체력
         _hpLevelText.text = $"체력 : {data.HpLevel} → {data.HpLevel + 1}";

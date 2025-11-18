@@ -67,11 +67,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
-        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.Model.Data.MaxHp * (0.25f + 0.0025f * SkillLevel)));
 
         // 지속시간 체크 시작
         _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
@@ -91,11 +91,11 @@ public class SkillLogic_2 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임 체크
-        if (IsCooldown || _isSpinning || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || _isSpinning || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
         Debug.Log("스킬 2 UseSkill");
 
         // 보호막 체력 설정
-        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.GetMaxHp() * (0.25f + 0.0025f * SkillLevel)));
+        PlayerController.Instance.TakeShield((long)(PlayerController.Instance.Model.Data.MaxHp * (0.25f + 0.0025f * SkillLevel)));
 
         // 지속시간 체크 시작
         _durationRoutine = PlayerController.Instance.StartCoroutine(SpinDurationCoroutine());
@@ -130,19 +130,19 @@ public class SkillLogic_2 : SkillLogic, ISkill
         IsSkillUsed = true;
 
         // 플레이어 이동 비활성화
-        PlayerController.Instance.Stop();
+        PlayerController.Instance.View.Stop();
     }
 
     public void OnAttackEnd()
     {
         //_isSkillUsed = false;
         IsSkillUsed = false;
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     public void AnimationPlay()
     {
-        PlayerController.Instance.SetTrigger("UseSkill_2");
+        PlayerController.Instance.View.SetTrigger("UseSkill_2");
 
         // 10프레임 후 플레이어 이동 활성화
         Invoke("PlayerMove", 1f);
@@ -150,7 +150,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private void PlayerMove()
     {
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     // 원 운동 로직
@@ -194,7 +194,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         Debug.Log("스킬 지속 시간 종료");
 
         // 스킬 지속 시간 종료 시 보호막 체력 = 0
-        PlayerController.Instance.ClearShield();
+        PlayerController.Instance.Model.ClearShield();
         
         // _projectilePrefab 활성화
         SetProjectileActive(false);
@@ -214,7 +214,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     protected override void Damage(GameObject monsters)
     {
-        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((0.25f + 0.0025f * SkillLevel)));
+        long damage = (long)(PlayerController.Instance.Model.GetTotalDamage() * ((0.25f + 0.0025f * SkillLevel)));
         monsters?.GetComponent<IDamagable>().TakeDamage(damage);
         Debug.Log($"{monsters.name}에게 {damage}의 피해를 가했음");
     }
@@ -258,7 +258,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

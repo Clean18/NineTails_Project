@@ -110,7 +110,7 @@ public class FallingRock : MonoBehaviour
         if (hits != null)
         {
             // 10% 대미지
-            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * DamagePercent));
+            PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * DamagePercent));
             Debug.Log($" 낙석 데미지: {DamagePercent * 100}% 피해");
         }
     }

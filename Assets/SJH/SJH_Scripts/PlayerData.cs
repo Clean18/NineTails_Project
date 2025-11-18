@@ -40,7 +40,7 @@ public class PlayerData
     /// </summary> 
     [SerializeField]
     public long PowerLevel
-    { get => (long) ((PlayerController.Instance.GetAttack()* (1f + PlayerController.Instance.GetEquipmentAttack()) * 1.20f + MaxHp* 1.10) * (1 + Defense / 1200f * 0.25f)); }
+    { get => (long) ((PlayerController.Instance.Model.Data.Attack * (1f + PlayerController.Instance.Model.GetEquipmentAttack()) * 1.20f + MaxHp* 1.10) * (1 + Defense / 1200f * 0.25f)); }
 
 [field: SerializeField] private int _attackLevel;
     /// <summary>
@@ -328,7 +328,7 @@ public class PlayerData
         }
 
         // 비용 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         AttackLevelup();
@@ -356,7 +356,7 @@ public class PlayerData
         }
 
         // 비용 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         DefenseLevelup();
@@ -383,7 +383,7 @@ public class PlayerData
         }
 
         // 비용 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         HpLevelup();
@@ -411,7 +411,7 @@ public class PlayerData
         }
 
         // 비용 감소
-        if (!GameManager.IsCheat) PlayerController.Instance.SpendCost(CostType.Warmth, cost);
+        if (!GameManager.IsCheat) PlayerController.Instance.Model.SpendCost(CostType.Warmth, cost);
 
         // 레벨업 실행
         SpeedLevelup();

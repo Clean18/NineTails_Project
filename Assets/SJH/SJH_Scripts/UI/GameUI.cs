@@ -56,13 +56,13 @@ public class GameUI : SceneUI, IUI
 
 		player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
 
-        player.AIInit();
+        player.AI.AIInit();
 
 		// Text On/Off
 		UpdateAIMode(player.Mode);
 
         // 플레이어 velocity 초기화
-        player.AIStop();
+        player.View.AIStop();
 	}
 
 	public void UpdateAIMode(ControlMode mode)

@@ -40,7 +40,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
         Debug.Log("스킬 1 UseSkill");
 
         // 쿨타임 체크 시작
@@ -62,7 +62,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public bool UseSkill(Transform attacker, Transform defender)
     {
         // 쿨타임이면 return
-        if (IsCooldown || !PlayerController.Instance.MoveCheck() || IsSkillUsed) return false;
+        if (IsCooldown || !PlayerController.Instance.View.IsMoving() || IsSkillUsed) return false;
 
         // 쿨타임 체크 시작
         IsCooldown = true;
@@ -108,10 +108,10 @@ public class SkillLogic_1 : SkillLogic, ISkill
     public void AnimationPlay()
     {
         if (!_hitBox.enabled) return;
-        else PlayerController.Instance.SetTrigger("UseSkill_1");
+        else PlayerController.Instance.View.SetTrigger("UseSkill_1");
 
         // 플레이어 움직임 비활성화
-        PlayerController.Instance.Stop();
+        PlayerController.Instance.View.Stop();
 
         // 1초 뒤 플레이어 움직임 활성화
         Invoke("PlayerMove", 1f);
@@ -119,7 +119,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     private void PlayerMove()
     {
-        PlayerController.Instance.Move();
+        PlayerController.Instance.View.Move();
     }
 
     public void CreateEffect()
@@ -133,7 +133,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     protected override void Damage()
     {
-        long damage = (long)(PlayerController.Instance.GetTotalDamage() * ((0.75f + 0.0075f * SkillLevel)));
+        long damage = (long)(PlayerController.Instance.Model.GetTotalDamage() * ((0.75f + 0.0075f * SkillLevel)));
 
         foreach (var monster in _hitMonsters)
         {
@@ -154,7 +154,7 @@ public class SkillLogic_1 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

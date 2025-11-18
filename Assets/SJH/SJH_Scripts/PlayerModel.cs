@@ -96,44 +96,6 @@ public class PlayerModel
     /// </summary>
     /// <param name="amount"></param>
     public void ApplyShield(long amount) => Data.HealShield(amount);
-
-    /// <summary>
-    /// 플레이어 죽음 상태 반환하는 함수
-    /// <br/> true = 죽음
-    /// <br/> false = 살음
-    /// </summary>
-    /// <returns></returns>
-    public bool GetIsDead() => Data.IsDead;
-    /// <summary>
-    /// 플레이어의 전투력을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetPower() => Data.PowerLevel;
-    /// <summary>
-    /// 플레이어의 순수 공격력을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetAttack() => Data.Attack;
-    /// <summary>
-    /// 플레이어의 방어력을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetDefense() => Data.Defense;
-    /// <summary>
-    /// 플레이어의 최대 체력을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetMaxHp() => Data.MaxHp;
-    /// <summary>
-    /// 플레이어의 현재 체력을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetHp() => Data.Hp;
-    /// <summary>
-    /// 플레이어의 보호막 수치를 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetShieldHp() => Data.ShieldHp;
     /// <summary>
     /// 플레이어의 온정 보유량을 반환하는 함수
     /// </summary>
@@ -153,7 +115,6 @@ public class PlayerModel
     /// 플레이어의 보호막을 없애는 함수
     /// </summary>
 	public void ClearShield() => Data.ShieldHp = 0;
-
     /// <summary>
     /// 플레이어 Data, Cost 변화시 플레이어 스탯 UI를 업데이트하는 이벤트를 연결하는 함수
     /// </summary>
@@ -165,6 +126,11 @@ public class PlayerModel
 	}
     public int GetPlayerSceneIndex() => Data.SceneIndex;
     public void SetPlayerSceneIndex(int index) => Data.SceneIndex = index;
+    /// <summary>
+	/// 플레이어 공격력 * (1 + 가하는 피해 증가)
+	/// </summary>
+	/// <returns></returns>
+    public long GetTotalDamage() => (long)((Data.Attack * (1f + GetEquipmentAttack())) * (1f + GetIncreseDamage()));
 
     /// <summary>
     /// 플레이어의 세이브 데이터를 반환하는 함수

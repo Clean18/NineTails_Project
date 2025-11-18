@@ -37,7 +37,7 @@ public class PlayerCost
                 GetFirstSpiritEnergy = true;
                 _spiritEnergy = value;
                 Debug.Log("첫 영기 획득");
-                PlayerController.Instance.SetPlayerSceneIndex(14); // 여기서 세이브도 함
+                PlayerController.Instance.Model.SetPlayerSceneIndex(14); // 여기서 세이브도 함
                 SceneChangeManager.Instance.LoadNextScene(14);
                 return;
             }
@@ -63,7 +63,7 @@ public class PlayerCost
                 _warmth = value;
                 Debug.Log($"첫 온정 획득 : {GetFirstWarmth}");
                 // Stage 1-1 Middle 다이얼로그로 이동 5번씬
-                PlayerController.Instance.SetPlayerSceneIndex(5); // 여기서 세이브도 함
+                PlayerController.Instance.Model.SetPlayerSceneIndex(5); // 여기서 세이브도 함
                 SceneChangeManager.Instance.LoadNextScene(5);
                 return;
             }

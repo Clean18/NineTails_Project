@@ -126,7 +126,7 @@ public class Stage1BossFSM : BaseBossFSM
 
             if (angle <= AttackAngle / 2f)
             {
-                PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.GetMaxHp() * 0.4f));
+                PlayerController.Instance.TakeDamage((long)(PlayerController.Instance.Model.Data.MaxHp * 0.4f));
                 Debug.Log($"패턴1 - 플레이어 {hit.name}에게 40% 데미지");
             }
         }
