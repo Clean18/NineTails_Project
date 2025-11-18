@@ -330,36 +330,6 @@ public class PlayerController : MonoBehaviour
 		_audioSource.PlayOneShot(clip, 1f);
 	}
 
-	#region 애니메이션 이벤트 함수
-
-	// SkillLogic_0 애니메이션 이벤트 함수들
-	public void Skill0_OnAttackStart() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackStart();
-	public void Skill0_OnAttackEnd() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.OnAttackEnd();
-	public void Skill0_SlashCountEvent() => (SkillController.SkillList[0] as SkillLogic_0_HitBox)?.SlashCountEvent();
-
-	// SkillLogic_1 애니메이션 이벤트 함수
-	public void Skill1_DisableHitbox() => (SkillController.SkillList[1] as SkillLogic_1)?.DisableHitbox();
-	public void Skill1_CreateEffect() => (SkillController.SkillList[1] as SkillLogic_1)?.CreateEffect();
-
-	// SkillLogic_2 애니메이션 이벤트 함수
-	public void Skill2_SkillRoutine() => (SkillController.SkillList[2] as SkillLogic_2)?.SkillRoutine();
-
-	// SkillLogic_3 애니메이션 이벤트 함수
-	public void Skill3_SkillRoutine() => (SkillController.SkillList[3] as SkillLogic_3)?.SkillRoutine();
-	public void Skill3_OnAttackEnd() => (SkillController.SkillList[3] as SkillLogic_3)?.OnAttackEnd();
-
-	// SkillLogic_4 애니메이션 이벤트 함수
-	public void Skill4_SkillRoutine() => (SkillController.SkillList[4] as SkillLogic_4)?.SkillRoutine();
-
-	// SkillLogic_5 애니메이션 이벤트 함수
-	public void Skill5_SkillRoutine() => (SkillController.SkillList[5] as SkillLogic_5)?.SkillRoutine();
-
-	// SkillLogic_6 애니메이션 이벤트 함수
-	public void Skill6_SkillRoutine() => (SkillController.SkillList[6] as SkillLogic_6)?.SkillRoutine();
-	public void Skill6_OnAttackEnd() => (SkillController.SkillList[6] as SkillLogic_6)?.OnAttackEnd();
-
-	#endregion
-
  //   void OnDrawGizmos()
 	//{
 	//	// 플레이어의 공격 범위 기즈모
