@@ -88,14 +88,14 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     public void LoadNextScene()
     {
         // 다음 인덱스 계산
-        int nextIndex = PlayerController.Instance.Model.GetPlayerSceneIndex() + 1;
+        int nextIndex = PlayerController.Instance.Model.Data.SceneIndex + 1;
 
         // 유효 범위 체크
         if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
             // 씬 정보로 씬 이름 가져오기
             string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
-            PlayerController.Instance.Model.SetPlayerSceneIndex(nextIndex);
+            PlayerController.Instance.Model.Data.SetPlayerSceneIndex(nextIndex);
 
             LoadSceneAsync(nextScene); // 사용중
         }
@@ -108,14 +108,14 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     public void LoadPrevScene()
     {
         // 다음 인덱스 계산
-        int nextIndex = PlayerController.Instance.Model.GetPlayerSceneIndex() - 1;
+        int nextIndex = PlayerController.Instance.Model.Data.SceneIndex - 1;
 
         // 유효 범위 체크
         if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
             // 씬 정보로 씬 이름 가져오기
             string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
-            PlayerController.Instance.Model.SetPlayerSceneIndex(nextIndex);
+            PlayerController.Instance.Model.Data.SetPlayerSceneIndex(nextIndex);
 
             LoadSceneAsync(nextScene); // 사용중
         }
@@ -128,14 +128,14 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
     public void LoadCurrentScene()
     {
         // 다음 인덱스 계산
-        int nextIndex = PlayerController.Instance.Model.GetPlayerSceneIndex();
+        int nextIndex = PlayerController.Instance.Model.Data.SceneIndex;
 
         // 유효 범위 체크
         if (_stageInfo != null && nextIndex < _stageInfo.Count)
         {
             // 씬 정보로 씬 이름 가져오기
             string nextScene = _gameSceneDict[_stageInfo[nextIndex]];
-            PlayerController.Instance.Model.SetPlayerSceneIndex(nextIndex);
+            PlayerController.Instance.Model.Data.SetPlayerSceneIndex(nextIndex);
 
             LoadSceneAsync(nextScene); // 사용중
         }
@@ -217,7 +217,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
                 sceneIndex = 2;
                 nextScene = _gameSceneDict[_stageInfo[sceneIndex]];
             }
-            PlayerController.Instance.Model.SetPlayerSceneIndex(sceneIndex);
+            PlayerController.Instance.Model.Data.SetPlayerSceneIndex(sceneIndex);
             Debug.Log($"크레딧 후 이동 할 씬 {nextScene}");
             LoadSceneAsync(nextScene);
 
@@ -265,7 +265,7 @@ public class SceneChangeManager : Singleton<SceneChangeManager>
         Debug.LogWarning("플레이어 초기화 완료");
 
         // 인덱스로 씬 변경
-        LoadNextScene(PlayerController.Instance.Model.GetPlayerSceneIndex());
+        LoadNextScene(PlayerController.Instance.Model.Data.SceneIndex);
     }
 
     /// <summary>

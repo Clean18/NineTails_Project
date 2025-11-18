@@ -157,7 +157,7 @@ public class SkillLogic_0_HitBox : SkillLogic, ISkill
     // 쿨타임 코루틴
     private IEnumerator CooldownCoroutine()
     {
-        float remaining = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
+        float remaining = PlayerController.Instance.Model.Equipment.GetCalculateCooldown(SkillData.CoolTime);
         //Debug.Log($"기본 공격 쿨타임 {remaining} 초");
         while (remaining > 0f)
         {

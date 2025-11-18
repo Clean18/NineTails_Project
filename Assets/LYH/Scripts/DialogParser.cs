@@ -90,11 +90,11 @@ public class DialogParser : MonoBehaviour
     {
         // ----------------------------#############################
         // 플레이어 이름 입력받기
-        foxName = PlayerController.Instance.Model.GetPlayerName();
+        foxName = PlayerController.Instance.Model.Data.PlayerName;
 
         // dialogName = 입력값 (추가완료)
-        dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.Model.GetPlayerSceneIndex()];
-        Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.Model.GetPlayerSceneIndex()}");
+        dialogName = SceneChangeManager.Instance._stageInfo[PlayerController.Instance.Model.Data.SceneIndex];
+        Debug.Log($"dialogName : {dialogName} / SceneIndex : {PlayerController.Instance.Model.Data.SceneIndex}");
         // csv 파싱
         for (int i = 0; i < dialogDatas.Length; i++)
         {
@@ -412,7 +412,7 @@ public class DialogParser : MonoBehaviour
         {
             Debug.Log("모든 대사 종료");
             Debug.Log("다음 씬으로 전환");
-            int curIndex = PlayerController.Instance.Model.GetPlayerSceneIndex();
+            int curIndex = PlayerController.Instance.Model.Data.SceneIndex;
             if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
             else SceneChangeManager.Instance.LoadNextScene();
         }
@@ -426,7 +426,7 @@ public class DialogParser : MonoBehaviour
         }
         else
         {
-            int curIndex = PlayerController.Instance.Model.GetPlayerSceneIndex();
+            int curIndex = PlayerController.Instance.Model.Data.SceneIndex;
             if (curIndex == 5 || curIndex == 14) SceneChangeManager.Instance.LoadPrevScene();
             else SceneChangeManager.Instance.LoadNextScene();
         }
@@ -468,7 +468,7 @@ public class DialogParser : MonoBehaviour
             Debug.Log(name);
             // ----------------------------#############################
             // 플레이어 이름값 저장
-            PlayerController.Instance.Model.SetPlayerName(foxName);
+            PlayerController.Instance.Model.Data.SetPlayerName(foxName);
 
             // UI 끄고 다음 대사 출력
             changeNameUI.gameObject.SetActive(false);

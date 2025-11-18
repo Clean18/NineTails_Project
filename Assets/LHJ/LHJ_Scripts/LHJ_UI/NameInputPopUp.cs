@@ -17,7 +17,7 @@ public class NameInputPopUp : BaseUI
             {
                 // 플레이어 이름 지정
                 Debug.Log($"플레이어 이름 : [{name}] 으로 결정");
-                PlayerController.Instance.Model.SetPlayerName(name);
+                PlayerController.Instance.Model.Data.SetPlayerName(name);
                 PlayerController.Instance.SaveData();
                 Time.timeScale = 1;
                 UIManager.Instance.ClosePopUp(); // 현재 팝업 닫기

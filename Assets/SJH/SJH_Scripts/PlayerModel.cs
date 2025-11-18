@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 플레이어의 스탯, 재화, 스킬 등의 데이터를 가지는 클래스
@@ -82,40 +80,6 @@ public class PlayerModel
     }
 
     /// <summary>
-    /// 플레이어가 피해를 입는 함수
-    /// </summary>
-    /// <param name="damage"></param>
-    public void ApplyDamage(long damage) => Data.DecreaseHp(damage);
-    /// <summary>
-    /// 플레이어가 회복하는 함수
-    /// </summary>
-    /// <param name="amount"></param>
-    public void ApplyHeal(long amount) => Data.HealHp(amount);
-    /// <summary>
-    /// 플레이어가 보호막을 얻는 함수
-    /// </summary>
-    /// <param name="amount"></param>
-    public void ApplyShield(long amount) => Data.HealShield(amount);
-    /// <summary>
-    /// 플레이어의 온정 보유량을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetWarmth() => Cost.Warmth;
-    /// <summary>
-    /// 플레이어의 영기 보유량을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-	public long GetSpiritEnergy() => Cost.SpiritEnergy;
-    /// <summary>
-    /// 플레이어의 혼백을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public long GetSoul() => Cost.Soul;
-    /// <summary>
-    /// 플레이어의 보호막을 없애는 함수
-    /// </summary>
-	public void ClearShield() => Data.ShieldHp = 0;
-    /// <summary>
     /// 플레이어 Data, Cost 변화시 플레이어 스탯 UI를 업데이트하는 이벤트를 연결하는 함수
     /// </summary>
     /// <param name="playerStatUI"></param>
@@ -124,13 +88,11 @@ public class PlayerModel
 		Data.OnStatChanged += playerStatUI;
 		Cost.OnCostChanged += playerStatUI;
 	}
-    public int GetPlayerSceneIndex() => Data.SceneIndex;
-    public void SetPlayerSceneIndex(int index) => Data.SceneIndex = index;
     /// <summary>
 	/// 플레이어 공격력 * (1 + 가하는 피해 증가)
 	/// </summary>
 	/// <returns></returns>
-    public long GetTotalDamage() => (long)((Data.Attack * (1f + GetEquipmentAttack())) * (1f + GetIncreseDamage()));
+    public long GetTotalDamage() => (long)((Data.Attack * (1f + Equipment.Attack)) * (1f + Equipment.IncreaseDamage));
 
     /// <summary>
     /// 플레이어의 세이브 데이터를 반환하는 함수
@@ -212,16 +174,9 @@ public class PlayerModel
 		else if (costType == CostType.SpiritEnergy) Cost.DecreaseSpiritEnergy(amount);
         else if (costType == CostType.Soul) Cost.DecreaseSoul(amount);
 	}
-    public bool GetFirstWarmth() => Cost.GetFirstWarmth;
-    public bool GetFirstSpiritEnergy() => Cost.GetFirstSpiritEnergy;
     #endregion
 
     #region PlayerData 관련 함수
-    /// <summary>
-    /// PlayerData 클래스 저장용 데이터를 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public SavePlayerData GetPlayerData() => Data.SavePlayerData();
     /// <summary>
     /// 플레이어 공격력 스탯 강화를 시도하는 함수
     /// </summary>
@@ -238,18 +193,6 @@ public class PlayerModel
     /// 플레이어 이동속도 스탯 강화를 시도하는 함수
     /// </summary>
 	public void TrySpeedLevelup() => Data.TrySpeedLevelup(Cost.Warmth);
-    /// <summary>
-    /// 플레이어 이름을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public string GetPlayerName() => Data.PlayerName;
-    /// <summary>
-    /// 플레이어의 이름을 지정하는 함수
-    /// </summary>
-    /// <param name="newName"></param>
-    /// <returns></returns>
-    public string SetPlayerName(string newName) => Data.PlayerName = newName;
-
     #endregion
 
     #region Equipment 관련 함수
@@ -266,84 +209,13 @@ public class PlayerModel
     /// 장비 승급을 시도하는 함수
     /// </summary>
 	public void TryPromote() => Equipment?.TryPromote(Cost.SpiritEnergy);
-    /// <summary>
-    /// 현재 장비 등급을 GradeType으로 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public GradeType GetGradeType() => Equipment.GradeType;
-    /// <summary>
-    /// 현재 장비의 가하는 피해 증가율을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public float GetIncreseDamage() => Equipment.IncreaseDamage;
-    /// <summary>
-    /// level(장비레벨)의 가하는 피해 증가율을 반환하는 함수
-    /// </summary>
-    /// <param name="level"></param>
-    /// <returns></returns>
-    public float GetIncreseDamage(int level) => Equipment.GetIncreseDamage(level);
-    /// <summary>
-    /// 현재 장비의 스킬 쿨타임 감소율을 반환하는 함수
-    /// </summary>
-    /// <param name="defaultCooldown"></param>
-    /// <returns></returns>
-    public float GetCalculateCooldown(float defaultCooldown) => Equipment.GetCalculateCooldown(defaultCooldown);
-    /// <summary>
-    /// 현재 장비의 공격력 증가율을 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public float GetEquipmentAttack() => Equipment.Attack;
     #endregion
 
     #region PlayerSkill 관련 함수
-    /// <summary>
-    /// PlayerSkill 클래스 저장용 데이터를 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public List<SaveSkillData> GetSkillData() => Skill.SavePlayerSkill();
-    /// <summary>
-    /// skillIndex 스킬 레벨업을 시도하는 함수
-    /// </summary>
-    /// <param name="skillIndex"></param>
-    public void TrySkillLevelUp(int skillIndex) => Skill.TrySkillLevelUp(skillIndex);
-    /// <summary>
-    /// 스킬 단축창을 Dictionary로 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public Dictionary<KeyCode, ISkill> GetMappingSkills() => Skill.SkillMapping;
-    /// <summary>
-    /// 스킬 단축창에 등록되어 있는 스킬을 List로 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public List<ISkill> GetSkillMappingList() => Skill.GetSkillMappingList();
-    public List<ISkill> GetHasSkillList() => Skill.HasSkills;
     /// <summary>
     /// skillIndex 번째 스킬을 획득하는 함수
     /// </summary>
     /// <param name="skillIndex"></param>
     public void LearnSkill(int skillIndex) => Skill.LearnSkill(skillIndex, Cost.Soul);
-    /// <summary>
-    /// skillIndex 번째 스킬을 단축창에 추가를 시도하는 함수
-    /// </summary>
-    /// <param name="skillIndex"></param>
-    public void AddSkillSlot(int skillIndex) => Skill.AddSkillSlot(skillIndex);
-    /// <summary>
-    /// skillIndex 번째 스킬을 단축창에서 제거를 시도하는 함수
-    /// </summary>
-    /// <param name="skillIndex"></param>
-    public void RemoveSkillSlot(int skillIndex) => Skill.RemoveSkillSlot(skillIndex);
-    #endregion
-
-    #region Quest 관련 함수
-    /// <summary>
-    /// PlayerQuest 클래스 저장용 업적 데이터를 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public List<SaveAchievementData> GetAchievData() => Quest.SaveAchievementData();
-    /// <summary>
-    /// PlayerQuest 클래스 저장용 돌파미션 데이터를 반환하는 함수
-    /// </summary>
-    /// <returns></returns>
-    public List<SaveMissionData> GetMissionData() => Quest.SaveMissionData();
     #endregion
 }

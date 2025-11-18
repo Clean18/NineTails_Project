@@ -24,7 +24,7 @@ public class StagePopUp : BaseUI
 
         GetEvent("Btn_Stage11").Click += data =>
         {
-            if (!PlayerController.Instance.Model.GetFirstWarmth())
+            if (!PlayerController.Instance.Model.Cost.GetFirstWarmth)
             {
                 Debug.Log("첫 온정 획득씬 안보면 돌파미션 수락 불가");
                 UIManager.Instance.ShowWarningText("구미호님 너무 급하신거 아닌가용?????");
@@ -97,7 +97,7 @@ public class StagePopUp : BaseUI
         };
         GetEvent("Btn_Stage21").Click += data =>
         {
-            if (!PlayerController.Instance.Model.GetFirstSpiritEnergy())
+            if (!PlayerController.Instance.Model.Cost.GetFirstSpiritEnergy)
             {
                 Debug.Log("첫 영기 획득씬 안보면 돌파미션 수락 불가");
                 if (firstSceneCheck) UIManager.Instance.ShowWarningText("그렇게 급하시면 어제 출발하지 그랬슈~~");

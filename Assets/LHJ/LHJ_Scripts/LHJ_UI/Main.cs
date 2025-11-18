@@ -135,7 +135,7 @@ public class Main : BaseUI, IUI
             player.Mode = player.Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto;
             _autoBtnText.text = player.Mode == ControlMode.Auto ? "자동" : "수동";
 
-            player.AIInit();
+            player.AI.AIInit();
 
             // 플레이어 velocity 초기화
             player.View.AIStop();
@@ -197,18 +197,18 @@ public class Main : BaseUI, IUI
         double shieldPer = (float)shieldHp / maxHp;
         _shieldSlider.value = (float)shieldPer;
         // Cost
-        _warmthText.text = $"{player.Model.GetWarmth()}";
-        _spritenergyText.text = $"{player.Model.GetSpiritEnergy()}";
+        _warmthText.text = $"{player.Model.Cost.Warmth}";
+        _spritenergyText.text = $"{player.Model.Cost.SpiritEnergy}";
         // 플레이어 스킬이 7개가 아니면 활성화
-        _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.Model.GetSkillData().Count != 7);
-        _soulText.text = $"{player.Model.GetSoul()}";
+        _soulText.transform.parent.gameObject.SetActive(PlayerController.Instance.Model.Skill.SavePlayerSkill().Count != 7);
+        _soulText.text = $"{player.Model.Cost.Soul}";
     }
 
     // 닉네임 갱신
     public void UpdateNicknameUI()
     {
         // 현재 플레이어 이름값
-        string playerName = PlayerController.Instance.Model.GetPlayerName();
+        string playerName = PlayerController.Instance.Model.Data.PlayerName;
         if (string.IsNullOrEmpty(playerName))
         {
             txt_Nickname.text = "구미호";

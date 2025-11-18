@@ -194,7 +194,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
         Debug.Log("스킬 지속 시간 종료");
 
         // 스킬 지속 시간 종료 시 보호막 체력 = 0
-        PlayerController.Instance.Model.ClearShield();
+        PlayerController.Instance.Model.Data.ClearShield();
         
         // _projectilePrefab 활성화
         SetProjectileActive(false);
@@ -258,7 +258,7 @@ public class SkillLogic_2 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.Equipment.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

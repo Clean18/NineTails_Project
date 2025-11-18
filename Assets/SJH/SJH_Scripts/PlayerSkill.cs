@@ -246,7 +246,7 @@ public class PlayerSkill
                 return;
             }
             // 노말체크
-            if (player.Model.GetSpiritEnergy() < ultCost)
+            if (player.Model.Cost.SpiritEnergy < ultCost)
             {
                 Debug.Log("영기가 부족합니다.");
                 UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");
@@ -263,7 +263,7 @@ public class PlayerSkill
                 Debug.Log("스킬을 강화할 수 없습니다.");
                 return;
             }
-            if (player.Model.GetSpiritEnergy() < normalCost)
+            if (player.Model.Cost.SpiritEnergy < normalCost)
             {
                 Debug.Log("영기가 부족합니다.");
                 UIManager.Instance.ShowWarningText("강화에 필요한 재화가 부족합니다.");

@@ -40,7 +40,7 @@ public class PlayerData
     /// </summary> 
     [SerializeField]
     public long PowerLevel
-    { get => (long) ((PlayerController.Instance.Model.Data.Attack * (1f + PlayerController.Instance.Model.GetEquipmentAttack()) * 1.20f + MaxHp* 1.10) * (1 + Defense / 1200f * 0.25f)); }
+    { get => (long) ((PlayerController.Instance.Model.Data.Attack * (1f + PlayerController.Instance.Model.Equipment.Attack) * 1.20f + MaxHp* 1.10) * (1 + Defense / 1200f * 0.25f)); }
 
 [field: SerializeField] private int _attackLevel;
     /// <summary>
@@ -173,7 +173,7 @@ public class PlayerData
     public long ShieldHp
     {
         get => _shieldHp;
-        set
+        private set
         {
             _shieldHp = value;
             OnStatChanged?.Invoke();
@@ -184,7 +184,7 @@ public class PlayerData
     public int SceneIndex
     {
         get => _sceneIndex;
-        set
+        private set
         {
             // 씬 인덱스 바뀔 때마다 세이브
             _sceneIndex = value;
@@ -416,4 +416,6 @@ public class PlayerData
         // 레벨업 실행
         SpeedLevelup();
     }
+
+    public void SetPlayerSceneIndex(int index) => _sceneIndex = index;
 }

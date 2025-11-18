@@ -295,7 +295,7 @@ public class SkillLogic_4 : SkillLogic, ISkill
 
     private IEnumerator CooldownCoroutine()
     {
-        RemainCooldown = PlayerController.Instance.Model.GetCalculateCooldown(SkillData.CoolTime);
+        RemainCooldown = PlayerController.Instance.Model.Equipment.GetCalculateCooldown(SkillData.CoolTime);
         Debug.Log($"{SkillData.SkillIndex}번 스킬 쿨타임 {RemainCooldown} 초");
         while (RemainCooldown > 0f)
         {

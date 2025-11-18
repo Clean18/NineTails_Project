@@ -72,7 +72,7 @@ public class SkillPopUp : BaseUI
                 // 2-3 클리어 체크
                 if ((AchievementManager.Instance.AchievedIds.ContainsKey("A6") && AchievementManager.Instance.AchievedIds["A6"]) || GameManager.IsCheat)
                 {
-                    PlayerController.Instance.Model.TrySkillLevelUp(skillIndex);
+                    PlayerController.Instance.Model.Skill.TrySkillLevelUp(skillIndex);
 				    Debug.Log($"스킬 {skillIndex}번 강화 버튼 클릭됨");
 				    UpdateSkill();
                 }
@@ -93,7 +93,7 @@ public class SkillPopUp : BaseUI
 			skillUIList[i]._active.onClick.AddListener(() =>
 			{
 				var skill = PlayerController.Instance.SkillController.SkillList[skillIndex];
-                var mappingList = PlayerController.Instance.Model.GetSkillMappingList();
+                var mappingList = PlayerController.Instance.Model.Skill.GetSkillMappingList();
 
                 // 플레이어의 단축키에서 ISkill 가져오기
                 ISkill mappingSkill = null;
@@ -126,13 +126,13 @@ public class SkillPopUp : BaseUI
                     else
                     {
                         Debug.Log($"스킬 {skillIndex}번 단축창에서 제거");
-                        PlayerController.Instance.Model.RemoveSkillSlot(skillIndex);
+                        PlayerController.Instance.Model.Skill.RemoveSkillSlot(skillIndex);
                     }
 				}
 				else
 				{
 					Debug.Log($"스킬 {skillIndex}번 단축창에 등록");
-					PlayerController.Instance.Model.AddSkillSlot(skillIndex);
+					PlayerController.Instance.Model.Skill.AddSkillSlot(skillIndex);
 				}
 				// 스킬 팝업 초기화
 				UpdateSkill();
@@ -170,7 +170,7 @@ public class SkillPopUp : BaseUI
     /// </summary>
 	public void UpdateSkill()
 	{
-		var skills = PlayerController.Instance.Model.GetSkillData();
+		var skills = PlayerController.Instance.Model.Skill.SavePlayerSkill();
 		if (skills == null || skills.Count < 1) return;
 		if (skillUIList.Count == 0)
 		{
@@ -180,8 +180,8 @@ public class SkillPopUp : BaseUI
 
 		// 리스트 합치기
 		List<ISkill> hasSkills = new();
-		hasSkills.AddRange(PlayerController.Instance.Model.GetSkillMappingList());
-		hasSkills.AddRange(PlayerController.Instance.Model.GetHasSkillList());
+		hasSkills.AddRange(PlayerController.Instance.Model.Skill.GetSkillMappingList());
+		hasSkills.AddRange(PlayerController.Instance.Model.Skill.HasSkills);
 
 		// 리스트 SkillIndex로 정렬
 		hasSkills.Sort((a, b) => a.SkillData.SkillIndex.CompareTo(b.SkillData.SkillIndex));

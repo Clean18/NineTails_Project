@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -258,7 +256,7 @@ public class PlayerController : MonoBehaviour
 		Debug.Log($"플레이어 [{damage}] 피해");
 
 		// 대미지 처리
-		Model.ApplyDamage(damage);
+		Model.Data.DecreaseHp(damage);
 
 		// view 처리
 		if (Model.Data.IsDead)
@@ -287,7 +285,7 @@ public class PlayerController : MonoBehaviour
 	public void TakeHeal(long amount)
 	{
 		Debug.Log($"플레이어 [{amount}] 회복");
-		Model.ApplyHeal(amount);
+		Model.Data.HealHp(amount);
 		UIManager.Instance.ShowDamageText(transform, amount, Color.green);
 	}
 
@@ -299,7 +297,7 @@ public class PlayerController : MonoBehaviour
 	public void TakeShield(long amount)
 	{
 		Debug.Log($"플레이어 [{amount}] 보호막 획득");
-		Model.ApplyShield(amount);
+		Model.Data.HealShield(amount);
 		UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
 	}
 	/// <summary>

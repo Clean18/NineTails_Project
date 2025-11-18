@@ -34,7 +34,7 @@ public class StartMissionPopUp : BaseUI
             MissionManager.Instance.StartMission(_sceneName); // 해당 씬에 해당되는 미션 시작
 
             // 씬 세이브
-            PlayerController.Instance.Model.SetPlayerSceneIndex(_saveSceneIndex);
+            PlayerController.Instance.Model.Data.SetPlayerSceneIndex(_saveSceneIndex);
 
             // 로딩씬이름 하드코딩 변경
             SceneChangeManager.Instance.LoadSceneWithLoading("LoadingScene_v1", _sceneName, 1);
