@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 		if (Model.Data.IsDead) return;
 
 		// Auto일 때는 입력 제한
-		if (Mode == ControlMode.Auto) _ai.Action();
+		if (Mode == ControlMode.Auto) AI.Action();
 
 		// 수동 컨트롤
 		else if (Mode == ControlMode.Manual) InputHandler();
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
 	void MoveInput()
 	{
 		MoveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-		_view.Move(MoveDir, _model.Data.Speed);
+		View.Move(MoveDir, Model.Data.Speed);
 	}
 
 	void SkillInput()
@@ -148,25 +148,25 @@ public class PlayerController : MonoBehaviour
 		{
 			Debug.Log("기본공격 사용");
 			//_model.Skill.DefaultAttack.UseSkill(transform);
-			var skill = _model.Skill.GetSkill(KeyCode.Mouse0);
+			var skill = Model.Skill.GetSkill(KeyCode.Mouse0);
 			skill?.UseSkill(transform);
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
 			Debug.Log("1번 슬롯 스킬 사용");
-			var skill = _model.Skill.GetSkill(KeyCode.Alpha1);
+			var skill = Model.Skill.GetSkill(KeyCode.Alpha1);
 			if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(1);
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
 			Debug.Log("2번 슬롯 스킬 사용");
-			var skill = _model.Skill.GetSkill(KeyCode.Alpha2);
+			var skill = Model.Skill.GetSkill(KeyCode.Alpha2);
 			if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(2);
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
 			Debug.Log("3번 슬롯 스킬 사용");
-			var skill = _model.Skill.GetSkill(KeyCode.Alpha3);
+			var skill = Model.Skill.GetSkill(KeyCode.Alpha3);
 			if (skill != null && skill.UseSkill(transform)) SkillButton.Instance.UpdateCooldown(3);
 		}
 	}
@@ -179,22 +179,22 @@ public class PlayerController : MonoBehaviour
 			case 0:
 				Debug.Log("기본공격 사용");
 				//_model.Skill.DefaultAttack.UseSkill(transform);
-				var skill0 = _model.Skill.GetSkill(KeyCode.Mouse0);
+				var skill0 = Model.Skill.GetSkill(KeyCode.Mouse0);
 				if (skill0 == null) return false;
 				return skill0.UseSkill(transform);
 			case 1:
 				Debug.Log("1번스킬 사용");
-				var skill1 = _model.Skill.GetSkill(KeyCode.Alpha1);
+				var skill1 = Model.Skill.GetSkill(KeyCode.Alpha1);
 				if (skill1 == null) return false;
 				return skill1.UseSkill(transform);
 			case 2:
 				Debug.Log("2번스킬 사용");
-				var skill2 = _model.Skill.GetSkill(KeyCode.Alpha2);
+				var skill2 = Model.Skill.GetSkill(KeyCode.Alpha2);
 				if (skill2 == null) return false;
 				return skill2.UseSkill(transform);
 			case 3:
 				Debug.Log("3번스킬 사용");
-				var skill3 = _model.Skill.GetSkill(KeyCode.Alpha3);
+				var skill3 = Model.Skill.GetSkill(KeyCode.Alpha3);
 				if (skill3 == null) return false;
 				return skill3.UseSkill(transform);
 		}
@@ -217,8 +217,8 @@ public class PlayerController : MonoBehaviour
 		SkillController = GetComponentInChildren<SkillController>();
 		SkillController.InitSkillController();
 
-		// 세이브로드매니저에서 데이터 받아오기
-		_model.InitModel(SaveLoadManager.Instance.GameData);
+        // 세이브로드매니저에서 데이터 받아오기
+        Model.InitModel(SaveLoadManager.Instance.GameData);
 
 		yield return UIManager.Instance.MainUI != null;
 
@@ -299,7 +299,7 @@ public class PlayerController : MonoBehaviour
 	public void TakeShield(long amount)
 	{
 		Debug.Log($"플레이어 [{amount}] 보호막 획득");
-		_model.ApplyShield(amount);
+		Model.ApplyShield(amount);
 		UIManager.Instance.ShowDamageText(transform, amount, Color.blue);
 	}
 	/// <summary>
