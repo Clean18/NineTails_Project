@@ -1,15 +1,15 @@
 {
-    "_savedTimeString": "2025-11-18T13:15:35.2024890+09:00",
+    "_savedTimeString": "2025-11-18T13:21:56.5157874+09:00",
     "PlayerName": "구미호",
-    "AttackLevel": 1,
-    "DefenseLevel": 1,
-    "HpLevel": 23,
-    "CurrentHp": 83,
-    "SpeedLevel": 1,
-    "ShieldHp": 0,
+    "AttackLevel": 208,
+    "DefenseLevel": 20,
+    "HpLevel": 43,
+    "CurrentHp": 230,
+    "SpeedLevel": 50,
+    "ShieldHp": 57,
     "SceneIndex": 4,
     "SpiritEnergy": 0,
-    "Warmth": 360,
+    "Warmth": 5310,
     "Soul": 0,
     "GetFirstSpiritEnergy": false,
     "GetFirstWarmth": true,
@@ -19,6 +19,24 @@
             "SkillLevel": 0,
             "SlotIndex": 0,
             "SkillCooldown": 0.0
+        },
+        {
+            "SkillIndex": 2,
+            "SkillLevel": 0,
+            "SlotIndex": 1,
+            "SkillCooldown": 10.0
+        },
+        {
+            "SkillIndex": 4,
+            "SkillLevel": 0,
+            "SlotIndex": 2,
+            "SkillCooldown": 2.0
+        },
+        {
+            "SkillIndex": 5,
+            "SkillLevel": 0,
+            "SlotIndex": 3,
+            "SkillCooldown": 8.0
         }
     ],
     "Grade": "N",
@@ -27,6 +45,72 @@
     "PlayerAchivementList": [
         {
             "Id": "A43",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A16",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A34",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A35",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A36",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A37",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A38",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A39",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A40",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A41",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A42",
+            "IsClear": true,
+            "CurrentCondition": -1,
+            "IsRewarded": false
+        },
+        {
+            "Id": "A17",
             "IsClear": true,
             "CurrentCondition": -1,
             "IsRewarded": false
